@@ -22,9 +22,10 @@ import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 
 /**
+ * Test case for the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: 88fa76566111 $
+ * @version $Revision: facef2e10c70 $
  */
 public class HibernateGenericDaoTest extends TestCase {
     private EntityTCBO entityTCBO;

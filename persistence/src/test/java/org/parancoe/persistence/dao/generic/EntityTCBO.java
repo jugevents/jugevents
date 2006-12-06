@@ -18,9 +18,10 @@ import org.parancoe.persistence.po.hibernate.EntityTC;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * A BO to be used for the tests of the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: 88fa76566111 $
+ * @version $Revision: facef2e10c70 $
  */
 public class EntityTCBO {
     private EntityTCDao dao;    
