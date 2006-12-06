@@ -14,11 +14,10 @@
 package org.parancoe.persistence.dao.generic;
 
 import java.lang.reflect.Method;
-import java.util.List;
+import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
@@ -32,10 +31,11 @@ import org.springframework.util.StringUtils;
  * An aspect for instrumenting a class with dao interfaces and methods.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 88fa76566111 $
+ * @version $Revision: afd0c0edb0e9 $
  */
 @Aspect()
-public class HibernateDaoInstrumentation<T> {
+public class HibernateDaoInstrumentation {
+    private static final Logger logger = Logger.getLogger(HibernateDaoInstrumentation.class);
     
     @Around("execution(* *(..)) && target(org.parancoe.persistence.dao.generic.GenericDaoHibernateSupport)")
     public Object executeFinder(ProceedingJoinPoint pjp) throws Throwable {
@@ -43,6 +43,9 @@ public class HibernateDaoInstrumentation<T> {
         final GenericDaoHibernateSupport target = (GenericDaoHibernateSupport)pjp.getTarget();
         final Method method = ((MethodSignature)pjp.getSignature()).getMethod();
         final Object[] args = pjp.getArgs();
+        logger.debug("target: "+target);
+        logger.debug("method: "+method);
+        logger.debug("args: "+args);
         
         if (target instanceof HibernateGenericDao) { // no decoration on the base DAO
             return pjp.proceed(args);
