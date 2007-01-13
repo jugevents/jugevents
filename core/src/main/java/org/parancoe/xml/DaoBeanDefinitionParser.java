@@ -23,7 +23,7 @@ import org.w3c.dom.Element;
  * The parser for the DAO bean definition.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 89ee87574caf $
+ * @version $Revision$
  */
 public class DaoBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
     

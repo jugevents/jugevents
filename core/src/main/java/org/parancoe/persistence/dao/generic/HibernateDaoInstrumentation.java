@@ -31,7 +31,7 @@ import org.springframework.util.StringUtils;
  * An aspect for instrumenting a class with dao interfaces and methods.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 89ee87574caf $
+ * @version $Revision$
  */
 @Aspect()
 public class HibernateDaoInstrumentation {

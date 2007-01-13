@@ -13,18 +13,23 @@
 // limitations under the License.
 package org.parancoe.persistence.dao.generic;
 
-import java.util.List;
-import org.parancoe.persistence.po.hibernate.EntityTC;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * A DAO to be used for the tests of the generic DAO.
+ * An annotation for marking a Generic Dao type.
  *
- * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: facef2e10c70 $
+ * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
+ * @version $Revision$
  */
-@Dao(entity=EntityTC.class)
-public interface EntityTCDao extends GenericDao<EntityTC, Long> {
-    List findByFieldOne(String value);
-    List findByFieldTwo(String value);
-    List findByFieldOneAndFieldTwo(String one, String two);
+@Documented
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+public @interface Dao {
+    Class entity();
 }

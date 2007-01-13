@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  * A BO to be used for the tests of the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: facef2e10c70 $
+ * @version $Revision$
  */
 public class EntityTCBO {
     private EntityTCDao dao;    

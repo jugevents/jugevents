@@ -11,18 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package org.parancoe.xml;
+package org.parancoe.persistence.dao.generic;
 
-import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
+import java.lang.reflect.Method;
+import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
- * The handler for the parancoe namespace.
  *
- * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 64975375e01c $
+ * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
+ * @version $Revision$
  */
-public class ParancoeNamespaceHandler extends NamespaceHandlerSupport {
-    public void init() {
-        registerBeanDefinitionParser("dao", new DaoBeanDefinitionParser());
-    }    
+public interface GenericDaoHibernateSupport {
+    HibernateTemplate getHibernateTemplate();
+    Class getType();
+    void setType(Class type);
 }

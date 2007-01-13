@@ -23,7 +23,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * Derived from http://www-128.ibm.com/developerworks/java/library/j-genericdao.html
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 88fa76566111 $
+ * @version $Revision$
  */
 public class HibernateGenericDao <T, PK extends Serializable>
         extends HibernateDaoSupport

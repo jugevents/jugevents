@@ -24,7 +24,7 @@ import javax.persistence.Version;
  * A base class for all persistent entities.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 88fa76566111 $
+ * @version $Revision$
  */
 @MappedSuperclass
 public abstract class EntityBase implements Entity, Serializable {
