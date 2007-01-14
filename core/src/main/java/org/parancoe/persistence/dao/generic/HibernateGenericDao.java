@@ -14,7 +14,7 @@
 package org.parancoe.persistence.dao.generic;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
+
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -23,7 +23,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * Derived from http://www-128.ibm.com/developerworks/java/library/j-genericdao.html
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision$
+ * @version $Revision: ff8c32ef549f $
  */
 public class HibernateGenericDao <T, PK extends Serializable>
         extends HibernateDaoSupport

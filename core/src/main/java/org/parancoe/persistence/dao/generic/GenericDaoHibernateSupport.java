@@ -13,13 +13,12 @@
 // limitations under the License.
 package org.parancoe.persistence.dao.generic;
 
-import java.lang.reflect.Method;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision$
+ * @version $Revision: ff8c32ef549f $
  */
 public interface GenericDaoHibernateSupport {
     HibernateTemplate getHibernateTemplate();

@@ -31,7 +31,7 @@ import org.springframework.util.StringUtils;
  * An aspect for instrumenting a class with dao interfaces and methods.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision$
+ * @version $Revision: ff8c32ef549f $
  */
 @Aspect()
 public class HibernateDaoInstrumentation {
@@ -75,8 +75,7 @@ public class HibernateDaoInstrumentation {
                         new HibernateCallback() {
                     public Object doInHibernate(Session session) throws HibernateException {
                         String queryString = queryStringFromMethod(target, method);
-                        Query query = null;
-                        query = session.createQuery(queryString);
+                        Query query = session.createQuery(queryString);
                         for(int i = 0; i < args.length; i++) {
                             Object arg = args[i];
                             query.setParameter(i, arg);
