@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
  * A BO to be used for the tests of the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: fa1b1950eaeb $
+ * @version $Revision: 0d2d742e4de7 $
  */
 public class PersonBO {
     private PersonDao dao;
@@ -73,7 +73,7 @@ public class PersonBO {
         }
     }
     
-    @Transactional(readOnly=true)
+//    @Transactional(readOnly=true)
     public Person retrievePerson(Long id) {
         return dao.read(id);
     }
