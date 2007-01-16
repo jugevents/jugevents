@@ -25,7 +25,7 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
  * Test case for the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision$
+ * @version $Revision: 4ee93f7aa67a $
  */
 public class HibernateGenericDaoTest extends TestCase {
     private EntityTCBO entityTCBO;
@@ -49,6 +49,11 @@ public class HibernateGenericDaoTest extends TestCase {
         EntityTC retrievedEntity = this.entityTCBO.retrieveEntity(id);
         assertEquals(entity, retrievedEntity);
         assertNotSame(entity, retrievedEntity);
+    }
+
+    public void testFindAll(){
+        List<EntityTC> list = this.entityTCBO.getDao().findAll();
+        assertNotNull(list);
     }
     
     public void testGetByFieldOne() {

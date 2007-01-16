@@ -15,6 +15,8 @@ package org.parancoe.persistence.dao.generic;
 
 import java.io.Serializable;
 
+import java.util.List;
+
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -23,7 +25,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * Derived from http://www-128.ibm.com/developerworks/java/library/j-genericdao.html
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: ff8c32ef549f $
+ * @version $Revision: 4ee93f7aa67a $
  */
 public class HibernateGenericDao <T, PK extends Serializable>
         extends HibernateDaoSupport
@@ -47,7 +49,11 @@ public class HibernateGenericDao <T, PK extends Serializable>
     public void delete(T o) {
         getHibernateTemplate().delete(o);
     }
-    
+
+    public List<T> findAll() {
+        return getHibernateTemplate().find("from "+getType().getName()+" x");
+    }
+
     public Class getType() {
         return type;
     }
