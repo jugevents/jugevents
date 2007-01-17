@@ -25,7 +25,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * Derived from http://www-128.ibm.com/developerworks/java/library/j-genericdao.html
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 4ee93f7aa67a $
+ * @version $Revision: 70e99fa563c7 $
  */
 public class HibernateGenericDao <T, PK extends Serializable>
         extends HibernateDaoSupport
@@ -35,6 +35,10 @@ public class HibernateGenericDao <T, PK extends Serializable>
     @SuppressWarnings("unchecked")
     public PK create(T o) {
         return (PK) getHibernateTemplate().save(o);
+    }
+    @SuppressWarnings("unchecked")
+    public void createOrUpdate(T o) {
+        getHibernateTemplate().saveOrUpdate(o);
     }
     
     @SuppressWarnings("unchecked")
