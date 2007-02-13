@@ -14,15 +14,17 @@
 package org.parancoe.example.po;
 
 import java.util.Date;
+
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import org.parancoe.persistence.po.hibernate.EntityBase;
 
 /**
  * An example of a persistent object containing personal data.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: fa1b1950eaeb $
+ * @version $Revision: a4278fd4b69d $
  */
 @javax.persistence.Entity()
 public class Person extends EntityBase {

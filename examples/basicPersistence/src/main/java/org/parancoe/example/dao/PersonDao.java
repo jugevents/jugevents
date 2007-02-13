@@ -15,6 +15,7 @@ package org.parancoe.example.dao;
 
 import java.util.Date;
 import java.util.List;
+
 import org.parancoe.example.po.Person;
 import org.parancoe.persistence.dao.generic.Dao;
 import org.parancoe.persistence.dao.generic.GenericDao;
@@ -23,7 +24,7 @@ import org.parancoe.persistence.dao.generic.GenericDao;
  * The DAO interface for the Person entity.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: fa1b1950eaeb $
+ * @version $Revision: a4278fd4b69d $
  */
 @Dao(entity=Person.class)
 public interface PersonDao extends GenericDao<Person, Long> {

@@ -16,6 +16,7 @@ package org.parancoe.example.bo;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
 import org.parancoe.example.dao.PersonDao;
 import org.parancoe.example.po.Person;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  * A BO to be used for the tests of the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: 0d2d742e4de7 $
+ * @version $Revision: a4278fd4b69d $
  */
 public class PersonBO {
     private PersonDao dao;
