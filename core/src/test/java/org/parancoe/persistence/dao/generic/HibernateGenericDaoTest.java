@@ -1,4 +1,4 @@
-// Copyright 2006 The Parancoe Team
+// Copyright 2006-2007 The Parancoe Team
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
  * Test case for the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: 4ee93f7aa67a $
+ * @version $Revision: d1a0edf52731 $
  */
 public class HibernateGenericDaoTest extends TestCase {
     private EntityTCBO entityTCBO;

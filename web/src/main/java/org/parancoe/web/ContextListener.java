@@ -1,4 +1,4 @@
-// Copyright 2006 The Parancoe Team
+// Copyright 2006-2007 The Parancoe Team
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,16 +25,11 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
 /**
- * Context Listener of parancoe web application.
- * @author Paolo Dona
- *
- */
-/**
  * A context listener for initializing the Spring context.
  *
  * @author <a href="mailto:paolo.dona@jugpadova.it">Paolo Donà</a>
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 610217f023e2 $
+ * @version $Revision: d1a0edf52731 $
  */
 public class ContextListener implements ServletContextListener {
     private static final Logger log = Logger.getLogger(ContextListener.class);

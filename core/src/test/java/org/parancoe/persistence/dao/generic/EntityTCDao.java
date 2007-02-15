@@ -1,4 +1,4 @@
-// Copyright 2006 The Parancoe Team
+// Copyright 2006-2007 The Parancoe Team
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import org.parancoe.persistence.po.hibernate.EntityTC;
  * A DAO to be used for the tests of the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision$
+ * @version $Revision: d1a0edf52731 $
  */
 @Dao(entity=EntityTC.class)
 public interface EntityTCDao extends GenericDao<EntityTC, Long> {

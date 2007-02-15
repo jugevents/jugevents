@@ -1,4 +1,4 @@
-// Copyright 2006 The Parancoe Team
+// Copyright 2006-2007 The Parancoe Team
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.springframework.util.StringUtils;
  * An aspect for instrumenting a class with dao interfaces and methods.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: ff8c32ef549f $
+ * @version $Revision: d1a0edf52731 $
  */
 @Aspect()
 public class HibernateDaoInstrumentation {
