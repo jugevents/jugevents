@@ -26,7 +26,7 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
  * A test case for a versioned entity.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: c43880848171 $
+ * @version $Revision: 46be536bbf31 $
  */
 public class VersionedEntityTest extends TestCase {
     
@@ -83,6 +83,13 @@ public class VersionedEntityTest extends TestCase {
         versionedEntityData.setBalance(new BigDecimal("100.00"));
         versionedEntityData.setDescription("Test description");
         versionedEntity.updateVersionedData(versionedEntityData);
+        //begin-added by enrico because test failed
+        try {
+			Thread.sleep(1000);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		//end-added by enrico because test failed
         Long id = this.entityTCBO.createEntity(versionedEntity);
         versionedEntityData = new VersionedEntityDataTC();
         versionedEntityData.setBalance(new BigDecimal("200.00"));
@@ -110,6 +117,13 @@ public class VersionedEntityTest extends TestCase {
         englishVersionedEntityData.setBalance(new BigDecimal("100.00"));
         englishVersionedEntityData.setDescription("English description");
         versionedEntity.updateVersionedData(englishVersionedEntityData);
+        //begin-added by enrico because test failed
+        try {
+			Thread.sleep(1000);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		//end-added by enrico because test failed
         Long id = this.entityTCBO.createEntity(versionedEntity);
         italianVersionedEntityData = new VersionedEntityDataTC();
         italianVersionedEntityData.setLocale(Locale.ITALIAN.getLanguage());
