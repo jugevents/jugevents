@@ -19,15 +19,17 @@ import java.util.List;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import org.apache.log4j.Logger;
 
 /**
  * The standard abstract implementation for an entity with versioned localized data.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: b04472d60172 $
+ * @version $Revision: d53613e5b806 $
  */
 @MappedSuperclass
 public abstract class VersionedEntityBase<T extends VersionedData> extends EntityBase implements VersionedEntity<T> {
+    
     /**
      * The collection of versioned data
      */
@@ -114,7 +116,7 @@ public abstract class VersionedEntityBase<T extends VersionedData> extends Entit
         if (last != null) {
             if (!current.after(last.getDateFrom())) {
                 // sometimes it happens with fast machines
-                current.setTime(last.getDateFrom().getTime()+1);
+                current.setTime(last.getDateFrom().getTime()+1000);
             }
             last.setDateTo(current);
         }
