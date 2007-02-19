@@ -24,7 +24,7 @@ import javax.persistence.OrderBy;
  * The standard abstract implementation for an entity with versioned localized data.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: c43880848171 $
+ * @version $Revision: b04472d60172 $
  */
 @MappedSuperclass
 public abstract class VersionedEntityBase<T extends VersionedData> extends EntityBase implements VersionedEntity<T> {
@@ -112,6 +112,10 @@ public abstract class VersionedEntityBase<T extends VersionedData> extends Entit
         Date current = new Date();
         T last = findLastVersionedData(newVersionData.getLocale());
         if (last != null) {
+            if (!current.after(last.getDateFrom())) {
+                // sometimes it happens with fast machines
+                current.setTime(last.getDateFrom().getTime()+1);
+            }
             last.setDateTo(current);
         }
         newVersionData.setDateFrom(current);
