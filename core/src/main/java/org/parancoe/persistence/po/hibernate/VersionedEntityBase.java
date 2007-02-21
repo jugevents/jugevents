@@ -16,16 +16,16 @@ package org.parancoe.persistence.po.hibernate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import org.apache.log4j.Logger;
 
 /**
  * The standard abstract implementation for an entity with versioned localized data.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: d53613e5b806 $
+ * @version $Revision: c468d0b3224e $
  */
 @MappedSuperclass
 public abstract class VersionedEntityBase<T extends VersionedData> extends EntityBase implements VersionedEntity<T> {

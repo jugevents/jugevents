@@ -14,13 +14,14 @@
 package org.parancoe.persistence.po.hibernate;
 
 import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 
 /**
  * A test class for a versioned entity.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: c43880848171 $
+ * @version $Revision: c468d0b3224e $
  */
 @Entity()
 public class VersionedEntityDataTC extends VersionedDataBase<VersionedEntityTC> {

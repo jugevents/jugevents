@@ -14,6 +14,7 @@
 package org.parancoe.persistence.dao.generic;
 
 import java.util.List;
+
 import org.parancoe.persistence.po.hibernate.EntityTC;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
  * A BO to be used for the tests of the versioned entity.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: c43880848171 $
+ * @version $Revision: c468d0b3224e $
  */
 public class EntityTCBO {
     private EntityTCDao dao;    

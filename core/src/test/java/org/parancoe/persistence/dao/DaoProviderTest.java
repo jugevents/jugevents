@@ -13,8 +13,10 @@
 // limitations under the License.
 package org.parancoe.persistence.dao;
 
-import junit.framework.*;
 import java.util.Map;
+
+import junit.framework.TestCase;
+
 import org.parancoe.persistence.po.hibernate.EntityTC;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
@@ -26,7 +28,7 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
  * Tests for the DaoProvider classes.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: d1a0edf52731 $
+ * @version $Revision: c468d0b3224e $
  */
 public class DaoProviderTest extends TestCase {
     private BeanFactory beanFactory;

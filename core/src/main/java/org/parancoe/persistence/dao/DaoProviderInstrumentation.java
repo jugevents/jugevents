@@ -14,6 +14,7 @@
 package org.parancoe.persistence.dao;
 
 import java.lang.reflect.Method;
+
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -26,7 +27,7 @@ import org.springframework.util.StringUtils;
  * An aspect for instrumenting a dao provider.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: d1a0edf52731 $
+ * @version $Revision: c468d0b3224e $
  */
 @Aspect()
 public class DaoProviderInstrumentation {

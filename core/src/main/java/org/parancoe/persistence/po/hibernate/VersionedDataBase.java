@@ -15,6 +15,7 @@ package org.parancoe.persistence.po.hibernate;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
@@ -24,7 +25,7 @@ import javax.persistence.TemporalType;
  * Base class for classes mantaining versioned localized data.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: c43880848171 $
+ * @version $Revision: c468d0b3224e $
  */
 @MappedSuperclass
 public class VersionedDataBase<T extends VersionedEntity> extends EntityBase

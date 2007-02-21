@@ -14,6 +14,7 @@
 package org.parancoe.persistence.po.hibernate;
 
 import java.io.Serializable;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +25,7 @@ import javax.persistence.Version;
  * A base class for all persistent entities.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: d1a0edf52731 $
+ * @version $Revision: c468d0b3224e $
  */
 @MappedSuperclass
 public abstract class EntityBase implements Entity, Serializable {
