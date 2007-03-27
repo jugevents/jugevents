@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  * @author <a href="mailto:enrico.giurin@gmail.com">Enrico Giurin</a>
  * @author <a href="mailto:michele.franzin@seesaw.it">Michele Franzin</a>
- * @version $Revision: c87082438263 $
+ * @version $Revision: 56f8b8714a00 $
  */
 public class UserBO {
 
@@ -69,7 +69,7 @@ public class UserBO {
 	    user.setPassword(USER_PARANCOE);
 	    dao.create(user);
 	}
-	logger.info("Created and populated table User");
+	logger.info("Created and populated table UserProfile");
 
     }
 
