@@ -19,10 +19,11 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
  * The handler for the parancoe namespace.
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: d1a0edf52731 $
+ * @version $Revision: 03b9b47e968e $
  */
 public class ParancoeNamespaceHandler extends NamespaceHandlerSupport {
     public void init() {
         registerBeanDefinitionParser("dao", new DaoBeanDefinitionParser());
+        registerBeanDefinitionParser("define-daos", new DefineDaosBeanDefinitionParser());
     }    
 }
