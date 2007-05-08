@@ -32,7 +32,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
  *
  * @author <a href="mailto:paolo.dona@jugpadova.it">Paolo Donà</a>
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: c468d0b3224e $
+ * @version $Revision: 4eb3b61f7c49 $
  */
 public class ContextListener implements ServletContextListener {
     private static final Logger log = Logger.getLogger(ContextListener.class);
@@ -99,7 +99,5 @@ public class ContextListener implements ServletContextListener {
          // Popoulating the database
          userBO.populateTable();
          authoritiesBO.populateTable();
-         
-        
     }
 }
