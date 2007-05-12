@@ -15,6 +15,9 @@ package org.parancoe.persistence.dao.generic;
 
 import java.io.Serializable;
 import java.util.List;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -24,7 +27,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * Derived from http://www-128.ibm.com/developerworks/java/library/j-genericdao.html
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: c468d0b3224e $
+ * @version $Revision: 1fa17d2c4ce2 $
  */
 public class HibernateGenericDao <T, PK extends Serializable>
         extends HibernateDaoSupport
@@ -57,6 +60,23 @@ public class HibernateGenericDao <T, PK extends Serializable>
         return getHibernateTemplate().find("from "+getType().getName()+" x");
     }
 
+    public List<T> searchByCriteria(Criterion... criterion) {
+        Criteria crit = getSession().createCriteria(getType());
+        for (Criterion c: criterion) {
+            crit.add(c);
+        }
+        return crit.list();
+    }
+
+    public List<T> searchByCriteria(DetachedCriteria criteria) {
+        return getHibernateTemplate().findByCriteria(criteria);
+    }
+
+    public List<T> searchByCriteria(DetachedCriteria criteria, int firstResult, int maxResults) {
+        return getHibernateTemplate().
+                findByCriteria(criteria, firstResult, maxResults);
+    }    
+    
     public Class getType() {
         return type;
     }
