@@ -13,6 +13,7 @@
 // limitations under the License.
 package org.parancoe.persistence.dao.generic;
 
+import org.parancoe.persistence.dao.Daos;
 import org.parancoe.persistence.po.hibernate.VersionedEntityDataTC;
 import org.parancoe.persistence.po.hibernate.VersionedEntityTC;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,41 +22,42 @@ import org.springframework.transaction.annotation.Transactional;
  * A BO to be used for the tests of the versioned entity.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: c43880848171 $
+ * @version $Revision: 8c19c37e30b9 $
  */
 public class VersionedEntityTCBO {
-    private VersionedEntityTCDao dao;    
     
     /** Creates a new instance of VersionedEntityTCBO */
     public VersionedEntityTCBO() {
     }
-
-    public VersionedEntityTCDao getDao() {
-        return dao;
-    }
-
-    public void setDao(VersionedEntityTCDao dao) {
-        this.dao = dao;
-    }
     
     @Transactional()
     public Long createEntity(VersionedEntityTC entity) {
-        return (Long)dao.create(entity);
+        return (Long)daos.getVersionedEntityTCDao().create(entity);
     }
     
     @Transactional(readOnly=true)
     public VersionedEntityTC retrieveEntity(Long id) {
-        VersionedEntityTC retrievedEntity = this.dao.read(id);
+        VersionedEntityTC retrievedEntity = this.daos.getVersionedEntityTCDao().read(id);
         retrievedEntity.getVersionedData().size(); // for initializing lazy collection
         return retrievedEntity;
     }
     
     @Transactional()
     public VersionedEntityTC updateVersionedData(Long id, VersionedEntityDataTC versionedData) {
-        VersionedEntityTC retrievedEntity = this.dao.read(id);
+        VersionedEntityTC retrievedEntity = this.daos.getVersionedEntityTCDao().read(id);
         retrievedEntity.updateVersionedData(versionedData);
-        this.dao.update(retrievedEntity);
+        this.daos.getVersionedEntityTCDao().update(retrievedEntity);
         return retrievedEntity;
+    }
+
+    public Daos daos;
+
+    public Daos getDaos() {
+        return daos;
+    }
+
+    public void setDaos(Daos daos) {
+        this.daos = daos;
     }
     
 }
