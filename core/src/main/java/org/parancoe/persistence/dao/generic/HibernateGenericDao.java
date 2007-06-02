@@ -27,7 +27,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * Derived from http://www-128.ibm.com/developerworks/java/library/j-genericdao.html
  *
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 1fa17d2c4ce2 $
+ * @version $Revision: bba072a12d06 $
  */
 public class HibernateGenericDao <T, PK extends Serializable>
         extends HibernateDaoSupport
@@ -76,6 +76,15 @@ public class HibernateGenericDao <T, PK extends Serializable>
         return getHibernateTemplate().
                 findByCriteria(criteria, firstResult, maxResults);
     }    
+    
+    public int deleteAll() {
+        return getHibernateTemplate().bulkUpdate("delete from "+getType().getName()+" x");
+    }
+    
+    public long count() {
+        // TODO IMPLEMENTARE IL METODO COUNT
+        throw new RuntimeException("Implementare il metodo di contaggio");
+    }
     
     public Class getType() {
         return type;
