@@ -39,7 +39,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
  *
  * @author paolo.dona@seesaw.it
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 2d77e220f16a $
+ * @version $Revision: 649b6e5f89db $
  */
 public class ContextListener implements ServletContextListener {
     private static final Logger log = Logger.getLogger(ContextListener.class);
@@ -57,7 +57,7 @@ public class ContextListener implements ServletContextListener {
             PluginHelper helper = new PluginHelper(applicationContext);
             helper.initPlugins(); // deve essere DOPO loadApplicationContext()
             helper.invokePluginContextInitialized(evt);
-            log.info("### Starting up Parancoe in " + BaseConf.getEnv() + " mode.");
+            log.info("### Starting up Parancoe in " + BaseConf.getEnv() + " mode.");        
         } catch (Exception e) {
             log.error("Error in base ContextListener.contextInitialized", e);
         }
