@@ -34,7 +34,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
  *
  * @author paolo.dona@seesaw.it
  * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 631b87325e19 $
+ * @version $Revision: 60766ca95dc3 $
  */
 public class ContextListener implements ServletContextListener {
     private static final Logger log = Logger.getLogger(ContextListener.class);
@@ -84,7 +84,6 @@ public class ContextListener implements ServletContextListener {
         applicationContext = ctx;
 
         populateDaoMap(ctx);
-//        setSecurity(ctx);
     }
 
     public void contextDestroyed(ServletContextEvent evt) {
@@ -101,16 +100,4 @@ public class ContextListener implements ServletContextListener {
         daoMap.putAll(daos);
     }
 
-    /**
-     * Populate and create if don't exist tables User and Authorities.
-     *
-     * @param ctx
-     */
-//    private void setSecurity(XmlWebApplicationContext ctx) {
-//        UserBO userBO = (UserBO) ctx.getBean("userBO");
-//        AuthoritiesBO authoritiesBO = (AuthoritiesBO) ctx.getBean("authoritiesBO");
-//        // Popoulating the database
-//        userBO.populateTable();
-//        authoritiesBO.populateTable();
-//    }
 }
