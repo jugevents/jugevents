@@ -22,9 +22,9 @@ import org.parancoe.persistence.dao.generic.GenericDao;
  * The DAO interface for the User entity.
  *
  * @author <a href="mailto:enrico.giurin@gmail.com">Enrico Giurin</a>
- * @version $Revision: 34cd8569752b $
+ * @version $Revision: 671bb6b03211 $
  */
 @Dao(entity=Authorities.class)
 public interface AuthoritiesDao extends GenericDao<Authorities, Long> {
-	List<Authorities> findByUsernameAndAuthority(String username, String authority);
+	List<Authorities> findByAuthority(String authority);
 }

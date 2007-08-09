@@ -23,9 +23,11 @@ import org.parancoe.persistence.dao.generic.GenericDao;
  * 
  * @author <a href="mailto:enrico.giurin@gmail.com">Enrico Giurin</a>
  * @author <a href="mailto:michele.franzin@seesaw.it">Michele Franzin</a>
- * @version $Revision: 34cd8569752b $
+ * @version $Revision: 671bb6b03211 $
  */
-@Dao(entity = UserProfile.class)
-public interface UserDao extends GenericDao<UserProfile, Long> {
-    List<UserProfile> findByUsernameAndPassword(String username, String password);
+@Dao(entity = User.class)
+public interface UserDao extends GenericDao<User, Long> {
+    List<User> findByUsernameAndPassword(String username, String password);
+    
+    List<User> findByUsername(String username);
 }

@@ -13,17 +13,23 @@
 // limitations under the License.
 package org.parancoe.plugins.security;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
+
 import org.parancoe.persistence.po.hibernate.EntityBase;
+
 
 /**
  * A PO for UserProfile table.
  * 
  * @author <a href="mailto:enrico.giurin@gmail.com">Enrico Giurin</a>
  * @author <a href="mailto:michele.franzin@seesaw.it">Michele Franzin</a>
- * @version $Revision: 34cd8569752b $
+ * @version $Revision: 671bb6b03211 $
  */
 @javax.persistence.Entity()
-public class UserProfile extends EntityBase {
+public class User extends EntityBase {
 
     private static final long serialVersionUID = 832363948575562242L;
 
@@ -32,6 +38,8 @@ public class UserProfile extends EntityBase {
     private String password = null;
 
     private boolean enabled = true;
+    
+    private List<Authorities> authorities;
 
     public boolean isEnabled() {
 	return enabled;
@@ -56,5 +64,13 @@ public class UserProfile extends EntityBase {
     public void setEnabled(boolean enabled) {
 	this.enabled = enabled;
     }
+    @OneToMany(cascade={CascadeType.ALL})
+	public List<Authorities> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(List<Authorities> authorities) {
+		this.authorities = authorities;
+	}
 
 }
