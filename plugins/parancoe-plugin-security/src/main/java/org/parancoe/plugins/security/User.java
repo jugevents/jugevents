@@ -27,7 +27,7 @@ import org.parancoe.persistence.po.hibernate.EntityBase;
  *
  * @author <a href="mailto:enrico.giurin@gmail.com">Enrico Giurin</a>
  * @author <a href="mailto:michele.franzin@seesaw.it">Michele Franzin</a>
- * @version $Revision: 13dae6883de3 $
+ * @version $Revision: 561e50bbaf7c $
  */
 @javax.persistence.Entity
 public class User extends EntityBase {
@@ -47,14 +47,7 @@ public class User extends EntityBase {
     {
     	
     }
-    /**
-     * Constructor with username.
-     * @param username
-     */
-    public User(String username)
-    {
-    	this.username = username;
-    }
+    
 
     private List<UserAuthority> userAuthority = new ArrayList<UserAuthority>();
 
