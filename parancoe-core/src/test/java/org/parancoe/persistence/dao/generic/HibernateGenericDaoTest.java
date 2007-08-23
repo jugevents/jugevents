@@ -18,20 +18,19 @@ import java.util.List;
 import java.util.Map;
 
 import junit.framework.TestCase;
-import org.parancoe.persistence.dao.DaoUtils;
 
+import org.parancoe.persistence.dao.DaoUtils;
 import org.parancoe.persistence.po.hibernate.EntityTC;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
-import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 import org.springframework.context.access.ContextSingletonBeanFactoryLocator;
 
 /**
  * Test case for the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: e8e903776783 $
+ * @version $Revision: 556f31e76d97 $
  */
 public class HibernateGenericDaoTest extends TestCase {
     private EntityTCBO entityTCBO;

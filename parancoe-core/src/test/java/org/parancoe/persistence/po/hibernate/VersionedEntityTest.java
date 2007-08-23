@@ -22,8 +22,8 @@ import org.parancoe.persistence.util.BaseTest;
 /**
  * A test case for a versioned entity.
  * 
- * @author href="lucio.benfante@jugpadova.it">Lucio Benfante</a>
- * @version $Revision: 97e97acfb62d $
+ * @author <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a>
+ * @version $Revision: 556f31e76d97 $
  */
 public class VersionedEntityTest extends BaseTest {
 

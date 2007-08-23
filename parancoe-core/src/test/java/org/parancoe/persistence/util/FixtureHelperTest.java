@@ -20,12 +20,11 @@ import java.util.Set;
 
 import org.parancoe.test.EnhancedTestCase;
 import org.parancoe.util.FixtureHelper;
-import org.parancoe.util.Utils;
 import org.springframework.util.CollectionUtils;
 
 /**
  * @author <a href="mailto:michele.franzin@seesaw.it">Michele Franzin</a>
- * @version $Revision: a6d35ce7b8a9 $
+ * @version $Revision: 556f31e76d97 $
  */
 public class FixtureHelperTest extends EnhancedTestCase {
 
