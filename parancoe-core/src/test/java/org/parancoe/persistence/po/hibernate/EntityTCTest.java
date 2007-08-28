@@ -15,13 +15,14 @@ package org.parancoe.persistence.po.hibernate;
 
 import java.util.List;
 import org.parancoe.persistence.dao.Daos;
+import org.parancoe.persistence.dao.generic.EntityTCDao;
 import org.parancoe.persistence.util.BaseTest;
 
 /**
  * Tests on generic DAO using EntityTC.
  * 
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: 636aa35dcc9f $
+ * @version $Revision: dfaecb4cd65f $
  */
 public class EntityTCTest extends BaseTest {
 
@@ -76,4 +77,21 @@ public class EntityTCTest extends BaseTest {
             old = curr;
         }
     }
+    
+    public void testFindSingleRecord() {
+        EntityTC entityTC = this.daos.getEntityTCDao().findByFieldOneOrderByFieldTwo("one1");
+        assertNotNull(entityTC);
+        assertEquals("one1", entityTC.getFieldOne());
+    }
+    
+    public void testFindOrderedSingleRecord() {
+        EntityTCDao dao = this.daos.getEntityTCDao();
+        List<EntityTC> entities = dao.findByFieldOne("one3");
+        assertSize(2, entities);
+        EntityTC entityTC = this.daos.getEntityTCDao().findByFieldOneOrderByFieldTwo("one3");
+        assertNotNull(entityTC);
+        assertEquals("one3", entityTC.getFieldOne());
+        assertEquals("two1", entityTC.getFieldTwo());
+    }
+    
 }
