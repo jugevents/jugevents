@@ -20,6 +20,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import org.parancoe.persistence.po.hibernate.EntityBase;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 
 
 /**
@@ -27,16 +28,16 @@ import org.parancoe.persistence.po.hibernate.EntityBase;
  *
  * @author <a href="mailto:enrico.giurin@gmail.com">Enrico Giurin</a>
  * @author <a href="mailto:michele.franzin@seesaw.it">Michele Franzin</a>
- * @version $Revision: 1d3e07b99641 $
+ * @version $Revision: 8154c0250612 $
  */
 @javax.persistence.Entity
 @javax.persistence.Table(name="PSEC_USER")
 public class User extends EntityBase {
 
     private static final long serialVersionUID = 832363948575562242L;
-
+    @NotBlank
     private String username = null;
-
+    @NotBlank
     private String password = null;
 
     private boolean enabled = true;
