@@ -22,7 +22,7 @@ import org.parancoe.persistence.util.BaseTest;
  * Tests on generic DAO using EntityTC.
  * 
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: 24f613add485 $
+ * @version $Revision: 283979709d08 $
  */
 public class EntityTCTest extends BaseTest {
 
@@ -120,6 +120,12 @@ public class EntityTCTest extends BaseTest {
         List<EntityTC> entities = dao.searchAllOrderByFieldOne(1, -1);
         assertSize(4, entities);
         assertEquals("one2", entities.get(0).getFieldOne());
+    }
+    
+    public void testFindByFieldThree() {
+        EntityTCDao dao = this.daos.getEntityTCDao();
+        List<EntityTC> entities = dao.findByFieldThree("t%");
+        assertSize(4, entities);        
     }
     
 }
