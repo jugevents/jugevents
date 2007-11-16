@@ -22,7 +22,7 @@ import org.parancoe.persistence.util.BaseTest;
  * Tests on generic DAO using EntityTC.
  * 
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: dfaecb4cd65f $
+ * @version $Revision: 24f613add485 $
  */
 public class EntityTCTest extends BaseTest {
 
@@ -92,6 +92,34 @@ public class EntityTCTest extends BaseTest {
         assertNotNull(entityTC);
         assertEquals("one3", entityTC.getFieldOne());
         assertEquals("two1", entityTC.getFieldTwo());
+    }
+    
+    public void testFindByOrderByFieldTwoWithFirstRecordAndMaxRecords() {
+        EntityTCDao dao = this.daos.getEntityTCDao();
+        List<EntityTC> entities = dao.findByOrderByFieldOne(1, 2);
+        assertSize(2, entities);
+        assertEquals("one2", entities.get(0).getFieldOne());
+    }
+    
+    public void testFindByOrderByFieldTwoWithFirstRecordAndNoMaxRecords() {
+        EntityTCDao dao = this.daos.getEntityTCDao();
+        List<EntityTC> entities = dao.findByOrderByFieldOne(1, -1);
+        assertSize(4, entities);
+        assertEquals("one2", entities.get(0).getFieldOne());
+    }
+
+    public void testSearchAllOrderByFieldTwoWithFirstRecordAndMaxRecords() {
+        EntityTCDao dao = this.daos.getEntityTCDao();
+        List<EntityTC> entities = dao.searchAllOrderByFieldOne(1, 2);
+        assertSize(2, entities);
+        assertEquals("one2", entities.get(0).getFieldOne());
+    }
+
+    public void testSearchAllOrderByFieldTwoWithFirstRecordAndNoMaxRecords() {
+        EntityTCDao dao = this.daos.getEntityTCDao();
+        List<EntityTC> entities = dao.searchAllOrderByFieldOne(1, -1);
+        assertSize(4, entities);
+        assertEquals("one2", entities.get(0).getFieldOne());
     }
     
 }

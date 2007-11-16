@@ -14,16 +14,19 @@
 package org.parancoe.persistence.po.hibernate;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 /**
  * An persistent object to be used for the tests of the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: e8e903776783 $
+ * @version $Revision: 24f613add485 $
  */
 @Entity()
-@NamedQuery(name="EntityTC.findByFieldOne", query="from EntityTC where fieldOne = ?")
+@NamedQueries({
+@NamedQuery(name="EntityTC.findByFieldOne", query="from EntityTC where fieldOne = ?"),
+@NamedQuery(name="EntityTC.searchAllOrderByFieldOne", query="from EntityTC order by fieldOne")})
 public class EntityTC extends EntityBase {
     private String fieldOne;
     private String fieldTwo;

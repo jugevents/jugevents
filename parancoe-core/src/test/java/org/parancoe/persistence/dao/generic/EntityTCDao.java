@@ -21,7 +21,7 @@ import org.parancoe.persistence.po.hibernate.EntityTC;
  * A DAO to be used for the tests of the generic DAO.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: dfaecb4cd65f $
+ * @version $Revision: 24f613add485 $
  */
 @Dao(entity=EntityTC.class)
 public interface EntityTCDao extends GenericDao<EntityTC, Long> {
@@ -32,4 +32,6 @@ public interface EntityTCDao extends GenericDao<EntityTC, Long> {
     List<EntityTC> findByOrderByFieldTwo();
     List<EntityTC> findByOrderByFieldOneAndFieldTwo();
     EntityTC findByFieldOneOrderByFieldTwo(String one);
+    List<EntityTC> findByOrderByFieldOne(@FirstResult int firstResult, @MaxResults int maxResults);
+    List<EntityTC> searchAllOrderByFieldOne(@FirstResult int firstResult, @MaxResults int maxResults);
 }
