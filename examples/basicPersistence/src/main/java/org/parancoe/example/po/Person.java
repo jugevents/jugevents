@@ -24,7 +24,7 @@ import org.parancoe.persistence.po.hibernate.EntityBase;
  * An example of a persistent object containing personal data.
  *
  * @author <a href="mailto:lucio@benfante.com">Lucio Benfante</a>
- * @version $Revision: d1a0edf52731 $
+ * @version $Revision: 82bbbceb82af $
  */
 @javax.persistence.Entity()
 public class Person extends EntityBase {
@@ -60,5 +60,8 @@ public class Person extends EntityBase {
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
-    
+
+    public String toString() {
+        return this.firstName + " "+this.lastName+" ("+this.birthDate+")";
+    }
 }
