@@ -63,7 +63,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  * 
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: acf0c6094131 $
+ * @version $Revision: cdd35dce08f9 $
  */
 public class EventBo {
 
@@ -236,6 +236,20 @@ public class EventBo {
                 ") registered to the event with id=" + event.getId());
     }
 
+    @Transactional
+    public void addParticipant(Event event, Participant participant) {
+        EventDao eventDao = getDaos().getEventDao();
+        event = eventDao.read(event.getId());
+        participant.setConfirmed(Boolean.TRUE);
+        participant.setEvent(event);
+        participant.setCreationDate(new Date());
+        getDaos().getParticipantDao().createOrUpdate(participant);
+        event.addParticipant(participant);
+        eventDao.createOrUpdate(event);
+        logger.info(participant.getEmail() + " (" + participant.getId() +
+                ") added to the event with id=" + event.getId());
+    }
+    
     @Transactional
     public void refreshRegistration(Event event, Participant participant,
             String baseUrl) {
