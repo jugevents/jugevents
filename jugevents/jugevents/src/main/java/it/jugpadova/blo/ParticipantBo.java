@@ -47,7 +47,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 8ee1e6b5c12b $
+ * @version $Revision$
  */
 public class ParticipantBo {
 

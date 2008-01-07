@@ -28,7 +28,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 5b292bea77a1 $
+ * @version $Revision$
  */
 @Entity
 @NamedQueries({
