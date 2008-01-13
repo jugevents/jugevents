@@ -51,8 +51,7 @@ public class Event extends EntityBase {
     private Jugger owner;
     private Date creationDate;
 
-    @ManyToOne
-    @JoinColumn(name="OWNER_ID", nullable=false)
+    @ManyToOne    
     public Jugger getOwner() {
         return owner;
     }
