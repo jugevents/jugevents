@@ -28,7 +28,7 @@
                     
                     <h2><spring:message code="juggerRegistrationTitle"/></h2>
                     
-                    <form:form commandName="jugger" method="POST" action="${cp}/jugger/registration.form">
+                    <form:form commandName="jugger" method="POST" action="${cp}/jugger/registration.form" onsubmit="enableJugFields(); return true;">
                         <form:errors path="*" cssClass="errorBox"/>
                         
                         <form:hidden path="jugger.id"/>
@@ -105,6 +105,8 @@ new Tip($('tip_reliability'), '<spring:message code="tip.reliability"/>', {title
 
 dwr.util.setEscapeHtml(false);
 
+disableJugFields();
+
 new Autocompleter.DWR('jugger.jug.country.englishName', 'countryList', updateCountryList, { valueSelector: singleValueSelector, partialChars: 0, fullSearch: true });
 new Autocompleter.DWR('jugger.jug.name', 'jugList', updateJUGNameList, { valueSelector: singleValueSelector, partialChars: 0, fullSearch: true, afterUpdateElement: populateJugFields });
 
@@ -128,7 +130,15 @@ function disableJugFields() {
     var s = document.getElementById('jugger.jug.name');    
     juggerBo.readOnlyJugFields(s.value, false);
 }
-    
+
+function enableJugFields() {
+    parancoe.util.fullEnableFormElement('jugger.jug.country.englishName');
+    parancoe.util.fullEnableFormElement('jugger.jug.webSite');
+    parancoe.util.fullEnableFormElement('jugger.jug.longitude');
+    parancoe.util.fullEnableFormElement('jugger.jug.latitude');
+    parancoe.util.fullEnableFormElement('jugger.jug.infos');
+}
+
  function singleValueSelector(tag) {
     return tag;
 }

@@ -96,9 +96,6 @@ public abstract class JuggerRegistrationController extends BaseFormController {
 
 	@Override
 	protected Object formBackingObject(HttpServletRequest req) throws Exception {
-		// set list of countries into request
-		List<Country> list = dao().getCountryDao().findByOrderByEnglishName();
-		req.setAttribute("countries", list);
 		NewJugger jc = Utilities.newJuggerCaptcha();
 		jc.setCaptchaId(req.getSession().getId());
 		jc.setCaptchaService(captchaService);
