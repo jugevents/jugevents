@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%@page import="it.jugpadova.po.Jugger"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
-	
+
    
 <head>
 <%@ include file="../../head.jspf"%>
@@ -15,75 +15,48 @@
 <h1>Juggers List</h1>
 
 
-<c:choose>
-	<c:when test="${not empty juggers}">
-		<table class="dataList">
-			<thead>
-				<tr>
-					<th>username</th>
-					<th>country</th>
-					<th>jugName</th>
-					<th>Reliability Request</th>
-					<th>actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="jugger" items="${juggers}" varStatus="status">
 
-					<c:choose>
-						<c:when test="${status.count % 2 == 0}">
-							<c:set var="rowStyle" value="evenRow" />
-						</c:when>
-						<c:otherwise>
-							<c:set var="rowStyle" value="oddRow" />
-						</c:otherwise>
-					</c:choose>
-					<tr class="${rowStyle}">
-						<td><a
-							href="${cp}/adminjugger/viewJugger.html?username=${jugger.user.username}">${jugger.user.username}</a></td>
-						<td>${jugger.jug.country.englishName}</td>
-						<td>${jugger.jug.name}</td>
-						
-						<td>
-						
-						<jsp:useBean id="jugger" scope="page" class="it.jugpadova.po.Jugger"/>
-						<% 
-						if(jugger.getReliabilityRequest()!= null) {	%>
-							<%= jugger.getReliabilityRequest().statusDescription() %>
+    
+	<div class="displaytag">
+               <display:table  id="jg"  name="juggers"  sort="list" pagesize="20" defaultsort="5" defaultorder="ascending" requestURI="list.html" >
+					
+					<display:column title="username" sortable="true">
+						<a	href="${cp}/adminjugger/viewJugger.html?username=${jg.user.username}">${jg.user.username}</a>				
+					</display:column>
+					<display:column title="JUG Name" sortable="true">
+						<c:out value="${jg.jug.name}" />				
+					</display:column>
+					<display:column title="Reliability Request" sortable="true">						
+					  <% 
+						if(((Jugger)jg).getReliabilityRequest()!= null) {	%>
+							<%= ((Jugger)jg).getReliabilityRequest().statusDescription() %>
 							<%
 							} else {
 							%>
 							NOT REQUIRED
 							<% } %>
-						
-						
-						</td>
-						<td><a
-							href="${cp}/jugger/edit.form?jugger.user.username=${jugger.user.username}">edit</a>
+					</display:column>
+					<display:column title="actions" >
+						<a
+							href="${cp}/jugger/edit.form?jugger.user.username=${jg.user.username}">edit</a>
 						<c:choose>
-							<c:when test="${jugger.user.enabled}">
+							<c:when test="${jg.user.enabled}">
 								<a
-									href="${cp}/adminjugger/disableJugger.html?username=${jugger.user.username}">disable</a>
+									href="${cp}/adminjugger/disableJugger.html?username=${jg.user.username}">disable</a>
 							</c:when>
 							<c:otherwise>
 								<a
-									href="${cp}/adminjugger/enableJugger.html?username=${jugger.user.username}">enable</a>
+									href="${cp}/adminjugger/enableJugger.html?username=${jg.user.username}">enable</a>
 							</c:otherwise>														
 						</c:choose>						
 						 <spring:message code='confirmDeleteJugger' var="confirmDeleteJuggerMessage"/>
-                         <a href="${cp}/adminjugger/delete.html?username=${jugger.user.username}" onclick="return confirm('${confirmDeleteJuggerMessage}')"><spring:message code="delete"/></a>						
-						</td>
+                         <a href="${cp}/adminjugger/delete.html?username=${jg.user.username}" onclick="return 		 confirm('${confirmDeleteJuggerMessage}')"><spring:message code="delete"/></a>				
+					</display:column>
+					
+			    </display:table>
+            </div>
 
 
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-	</c:when>
-	<c:otherwise>
-                            No active Juggers
-                        </c:otherwise>
-</c:choose> <br />
 </div>
 <jsp:include page="../../menu.jsp" /></div>
 </div>
