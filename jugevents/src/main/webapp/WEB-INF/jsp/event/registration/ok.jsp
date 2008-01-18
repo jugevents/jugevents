@@ -14,6 +14,10 @@
                             Congratulazioni <b>${participant.firstName}</b>!<br>
                             La tua partecipazione all'evento &quot;${participant.event.title}&quot; &egrave; confermata.
                         </c:when>
+                        <c:when test="${requestScope.lang eq 'fr'}">
+                            Bravo <b>${participant.firstName}</b>!<br>
+                            Votre participation à l'évènement &quot;${participant.event.title}&quot; est confirmée.
+                        </c:when>
                         <c:otherwise>
                             Congratulations <b>${participant.firstName}</b>!<br>
                             Your participation to the event &quot;${participant.event.title}&quot; is confirmed.

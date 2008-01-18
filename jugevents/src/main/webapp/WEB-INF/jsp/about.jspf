@@ -13,6 +13,17 @@
             <a href="http://www.jugpadova.it">JUG Padova</a>. Chiunque pu&ograve;
             partecipare.</p>
         </c:when>
+        <c:when test="${requestScope.lang eq 'fr'}">
+            <p>Avec JUGEvents vous pouvez rechercher les évènements organisés par les JUGs,
+            et vous y inscrire. Les organisateurs des JUGs peuvent 
+            <a href="${cp}/jugger/registration.form">gratuitement obtenir un compte</a>
+            et commencer à gérer leurs évènements.</p>
+            <p>JUGEvents est toujours en cours de développement. Si vous découvrez un problème,
+            ou si vous avez une idée pour améliorer le site, écrivez à
+            <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+            <p>JUGEvents est un projet du <a href="http://www.jugpadova.it">JUG Padova</a>.
+            Tout le monde peut y participer.</p>
+        </c:when>
         <c:otherwise>
             <p>With JUGEvents You can search for events organized by JUGs,
             and register to them. A JUG representative can

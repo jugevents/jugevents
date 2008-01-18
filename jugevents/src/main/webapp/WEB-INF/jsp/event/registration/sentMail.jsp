@@ -18,6 +18,14 @@
                             Ti &egrave; stata spedita una mail all'indirizzo <b>${participant.email}</b> con
                             le istruzioni per confermare la registrazione.
                         </c:when>
+                        <c:when test="${requestScope.lang eq 'fr'}">
+                            Merci de vous être enregistré à l'évènement &quot;${participant.event.title}&quot;.<br/>
+                            <br/>
+                            Pour compléter votre participation, 
+                            <h3 style="text-align: center;">vous avez besoin de la confirmer.</h3>
+                            Un e-mail vous a été envoyé à l'adresse <b>${participant.email}</b> avec
+                            les instructions pour confirmer votre participation.
+                        </c:when>
                         <c:otherwise>
                             Thank you for registering to the event &quot;${participant.event.title}&quot;.<br/>
                             <br/>

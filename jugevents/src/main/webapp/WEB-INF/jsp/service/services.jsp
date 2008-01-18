@@ -20,6 +20,14 @@
                             potrebbe fornirlo, <a href="mailto:info@jugevents.org">suggeriscilo</a>
                             e cercheremo di realizzarlo.</p>
                         </c:when>
+                        <c:when test="${requestScope.lang eq 'fr'}">
+                            <p>JUG Events n'est pas uniquement fait pour gérer les évènements. Il peut
+                            vous fournir d'autres services très utiles pour votre JUG et pour la
+                            communauté internationale des JUGs.</p>
+                            <p>Si vous pensez à un service que JUG Events pourrait
+                            vous fournir, <a href="mailto:info@jugevents.org">suggérez le nous</a>,
+                            et nous essaierons de le réaliser.</p>
+                        </c:when>
                         <c:otherwise>
                             <p>JUG Events isn't just for event management. It can
                             provide some useful services to your JUG and to the
