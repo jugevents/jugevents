@@ -8,8 +8,9 @@
 Map paramMap = request.getParameterMap();
 Map tmp = new HashMap(paramMap);
 tmp.remove("language");
+tmp.put("null", "null");
 List<String> paramKeyValuesList = Utils.convertToNameValueList(tmp, true);
-String queryString = "?null=null" + StringUtils.join(paramKeyValuesList.iterator(), "&");
+String queryString = "?" + StringUtils.join(paramKeyValuesList.iterator(), "&");
 %>
 <span id="language">
     <!-- lang: ${requestScope.lang} -->
