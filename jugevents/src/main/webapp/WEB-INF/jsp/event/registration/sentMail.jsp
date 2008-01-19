@@ -26,6 +26,14 @@
                             Un e-mail vous a été envoyé à l'adresse <b>${participant.email}</b> avec
                             les instructions pour confirmer votre participation.
                         </c:when>
+                        <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
+                            Obrigado pelo seu pedido de cadastro no evento &quot;${participant.event.title}&quot;.<br/>
+                            <br/>
+                            Para completar o seu cadastro, 
+                            <h3 style="text-align: center;">Você precisa confirmar seu cadastro.</h3>
+                            Um email foi enviado ao seu endereço <b>${participant.email}</b> com as instruções
+                            sobre como confirmar o seu cadastro.
+                        </c:when>
                         <c:otherwise>
                             Thank you for registering to the event &quot;${participant.event.title}&quot;.<br/>
                             <br/>

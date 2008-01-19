@@ -18,6 +18,10 @@
                             Bravo <b>${participant.firstName}</b>!<br>
                             Votre participation à l'évènement &quot;${participant.event.title}&quot; est confirmée.
                         </c:when>
+                        <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
+                            Parabéns <b>${participant.firstName}</b>!<br>
+                            Sua participação no evento &quot;${participant.event.title}&quot; foi confirmada.
+                        </c:when>
                         <c:otherwise>
                             Congratulations <b>${participant.firstName}</b>!<br>
                             Your participation to the event &quot;${participant.event.title}&quot; is confirmed.

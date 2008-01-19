@@ -24,6 +24,17 @@
             <p>JUGEvents est un projet du <a href="http://www.jugpadova.it">JUG Padova</a>.
             Tout le monde peut y participer.</p>
         </c:when>
+        <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
+            <p>Através do JUGEvents você pode procurar eventos realizados por JUGs,
+            e registrar-se neles. Um representante do JUG pode
+            <a href="${cp}/jugger/registration.form">obter uma conta gratuitamente</a>
+            e comeár a gerenciar os eventos de seu JUG.</p>
+            <p>JUGEvents é um projeto em desenvolvimento. Se você encontrar falhas 
+            ou quiser sugerir melhorias e novas funcionalidades, por favor escreva para
+            <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+            <p>JUGEvents é um projeto livre desenvolvido pelo <a href="http://www.jugpadova.it">JUG Padova</a>.
+            Qualquer pessoa pode participar.</p>
+        </c:when>
         <c:otherwise>
             <p>With JUGEvents You can search for events organized by JUGs,
             and register to them. A JUG representative can

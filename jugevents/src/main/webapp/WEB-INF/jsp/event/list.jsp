@@ -42,7 +42,7 @@
                                 <dt><form:label path="pastEvents"><spring:message code="search.pastEvents"/>:</form:label></dt>
                                 <dd><form:checkbox path="pastEvents" id="pastEvents"/></dd>
                                 <dt><form:label path="orderByDate"><spring:message code="search.orderByDate"/>:</form:label></dt>
-                                <dd><form:radiobutton path="orderByDate" value="asc"/>ascending&nbsp;<form:radiobutton path="orderByDate" value="desc"/>descending</dd>
+                                <dd><form:radiobutton path="orderByDate" value="asc"/><spring:message code="Ascending"/>&nbsp;<form:radiobutton path="orderByDate" value="desc"/><spring:message code="Descending"/></dd>
                                 <dt>&nbsp;</dt><dd><input type="submit" value="<spring:message code='Search'/>"/></dd>
                             </dl>
                         </fieldset>

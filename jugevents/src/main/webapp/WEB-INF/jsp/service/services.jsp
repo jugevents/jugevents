@@ -13,27 +13,35 @@
                     <c:choose>
                         <c:when test="${requestScope.lang eq 'it'}">
                             <p>JUG Events non &egrave; solo per gestire gli eventi
-                            del tuo JUG. Pu&ograve; fornire anche alcuni servizi
-                            utili al tuo JUG e alla comunit&agrave; internazionale
+                                del tuo JUG. Pu&ograve; fornire anche alcuni servizi
+                                utili al tuo JUG e alla comunit&agrave; internazionale
                             dei JUG.</p>
                             <p>Se hai in mente qualche servizio, e pensi che JUG Events
-                            potrebbe fornirlo, <a href="mailto:info@jugevents.org">suggeriscilo</a>
+                                potrebbe fornirlo, <a href="mailto:info@jugevents.org">suggeriscilo</a>
                             e cercheremo di realizzarlo.</p>
                         </c:when>
                         <c:when test="${requestScope.lang eq 'fr'}">
                             <p>JUG Events n'est pas uniquement fait pour gérer les évènements. Il peut
-                            vous fournir d'autres services très utiles pour votre JUG et pour la
+                                vous fournir d'autres services très utiles pour votre JUG et pour la
                             communauté internationale des JUGs.</p>
                             <p>Si vous pensez à un service que JUG Events pourrait
-                            vous fournir, <a href="mailto:info@jugevents.org">suggérez le nous</a>,
+                                vous fournir, <a href="mailto:info@jugevents.org">suggérez le nous</a>,
                             et nous essaierons de le réaliser.</p>
                         </c:when>
+                        <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
+                            <p>JUG Events não serve apenas para o gerenciamento de eventos. 
+                                O projeto também provê serviços úteis ao seu JUG e à comunidade
+                            internacional de JUGs.</p>
+                            <p>Se você imagina algum serviço que o JUG Events deveria
+                                fornecer, <a href="mailto:info@jugevents.org">envie sua sugestão</a>,
+                            e nós analisaremos e tentaremos implementá-la.</p>
+                        </c:when>                        
                         <c:otherwise>
                             <p>JUG Events isn't just for event management. It can
-                            provide some useful services to your JUG and to the
+                                provide some useful services to your JUG and to the
                             international JUG community.</p>
                             <p>If You are thinking to a service JUG Events could
-                            provide, <a href="mailto:info@jugevents.org">suggest it</a>,
+                                provide, <a href="mailto:info@jugevents.org">suggest it</a>,
                             and we'll try to realize it.</p>
                         </c:otherwise>
                     </c:choose>
@@ -45,7 +53,7 @@
                             in JUG Events e tenere quindi aggiornato questo file KML.</p>
                             <p style="text-align: center;"><a href="${cp}/service/kml.html">Scarica il file KML</a></p>
                             <p>Questo file KML &egrave; prodotto usando i dati presenti nel database di JUG Events. I dati
-                            originali sono stati estratti dalla
+                                originali sono stati estratti dalla
                             <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>.</p>
                         </c:when>
                         <c:when test="${requestScope.lang eq 'fr'}">
@@ -54,16 +62,25 @@
                             maintien à jour son fichier KML.</p>
                             <p style="text-align: center;"><a href="${cp}/service/kml.html">Téléchargez le fichier KML</a></p>
                             <p>Le fichier KML est produit à partir des données de JUG Events. Les données d'origine ont été
-                            importé à partir de
+                                importé à partir de
                             <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>.</p>
                         </c:when>
+                        <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
+                            <h2>KML para um mapa de JUG</h2>
+                            <p>Qualquer JUG Every pode gerenciar suas informações através do JUG Events e
+                            atualizar o seu arquivo KML.</p>
+                            <p style="text-align: center;"><a href="${cp}/service/kml.html">Faça o download do arquivo KML</a></p>
+                            <p>Este arquivo KML é produzido a partir do banco de dados do JUG Events. Os dados originais foram importados
+                                do 
+                            <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Mapa Internacional de Java User Groups</a>.</p>
+                        </c:when>                        
                         <c:otherwise>
                             <h2>KML for a JUG map</h2>
                             <p>Every JUG can manage its information in JUG Events and
                             mantain updated this KML file.</p>
                             <p style="text-align: center;"><a href="${cp}/service/kml.html">Download the KML file</a></p>
                             <p>This KML file is produced from the data of the JUG Events database. The original data has been
-                            imported from the
+                                imported from the
                             <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>.</p>
                         </c:otherwise>
                     </c:choose>                    

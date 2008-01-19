@@ -13,10 +13,11 @@ String queryString = "?" + StringUtils.join(paramKeyValuesList.iterator(), "&");
 %>
 <span id="language">
     <!-- lang: ${requestScope.lang} -->
-    <c:forEach var="supportedLanguage" items="${conf.supportedLanguages}">
+    <!-- locale: ${requestScope.requestContext.locale} -->
+    <c:forEach var="supportedLanguage" items="${conf.supportedLanguages}" varStatus="status">
         <a href="<%=queryString%>&language=${supportedLanguage}" title="${supportedLanguage}">
             <c:choose>
-                <c:when test="${requestScope.lang eq supportedLanguage}">
+                <c:when test="${requestScope.requestContext.locale eq supportedLanguage}">
                     <b><spring:message code="${supportedLanguage}"/></b>                
                 </c:when>
                 <c:otherwise>
@@ -24,5 +25,6 @@ String queryString = "?" + StringUtils.join(paramKeyValuesList.iterator(), "&");
                 </c:otherwise>
             </c:choose>
         </a>
+        <c:if test="${status.count % 2 == 0}"><br/></c:if>
     </c:forEach>
 </span>

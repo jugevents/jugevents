@@ -22,7 +22,7 @@
                             <br/>
                             <a href="http://www.parancoe.org">http://www.parancoe.org</a>.<br/>
                         </c:when>
-			<c:when test="${requestScope.lang eq 'fr'}">
+                        <c:when test="${requestScope.lang eq 'fr'}">
                             Ceci est une template d'application pour le framework
                             <a href="http://wwww.parancoe.org">Parancoe</a>.<br/>
                             <br/>
@@ -33,6 +33,17 @@
                             <br/>
                             <a href="http://www.parancoe.org">http://www.parancoe.org</a>.<br/>
                         </c:when>
+                        <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
+                            Esta é uma aplicação exemplo do framework 
+                            <a href="http://wwww.parancoe.org">Parancoe</a>.<br/>
+                            <br/>
+                            A partir deste exemplo, você pode construir sua própia aplicação
+                            e aproveitar todos os benefícios de usar o Parancoe Framework<br/>
+                            <br/>
+                            Para maiores informações, visite o site do projeto Parancoe:<br/>
+                            <br/>
+                            <a href="http://www.parancoe.org">http://www.parancoe.org</a>.<br/>
+                        </c:when>                        
                         <c:otherwise>
                             This is the template application of the
                             <a href="http://wwww.parancoe.org">Parancoe</a> framework.<br/>
