@@ -48,6 +48,15 @@
                             originali sono stati estratti dalla
                             <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>.</p>
                         </c:when>
+                        <c:when test="${requestScope.lang eq 'fr'}">
+                            <h2>KML pour le JUG map</h2>
+                            <p>Chaque JUG gère ses informations das JUG Events et
+                            maintien à jour son fichier KML.</p>
+                            <p style="text-align: center;"><a href="${cp}/service/kml.html">Téléchargez le fichier KML</a></p>
+                            <p>Le fichier KML est produit à partir des données de JUG Events. Les données d'origine ont été
+                            importé à partir de
+                            <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>.</p>
+                        </c:when>
                         <c:otherwise>
                             <h2>KML for a JUG map</h2>
                             <p>Every JUG can manage its information in JUG Events and
