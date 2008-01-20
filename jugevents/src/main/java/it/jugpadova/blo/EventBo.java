@@ -63,7 +63,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  * 
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision$
+ * @version $Revision: 64d3a5daeee0 $
  */
 public class EventBo {
 
@@ -249,7 +249,7 @@ public class EventBo {
         logger.info(participant.getEmail() + " (" + participant.getId() +
                 ") added to the event with id=" + event.getId());
     }
-    
+
     @Transactional
     public void refreshRegistration(Event event, Participant participant,
             String baseUrl) {
@@ -366,6 +366,7 @@ public class EventBo {
     @Transactional(readOnly = true)
     public void updateBadgePanel(String continent, String country,
             String jugName, String pastEvents, String orderByDate,
+            String jebShowJUGName, String jebShowCountry,
             String jebShowDescription, String badgeStyle, String locale) {
         WebContext wctx = WebContextFactory.get();
         HttpServletRequest req = wctx.getHttpServletRequest();
@@ -384,13 +385,18 @@ public class EventBo {
         eventSearch.setPastEvents(java.lang.Boolean.parseBoolean(pastEvents));
         eventSearch.setOrderByDate(orderByDate);
         java.util.List<it.jugpadova.po.Event> events = this.search(eventSearch);
+        boolean showJUGName =
+                java.lang.Boolean.parseBoolean(jebShowJUGName);
+        boolean showCountry =
+                java.lang.Boolean.parseBoolean(jebShowCountry);
         boolean showDescription =
                 java.lang.Boolean.parseBoolean(jebShowDescription);
         util.setValue("badgeCode", this.getBadgePageCode(baseUrl, continent,
-                country, jugName, pastEvents, orderByDate, jebShowDescription,
+                country, jugName, pastEvents, orderByDate, jebShowJUGName,
+                jebShowCountry, jebShowDescription,
                 badgeStyle, locale));
         util.setValue("badgePreview", this.getBadgeHtmlCode(events, dateFormat,
-                baseUrl, showDescription, badgeStyle));
+                baseUrl, showJUGName, showCountry, showDescription, badgeStyle));
     }
 
     public String getBadgeCode(String badgeHtmlCode) {
@@ -403,7 +409,8 @@ public class EventBo {
 
     public String getBadgePageCode(String baseUrl, String continent,
             String country, String jugName, String pastEvents,
-            String orderByDate, String jebShowDescription, String badgeStyle,
+            String orderByDate, String jebShowJUGName, String jebShowCountry,
+            String jebShowDescription, String badgeStyle,
             String lang) {
         StringBuffer result = new StringBuffer();
         result.append("<script type=\"text/javascript\" src=\"").append(baseUrl).
@@ -414,6 +421,8 @@ public class EventBo {
                     StringUtils.isNotBlank(jugName) ||
                     StringUtils.isNotBlank(pastEvents) ||
                     StringUtils.isNotBlank(orderByDate) ||
+                    StringUtils.isNotBlank(jebShowJUGName) ||
+                    StringUtils.isNotBlank(jebShowCountry) ||
                     StringUtils.isNotBlank(jebShowDescription) ||
                     StringUtils.isNotBlank(badgeStyle) ||
                     StringUtils.isNotBlank(lang)) {
@@ -459,6 +468,22 @@ public class EventBo {
                             URLEncoder.encode(orderByDate, "UTF-8"));
                     first = false;
                 }
+                if (StringUtils.isNotBlank(jebShowJUGName)) {
+                    if (!first) {
+                        result.append('&');
+                    }
+                    result.append("jeb_showJUGName=").append(
+                            URLEncoder.encode(jebShowJUGName, "UTF-8"));
+                    first = false;
+                }
+                if (StringUtils.isNotBlank(jebShowCountry)) {
+                    if (!first) {
+                        result.append('&');
+                    }
+                    result.append("jeb_showCountry=").append(
+                            URLEncoder.encode(jebShowCountry, "UTF-8"));
+                    first = false;
+                }
                 if (StringUtils.isNotBlank(jebShowDescription)) {
                     if (!first) {
                         result.append('&');
@@ -494,7 +519,8 @@ public class EventBo {
     }
 
     public String getBadgeHtmlCode(List<Event> events, DateFormat dateFormat,
-            String baseUrl, boolean showDescription, String badgeStyle) {
+            String baseUrl, boolean showJUGName, boolean showCountry,
+            boolean showDescription, String badgeStyle) {
         StringBuffer result = new StringBuffer();
         if ("simple".equals(badgeStyle)) {
             result.append("<style type=\"text/css\"><!--\n");
@@ -502,6 +528,8 @@ public class EventBo {
             result.append(".jeb_event_even {background-color: white; padding: 4px;}\n");
             result.append(".jeb_date {font-weight: bold;}\n");
             result.append(".jeb_title {margin-left: 15px;}\n");
+            result.append(".jeb_jug_name {margin-left: 15px;}\n");
+            result.append(".jeb_country {margin-left: 15px;}\n");
             result.append(".jeb_description {margin-left: 15px;}\n");
             result.append("--></style>\n");
         }
@@ -517,6 +545,26 @@ public class EventBo {
                     append(baseUrl).append("/event/show.html?id=").append(
                     event.getId()).append("\">").append(
                     event.getTitle()).append("</a></span></div>");
+            if (showJUGName) {
+                result.append(
+                        "<div class=\"jeb_jug_name\"><span class=\"jeb_text\">");
+                if (event.getOwner() != null) {
+                    result.append("<a href=\"").append(event.getOwner().getJug().
+                            getWebSite()).append("\">").append(event.getOwner().
+                            getJug().getName()).append("</a>");
+                }
+                result.append("</span></div>");
+            }
+            if (showCountry) {
+                result.append(
+                        "<div class=\"jeb_country\"><span class=\"jeb_text\">");
+                if (event.getOwner() != null && event.getOwner().getJug().
+                        getCountry() != null) {
+                    result.append(event.getOwner().getJug().getCountry().
+                            getLocalName());
+                }
+                result.append("</span></div>");
+            }
             if (showDescription) {
                 result.append(
                         "<div class=\"jeb_description\"><span class=\"jeb_text\">").

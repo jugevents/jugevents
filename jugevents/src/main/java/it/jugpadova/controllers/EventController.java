@@ -201,13 +201,18 @@ public abstract class EventController extends BaseMultiActionController {
             eventSearch.setOrderByDate(req.getParameter("order"));
             java.util.List<it.jugpadova.po.Event> events =
                     blo().getEventBo().search(eventSearch);
+            boolean showJUGName =
+                    java.lang.Boolean.parseBoolean(req.getParameter("jeb_showJUGName"));
+            boolean showCountry =
+                    java.lang.Boolean.parseBoolean(req.getParameter("jeb_showCountry"));
             boolean showDescription =
                     java.lang.Boolean.parseBoolean(req.getParameter("jeb_showDescription"));
             String badgeStyle = req.getParameter("jeb_style");
             EventBo eventBo = blo().getEventBo();
             String result =
                     eventBo.getBadgeCode(eventBo.getBadgeHtmlCode(events,
-                    dateFormat, baseUrl, showDescription, badgeStyle));
+                    dateFormat, baseUrl, showJUGName, showCountry,
+                    showDescription, badgeStyle));
             // flush it in the res
             res.setHeader("Cache-Control", "no-store");
             res.setHeader("Pragma", "no-cache");

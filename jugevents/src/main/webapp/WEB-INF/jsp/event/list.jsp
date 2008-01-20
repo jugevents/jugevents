@@ -121,6 +121,10 @@
                             <legend><spring:message code='WebBadge'/></legend>
                             <a href="#" onclick="$('webBadge').hide(); return false;"><spring:message code="CloseBadgePanel"/></a>
                             <dl>
+                                <dt><label><spring:message code="IncludeJUGName"/>:</label></dt>
+                                <dd><input type="checkbox" name="badgeIncludeJUGName" id="badgeIncludeJUGName" onchange="updateBadge()"/></dd>
+                                <dt><label><spring:message code="IncludeCountry"/>:</label></dt>
+                                <dd><input type="checkbox" name="badgeIncludeCountry" id="badgeIncludeCountry" onchange="updateBadge()"/></dd>
                                 <dt><label><spring:message code="IncludeTheDescription"/>:</label></dt>
                                 <dd><input type="checkbox" name="badgeIncludeTheDescription" id="badgeIncludeTheDescription" onchange="updateBadge()"/></dd>
                                 <dt><label><spring:message code="Style"/>:</label></dt>
@@ -169,7 +173,7 @@
             }
 
             function updateBadge() {
-            eventBo.updateBadgePanel($('continent').value, $('country').value, $('jugName').value, $('pastEvents').checked, $$('input[type=radio][name=orderByDate]').find(function(el) { return el.checked }).value, $('badgeIncludeTheDescription').checked, $$('input[type=radio][name=badgeStyle]').find(function(el) { return el.checked }).value, '${requestScope.lang}');
+            eventBo.updateBadgePanel($('continent').value, $('country').value, $('jugName').value, $('pastEvents').checked, $$('input[type=radio][name=orderByDate]').find(function(el) { return el.checked }).value, $('badgeIncludeJUGName').checked, $('badgeIncludeCountry').checked, $('badgeIncludeTheDescription').checked, $$('input[type=radio][name=badgeStyle]').find(function(el) { return el.checked }).value, '${requestScope.lang}');
             }
 
         </script>
