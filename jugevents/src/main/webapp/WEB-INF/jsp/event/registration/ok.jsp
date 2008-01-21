@@ -5,9 +5,9 @@
         <%@ include file="../../head.jspf" %>
     </head>
     <body>
-        <div id="nonFooter">            
+        <div id="nonFooter">
             <jsp:include page="../../header.jsp"/>
-            <div id="content"> 
+            <div id="content">
                 <div id="content_main">
                     <c:choose>
                         <c:when test="${requestScope.lang eq 'it'}">
@@ -22,6 +22,10 @@
                             Parabéns <b>${participant.firstName}</b>!<br>
                             Sua participação no evento &quot;${participant.event.title}&quot; foi confirmada.
                         </c:when>
+                        <c:when test="${requestScope.requestContext.locale eq 'pt_PT'}">
+                            Parabéns <b>${participant.firstName}</b>!<br>
+                            A sua participação no evento &quot;${participant.event.title}&quot; foi confirmada.
+                        </c:when>
                         <c:otherwise>
                             Congratulations <b>${participant.firstName}</b>!<br>
                             Your participation to the event &quot;${participant.event.title}&quot; is confirmed.
@@ -31,6 +35,6 @@
                 <jsp:include page="../../menu.jsp"/>
             </div>
         </div>
-        <jsp:include page="../../footer.jsp"/>        
+        <jsp:include page="../../footer.jsp"/>
     </body>
 </html>

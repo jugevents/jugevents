@@ -141,7 +141,8 @@ form br {
 
 #languages {
     text-align: right;
-    padding-top: 30px;
+    padding-top: 15px;
+    font-size: 10px;
 }
 
 #footer {

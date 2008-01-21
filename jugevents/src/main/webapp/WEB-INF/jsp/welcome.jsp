@@ -5,9 +5,9 @@
         <%@ include file="head.jspf" %>
     </head>
     <body>
-        <div id="nonFooter">            
+        <div id="nonFooter">
             <jsp:include page="header.jsp"/>
-            <div id="content"> 
+            <div id="content">
                 <div id="content_main">
                     <c:choose>
                         <c:when test="${requestScope.lang eq 'it'}">
@@ -34,7 +34,7 @@
                             <a href="http://www.parancoe.org">http://www.parancoe.org</a>.<br/>
                         </c:when>
                         <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
-                            Esta é uma aplicação exemplo do framework 
+                            Esta é uma aplicação exemplo do framework
                             <a href="http://wwww.parancoe.org">Parancoe</a>.<br/>
                             <br/>
                             A partir deste exemplo, você pode construir sua própia aplicação
@@ -43,7 +43,18 @@
                             Para maiores informações, visite o site do projeto Parancoe:<br/>
                             <br/>
                             <a href="http://www.parancoe.org">http://www.parancoe.org</a>.<br/>
-                        </c:when>                        
+                        </c:when>
+                        <c:when test="${requestScope.requestContext.locale eq 'pt_PT'}">
+                            Esta é uma aplicação exemplo da framework
+                            <a href="http://wwww.parancoe.org">Parancoe</a>.<br/>
+                            <br/>
+                            A partir deste exemplo, pode construir a sua própia aplicação
+                            e aproveitar todos os benefícios de usar o Parancoe Framework<br/>
+                            <br/>
+                            Para mais informações, visite o site do projecto Parancoe:<br/>
+                            <br/>
+                            <a href="http://www.parancoe.org">http://www.parancoe.org</a>.<br/>
+                        </c:when>
                         <c:otherwise>
                             This is the template application of the
                             <a href="http://wwww.parancoe.org">Parancoe</a> framework.<br/>
@@ -60,6 +71,6 @@
                 <jsp:include page="menu.jsp"/>
             </div>
         </div>
-        <jsp:include page="footer.jsp"/>        
+        <jsp:include page="footer.jsp"/>
     </body>
 </html>

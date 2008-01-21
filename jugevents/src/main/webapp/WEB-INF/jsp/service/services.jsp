@@ -5,11 +5,11 @@
         <%@ include file="../head.jspf" %>
     </head>
     <body>
-        <div id="nonFooter">            
+        <div id="nonFooter">
             <jsp:include page="../header.jsp"/>
-            <div id="content"> 
+            <div id="content">
                 <div id="content_main">
-                    <h1><spring:message code="Services"/></h1>                    
+                    <h1><spring:message code="Services"/></h1>
                     <c:choose>
                         <c:when test="${requestScope.lang eq 'it'}">
                             <p>JUG Events non &egrave; solo per gestire gli eventi
@@ -29,13 +29,21 @@
                             et nous essaierons de le réaliser.</p>
                         </c:when>
                         <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
-                            <p>JUG Events não serve apenas para o gerenciamento de eventos. 
+                            <p>JUG Events não serve apenas para o gerenciamento de eventos.
                                 O projeto também provê serviços úteis ao seu JUG e à comunidade
                             internacional de JUGs.</p>
                             <p>Se você imagina algum serviço que o JUG Events deveria
                                 fornecer, <a href="mailto:info@jugevents.org">envie sua sugestão</a>,
                             e nós analisaremos e tentaremos implementá-la.</p>
-                        </c:when>                        
+                        </c:when>
+                        <c:when test="${requestScope.requestContext.locale eq 'pt_PT'}">
+                            <p>JUG Events não serve apenas para gestão de eventos.
+                                O projecto também fornece serviços úteis ao seu JUG e à comunidade
+                            internacional de JUGs.</p>
+                            <p>Se você imagina algum serviço que o JUG Events deveria
+                                fornecer, <a href="mailto:info@jugevents.org">envie a sua sugestão</a>,
+                            e nós analisaremos e tentaremos implementá-la.</p>
+                        </c:when>
                         <c:otherwise>
                             <p>JUG Events isn't just for event management. It can
                                 provide some useful services to your JUG and to the
@@ -71,9 +79,18 @@
                             atualizar o seu arquivo KML.</p>
                             <p style="text-align: center;"><a href="${cp}/service/kml.html">Faça o download do arquivo KML</a></p>
                             <p>Este arquivo KML é produzido a partir do banco de dados do JUG Events. Os dados originais foram importados
-                                do 
+                                do
                             <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Mapa Internacional de Java User Groups</a>.</p>
-                        </c:when>                        
+                        </c:when>
+                        <c:when test="${requestScope.requestContext.locale eq 'pt_PT'}">
+                            <h2>KML para um mapa de JUG</h2>
+                            <p>Qualquer JUG Every pode gerenciar suas informações através do JUG Events e
+                            atualizar o seu arquivo KML.</p>
+                            <p style="text-align: center;"><a href="${cp}/service/kml.html">Faça o download do arquivo KML</a></p>
+                            <p>Este arquivo KML é produzido a partir do banco de dados do JUG Events. Os dados originais foram importados
+                                do
+                            <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Mapa Internacional de Java User Groups</a>.</p>
+                        </c:when>
                         <c:otherwise>
                             <h2>KML for a JUG map</h2>
                             <p>Every JUG can manage its information in JUG Events and
@@ -83,11 +100,11 @@
                                 imported from the
                             <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>.</p>
                         </c:otherwise>
-                    </c:choose>                    
+                    </c:choose>
                 </div>
                 <jsp:include page="../menu.jsp"/>
             </div>
         </div>
-        <jsp:include page="../footer.jsp"/>        
+        <jsp:include page="../footer.jsp"/>
     </body>
 </html>
