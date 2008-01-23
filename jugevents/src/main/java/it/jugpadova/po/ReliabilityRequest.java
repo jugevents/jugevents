@@ -19,6 +19,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
 
@@ -40,6 +41,8 @@ public class ReliabilityRequest extends EntityBase implements Serializable {
 	private String motivation;
 	private String adminResponse;
 	private Date dateRequest;
+	
+	
 	private Date dateAdminResponse;
 	
 	public String getAdminResponse() {
@@ -76,7 +79,7 @@ public class ReliabilityRequest extends EntityBase implements Serializable {
 	}
 	
 	
-	public String statusDescription()
+	private String statusDescription()
 	{
 		switch(status) 
 		{	
@@ -88,5 +91,10 @@ public class ReliabilityRequest extends EntityBase implements Serializable {
 		}
 		return "INVALID";
 	}
+	@Transient
+	public String getDescription() {
+		return statusDescription();
+	}
+	
 
 }

@@ -27,14 +27,13 @@
 						<c:out value="${jg.jug.name}" />				
 					</display:column>
 					<display:column title="Reliability Request" sortable="true">						
-					  <% 
-						if(((Jugger)jg).getReliabilityRequest()!= null) {	%>
-							<%= ((Jugger)jg).getReliabilityRequest().statusDescription() %>
-							<%
-							} else {
-							%>
-							NOT REQUIRED
-							<% } %>
+					<c:choose>
+					<c:when test="${jg.reliabilityRequest!=null}">					
+						${jg.reliabilityRequest.description}
+					</c:when>
+					<c:otherwise>NOT REQUIRED</c:otherwise>					  
+					</c:choose>
+					
 					</display:column>
 					<display:column title="actions" >
 						<a
