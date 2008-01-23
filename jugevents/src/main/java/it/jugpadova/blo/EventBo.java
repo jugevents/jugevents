@@ -63,7 +63,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  * 
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 64d3a5daeee0 $
+ * @version $Revision: da7a56e2f734 $
  */
 public class EventBo {
 
@@ -578,8 +578,10 @@ public class EventBo {
     }
 
     private String javascriptize(String s) {
-        return s.replaceAll("\'", Matcher.quoteReplacement("\\'")).replaceAll(
-                "\n", Matcher.quoteReplacement("\\n"));
+        return s.replaceAll("\'", Matcher.quoteReplacement("\\'"))
+                .replaceAll("\\r\\n", Matcher.quoteReplacement("\\n"))
+                .replaceAll("\\r", Matcher.quoteReplacement("\\n"))
+                .replaceAll("\\n", Matcher.quoteReplacement("\\n"));
     }
 
     @Transactional(readOnly = true)
