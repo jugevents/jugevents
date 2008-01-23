@@ -99,22 +99,22 @@
                             </dl>
                         </fieldset>
                         
+                        
+                        <authz:authorize ifAnyGranted="ROLE_JUGGER">    
                         <c:if test="${!jugger.reliable}">                            
                             <fieldset>
                             	<legend><spring:message  code="Reliability" /></legend>       
                             	<a href="javascript:require();"><spring:message code="requireReliability"/></a>                
                                 &nbsp;<img id="tip_reliability" src="${cp}/images/question16x16.png" />          
                                 
-                               
 								<div id="confirmMSGOK" style="display: none; color: #41AF0A"></div>
-								
-                               
 								
                             </fieldset>      
 						 <script type="text/javascript">
                                 new Tip($('tip_reliability'), '<spring:message code="tip.reliability"/>', {title: 'Reliability', effect: 'appear'});
                             </script>                      
                         </c:if>
+                        </authz:authorize>
                         
                         <fieldset><legend>JUG</legend>
                             <dl>
