@@ -1,0 +1,10 @@
+<dl>
+    <dt><spring:message code="event.title"/>:</dt>
+    <dd><a href="${cp}/event/show.html?id=${event.id}">${event.title}</a>&nbsp;</dd>
+    <c:if test="${!empty event.owner}">
+        <dt><spring:message code="event.organizingJUG"/>:</dt>
+        <dd><a href="${event.owner.jug.webSite}">${event.owner.jug.name}</a></dd>        
+    </c:if>
+    <dt><spring:message code="event.startDate"/>:</dt>
+    <dd><fmt:formatDate value="${event.startDate}" type="date" dateStyle="full" />&nbsp;</dd>
+</dl>

@@ -63,7 +63,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  * 
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: da7a56e2f734 $
+ * @version $Revision: 6b50ef9057fd $
  */
 public class EventBo {
 
@@ -358,6 +358,7 @@ public class EventBo {
         if (participants != null && participants.size() > 0) {
             Participant p = participants.get(0);
             p.setConfirmed(Boolean.TRUE);
+            p.setConfirmationDate(new Date());
             return p;
         }
         return null;

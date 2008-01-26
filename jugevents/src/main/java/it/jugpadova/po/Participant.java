@@ -28,7 +28,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision$
+ * @version $Revision: 6b50ef9057fd $
  */
 @Entity
 @NamedQueries({
@@ -36,6 +36,8 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
         query="from Participant p where p.email = ? and p.event.id = ?"),
     @NamedQuery(name="Participant.findConfirmedParticipantsByEventId",
         query="from Participant p where p.event.id = ? and p.confirmed = true order by p.creationDate, p.id"),
+    @NamedQuery(name="Participant.findNotConfirmedParticipantsByEventId",
+        query="from Participant p where p.event.id = ? and p.confirmed = false order by p.creationDate, p.id"),
     @NamedQuery(name="Participant.findPresentParticipantsByEventId",
         query="from Participant p where p.event.id = ? and p.attended = true")
 })
@@ -53,6 +55,7 @@ public class Participant extends EntityBase {
     private Date creationDate;
     private Boolean attended;
     private Date lastCertificateSentDate;
+    private Date confirmationDate;
     
     /** Creates a new instance of Participant */
     public Participant() {
@@ -131,6 +134,14 @@ public class Participant extends EntityBase {
 
     public void setLastCertificateSentDate(Date lastCertificateSentDate) {
         this.lastCertificateSentDate = lastCertificateSentDate;
+    }
+
+    public Date getConfirmationDate() {
+        return confirmationDate;
+    }
+
+    public void setConfirmationDate(Date confirmationDate) {
+        this.confirmationDate = confirmationDate;
     }
     
 }

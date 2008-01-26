@@ -97,8 +97,12 @@ public abstract class EventController extends BaseMultiActionController {
             List<Participant> participants =
                     dao().getParticipantDao().
                     findConfirmedParticipantsByEventId(event.getId());
+            List<Participant> participantsNotConfirmed =
+                    dao().getParticipantDao().
+                    findNotConfirmedParticipantsByEventId(event.getId());            
             mv.addObject("event", event);
             mv.addObject("participants", participants);
+            mv.addObject("participantsNotConfirmed", participantsNotConfirmed);
             Registration registration = new Registration();
             registration.setEvent(event);
             registration.setParticipant(new Participant());
