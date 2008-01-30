@@ -99,7 +99,7 @@ public abstract class EventController extends BaseMultiActionController {
                     findConfirmedParticipantsByEventId(event.getId());
             List<Participant> participantsNotConfirmed =
                     dao().getParticipantDao().
-                    findNotConfirmedParticipantsByEventId(event.getId());            
+                    findNotConfirmedParticipantsByEventId(event.getId());
             mv.addObject("event", event);
             mv.addObject("participants", participants);
             mv.addObject("participantsNotConfirmed", participantsNotConfirmed);
@@ -107,6 +107,32 @@ public abstract class EventController extends BaseMultiActionController {
             registration.setEvent(event);
             registration.setParticipant(new Participant());
             mv.addObject("registration", registration);
+        } catch (ParancoeAccessDeniedException pade) {
+            throw pade;
+        } catch (Exception e) {
+            return genericError(e);
+        }
+        return mv;
+    }
+
+    public ModelAndView winners(HttpServletRequest req,
+            HttpServletResponse res) {
+        ModelAndView mv =
+                new ModelAndView("event/winners");
+        try {
+            Long id = Long.parseLong(req.getParameter("id"));
+            Event event = blo().getEventBo().retrieveEvent(id);
+            if (event == null) {
+                throw new IllegalArgumentException("No event with id " + id);
+            }
+            blo().getEventBo().checkUserAuthorization(event);
+            mv.addObject("event", event);
+            List<Participant> nonWinningParticipants = dao().getParticipantDao().
+                    findNonwinningParticipantsByEventId(id);
+            mv.addObject("nonWinningParticipants", nonWinningParticipants);
+            List<Participant> winningParticipants = dao().getParticipantDao().
+                    findWinningParticipantsByEventId(id);
+            mv.addObject("winningParticipants", winningParticipants);
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;
         } catch (Exception e) {

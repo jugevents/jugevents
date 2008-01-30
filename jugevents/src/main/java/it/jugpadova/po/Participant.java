@@ -28,7 +28,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 6b50ef9057fd $
+ * @version $Revision: d4aa1bb2b87b $
  */
 @Entity
 @NamedQueries({
@@ -39,7 +39,11 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
     @NamedQuery(name="Participant.findNotConfirmedParticipantsByEventId",
         query="from Participant p where p.event.id = ? and p.confirmed = false order by p.creationDate, p.id"),
     @NamedQuery(name="Participant.findPresentParticipantsByEventId",
-        query="from Participant p where p.event.id = ? and p.attended = true")
+        query="from Participant p where p.event.id = ? and p.attended = true"),
+    @NamedQuery(name="Participant.findWinningParticipantsByEventId",
+        query="from Participant p where p.event.id = ? and p.winner = true"),
+    @NamedQuery(name="Participant.findNonwinningParticipantsByEventId",
+        query="from Participant p where p.event.id = ? and (p.winner = null or p.winner = false)")
 })
 public class Participant extends EntityBase {
     @NotBlank
@@ -56,7 +60,8 @@ public class Participant extends EntityBase {
     private Boolean attended;
     private Date lastCertificateSentDate;
     private Date confirmationDate;
-    
+    private Boolean winner;
+
     /** Creates a new instance of Participant */
     public Participant() {
     }
@@ -108,7 +113,7 @@ public class Participant extends EntityBase {
 
     public void setEvent(Event event) {
         this.event = event;
-    }        
+    }
 
     @Temporal(value = TemporalType.TIMESTAMP)
     public Date getCreationDate() {
@@ -143,5 +148,13 @@ public class Participant extends EntityBase {
     public void setConfirmationDate(Date confirmationDate) {
         this.confirmationDate = confirmationDate;
     }
-    
+
+    public Boolean getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Boolean winner) {
+        this.winner = winner;
+    }
+
 }

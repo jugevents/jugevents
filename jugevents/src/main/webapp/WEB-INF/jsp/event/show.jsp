@@ -32,6 +32,11 @@
                             <a href="${cp}/event/participants.html?id=${event.id}"><spring:message code="participants"/></a>
                         </c:if>
                     </authz:authorize>
+                    <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
+                        <c:if test="${event.owner.user.username == authentication.name || authentication.authorities[0] == 'ROLE_ADMIN'}">
+                            <a href="${cp}/event/winners.html?id=${event.id}"><spring:message code="winners"/></a>
+                        </c:if>
+                    </authz:authorize>
                     
                     <%@ include file="show.jspf" %>
                 </div>

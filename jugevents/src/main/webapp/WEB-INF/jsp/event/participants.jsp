@@ -49,6 +49,9 @@
                 <display:column media="html" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;">
                     <input onclick="participantBo.setAttended(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.attended}">checked="${participantList.attended}"</c:if> />
                        </display:column>
+                <display:column media="html" titleKey="Winner" sortable="true" headerClass="sortable" style="text-align: center;">
+                        <input onclick="participantBo.setWinner(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.winner}">checked="${participantList.winner}"</c:if> />
+                           </display:column>
                        <display:column media="csv xml excel pdf" property="attended" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;" />
                        <display:column media="html" titleKey="Certificate" sortable="false" style="text-align: center;">
                            <a href="#" onclick="participantBo.sendCertificateToParticipant(${participantList.id}, 'http://www.jugevents.org'); return false"><spring:message code="SendCertificate"/></a>
@@ -68,6 +71,9 @@
                 <display:column media="html" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;">
                     <input onclick="participantBo.confirmParticipantOnAttendance(${participantNotConfirmedList.id}, this.checked)" type="checkbox" <c:if test="${participantNotConfirmedList.attended}">checked="${participantNotConfirmedList.attended}"</c:if> />
                        </display:column>
+                <display:column media="html" titleKey="Winner" sortable="true" headerClass="sortable" style="text-align: center;">
+                        <input onclick="participantBo.setWinner(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.winner}">checked="${participantList.winner}"</c:if> />
+                           </display:column>
                        <display:column media="csv xml excel pdf" property="attended" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;" />
                    </display:table>
                    </div>

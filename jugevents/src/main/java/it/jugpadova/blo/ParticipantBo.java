@@ -47,7 +47,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 6b50ef9057fd $
+ * @version $Revision: d4aa1bb2b87b $
  */
 public class ParticipantBo {
 
@@ -132,6 +132,13 @@ public class ParticipantBo {
         } else {
             participant.setConfirmationDate(null);
         }
+    }
+
+    @Transactional
+    public void setWinner(long participantId, boolean value) {
+        Participant participant =
+                daos.getParticipantDao().read(Long.valueOf(participantId));
+        participant.setWinner(new Boolean(value));
     }
 
     @Transactional
@@ -249,5 +256,22 @@ public class ParticipantBo {
             }
         };
         this.mailSender.send(preparator);
+    }
+
+    @Transactional
+    public List<Participant> chooseWinnerForEvent(long eventId) {
+        List<Participant> nonwinningParticipants = daos.getParticipantDao().findNonwinningParticipantsByEventId(eventId);
+
+        int totalParticipants = nonwinningParticipants.size();
+
+        int winner = (int) Math.round(Math.random() * totalParticipants);
+        nonwinningParticipants.get(winner).setWinner(true);
+        daos.getParticipantDao().createOrUpdate(nonwinningParticipants.get(winner));
+
+        return nonwinningParticipants;
+    }
+
+    public List<Participant> findAllWinnersForEvent(long eventId) {
+        return daos.getParticipantDao().findWinningParticipantsByEventId(eventId);
     }
 }

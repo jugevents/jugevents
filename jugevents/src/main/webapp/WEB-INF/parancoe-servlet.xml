@@ -85,9 +85,12 @@
         <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>
         <dwr:remote javascript="participantBo">
             <dwr:include method="setAttended"/>
+            <dwr:include method="setWinner"/>
             <dwr:include method="confirmParticipantOnAttendance"/>
             <dwr:include method="sendCertificateToParticipant"/>
             <dwr:include method="sendCertificateToAllParticipants"/>
+            <dwr:include method="chooseWinnerForEvent"/>
+            <dwr:include method="findAllWinnersForEvent"/>
         </dwr:remote>
     </bean>
 
@@ -238,6 +241,7 @@
                 /event/edit*=ROLE_ADMIN, ROLE_JUGGER
                 /event/delete*=ROLE_ADMIN, ROLE_JUGGER
                 /event/participants*=ROLE_ADMIN, ROLE_JUGGER
+                /event/winners*=ROLE_ADMIN, ROLE_JUGGER
                 /event/addparticipant*=ROLE_ADMIN, ROLE_JUGGER
                 /admin/**=ROLE_ADMIN
                 /**=IS_AUTHENTICATED_ANONYMOUSLY
@@ -255,6 +259,7 @@
 
     <dwr:configuration>
         <dwr:convert type="bean" class="it.jugpadova.po.Person" />
+        <dwr:convert class="it.jugpadova.po.Participant" type="bean"/>
     </dwr:configuration>
     <!-- end dwr section -->
 
