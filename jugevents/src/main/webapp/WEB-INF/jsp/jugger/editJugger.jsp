@@ -75,7 +75,7 @@
                                         
                     <h1><spring:message code="Edit-Jugger"/></h1>
                     
-                    <form:form commandName="jugger" method="POST" action="${cp}/jugger/edit.form">
+                    <form:form commandName="jugger" method="POST" action="${cp}/jugger/edit.form" enctype="multipart/form-data">
                         <form:errors path="*" cssClass="errorBox"/>
                         
                         
@@ -117,6 +117,7 @@
                         </authz:authorize>
                         
                         <fieldset><legend>JUG</legend>
+                            <img style="float: right;" src="${cp}/bin/jugLogo.html?id=${jugger.jugger.jug.id}" alt="JUG Logo" width="100"/>
                             <dl>
                                 <dt><form:label path="jugger.jug.name">
                                 <spring:message code="juggerRegistrationJUGName" /> (*)</form:label></dt>
@@ -134,6 +135,10 @@
                                         <spring:message code="juggerRegistrationWebSite" />
                                 </form:label></dt>
                                 <dd><form:input path="jugger.jug.webSite" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
+                                <dt><form:label path="jugger.jug.logo">
+                                        <spring:message code="juggerRegistrationLogo" />
+                                </form:label></dt>
+                                <dd><input type="file" name="jugger.jug.logo" id="jugger.jug.logo"  <c:if test="${!jugger.reliable}">readonly="readonly" disabled="disabled"</c:if>/></dd>
                                 <dt><form:label path="jugger.jug.longitude">
                                         <spring:message code="juggerRegistrationLongitude" />
                                 </form:label></dt>

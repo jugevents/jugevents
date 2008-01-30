@@ -30,6 +30,7 @@ import org.parancoe.web.BaseFormController;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -48,10 +49,11 @@ public abstract class JuggerEditController extends BaseFormController {
             ServletRequestDataBinder binder) throws Exception {
         binder.registerCustomEditor(Date.class,
                 new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true));
+        binder.registerCustomEditor(byte[].class,
+                new ByteArrayMultipartFileEditor());
     }
 
     /* questo viene chiamato solo in caso di una post a jugger/edit.form */
-
     @Override
     protected ModelAndView onSubmit(HttpServletRequest req,
             HttpServletResponse res, Object command,
@@ -61,8 +63,9 @@ public abstract class JuggerEditController extends BaseFormController {
         if (StringUtils.isNotBlank(ej.getPassword())) {
             ej.getJugger().getUser().setPassword(ej.getPassword());
         }
-        blo().getJuggerBO().update(ej.getJugger(), ej.getRequireReliability().isRequireReliability(),
-				ej.getRequireReliability().getComment());
+        blo().getJuggerBO().update(ej.getJugger(), ej.getRequireReliability().
+                isRequireReliability(),
+                ej.getRequireReliability().getComment());
         ModelAndView mv = onSubmit(command, errors);
         mv.addObject("id", ej.getJugger().getId());
         return mv;
@@ -74,11 +77,11 @@ public abstract class JuggerEditController extends BaseFormController {
 
         EditJugger ej = new EditJugger();
         Jugger jugger = dao().getJuggerDao().searchByUsername(username);
-        if(!blo().getServicesBo().checkAuthorization(username))
-        {
-        	throw new ParancoeAccessDeniedException("Forbidden access to user identified by "+username);
+        if (!blo().getServicesBo().checkAuthorization(username)) {
+            throw new ParancoeAccessDeniedException("Forbidden access to user identified by " +
+                    username);
         }
-        
+
         ej.setJugger(jugger);
         ej.setRequireReliability(new RequireReliability());
         ej.setReliable(blo().getServicesBo().isJuggerReliable(jugger.getReliability()));
@@ -96,3 +99,4 @@ public abstract class JuggerEditController extends BaseFormController {
 
     protected abstract Blos blo();
 } // end of class
+

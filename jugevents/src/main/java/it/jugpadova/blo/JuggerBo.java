@@ -1,3 +1,16 @@
+// Copyright 2006-2007 The JUG Events Team
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 package it.jugpadova.blo;
 
 import it.jugpadova.Daos;
@@ -344,7 +357,6 @@ public class JuggerBo {
             if (jug.getLongitude() != null) {
                 util.setValue("jugger.jug.longitude", jug.getLongitude().
                         toString());
-
             } else {
                 util.setValue("jugger.jug.longitude", null);
             }
@@ -395,6 +407,7 @@ public class JuggerBo {
         }
         util.addFunctionCall(jsFunction, "jugger.jug.country.englishName");
         util.addFunctionCall(jsFunction, "jugger.jug.webSite");
+        util.addFunctionCall(jsFunction, "jugger.jug.log");
         util.addFunctionCall(jsFunction, "jugger.jug.longitude");
         util.addFunctionCall(jsFunction, "jugger.jug.latitude");
         util.addFunctionCall(jsFunction, "jugger.jug.infos");
