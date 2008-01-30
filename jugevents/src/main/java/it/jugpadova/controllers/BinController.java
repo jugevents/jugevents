@@ -15,9 +15,10 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.Blos;
 import it.jugpadova.Daos;
-import it.jugpadova.po.JUG;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,12 +54,28 @@ public abstract class BinController extends BaseMultiActionController {
             HttpServletResponse res) throws IOException {
         Long id = new Long(req.getParameter("id"));
         byte[] jugLogo = blo().getJugBo().retrieveJugLogo(id);
-        res.setContentType("image/jpeg");
-        res.setContentLength(jugLogo.length);
-        OutputStream out = new BufferedOutputStream(res.getOutputStream());
-        out.write(jugLogo);
-        out.flush();
-        out.close();
+        if (jugLogo != null && jugLogo.length > 0) {
+            res.setContentType("image/jpeg");
+            res.setContentLength(jugLogo.length);
+            OutputStream out = new BufferedOutputStream(res.getOutputStream());
+            out.write(jugLogo);
+            out.flush();
+            out.close();
+        } else {
+            // no logo image
+            InputStream in =
+                    new BufferedInputStream(this.getClass().getClassLoader().
+                    getResourceAsStream("images/noJugLogo.jpg"));
+            res.setContentType("image/jpeg");
+            OutputStream out = new BufferedOutputStream(res.getOutputStream());
+            int b = 0;
+            while ((b = in.read()) != -1) {
+                out.write(b);
+            }
+            in.close();
+            out.flush();
+            out.close();                    
+        }
         return null;
     }
 

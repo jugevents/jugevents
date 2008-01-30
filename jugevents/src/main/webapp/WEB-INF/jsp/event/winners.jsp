@@ -93,7 +93,7 @@
             <h2><spring:message code="Winners"/></h2>
             <ul id="winnersList">
                 <c:forEach var="participant" items="${winningParticipants}">
-                    <li id="winner${participant.id}"><c:out value="${participant.firstName} ${participant.lastName}"/> [<a href="#" onclick="deleteWinner(${participant.id}, 'winner${participant.id}')">X</a>]</li>
+                    <li id="winner${participant.id}"><c:out value="${participant.firstName} ${participant.lastName}"/> [<a href="#" onclick="deleteWinner(${participant.id}, 'winner${participant.id}'); return false;">X</a>]</li>
                 </c:forEach>
             </ul>
         </div>

@@ -14,11 +14,14 @@
 package it.jugpadova.blo;
 
 import it.jugpadova.Daos;
+import it.jugpadova.bean.ParticipantBean;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +32,7 @@ import javax.mail.internet.MimeMessage;
 import net.java.dev.footprint.exporter.Exporter;
 import net.java.dev.footprint.exporter.pdf.PdfExporterFactory;
 import net.java.dev.footprint.model.generated.FootprintProperties;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
 import org.directwebremoting.ScriptSession;
@@ -47,7 +51,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: d4aa1bb2b87b $
+ * @version $Revision: a48ebedb7eae $
  */
 public class ParticipantBo {
 
@@ -103,7 +107,7 @@ public class ParticipantBo {
 
     /**
      * Set the attended flag of a participant.
-     * 
+     *
      * @param participantId The id of the participa
      * @param value true if attended
      */
@@ -116,7 +120,7 @@ public class ParticipantBo {
 
     /**
      * Confirm a participant when he is present to the event.
-     * 
+     *
      * @param participantId The id of the participa
      * @param value true if he's present
      */
@@ -259,8 +263,9 @@ public class ParticipantBo {
     }
 
     @Transactional
-    public List<Participant> chooseWinnerForEvent(long eventId) {
-        List<Participant> nonwinningParticipants = daos.getParticipantDao().findNonwinningParticipantsByEventId(eventId);
+    public List<ParticipantBean> chooseWinnerForEvent(long eventId) {
+        List<Participant> nonwinningParticipants = daos.getParticipantDao().
+                findNonwinningParticipantsByEventId(eventId);
 
         int totalParticipants = nonwinningParticipants.size();
 
@@ -268,10 +273,43 @@ public class ParticipantBo {
         nonwinningParticipants.get(winner).setWinner(true);
         daos.getParticipantDao().createOrUpdate(nonwinningParticipants.get(winner));
 
-        return nonwinningParticipants;
+        List<ParticipantBean> nonwinningParticipantBeans =
+                convertParticipantList(nonwinningParticipants);
+
+        return nonwinningParticipantBeans;
     }
 
-    public List<Participant> findAllWinnersForEvent(long eventId) {
-        return daos.getParticipantDao().findWinningParticipantsByEventId(eventId);
+    @Transactional(readOnly = true)
+    public List<ParticipantBean> findAllWinnersForEvent(long eventId) {
+        List<Participant> winningParticipants =
+                daos.getParticipantDao().
+                findWinningParticipantsByEventId(eventId);
+        List<ParticipantBean> winningParticipantBeans =
+                convertParticipantList(winningParticipants);
+        return winningParticipantBeans;
     }
+
+
+    /**
+     * Convert a list o Participant to a list of ParticipantBean.
+     *
+     * @param participants The list of Participant
+     * @return The list of ParticipantBean
+     */
+    private List<ParticipantBean> convertParticipantList(List<Participant> participants) {
+        List<ParticipantBean> participantBeans =
+                new ArrayList<ParticipantBean>(participants.size());
+        for (Participant p : participants) {
+            try {
+                ParticipantBean pb = new ParticipantBean();
+                BeanUtils.copyProperties(pb, p);
+                participantBeans.add(pb);
+            } catch (Exception ex) {
+                // it shouldn't happen
+                logger.error("Unexpected exception copying participant bean", ex);
+            }
+        }
+        return participantBeans;
+    }
+
 }
