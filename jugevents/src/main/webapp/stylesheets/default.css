@@ -381,3 +381,15 @@ div.rounded div {
   height: 1px;
   overflow: hidden;
 }
+
+div.jugLogoBox {
+    float: right;
+    width: 100px;
+    text-align: center;
+    padding: 3px;
+    margin: 2px;
+}
+
+div.jugLogoBox img {
+    border: 0px;
+}

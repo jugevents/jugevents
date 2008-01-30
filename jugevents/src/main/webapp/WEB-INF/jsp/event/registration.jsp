@@ -12,6 +12,15 @@
                     
                     <h1><spring:message code="RegisterToTheEvent"/></h1>
                     
+                    <a href="${cp}/event/show.html?id=${event.id}"><spring:message code="BackToTheEvent"/></a>
+                    
+                    <c:if test="${!empty event.owner}">
+                        <div class="jugLogoBox">
+                            <a href="${event.owner.jug.webSite}"><img src="${cp}/bin/jugLogo.html?id=${event.owner.jug.id}" alt="JUG Logo" width="100"/></a>
+                            <a href="${event.owner.jug.webSite}">${event.owner.jug.name}</a>
+                        </div>
+                    </c:if>
+                    
                     <form:form commandName="registration" method="POST" action="${cp}/event/registration.form">
                         <form:hidden path="event.id"/>
                         <dl>
