@@ -65,7 +65,8 @@ public abstract class AddParticipantController extends BaseFormController {
         if (registration.getEvent().getId() == null) {
             return genericError("No valid event");
         }
-        List<Participant> prevParticipant = blo().getEventBo().searchfindParticipantByEmailAndEventId(registration.getParticipant().
+        List<Participant> prevParticipant = blo().getEventBo().
+                searchParticipantByEmailAndEventId(registration.getParticipant().
                 getEmail(), registration.getEvent().getId());
         if (prevParticipant.size() == 0) {
             blo().getEventBo().addParticipant(registration.getEvent(),
@@ -87,8 +88,7 @@ public abstract class AddParticipantController extends BaseFormController {
         result.setParticipant(new Participant());
         String sid = req.getParameter("event.id");
         if (sid != null) {
-            Event event = dao().getEventDao().
-                    read(Long.parseLong(sid));
+            Event event = blo().getEventBo().retrieveEvent(Long.parseLong(sid));
             if (event != null) {
                 result.setEvent(event);
                 // for event showing fragment

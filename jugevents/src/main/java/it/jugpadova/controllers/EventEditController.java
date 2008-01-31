@@ -63,7 +63,7 @@ public abstract class EventEditController extends BaseFormController {
     protected Object formBackingObject(HttpServletRequest req) throws Exception {
         try {
             Long id = Long.parseLong(req.getParameter("id"));
-            Event event = dao().getEventDao().read(id);
+            Event event = blo().getEventBo().retrieveEvent(id);
             if (event == null) {
                 throw new Exception();
             }

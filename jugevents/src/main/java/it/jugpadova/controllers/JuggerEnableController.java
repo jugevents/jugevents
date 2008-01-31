@@ -64,8 +64,8 @@ public abstract class JuggerEnableController extends BaseFormController {
             throw new Exception("No code found in the request!");
         }
         Jugger jugger =
-                dao().getJuggerDao().
-                findByUsernameAndConfirmationCode(username, confirmationCode);
+                blo().getJuggerBO().searchByUsernameAndConfirmationCode(username,
+                confirmationCode);
         if (jugger == null) {
             logger.warn("Trying to enable " + username +
                     " user, but it doesn't exist or the confirmation code (" +

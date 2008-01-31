@@ -36,8 +36,6 @@ public abstract class PasswordRecoveryController extends BaseFormController {
     private static final Logger logger =
             Logger.getLogger(PasswordRecoveryController.class);
 
-
-
     @Override
     protected ModelAndView onSubmit(HttpServletRequest req,
             HttpServletResponse res, Object command,
@@ -46,7 +44,7 @@ public abstract class PasswordRecoveryController extends BaseFormController {
         PasswordRecovery pr = (PasswordRecovery) command;
         String email = pr.getEmail();
         logger.debug("email: " + email);
-        Jugger jugger = dao().getJuggerDao().findByEmail(email);
+        Jugger jugger = blo().getJuggerBO().searchByEmail(email);
         if (jugger == null) {
             errors.rejectValue("email", "juggerNotFoundByEmail");
             return showForm(req, res, errors);
@@ -76,3 +74,4 @@ public abstract class PasswordRecoveryController extends BaseFormController {
 
     protected abstract Blos blo();
 } // end of class
+

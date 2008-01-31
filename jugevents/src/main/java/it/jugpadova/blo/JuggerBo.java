@@ -88,6 +88,11 @@ public class JuggerBo {
         this.jugBo = jugBo;
     }
 
+    @Transactional(readOnly = true)
+    public Jugger retrieveJugger(Long id) {
+        return daos.getJuggerDao().read(id);
+    }
+
     /**
      * Creates and persists new Jugger.
      *
@@ -342,7 +347,7 @@ public class JuggerBo {
             Effect effect = new Effect(session);
 
             String cp = wctx.getHttpServletRequest().getContextPath();
-            
+
             Country country = jug.getCountry();
 
             if (country != null) {
@@ -352,12 +357,15 @@ public class JuggerBo {
                 util.setValue("jugger.jug.country.englishName", null);
             }
             // effect.highlight("jugger.jug.country.englishName");            
-            
+
             util.setValue("jugger.jug.webSite", jug.getWebSite());
             // effect.highlight("jugger.jug.webSite");
 
-            util.setValue("jugLogo", "<img style=\"float: right;\" src=\""+cp+"/bin/jugLogo.html?id="+jug.getId()+"\" alt=\"JUG Logo\" width=\"100\"/>");
-            
+            util.setValue("jugLogo",
+                    "<img style=\"float: right;\" src=\"" + cp +
+                    "/bin/jugLogo.html?id=" + jug.getId() +
+                    "\" alt=\"JUG Logo\" width=\"100\"/>");
+
             if (jug.getLongitude() != null) {
                 util.setValue("jugger.jug.longitude", jug.getLongitude().
                         toString());
@@ -548,9 +556,28 @@ public class JuggerBo {
         this.mailSender.send(preparator);
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public Jugger searchByUsername(String username) {
         return daos.getJuggerDao().searchByUsername(username);
+    }
+
+    @Transactional(readOnly = true)
+    public Jugger searchByUsernameAndChangePasswordCode(String username,
+            String changePasswordCode) {
+        return daos.getJuggerDao().
+                findByUsernameAndChangePasswordCode(username, changePasswordCode);
+    }
+
+    @Transactional(readOnly = true)
+    public Jugger searchByUsernameAndConfirmationCode(String username,
+            String confirmationCode) {
+        return daos.getJuggerDao().findByUsernameAndConfirmationCode(username,
+                confirmationCode);
+    }
+
+    @Transactional(readOnly = true)
+    public Jugger searchByEmail(String email) {
+        return daos.getJuggerDao().findByEmail(email);
     }
     
     public ServicesBo getServicesBo() {

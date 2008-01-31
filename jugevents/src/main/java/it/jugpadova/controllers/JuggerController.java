@@ -44,8 +44,8 @@ public abstract class JuggerController extends BaseMultiActionController {
 
     public ModelAndView confirmUpdateJugger(HttpServletRequest req,
             HttpServletResponse res) {
-        Long Id = new Long(req.getParameter("id"));
-        Jugger jugger = dao().getJuggerDao().read(Id);
+        Long id = new Long(req.getParameter("id"));
+        Jugger jugger = blo().getJuggerBO().retrieveJugger(id);
         ModelAndView mv =
                 new ModelAndView("jugger/confirmUpdateJugger");
         mv.addObject("jugger", jugger);

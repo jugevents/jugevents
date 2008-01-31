@@ -63,7 +63,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  * 
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 6a766f0d9557 $
+ * @version $Revision: 1dbd86c70d06 $
  */
 public class EventBo {
 
@@ -106,7 +106,7 @@ public class EventBo {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> searchfindParticipantByEmailAndEventId(String email,
+    public List<Participant> searchParticipantByEmailAndEventId(String email,
             Long id) {
         return daos.getParticipantDao().findParticipantByEmailAndEventId(email,
                 id);

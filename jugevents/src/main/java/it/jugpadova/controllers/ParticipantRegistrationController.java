@@ -56,9 +56,8 @@ public abstract class ParticipantRegistrationController extends BaseFormControll
         String baseUrl =
                 "http://" + req.getServerName() + ":" + req.getServerPort() +
                 req.getContextPath();
-        List<Participant> prevParticipant =
-                dao().getParticipantDao().
-                findParticipantByEmailAndEventId(registration.getParticipant().
+        List<Participant> prevParticipant = blo().getEventBo().
+                searchParticipantByEmailAndEventId(registration.getParticipant().
                 getEmail(), registration.getEvent().getId());
         if (prevParticipant.size() == 0) {
             blo().getEventBo().

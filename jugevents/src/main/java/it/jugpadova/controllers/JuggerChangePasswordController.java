@@ -30,7 +30,6 @@ public abstract class JuggerChangePasswordController extends BaseFormController 
 
     private static final Logger logger =
             Logger.getLogger(JuggerChangePasswordController.class);
-    
     private static final String JUGGER_ATTRIBUTE = "jugger";
 
     @Override
@@ -43,8 +42,10 @@ public abstract class JuggerChangePasswordController extends BaseFormController 
         try {
             blo().getJuggerBO().changePassword(jugger, password);
         } catch (UserNotEnabledException uaee) {
-            logger.info("Trying to change "+jugger.getUser().getUsername()+" password, but this user is disabled");
-            return Utilities.getMessageView("jugger.pwdchng.failed.disabled", jugger.getUser().getUsername());
+            logger.info("Trying to change " + jugger.getUser().getUsername() +
+                    " password, but this user is disabled");
+            return Utilities.getMessageView("jugger.pwdchng.failed.disabled", jugger.getUser().
+                    getUsername());
         } catch (Exception e) {
             logger.error(e, e);
             return Utilities.getMessageView("jugger.pwdchng.failed");
@@ -62,9 +63,9 @@ public abstract class JuggerChangePasswordController extends BaseFormController 
         if ((changePasswordCode = req.getParameter("code")) == null) {
             throw new Exception("No code found in the request!");
         }
-        Jugger jugger =
-                dao().getJuggerDao().
-                findByUsernameAndChangePasswordCode(username, changePasswordCode);
+        Jugger jugger = blo().getJuggerBO().
+                searchByUsernameAndChangePasswordCode(username,
+                changePasswordCode);
         if (jugger == null) {
             logger.warn("Trying to change the password of the " + username +
                     " user, but it doesn't exist or the change password code (" +
