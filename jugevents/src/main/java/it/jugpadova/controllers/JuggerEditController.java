@@ -76,7 +76,7 @@ public abstract class JuggerEditController extends BaseFormController {
         String username = req.getParameter("jugger.user.username");
 
         EditJugger ej = new EditJugger();
-        Jugger jugger = dao().getJuggerDao().searchByUsername(username);
+        Jugger jugger = blo().getJuggerBO().searchByUsername(username);
         if (!blo().getServicesBo().checkAuthorization(username)) {
             throw new ParancoeAccessDeniedException("Forbidden access to user identified by " +
                     username);

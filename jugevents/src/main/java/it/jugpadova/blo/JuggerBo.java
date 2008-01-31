@@ -544,6 +544,11 @@ public class JuggerBo {
         this.mailSender.send(preparator);
     }
 
+    @Transactional(readOnly=true)
+    public Jugger searchByUsername(String username) {
+        return daos.getJuggerDao().searchByUsername(username);
+    }
+    
     public ServicesBo getServicesBo() {
         return servicesBo;
     }
