@@ -90,8 +90,7 @@ public abstract class ParticipantRegistrationController extends BaseFormControll
         result.setParticipant(new Participant());
         String sid = req.getParameter("event.id");
         if (sid != null) {
-            Event event = dao().getEventDao().
-                    read(Long.parseLong(sid));
+            Event event = blo().getEventBo().retrieveEvent(Long.parseLong(sid));
             if (event != null) {
                 result.setEvent(event);
                 // for event showing fragment
