@@ -50,7 +50,7 @@ public abstract class EventController extends BaseMultiActionController {
             HttpServletResponse res) {
         try {
             Long id = Long.parseLong(req.getParameter("id"));
-            Event event = dao().getEventDao().read(id);
+            Event event = blo().getEventBo().retrieveEvent(id);
             if (event == null) {
                 throw new IllegalArgumentException("No event with id " + id);
             }
@@ -94,12 +94,10 @@ public abstract class EventController extends BaseMultiActionController {
                 throw new IllegalArgumentException("No event with id " + id);
             }
             blo().getEventBo().checkUserAuthorization(event);
-            List<Participant> participants =
-                    dao().getParticipantDao().
-                    findConfirmedParticipantsByEventId(event.getId());
-            List<Participant> participantsNotConfirmed =
-                    dao().getParticipantDao().
-                    findNotConfirmedParticipantsByEventId(event.getId());
+            List<Participant> participants = blo().getEventBo().
+                    searchConfirmedParticipantsByEventId(event.getId());
+            List<Participant> participantsNotConfirmed = blo().getEventBo().
+                    searchNotConfirmedParticipantsByEventId(event.getId());
             mv.addObject("event", event);
             mv.addObject("participants", participants);
             mv.addObject("participantsNotConfirmed", participantsNotConfirmed);
@@ -127,11 +125,11 @@ public abstract class EventController extends BaseMultiActionController {
             }
             blo().getEventBo().checkUserAuthorization(event);
             mv.addObject("event", event);
-            List<Participant> nonWinningParticipants = dao().getParticipantDao().
-                    findNonwinningParticipantsByEventId(id);
+            List<Participant> nonWinningParticipants = blo().getEventBo().
+                    searchNonwinningParticipantsByEventId(id);
             mv.addObject("nonWinningParticipants", nonWinningParticipants);
-            List<Participant> winningParticipants = dao().getParticipantDao().
-                    findWinningParticipantsByEventId(id);
+            List<Participant> winningParticipants = blo().getEventBo().
+                    searchWinningParticipantsByEventId(id);
             mv.addObject("winningParticipants", winningParticipants);
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;

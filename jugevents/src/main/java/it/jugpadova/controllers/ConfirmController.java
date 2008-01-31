@@ -60,7 +60,7 @@ public abstract class ConfirmController extends BaseMultiActionController {
             HttpServletResponse res) {
         Long participantId =
                 new Long(req.getParameter("participantId"));
-        Participant participant = dao().getParticipantDao().read(participantId);
+        Participant participant = blo().getEventBo().searchParticipantById(participantId);
         ModelAndView mv =
                 new ModelAndView("event/registration/ok");
         mv.addObject("participant", participant);

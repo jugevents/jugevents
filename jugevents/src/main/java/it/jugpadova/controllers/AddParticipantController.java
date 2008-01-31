@@ -47,16 +47,16 @@ public abstract class AddParticipantController extends BaseFormController {
             BindException errors) throws Exception {
         if (errors.hasErrors()) {
             Registration registration = (Registration) command;
-            Event event = blo().getEventBo().retrieveEvent(registration.getEvent().getId());
-            List<Participant> participants =
-                    dao().getParticipantDao().
-                    findConfirmedParticipantsByEventId(event.getId());
+            Event event = blo().getEventBo().retrieveEvent(registration.getEvent().
+                    getId());
+            List<Participant> participants = blo().getEventBo().
+                    searchConfirmedParticipantsByEventId(event.getId());
             req.setAttribute("event", event);
-            req.setAttribute("participants", participants);            
-            req.setAttribute("showAddNewPartecipantDiv", "true");            
+            req.setAttribute("participants", participants);
+            req.setAttribute("showAddNewPartecipantDiv", "true");
         }
     }
-    
+
     @Override
     protected ModelAndView onSubmit(HttpServletRequest req,
             HttpServletResponse res, Object command,
@@ -65,9 +65,7 @@ public abstract class AddParticipantController extends BaseFormController {
         if (registration.getEvent().getId() == null) {
             return genericError("No valid event");
         }
-        List<Participant> prevParticipant =
-                dao().getParticipantDao().
-                findParticipantByEmailAndEventId(registration.getParticipant().
+        List<Participant> prevParticipant = blo().getEventBo().searchfindParticipantByEmailAndEventId(registration.getParticipant().
                 getEmail(), registration.getEvent().getId());
         if (prevParticipant.size() == 0) {
             blo().getEventBo().addParticipant(registration.getEvent(),
@@ -78,7 +76,8 @@ public abstract class AddParticipantController extends BaseFormController {
             dao().getParticipantDao().createOrUpdate(p);
             logger.info("Confirmed participant with id=" + p.getId());
         }
-        ModelAndView mv = new ModelAndView("redirect:participants.html?id="+registration.getEvent().getId());
+        ModelAndView mv = new ModelAndView("redirect:participants.html?id=" + registration.getEvent().
+                getId());
         return mv;
     }
 
