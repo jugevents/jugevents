@@ -28,7 +28,7 @@
                     
                     <h2><spring:message code="juggerRegistrationTitle"/></h2>
                     
-                    <form:form commandName="jugger" method="POST" action="${cp}/jugger/registration.form" onsubmit="enableJugFields(); return true;">
+                    <form:form commandName="jugger" method="POST" action="${cp}/jugger/registration.form" onsubmit="enableJugFields(); return true;" enctype="multipart/form-data">
                         <form:errors path="*" cssClass="errorBox"/>
                         
                         <form:hidden path="jugger.id"/>
@@ -74,6 +74,10 @@
                                 <dd><form:input path="jugger.jug.country.englishName"  /><div id="countryList" class="auto_complete"></div></dd>
                                 <dt><form:label path="jugger.jug.webSite"><spring:message code="juggerRegistrationWebSite"/></form:label></dt>                            
                                 <dd><form:input path="jugger.jug.webSite"    /></dd>
+                                <dt><form:label path="jugger.jug.logo">
+                                        <img id="tip_jugLogo" src="${cp}/images/question16x16.png" />&nbsp;<spring:message code="juggerRegistrationLogo" />
+                                </form:label></dt>
+                                <dd><input type="file" name="jugger.jug.logo" id="jugger.jug.logo"/></dd>
                                 <dt><form:label path="jugger.jug.longitude"><spring:message code="juggerRegistrationLongitude"/></form:label></dt>                            
                                 <dd><form:input path="jugger.jug.longitude"  /></dd>
                                 <dt><form:label path="jugger.jug.latitude"><spring:message code="juggerRegistrationLatitude"/></form:label></dt>                            
@@ -102,6 +106,7 @@
         <script type="text/javascript">
 
 new Tip($('tip_reliability'), '<spring:message code="tip.reliability"/>', {title: 'Reliability', effect: 'appear'});
+new Tip($('tip_jugLogo'), '<spring:message code="tip.jugLogo"/>', {title: 'JUG Logo', effect: 'appear'});
 
 dwr.util.setEscapeHtml(false);
 
@@ -134,6 +139,7 @@ function disableJugFields() {
 function enableJugFields() {
     parancoe.util.fullEnableFormElement('jugger.jug.country.englishName');
     parancoe.util.fullEnableFormElement('jugger.jug.webSite');
+    parancoe.util.fullEnableFormElement('jugger.jug.logo');
     parancoe.util.fullEnableFormElement('jugger.jug.longitude');
     parancoe.util.fullEnableFormElement('jugger.jug.latitude');
     parancoe.util.fullEnableFormElement('jugger.jug.infos');

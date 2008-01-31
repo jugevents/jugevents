@@ -407,7 +407,7 @@ public class JuggerBo {
         }
         util.addFunctionCall(jsFunction, "jugger.jug.country.englishName");
         util.addFunctionCall(jsFunction, "jugger.jug.webSite");
-        util.addFunctionCall(jsFunction, "jugger.jug.log");
+        util.addFunctionCall(jsFunction, "jugger.jug.logo");
         util.addFunctionCall(jsFunction, "jugger.jug.longitude");
         util.addFunctionCall(jsFunction, "jugger.jug.latitude");
         util.addFunctionCall(jsFunction, "jugger.jug.infos");

@@ -136,7 +136,7 @@
                                 </form:label></dt>
                                 <dd><form:input path="jugger.jug.webSite" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
                                 <dt><form:label path="jugger.jug.logo">
-                                        <spring:message code="juggerRegistrationLogo" />
+                                        <img id="tip_jugLogo" src="${cp}/images/question16x16.png" />&nbsp;<spring:message code="juggerRegistrationLogo" />
                                 </form:label></dt>
                                 <dd><input type="file" name="jugger.jug.logo" id="jugger.jug.logo"  <c:if test="${!jugger.reliable}">readonly="readonly" disabled="disabled"</c:if>/></dd>
                                 <dt><form:label path="jugger.jug.longitude">
@@ -179,7 +179,9 @@
 	    <div id="mbg"></div>
         
         <script type="text/javascript">
-            
+
+            new Tip($('tip_jugLogo'), '<spring:message code="tip.jugLogo"/>', {title: 'JUG Logo', effect: 'appear'});
+
             dwr.util.setEscapeHtml(false);
             
             new Autocompleter.DWR('jugger.jug.country.englishName', 'countryList', updateCountryList, { valueSelector: singleValueSelector, partialChars: 0, fullSearch: true });

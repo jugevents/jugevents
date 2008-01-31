@@ -37,6 +37,7 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.octo.captcha.service.CaptchaService;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 /**
  * 
@@ -56,6 +57,8 @@ public abstract class JuggerRegistrationController extends BaseFormController {
 			ServletRequestDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
 				new SimpleDateFormat("dd/MM/yyyy"), true));
+        binder.registerCustomEditor(byte[].class,
+                new ByteArrayMultipartFileEditor());
 	}
 
 	@Override
