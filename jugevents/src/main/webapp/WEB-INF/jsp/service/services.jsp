@@ -84,10 +84,10 @@
                         </c:when>
                         <c:when test="${requestScope.requestContext.locale eq 'pt_PT'}">
                             <h2>KML para um mapa de JUG</h2>
-                            <p>Qualquer JUG Every pode gerenciar suas informações através do JUG Events e
-                            atualizar o seu arquivo KML.</p>
-                            <p style="text-align: center;"><a href="${cp}/service/kml.html">Faça o download do arquivo KML</a></p>
-                            <p>Este arquivo KML é produzido a partir do banco de dados do JUG Events. Os dados originais foram importados
+                            <p>Qualquer JUG pode gerir as suas informações através do JUG Events e
+                            actualizar o seu ficheiro KML.</p>
+                            <p style="text-align: center;"><a href="${cp}/service/kml.html">Faça o download do ficheiro KML</a></p>
+                            <p>Este arquivo KML é produzido a partir da base de dados do JUG Events. Os dados originais foram importados
                                 do
                             <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Mapa Internacional de Java User Groups</a>.</p>
                         </c:when>

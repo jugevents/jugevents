@@ -105,8 +105,8 @@
         
         <script type="text/javascript">
 
-new Tip($('tip_reliability'), '<spring:message code="tip.reliability"/>', {title: 'Reliability', effect: 'appear'});
-new Tip($('tip_jugLogo'), '<spring:message code="tip.jugLogo"/>', {title: 'JUG Logo', effect: 'appear'});
+new Tip($('tip_reliability'), '<spring:message code="tip.reliability"/>', {title: '<spring:message code="tip.reliability.title"/>', effect: 'appear'});
+new Tip($('tip_jugLogo'), '<spring:message code="tip.jugLogo"/>', {title: '<spring:message code="tip.jugLogo.title"/>', effect: 'appear'});
 
 dwr.util.setEscapeHtml(false);
 
