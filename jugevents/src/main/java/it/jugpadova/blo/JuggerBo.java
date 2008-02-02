@@ -363,7 +363,7 @@ public class JuggerBo {
 
             util.setValue("jugLogo",
                     "<img style=\"float: right;\" src=\"" + cp +
-                    "/bin/jugLogo.html?id=" + jug.getId() +
+                    "/bin/jugLogo.bin?id=" + jug.getId() +
                     "\" alt=\"JUG Logo\" width=\"100\"/>");
 
             if (jug.getLongitude() != null) {

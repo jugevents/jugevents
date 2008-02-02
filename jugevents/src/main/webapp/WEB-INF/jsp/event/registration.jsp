@@ -16,7 +16,7 @@
                     
                     <c:if test="${!empty event.owner}">
                         <div class="jugLogoBox">
-                            <a href="${event.owner.jug.webSite}"><img src="${cp}/bin/jugLogo.html?id=${event.owner.jug.id}" alt="JUG Logo" width="100"/></a>
+                            <a href="${event.owner.jug.webSite}"><img src="${cp}/bin/jugLogo.bin?id=${event.owner.jug.id}" alt="JUG Logo" width="100"/></a>
                             <a href="${event.owner.jug.webSite}">${event.owner.jug.name}</a>
                         </div>
                     </c:if>

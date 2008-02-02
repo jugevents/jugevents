@@ -117,7 +117,7 @@
                         </authz:authorize>
                         
                         <fieldset><legend>JUG</legend>
-                            <span id="jugLogo"><img style="float: right;" src="${cp}/bin/jugLogo.html?id=${jugger.jugger.jug.id}" alt="JUG Logo" width="100"/></span>
+                            <span id="jugLogo"><img style="float: right;" src="${cp}/bin/jugLogo.bin?id=${jugger.jugger.jug.id}" alt="JUG Logo" width="100"/></span>
                             <dl>
                                 <dt><form:label path="jugger.jug.name">
                                 <spring:message code="juggerRegistrationJUGName" /> (*)</form:label></dt>

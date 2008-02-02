@@ -15,6 +15,7 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.Blos;
 import it.jugpadova.Daos;
+import it.jugpadova.util.mime.MimeUtil;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -24,39 +25,42 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.parancoe.web.BaseMultiActionController;
-import org.parancoe.web.controller.annotation.DefaultUrlMapping;
+import org.parancoe.web.controller.annotation.UrlMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controlle for managing binary contents
- * 
+ *
  * @author Lucio Benfante
  *
  */
-@DefaultUrlMapping
+@UrlMapping(value="/bin/*.bin")
 public abstract class BinController extends BaseMultiActionController {
 
-    private static Logger logger =
+    private static final Logger logger =
             Logger.getLogger(BinController.class);
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.parancoe.web.BaseMultiActionController#getLogger()
-     */
     @Override
     public Logger getLogger() {
-        // TODO Auto-generated method stub
         return logger;
     }
 
+    /**
+     * Produce the JUG Logo from the database, or the default no logo image.
+     */
     public ModelAndView jugLogo(HttpServletRequest req,
             HttpServletResponse res) throws IOException {
         Long id = new Long(req.getParameter("id"));
         byte[] jugLogo = blo().getJugBo().retrieveJugLogo(id);
         if (jugLogo != null && jugLogo.length > 0) {
-            res.setContentType("image/jpeg");
+            String contentType = MimeUtil.getMimeType(jugLogo);
+            if (contentType == null) {
+                contentType = "image/jpeg";
+            }
+            String fileExtension= MimeUtil.getMinorComponent(contentType);
+            res.setContentType(contentType);
             res.setContentLength(jugLogo.length);
+            res.setHeader("Content-Disposition", "filename=JugLogo."+fileExtension);
             OutputStream out = new BufferedOutputStream(res.getOutputStream());
             out.write(jugLogo);
             out.flush();
@@ -67,6 +71,7 @@ public abstract class BinController extends BaseMultiActionController {
                     new BufferedInputStream(this.getClass().getClassLoader().
                     getResourceAsStream("images/noJugLogo.jpg"));
             res.setContentType("image/jpeg");
+            res.setHeader("Content-Disposition", "filename=noJugLogo.jpg");
             OutputStream out = new BufferedOutputStream(res.getOutputStream());
             int b = 0;
             while ((b = in.read()) != -1) {
@@ -74,7 +79,7 @@ public abstract class BinController extends BaseMultiActionController {
             }
             in.close();
             out.flush();
-            out.close();                    
+            out.close();
         }
         return null;
     }
