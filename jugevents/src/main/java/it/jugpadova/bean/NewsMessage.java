@@ -70,7 +70,11 @@ public class NewsMessage {
 
     public Object[] getArguments() {
         if (TYPE_UPCOMING_EVENT.equals(this.type) || TYPE_NEW_EVENT.equals(this.type)) {
-            return new Object[]{event.getTitle(), event.getOwner().getJug().getName(), event.getOwner().getJug().getWebSite(), getEventUrl(baseUrl, event)};
+            if (event.getOwner() != null) {
+                return new Object[]{event.getTitle(), event.getOwner().getJug().getName(), event.getOwner().getJug().getWebSiteUrl(), getEventUrl(baseUrl, event)};
+            } else {
+                return new Object[]{event.getTitle(), "JUG Events", baseUrl, getEventUrl(baseUrl, event)};                
+            }
         }
         return new Object[]{};
     }

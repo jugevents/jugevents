@@ -394,6 +394,7 @@ public class JuggerBo {
      *
      * @param jugName
      */
+    @Transactional(readOnly=true)
     public void readOnlyJugFields(String jugName, boolean reliability) {
         if ((daos.getJUGDao().findByICName(jugName) != null) && (!reliability)) {
             jugFieldsEnable(false);

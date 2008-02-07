@@ -3,6 +3,7 @@ package it.jugpadova.blo;
 import it.jugpadova.Daos;
 import it.jugpadova.dao.JuggerDao;
 import it.jugpadova.dao.ReliabilityRequestDao;
+import it.jugpadova.po.Event;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.ReliabilityRequest;
 
@@ -72,11 +73,15 @@ public class ServicesBo {
         // attribute reliability
 
 
-        if (reliability < MIN_THRESHOLD_ACCESS || reliability > MAX_THRESHOLD_ACCESS) {
-            throw new IllegalArgumentException("reliability: " + reliability + " is out of range");
+        if (reliability < MIN_THRESHOLD_ACCESS || reliability >
+                MAX_THRESHOLD_ACCESS) {
+            throw new IllegalArgumentException("reliability: " + reliability +
+                    " is out of range");
         }
-        if (thresholdAccess < MIN_THRESHOLD_ACCESS || thresholdAccess > MAX_THRESHOLD_ACCESS) {
-            throw new IllegalArgumentException("thresholdAccess: " + thresholdAccess + " is out of range");
+        if (thresholdAccess < MIN_THRESHOLD_ACCESS || thresholdAccess >
+                MAX_THRESHOLD_ACCESS) {
+            throw new IllegalArgumentException("thresholdAccess: " +
+                    thresholdAccess + " is out of range");
         }
         if (reliability >= thresholdAccess) {
             return true;
@@ -117,11 +122,13 @@ public class ServicesBo {
         sendEmail(jugger, "", "A jugger has required reliability",
                 "it/jugpadova/request-reliability2admin.vm", internalMail,
                 adminMailJE, motivation);
-        logger.info("Jugger " + jugger.getUser().getUsername() + " has completed wth success request of reliability");
+        logger.info("Jugger " + jugger.getUser().getUsername() +
+                " has completed wth success request of reliability");
     }
 
     @Transactional
-    public String requireReliabilityOnExistingJugger(String emailJugger, String motivation) {
+    public String requireReliabilityOnExistingJugger(String emailJugger,
+            String motivation) {
         Jugger jugger = daos.getJuggerDao().findByEmail(emailJugger);
 
         try {
@@ -153,7 +160,8 @@ public class ServicesBo {
                 model.put("baseUrl", baseUrl);
                 model.put("motivation", motivation);
 
-                model.put("username", URLEncoder.encode(jugger.getUser().getUsername(), "UTF-8"));
+                model.put("username", URLEncoder.encode(jugger.getUser().
+                        getUsername(), "UTF-8"));
                 String text = VelocityEngineUtils.mergeTemplateIntoString(
                         velocityEngine, template, model);
                 message.setText(text, true);
@@ -258,6 +266,37 @@ public class ServicesBo {
             return authentication.getName();
         }
         return null; //not so good...
+    }
+
+    /**
+     * Check if the current user can manage an event.
+     * 
+     * @param event The event to manage
+     * @return true if the user can manage the event
+     */
+    @Transactional(readOnly = true)
+    public boolean canCurrentUserManageEvent(Event event) {
+        boolean result = false;
+        User user = getCurrentUser();
+        if (user != null) {
+            if (isAdmin(user)) {
+                // admins, of course
+                return true;
+            }
+            if (event.getOwner() != null) {
+                if (event.getOwner().getUser().getUsername().equals(user.getUsername())) {
+                    // the event owner
+                    return true;
+                }
+                Jugger currentJugger = getCurrentJugger();
+                if (isJuggerReliable(currentJugger.getReliability()) && event.getOwner().
+                        getJug().equals(currentJugger.getJug())) {
+                    // the jugger is reliable and is from the same jug of the event owner
+                    return true;
+                }
+            }
+        }
+        return result;
     }
 
     public String getAdminMailJE() {

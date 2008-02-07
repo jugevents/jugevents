@@ -3,6 +3,7 @@
 <%@ page import="org.parancoe.util.BaseConf" %>
 <%@ page import="org.acegisecurity.context.SecurityContextHolder" %>
 <%@ page import="org.acegisecurity.Authentication" %>
+<%@ page import="it.jugpadova.Blos" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
@@ -22,6 +23,9 @@
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     pageContext.setAttribute("authentication", authentication);
+
+    Blos blos = (Blos)ctx.getBean("blos");
+    pageContext.setAttribute("blos", blos);
     
 %>
 

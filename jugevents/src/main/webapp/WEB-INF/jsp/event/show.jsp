@@ -14,12 +14,12 @@
                     <jsp:useBean id="today" class="java.util.Date"/>
                     
                     <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-                        <c:if test="${event.owner.user.username == authentication.name || authentication.authorities[0] == 'ROLE_ADMIN'}">
+                        <c:if test="${canCurrentUserManageEvent}">
                             <a href="${cp}/event/edit.form?id=${event.id}"><spring:message code="edit"/></a>
                         </c:if>
                     </authz:authorize>
                     <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-                        <c:if test="${event.owner.user.username == authentication.name || authentication.authorities[0] == 'ROLE_ADMIN'}">
+                        <c:if test="${canCurrentUserManageEvent}">
                             <spring:message code='confirmDeleteEvent' var="confirmDeleteEventMessage"/>
                             <a href="${cp}/event/delete.html?id=${event.id}" onclick="return confirm('${confirmDeleteEventMessage}')"><spring:message code="delete"/></a>
                         </c:if>
@@ -28,12 +28,12 @@
                         <a href="${cp}/event/registration.form?event.id=${event.id}"><spring:message code="register"/></a>
                     </c:if>
                     <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-                        <c:if test="${event.owner.user.username == authentication.name || authentication.authorities[0] == 'ROLE_ADMIN'}">
+                        <c:if test="${canCurrentUserManageEvent}">
                             <a href="${cp}/event/participants.html?id=${event.id}"><spring:message code="participants"/></a>
                         </c:if>
                     </authz:authorize>
                     <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-                        <c:if test="${event.owner.user.username == authentication.name || authentication.authorities[0] == 'ROLE_ADMIN'}">
+                        <c:if test="${canCurrentUserManageEvent}">
                             <a href="${cp}/event/winners.html?id=${event.id}"><spring:message code="winners"/></a>
                         </c:if>
                     </authz:authorize>

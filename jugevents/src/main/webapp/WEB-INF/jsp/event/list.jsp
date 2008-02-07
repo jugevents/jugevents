@@ -85,23 +85,35 @@
                                             <td>${event.numberOfParticipants}</td>
                                             <td class="actionColumn">
                                                 <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-                                                    <c:if test="${event.owner.user.username == authentication.name || authentication.authorities[0] == 'ROLE_ADMIN'}">
+                                                    <%
+                                                    if (blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event)pageContext.getAttribute("event"))) {
+                                                    %>
                                                         <a href="edit.form?id=${event.id}"><spring:message code="edit"/></a>
-                                                    </c:if>
+                                                    <%
+                                                    }
+                                                    %>
                                                 </authz:authorize>
                                                 <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-                                                    <c:if test="${event.owner.user.username == authentication.name || authentication.authorities[0] == 'ROLE_ADMIN'}">
+                                                    <%
+                                                    if (blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event)pageContext.getAttribute("event"))) {
+                                                    %>
                                                         <spring:message code='confirmDeleteEvent' var="confirmDeleteEventMessage"/>
                                                         <a href="delete.html?id=${event.id}" onclick="return confirm('${confirmDeleteEventMessage}')"><spring:message code="delete"/></a>
-                                                    </c:if>
+                                                    <%
+                                                    }
+                                                    %>
                                                 </authz:authorize>
                                                 <c:if test="${today lt event.startDate}">
                                                     <a href="registration.form?event.id=${event.id}"><spring:message code="register"/></a>
                                                 </c:if>
                                                 <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-                                                    <c:if test="${event.owner.user.username == authentication.name || authentication.authorities[0] == 'ROLE_ADMIN'}">
+                                                    <%
+                                                    if (blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event)pageContext.getAttribute("event"))) {
+                                                    %>
                                                         <a href="participants.html?id=${event.id}"><spring:message code="participants"/></a>
-                                                    </c:if>
+                                                    <%
+                                                    }
+                                                    %>
                                                 </authz:authorize>
                                             </td>
                                         </tr>

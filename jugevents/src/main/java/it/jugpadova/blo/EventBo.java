@@ -63,7 +63,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  * 
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 1dbd86c70d06 $
+ * @version $Revision: 4974be385253 $
  */
 public class EventBo {
 
@@ -620,7 +620,7 @@ public class EventBo {
     @Transactional(readOnly = true)
     public void checkUserAuthorization(Event event)
             throws ParancoeAccessDeniedException {
-        if (!servicesBo.isCurrentUserAuthorized(event.getOwner().getUser())) {
+        if (!servicesBo.canCurrentUserManageEvent(event)) {
             throw new ParancoeAccessDeniedException(
                     "You are not authorized on this event.");
         }

@@ -21,6 +21,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Transient;
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.parancoe.plugins.world.Country;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.CascadeValidation;
@@ -135,5 +136,13 @@ public class JUG extends EntityBase {
     public void setLogo(byte[] logo) {
         this.logo = logo;
     }
-        
+
+    @Transient
+    public String getWebSiteUrl() {
+        String result = this.getWebSite();
+        if (this.getWebSite() != null && !this.getWebSite().contains("://")) {
+            result = "http://"+result;
+        }
+        return result;
+    }
 }

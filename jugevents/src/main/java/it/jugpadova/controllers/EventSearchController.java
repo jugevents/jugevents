@@ -48,7 +48,8 @@ public abstract class EventSearchController extends BaseFormController {
             BindException errors) throws Exception {
         EventSearch eventSearch = (EventSearch) command;
         List<Event> events = blo().getEventBo().search(eventSearch);
-        ModelAndView mv = onSubmit(command, errors);        
+        ModelAndView mv = onSubmit(command, errors);  
+        mv.addObject("servicesBo", blo().getServicesBo());
         mv.addObject("events", events);
         if (events.isEmpty()) {
             mv.addObject("showNoResultsMessage", "true");

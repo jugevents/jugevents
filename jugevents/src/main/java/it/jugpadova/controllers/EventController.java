@@ -77,6 +77,8 @@ public abstract class EventController extends BaseMultiActionController {
                 throw new IllegalArgumentException("No event with id " + id);
             }
             mv.addObject("event", event);
+            mv.addObject("canCurrentUserManageEvent", blo().getServicesBo().
+                    canCurrentUserManageEvent(event));
         } catch (Exception e) {
             return genericError(e);
         }
