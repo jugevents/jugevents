@@ -6,7 +6,19 @@
 <%@page import="it.jugpadova.util.RRStatus"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <%@ include file="../../head.jspf" %>       
+        <%@ include file="../../head.jspf" %>   
+        <script type="text/javascript">
+        //simple javascript function to modify the value of reliability
+        //according to the value selected for the status            
+			function changeReliability() {  					
+				var sts = document.getElementById('reliabilityRequest.status');
+				var rel = document.getElementById('reliability');				  		
+				if((sts.value==3)||(sts.value==4))
+					rel.value=0;
+				if(sts.value==2)
+				    rel.value=1;				  
+			   }
+		</script>
         <style type="text/css">
     	</style>        
     </head>
@@ -44,12 +56,17 @@
 	                                
 	                                 
 	                                 <dt><form:label path="reliabilityRequest.status"><spring:message code="RR.status"/></form:label></dt>
-	                                 <dd><form:select path="reliabilityRequest.status">
+	                                 <dd><form:select path="reliabilityRequest.status" onchange="javascript:changeReliability();">
 	                                 <% EnumSet<RRStatus> es = (EnumSet<RRStatus>)request.getAttribute("statusList");
+	                                    boolean disabledOption=false;
 	                                    for(RRStatus rrs:es)
 	                                    {
+	                                    	if((rrs.equals(RRStatus.NOT_REQUIRED))||(rrs.equals(RRStatus.RELIABILITY_REQUIRED))) 
+	                                    		disabledOption=true; 
+	                                    	else 
+	                                    		disabledOption=false;
 	                                    	%>
-	                                    		<form:option value="<%= rrs.value %>" label="<%= rrs.description %>"/>
+	                                    		<form:option value="<%= rrs.value %>" label="<%= rrs.description %>" disabled="<%= String.valueOf(disabledOption) %>"/>
 	                                    	<%
 	                                    }
 	                                 %>						          

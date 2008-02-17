@@ -26,6 +26,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 
 /**
  * Represents informations concerning reliability request.
@@ -40,8 +41,10 @@ public class ReliabilityRequest extends EntityBase implements Serializable {
 	
 	private int status = RRStatus.NOT_REQUIRED.value;
 	private String motivation;
+	@NotBlank
 	private String adminResponse;
 	private Date dateRequest;
+	
 	private Date dateAdminResponse;
 	
 	public String getAdminResponse() {
