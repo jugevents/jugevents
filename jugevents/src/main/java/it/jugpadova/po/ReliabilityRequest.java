@@ -91,21 +91,7 @@ public class ReliabilityRequest extends EntityBase implements Serializable {
 	@Transient
 	public String getDescription() {
 		return statusDescription();
-	}
-	
-	public static Map<Integer, String> buildMapStatusDescription()
-	{
-		Map<Integer, String> map = new HashMap<Integer, String>();
-		RRStatus list[] = RRStatus.values();
-		for(RRStatus rrs:list)
-		{
-			map.put(rrs.value, rrs.description);
-			
-		}
-		
-		return map;
-	}
-	
+	}	
 	
 	
 }
