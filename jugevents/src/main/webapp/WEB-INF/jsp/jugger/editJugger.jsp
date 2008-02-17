@@ -116,29 +116,7 @@
                         </c:if>
                         </authz:authorize>
                         
-                        <authz:authorize ifAnyGranted="ROLE_ADMIN">    
-                                                  
-                            <fieldset>
-                            	<legend>Reliability Request</legend>     
-                            	 <dt><form:label path="jugger.reliability">reliability</form:label></dt>
-                                 <dd><form:input path="jugger.reliability" disabled="true"/></dd>  
-                                 <c:if test="${jugger.jugger.reliabilityRequest!=null}">                                 
-	                                 <dt><form:label path="jugger.reliabilityRequest.description">status</form:label></dt>
-	                                 <dd><form:input path="jugger.reliabilityRequest.description" disabled="true" /></dd> 
-	                                 <dt><form:label path="jugger.reliabilityRequest.motivation">motivation</form:label></dt>
-	                                 <dd><form:input path="jugger.reliabilityRequest.motivation"  disabled="true" /></dd> 
-	                                 <dt><form:label path="jugger.reliabilityRequest.adminResponse">admin response</form:label></dt>
-	                                 <dd><form:input path="jugger.reliabilityRequest.adminResponse"  disabled="true" /></dd> 
-	                                 <dt><form:label path="jugger.reliabilityRequest.dateRequest">date of the request</form:label></dt>
-	                                 <dd><form:input path="jugger.reliabilityRequest.dateRequest"  disabled="true" /></dd> 
-	                                 <dt><form:label path="jugger.reliabilityRequest.dateAdminResponse">date of the response</form:label></dt>
-	                                 <dd><form:input path="jugger.reliabilityRequest.dateAdminResponse"  disabled="true" /></dd>                               
-                                  
-                                 </c:if>									
-                            </fieldset>      
-						                      
                         
-                        </authz:authorize>
                         
                         <fieldset><legend>JUG</legend>
                             <span id="jugLogo"><img style="float: right;" src="${cp}/bin/jugLogo.bin?id=${jugger.jugger.jug.id}" alt="JUG Logo" width="100"/></span>

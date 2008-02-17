@@ -13,8 +13,12 @@
 // limitations under the License.
 package it.jugpadova.po;
 
+import it.jugpadova.util.RRStatus;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
@@ -32,17 +36,12 @@ import org.parancoe.persistence.po.hibernate.EntityBase;
 @Entity
 public class ReliabilityRequest extends EntityBase implements Serializable {
 	
-	public static final int RELIABILITY_REQUIRED = 1;
-	public static final int RELIABILITY_GRANTED = 2;
-	public static final int RELIABILITY_NOT_GRANTED = 3;
-	public static final int RELIABILITY_REVOKED = 4;
 	
-	private int status = 0;
+	
+	private int status = RRStatus.NOT_REQUIRED.value;
 	private String motivation;
 	private String adminResponse;
 	private Date dateRequest;
-	
-	
 	private Date dateAdminResponse;
 	
 	public String getAdminResponse() {
@@ -81,20 +80,32 @@ public class ReliabilityRequest extends EntityBase implements Serializable {
 	
 	private String statusDescription()
 	{
-		switch(status) 
-		{	
-		case 0: return "NOT REQUIRED";
-		case RELIABILITY_REQUIRED: return "REQUIRED";
-		case RELIABILITY_GRANTED: return "GRANTED";
-		case RELIABILITY_NOT_GRANTED: return "NOT_GRANTED";
-		case RELIABILITY_REVOKED: return "REVOKED";
+		RRStatus[] list = RRStatus.values();
+		for(RRStatus rrs:list)
+		{
+			if(rrs.value==status)
+				return rrs.description;
 		}
-		return "INVALID";
+		return RRStatus.NOT_REQUIRED.description;
 	}
 	@Transient
 	public String getDescription() {
 		return statusDescription();
 	}
 	
-
+	public static Map<Integer, String> buildMapStatusDescription()
+	{
+		Map<Integer, String> map = new HashMap<Integer, String>();
+		RRStatus list[] = RRStatus.values();
+		for(RRStatus rrs:list)
+		{
+			map.put(rrs.value, rrs.description);
+			
+		}
+		
+		return map;
+	}
+	
+	
+	
 }

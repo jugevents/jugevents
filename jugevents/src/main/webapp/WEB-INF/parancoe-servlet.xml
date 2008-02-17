@@ -74,6 +74,7 @@
     
     <bean id="servicesBo" class="it.jugpadova.blo.ServicesBo" autowire="byType">
         <property name="thresholdAccess" value="1"/>
+        <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>
         <property name="internalMail" value="${email.internal}"/>
         <property name="adminMailJE" value="${email.admin}"/>
         <property name="mailSender" ref="mailSender"/>
@@ -208,6 +209,17 @@
         <property name="commandName" value="jugger"/>
         <property name="formView" value="jugger/editJugger"/>
         <property name="successView" value="redirect:/jugger/confirmUpdateJugger.html"/>
+        
+    </bean>
+    
+    
+    <bean name="/adminjugger/reliability.form" id="reliabilityEditController"
+          class="it.jugpadova.controllers.ReliabilityEditController"
+          parent="abstractController">
+        <property name="commandClass" value="it.jugpadova.po.Jugger"/>
+        <property name="commandName" value="jugger"/>
+        <property name="formView" value="jugger/admin/reliability"/>
+        <property name="successView" value="redirect:/adminjugger/list.html"/>
         
     </bean>
     
@@ -372,9 +384,13 @@
 
         <property name="username"><value>${mail.username}</value></property>
         <property name="password"><value>${mail.password}</value></property>
+        
+        
         <property name="javaMailProperties">
-            <props>
+            <props>     			
                 <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+                <!-- used by gmail smtp server -->
+                <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
             </props>
         </property>
         

@@ -1,0 +1,24 @@
+<html>
+<body>
+<p>Dear <b>${jugger.firstName} ${jugger.lastName}</b>,<br>
+on  ${dateRequest} you asked to be reliable with the following motivation:<br>
+-------------------------------------------------------------------------------
+<div> 
+  ${motivation}
+</div>
+-------------------------------------------------------------------------------
+<br>
+The JUG Events Team, have evaluated your request and this is the response:<br>
+-------------------------------------------------------------------------------
+<div>
+  ${adminResponse}
+</div>
+-------------------------------------------------------------------------------
+<br>
+<p>If You didn't requested this <em>reliability request</em> action, please ignore this message and
+continue to access to <a href="${baseUrl}">JUG Events</a> as usually. If you want to
+signal an abuse, please write to <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+<p>Best Regards,<br>
+The JUG Events Team</p>
+</body>
+</html>

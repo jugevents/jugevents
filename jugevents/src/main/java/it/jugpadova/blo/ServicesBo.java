@@ -6,6 +6,7 @@ import it.jugpadova.dao.ReliabilityRequestDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.ReliabilityRequest;
+import it.jugpadova.util.RRStatus;
 
 import java.net.URLEncoder;
 import java.util.Date;
@@ -51,6 +52,7 @@ public class ServicesBo {
     private JavaMailSender mailSender;
     private String adminMailJE;
     private String internalMail;
+    private String confirmationSenderEmailAddress;
     private Daos daos;
 
     public double getThresholdAccess() {
@@ -89,6 +91,9 @@ public class ServicesBo {
 
         return false;
     }
+    
+    
+    
 
     /**
      * Business method to require Reliability.
@@ -112,7 +117,7 @@ public class ServicesBo {
 
         rr.setDateRequest(new Date(System.currentTimeMillis()));
         rr.setMotivation(motivation);
-        rr.setStatus(ReliabilityRequest.RELIABILITY_REQUIRED);
+        rr.setStatus(RRStatus.RELIABILITY_REQUIRED.value);
         rrdao.create(rr);
 
         jugger.setReliabilityRequest(rr);
@@ -140,9 +145,22 @@ public class ServicesBo {
             logger.error(e.toString(), e);
             return "false";
         }
-
-
+       }
+    
+    @Transactional
+    public void updateReliability(Jugger jugger, String baseUrl)
+    {
+    	Jugger ej = daos.getJuggerDao().read(jugger.getId());
+    	ej.setReliability(jugger.getReliability());
+    	ej.getReliabilityRequest().setAdminResponse(jugger.getReliabilityRequest().getAdminResponse());
+    	ej.getReliabilityRequest().setDateAdminResponse(new Date(System.currentTimeMillis()));
+    	ej.getReliabilityRequest().setStatus(jugger.getReliabilityRequest().getStatus());
+    	daos.getReliabilityRequestDao().update(ej.getReliabilityRequest());
+    	daos.getJuggerDao().update(ej);
+    	sendAdminEmail(jugger, baseUrl, "Response to the Request for Reliability",  "it/jugpadova/response-ReliabilityAdmin.vm", confirmationSenderEmailAddress, jugger.getEmail());
     }
+
+
 
     private void sendEmail(final Jugger jugger, final String baseUrl,
             final String subject, final String template, final String sender,
@@ -170,6 +188,34 @@ public class ServicesBo {
         this.mailSender.send(preparator);
     }
 
+    
+    private void sendAdminEmail(final Jugger jugger, final String baseUrl,
+            final String subject, final String template, final String sender,
+            final String mailTo) {
+        MimeMessagePreparator preparator = new MimeMessagePreparator() {
+
+            @SuppressWarnings(value = "unchecked")
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+                message.setTo(mailTo);
+                message.setFrom(sender);
+                message.setSubject(subject);
+                Map model = new HashMap();
+                model.put("jugger", jugger);
+                model.put("baseUrl", baseUrl);
+                model.put("motivation", jugger.getReliabilityRequest().getMotivation());
+                model.put("adminResponse", jugger.getReliabilityRequest().getAdminResponse());
+                model.put("dateRequest", jugger.getReliabilityRequest().getDateRequest());
+               
+                String text = VelocityEngineUtils.mergeTemplateIntoString(
+                        velocityEngine, template, model);
+                message.setText(text, true);
+            }
+        };
+        this.mailSender.send(preparator);
+    }
+
+    
     /**
      * Retrieves the current authenticated user.
      * @return
@@ -338,4 +384,13 @@ public class ServicesBo {
     public void setDaos(Daos daos) {
         this.daos = daos;
     }
+
+	public String getConfirmationSenderEmailAddress() {
+		return confirmationSenderEmailAddress;
+	}
+
+	public void setConfirmationSenderEmailAddress(
+			String confirmationSenderEmailAddress) {
+		this.confirmationSenderEmailAddress = confirmationSenderEmailAddress;
+	}
 }

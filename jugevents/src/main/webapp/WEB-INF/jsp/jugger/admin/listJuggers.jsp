@@ -12,7 +12,7 @@
 <div id="content">
 <div id="content_main">
 
-<h1>Juggers List</h1>
+<h1><spring:message code="JuggerList"/></h1>
 
 
 
@@ -20,32 +20,34 @@
 	<div class="displaytag">
                <display:table  id="jg"  name="juggers"  sort="list" pagesize="20" defaultsort="5" defaultorder="ascending" requestURI="list.html" >
 					
-					<display:column title="username" sortable="true">
+					<display:column titleKey="username" sortable="true">
 						<a	href="${cp}/adminjugger/viewJugger.html?username=${jg.user.username}">${jg.user.username}</a>				
 					</display:column>
-					<display:column title="JUG Name" sortable="true">
+					<display:column titleKey="juggerRegistrationJUGName" sortable="true">
 						<c:out value="${jg.jug.name}" />				
 					</display:column>
-					<display:column title="Reliability Request" sortable="true">						
+					<display:column titleKey="ReliabilityRequest" sortable="true">						
 					<c:choose>
 					<c:when test="${jg.reliabilityRequest!=null}">					
-						${jg.reliabilityRequest.description}
+						${jg.reliabilityRequest.description}<br>
+						<a href="${cp}/adminjugger/reliability.form?jugger.user.username=${jg.user.username}"><spring:message code="edit"/></a>
+						
 					</c:when>
 					<c:otherwise>NOT REQUIRED</c:otherwise>					  
 					</c:choose>
 					
 					</display:column>
-					<display:column title="actions" >
+					<display:column titleKey="actions" >
 						<a
-							href="${cp}/jugger/edit.form?jugger.user.username=${jg.user.username}">edit</a>
+							href="${cp}/jugger/edit.form?jugger.user.username=${jg.user.username}"><spring:message code="edit"/></a>
 						<c:choose>
 							<c:when test="${jg.user.enabled}">
 								<a
-									href="${cp}/adminjugger/disableJugger.html?username=${jg.user.username}">disable</a>
+									href="${cp}/adminjugger/disableJugger.html?username=${jg.user.username}"><spring:message code="disable"/></a>
 							</c:when>
 							<c:otherwise>
 								<a
-									href="${cp}/adminjugger/enableJugger.html?username=${jg.user.username}">enable</a>
+									href="${cp}/adminjugger/enableJugger.html?username=${jg.user.username}"><spring:message code="enable"/></a>
 							</c:otherwise>														
 						</c:choose>						
 						 <spring:message code='confirmDeleteJugger' var="confirmDeleteJuggerMessage"/>
