@@ -9,20 +9,24 @@
 
 package it.jugpadova.controllers;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import it.jugpadova.Blos;
 import it.jugpadova.Daos;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.parancoe.web.BaseMultiActionController;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.octo.captcha.service.image.ImageCaptchaService;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 /**
  *

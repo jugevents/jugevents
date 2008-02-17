@@ -3,13 +3,10 @@
  */
 package it.jugpadova.blo;
 
-import org.parancoe.plugins.security.User;
-
-import it.jugpadova.Daos;
 import it.jugpadova.JugEventsBaseTest;
-import it.jugpadova.dao.JUGDao;
 import it.jugpadova.exception.UserAlreadyEnabledException;
-import it.jugpadova.po.Jugger;
+
+import org.parancoe.plugins.security.User;
 
 /**
  * @author Enrico Giurin

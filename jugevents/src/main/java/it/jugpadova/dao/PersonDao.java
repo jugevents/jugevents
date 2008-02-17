@@ -13,12 +13,13 @@
 // limitations under the License.
 package it.jugpadova.dao;
 
-import org.parancoe.persistence.dao.generic.Dao;
-import org.parancoe.persistence.dao.generic.GenericDao;
 import it.jugpadova.po.Person;
 
-import java.util.List;
 import java.util.Date;
+import java.util.List;
+
+import org.parancoe.persistence.dao.generic.Dao;
+import org.parancoe.persistence.dao.generic.GenericDao;
 
 @Dao(entity=Person.class)
 public interface PersonDao extends GenericDao<Person, Long> {

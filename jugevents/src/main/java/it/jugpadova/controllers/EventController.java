@@ -13,14 +13,8 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import com.sun.syndication.feed.rss.Channel;
-import com.sun.syndication.feed.rss.Description;
-import com.sun.syndication.feed.rss.Guid;
-import com.sun.syndication.feed.rss.Item;
-import com.sun.syndication.io.WireFeedOutput;
-import org.parancoe.web.BaseMultiActionController;
-import it.jugpadova.Daos;
 import it.jugpadova.Blos;
+import it.jugpadova.Daos;
 import it.jugpadova.bean.EventSearch;
 import it.jugpadova.bean.Registration;
 import it.jugpadova.blo.EventBo;
@@ -28,18 +22,28 @@ import it.jugpadova.exception.ParancoeAccessDeniedException;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.Participant;
+
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
 import javax.servlet.ServletOutputStream;
-import org.apache.log4j.Logger;
-import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.parancoe.web.BaseMultiActionController;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.sun.syndication.feed.rss.Channel;
+import com.sun.syndication.feed.rss.Description;
+import com.sun.syndication.feed.rss.Guid;
+import com.sun.syndication.feed.rss.Item;
+import com.sun.syndication.io.WireFeedOutput;
 
 public abstract class EventController extends BaseMultiActionController {
 

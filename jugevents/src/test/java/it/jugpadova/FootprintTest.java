@@ -2,14 +2,15 @@ package it.jugpadova;
 
 import java.io.File;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
 import net.java.dev.footprint.exporter.Exporter;
 import net.java.dev.footprint.exporter.pdf.PdfExporterFactory;
 import net.java.dev.footprint.model.generated.FootprintProperties;
+
 import org.parancoe.web.test.BaseTest;
 
 /**

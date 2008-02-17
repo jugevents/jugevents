@@ -15,8 +15,6 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.Blos;
 import it.jugpadova.Daos;
-import it.jugpadova.po.Jugger;
-import it.jugpadova.po.Participant;
 
 import java.util.HashMap;
 import java.util.Map;

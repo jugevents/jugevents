@@ -1,9 +1,9 @@
 package it.jugpadova;
 
-import it.jugpadova.dao.*;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
+
 import org.parancoe.plugins.security.Authority;
 import org.parancoe.plugins.security.User;
 import org.parancoe.plugins.security.UserAuthority;

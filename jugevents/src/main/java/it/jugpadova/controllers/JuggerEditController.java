@@ -19,10 +19,13 @@ import it.jugpadova.bean.EditJugger;
 import it.jugpadova.bean.RequireReliability;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
 import it.jugpadova.po.Jugger;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.parancoe.plugins.world.Country;

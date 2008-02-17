@@ -1,6 +1,7 @@
 package it.jugpadova.bean;
 
 import it.jugpadova.po.Event;
+
 import java.util.Date;
 
 /**

@@ -1,9 +1,8 @@
 package it.jugpadova.controllers;
 
-import org.springframework.web.servlet.ModelAndView;
-
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.parancoe.web.test.ControllerTest;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 public class HomeControllerTest extends ControllerTest {
     

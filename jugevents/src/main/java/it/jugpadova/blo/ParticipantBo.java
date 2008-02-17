@@ -17,9 +17,8 @@ import it.jugpadova.Daos;
 import it.jugpadova.bean.ParticipantBean;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
+
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,11 +26,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
+
 import javax.mail.internet.MimeMessage;
+
 import net.java.dev.footprint.exporter.Exporter;
 import net.java.dev.footprint.exporter.pdf.PdfExporterFactory;
 import net.java.dev.footprint.model.generated.FootprintProperties;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
@@ -51,7 +52,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: a48ebedb7eae $
+ * @version $Revision: 5fbedb5de47e $
  */
 public class ParticipantBo {
 

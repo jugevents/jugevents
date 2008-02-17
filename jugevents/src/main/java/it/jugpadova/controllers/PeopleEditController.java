@@ -13,6 +13,10 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
+import it.jugpadova.Blos;
+import it.jugpadova.Daos;
+import it.jugpadova.po.Person;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,9 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
-import it.jugpadova.po.Person;
 import org.parancoe.web.BaseFormController;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.BindException;

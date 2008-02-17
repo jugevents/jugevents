@@ -1,11 +1,11 @@
 package it.jugpadova.util;
 
-import com.octo.captcha.service.CaptchaService;
-import com.octo.captcha.service.CaptchaServiceException;
 import org.apache.log4j.Logger;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
+
+import com.octo.captcha.service.CaptchaService;
+import com.octo.captcha.service.CaptchaServiceException;
 
 /**
  * A validator for classes with jCaptchaCode and captchaService attributes

@@ -1,10 +1,11 @@
 package it.jugpadova.blo;
 
-import com.plink.plextile.*;
 import org.directwebremoting.ScriptSession;
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
 import org.directwebremoting.proxy.dwr.Util;
+
+import com.plink.plextile.TextParser;
 
 /**
  *

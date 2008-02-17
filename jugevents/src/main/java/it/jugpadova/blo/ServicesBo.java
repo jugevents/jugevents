@@ -37,6 +37,8 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * 
  */
 public class ServicesBo {
+	
+	
 
     /**
      * min value for threshold access.
@@ -128,7 +130,7 @@ public class ServicesBo {
                 "it/jugpadova/request-reliability2admin.vm", internalMail,
                 adminMailJE, motivation);
         logger.info("Jugger " + jugger.getUser().getUsername() +
-                " has completed wth success request of reliability");
+                " has completed with success request of reliability");
     }
 
     @Transactional
@@ -158,6 +160,9 @@ public class ServicesBo {
     	daos.getReliabilityRequestDao().update(ej.getReliabilityRequest());
     	daos.getJuggerDao().update(ej);
     	sendAdminEmail(jugger, baseUrl, "Response to the Request for Reliability",  "it/jugpadova/response-ReliabilityAdmin.vm", confirmationSenderEmailAddress, jugger.getEmail());
+    	
+    	logger.info("Request for reliability for the jugger " + jugger.getUser().getUsername() +
+        " has been processed with success");
     }
 
 

@@ -16,8 +16,10 @@ package it.jugpadova.controllers;
 import it.jugpadova.Blos;
 import it.jugpadova.Daos;
 import it.jugpadova.po.Jugger;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.parancoe.web.BaseMultiActionController;
 import org.springframework.web.servlet.ModelAndView;

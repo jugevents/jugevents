@@ -24,7 +24,6 @@ import java.util.EnumSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.parancoe.web.BaseFormController;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,15 +34,10 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 public abstract class ReliabilityEditController extends BaseFormController {
+	
+	
 
-	/* (non-Javadoc)
-	 * @see org.parancoe.web.BaseFormController#getLogger()
-	 */
-	@Override
-	public Logger getLogger() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	protected ModelAndView onSubmit(HttpServletRequest request,

@@ -3,14 +3,13 @@
  */
 package it.jugpadova.util;
 
+import it.jugpadova.bean.NewJugger;
+import it.jugpadova.po.JUG;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.parancoe.plugins.security.User;
 import org.parancoe.plugins.world.Country;
-import it.jugpadova.bean.NewJugger;
-import it.jugpadova.blo.JuggerBo;
-import it.jugpadova.exception.ParancoeAccessDeniedException;
-import it.jugpadova.po.JUG;
-import it.jugpadova.po.Jugger;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 /**

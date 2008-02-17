@@ -13,18 +13,20 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import java.text.ParseException;
-import org.parancoe.web.BaseMultiActionController;
-import it.jugpadova.Daos;
 import it.jugpadova.Blos;
+import it.jugpadova.Daos;
 import it.jugpadova.po.Person;
-import org.apache.log4j.Logger;
-import org.springframework.web.servlet.ModelAndView;
+
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
-import java.util.HashMap;
+
+import org.apache.log4j.Logger;
+import org.parancoe.web.BaseMultiActionController;
+import org.springframework.web.servlet.ModelAndView;
 
 public abstract class PeopleController extends BaseMultiActionController {
     private static Logger logger = Logger.getLogger(PeopleController.class);

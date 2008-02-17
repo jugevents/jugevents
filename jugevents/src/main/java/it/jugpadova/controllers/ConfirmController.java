@@ -13,16 +13,17 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import java.util.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
-import org.springframework.web.servlet.ModelAndView;
-import org.parancoe.web.BaseMultiActionController;
-import it.jugpadova.Daos;
 import it.jugpadova.Blos;
+import it.jugpadova.Daos;
 import it.jugpadova.blo.EventBo;
 import it.jugpadova.po.Participant;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.parancoe.web.BaseMultiActionController;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *

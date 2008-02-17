@@ -1,13 +1,15 @@
 package it.jugpadova.bean;
 
-import com.octo.captcha.service.CaptchaService;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
 import it.jugpadova.util.JCaptchaValidable;
 import it.jugpadova.util.JCaptchaValidator;
+
 import org.springmodules.validation.bean.conf.loader.annotation.handler.CascadeValidation;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Validator;
+
+import com.octo.captcha.service.CaptchaService;
 
 /**
  *

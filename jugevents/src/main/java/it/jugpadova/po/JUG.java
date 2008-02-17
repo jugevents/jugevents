@@ -22,6 +22,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
+
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.parancoe.plugins.world.Country;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.CascadeValidation;
