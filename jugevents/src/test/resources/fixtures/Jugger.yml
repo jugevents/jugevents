@@ -4,6 +4,7 @@
   email: lucio.benfante@jugpadova.it  
   jug: *JUG-Padova
   user: *User-lucio
+  reliabilityRequest: *ReliabilityRequest-lucio
   
 - &Jugger-fabrizio
   firstName: Fabrizio

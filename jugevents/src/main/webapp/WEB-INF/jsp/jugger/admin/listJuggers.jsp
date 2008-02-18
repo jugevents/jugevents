@@ -29,8 +29,8 @@
 					<display:column titleKey="ReliabilityRequest" sortable="true">						
 					<c:choose>
 					<c:when test="${jg.reliabilityRequest!=null}">					
-						${jg.reliabilityRequest.description}<br>
-						<a href="${cp}/adminjugger/reliability.form?jugger.user.username=${jg.user.username}"><spring:message code="edit"/></a>
+						${jg.reliabilityRequest.description}
+						(<a href="${cp}/adminjugger/reliability.form?jugger.user.username=${jg.user.username}"><spring:message code="edit"/></a>)
 						
 					</c:when>
 					<c:otherwise>NOT REQUIRED</c:otherwise>					  

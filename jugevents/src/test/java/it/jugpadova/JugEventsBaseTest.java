@@ -4,6 +4,7 @@ import it.jugpadova.po.Event;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.Participant;
+import it.jugpadova.po.ReliabilityRequest;
 import org.parancoe.plugins.security.Authority;
 import org.parancoe.plugins.security.User;
 import org.parancoe.plugins.security.UserAuthority;
@@ -20,6 +21,6 @@ public abstract class JugEventsBaseTest extends BaseTest {
 
     @Override
     public Class[] getFixtureClasses() {
-        return new Class[]{Continent.class, Country.class, User.class, Authority.class, UserAuthority.class, JUG.class, Jugger.class, Event.class, Participant.class };
+        return new Class[]{Continent.class, Country.class, User.class, Authority.class, UserAuthority.class, JUG.class, ReliabilityRequest.class, Jugger.class, Event.class, Participant.class};
     }
 }
