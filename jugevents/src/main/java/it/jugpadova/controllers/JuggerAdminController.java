@@ -43,7 +43,7 @@ public abstract class JuggerAdminController extends BaseMultiActionController {
 	 */
 	public ModelAndView list(HttpServletRequest req, HttpServletResponse res) {
 		ModelAndView mv = new ModelAndView("jugger/admin/listJuggers");
-		mv.addObject("juggers", dao().getJuggerDao().findAllOrderByUsername());
+		mv.addObject("juggers", blo().getJuggerBO().searchAllOrderByUsername());
 		return mv;
 	}
 

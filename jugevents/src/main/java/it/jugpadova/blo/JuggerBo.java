@@ -580,6 +580,11 @@ public class JuggerBo {
     public Jugger searchByEmail(String email) {
         return daos.getJuggerDao().findByEmail(email);
     }
+
+    @Transactional(readOnly = true)
+    public List<Jugger> searchAllOrderByUsername() {
+        return daos.getJuggerDao().findAllOrderByUsername();
+    }
     
     public ServicesBo getServicesBo() {
         return servicesBo;
