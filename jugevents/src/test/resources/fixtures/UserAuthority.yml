@@ -1,6 +1,3 @@
-- &UserAuthority-parancoe-parancoe
-  user: *User-parancoe
-  authority: *Authority-parancoe
 - &UserAuthority-admin-admin
   user: *User-admin
   authority: *Authority-admin

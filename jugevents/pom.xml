@@ -149,7 +149,13 @@
             <scope>provided</scope>
         </dependency>
         
-        
+        <!-- mysql db -->	
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>8.2-507.jdbc3</version>
+            <scope>provided</scope>
+        </dependency>        
         
         <!-- AJAX framework -->
         <dependency>
@@ -222,7 +228,7 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-
+        
         <dependency>
             <groupId>footprint</groupId>
             <artifactId>footprint-config</artifactId>

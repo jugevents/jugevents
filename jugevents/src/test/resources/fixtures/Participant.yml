@@ -1,0 +1,10 @@
+- &Participant-FutureLucio
+  firstName: "Lucio"
+  lastName: "Benfante"
+  email: "lucio.benfante@jugpadova.it"
+  confirmed: true
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
