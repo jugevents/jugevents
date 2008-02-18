@@ -12,13 +12,11 @@
         <!-- <property name="jndiName" value="jdbc/jugeventsDS"/>  -->
     </bean>
 
-    <!-- HSQLDB session factory -->
-    
+    <!-- HSQLDB session factory -->    
     <bean id="sessionFactory" parent="abstractSessionFactory">
         <property name="hibernateProperties">
             <props merge="true">
-                <!-- prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop-->
-                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.show_sql">false</prop>
             </props>
@@ -38,6 +36,19 @@
     </bean>
      -->
 
+    <!-- PostegrSQL session factory -->
+    <!--
+    <bean id="sessionFactory" parent="abstractSessionFactory">
+        <property name="hibernateProperties">
+            <props merge="true">
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">false</prop>
+            </props>
+        </property>
+    </bean>
+     -->
+     
     <!-- Derby session factory -->
 	<!--
     <bean id="sessionFactory" parent="abstractSessionFactory">
