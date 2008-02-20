@@ -57,9 +57,9 @@
                 <configuration>
                     <skip>false</skip>
                     <useFile>true</useFile>
-                    <forkMode>once</forkMode> <!-- pertest once or never -->
+                    <forkMode>once</forkMode> <!-- always, once or never -->
                     <!-- <reportFormat>plain</reportFormat> -->
-                    <argLine>-Xmx512M</argLine>
+                    <!--argLine>-Xmx512M</argLine--> <!-- don't use if you want to debug tests in NetBeans -->
                 </configuration>
             </plugin>
             <plugin>

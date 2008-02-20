@@ -603,6 +603,10 @@ public class MagicMimeEntry {
                         indx--;
                     }
                     ret.append((char) escape);
+                } else if (cn == 'x') {
+                    int escape = Integer.parseInt(s.substring(indx + 1, indx + 3), 16);
+                    ret.append((char) escape);
+                    indx+=2;
                 } else {
                     ret.append((char) cn);
                 }
