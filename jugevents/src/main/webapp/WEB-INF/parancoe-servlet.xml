@@ -140,7 +140,7 @@
 
     <!--  override bean definition in parancoe-servlet.xml  -->
     <!-- sends exceptions to genericError.jsp -->
-    <bean id="exceptionResolver" class="it.jugpadova.util.JUGEventsExceptionResolver"/>
+    <bean id="exceptionResolver" class="it.jugpadova.util.JUGEventsExceptionResolver" autowire="byType"/>
 
     <bean name="/people/edit.form" id="peopleEditController"
           class="it.jugpadova.controllers.PeopleEditController"
