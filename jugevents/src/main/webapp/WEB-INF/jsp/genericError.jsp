@@ -9,30 +9,33 @@
             <jsp:include page="header.jsp"/>
             <div id="content">
                 <div id="content_main">
-        <h2>
-            <spring:message code="attention"/>
-        </h2>
-
-        <div id="errore">
-            <h3>
-                <spring:message code="error"/>
-            </h3>
-
-            <p>
-                <spring:message code="${requestScope.messageCode}" text="${requestScope.messageCode}" htmlEscape="true"/>
-            </p>
-
-<% if (!BaseConf.isProduction()) { %>
-            <!--
-        <%
-            Exception e = (Exception)request.getAttribute("exception");
-	    if (e != null){
-	      e.printStackTrace(new java.io.PrintWriter(out));
-	    }
-    	%>
-        -->
-<% } %>
-        </div>
+                    <h2>
+                        <spring:message code="attention"/>
+                    </h2>
+                    
+                    <div id="errore">
+                        <h3>
+                            <spring:message code="error"/>
+                        </h3>
+                        
+                        <p>
+                            <spring:message code="${requestScope.messageCode}" text="${requestScope.messageCode}" htmlEscape="true" javaScriptEscape="true"/>
+                        </p>
+                        
+                        <p>
+                            <spring:message code="error.generic"/>
+                        </p>
+                        <% if (!BaseConf.isProduction()) {%>
+                        <!--
+                        <%
+     Exception e = (Exception) request.getAttribute("exception");
+     if (e != null) {
+         e.printStackTrace(new java.io.PrintWriter(out));
+     }
+                        %>
+                        -->
+                        <% } %>
+                    </div>
                 </div>
                 <jsp:include page="menu.jsp"/>
             </div>
