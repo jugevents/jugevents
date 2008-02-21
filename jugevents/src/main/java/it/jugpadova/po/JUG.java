@@ -13,6 +13,7 @@
 // limitations under the License.
 package it.jugpadova.po;
 
+import it.jugpadova.util.JUGValidator;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +28,7 @@ import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.parancoe.plugins.world.Country;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.CascadeValidation;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.Validator;
 
 /**
  * Represents Java User Group informations.
@@ -46,6 +48,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
         , @NamedQuery(name =
         "JUG.findByPartialJugNameAndCountryAndContinent", query =
         "from JUG j where upper(j.name) like upper(?) and upper(j.country.localName) like upper(?) and upper(j.country.continent.name) like upper(?) order by j.name asc")})
+@Validator(value=JUGValidator.class)
 public class JUG extends EntityBase {
 
     private static final long serialVersionUID = -40063909128565029L;
