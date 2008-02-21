@@ -75,6 +75,8 @@
                                         
                     <h1><spring:message code="Edit-Jugger"/></h1>
                     
+                    <%@ include file="../message.jspf" %>
+                    
                     <form:form commandName="jugger" method="POST" action="${cp}/jugger/edit.form" enctype="multipart/form-data">
                         <form:errors path="*" cssClass="errorBox"/>
                         
@@ -149,6 +151,25 @@
                                         <spring:message code="juggerRegistrationLatitude" />
                                 </form:label></dt>
                                 <dd><form:input path="jugger.jug.latitude" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
+                                <dt><form:label path="jugger.jug.timeZoneId">
+                                        <spring:message code="juggerRegistrationTimezone" />
+                                </form:label></dt>
+                                <dd><form:select items="${timezones}" itemLabel="description" itemValue="id"  path="jugger.jug.timeZoneId" disabled="${!jugger.reliable}"/></dd>
+                                <dt><form:label path="jugger.jug.contactName">
+                                        <spring:message code="juggerRegistrationContactName" />
+                                </form:label></dt>
+                                <dd><form:input path="jugger.jug.contactName" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
+                                <dt><form:label path="jugger.jug.contactEmail">
+                                        <spring:message code="juggerRegistrationContactEmail" />
+                                </form:label></dt>
+                                <dd><form:input path="jugger.jug.contactEmail" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
+                                <dt><form:label path="jugger.jug.certificateTemplate">
+                                        <img id="tip_jugCertificateTemplate" src="${cp}/images/question16x16.png" />&nbsp;<spring:message code="juggerRegistrationCertificateTemplate" />
+                                </form:label></dt>
+                                <dd>
+                                    <input type="file" name="jugger.jug.certificateTemplate" id="jugger.jug.certificateTemplate"  <c:if test="${!jugger.reliable}">readonly="readonly" disabled="disabled"</c:if>/><br/>
+                                           <a href="${cp}/docs/certificate.odt" target="certificate" class="smallText">Certificate example</a>
+                                </dd>
                                 <dt><form:label path="jugger.jug.infos">
                                         <spring:message code="juggerRegistrationJUGInfos" />
                                 </form:label></dt>
@@ -183,6 +204,7 @@
         <script type="text/javascript">
 
             new Tip($('tip_jugLogo'), '<spring:message code="tip.jugLogo"/>', {title: '<spring:message code="tip.jugLogo.title"/>', effect: 'appear'});
+            new Tip($('tip_jugCertificateTemplate'), '<spring:message code="tip.jugCertificateTemplate"/>', {title: '<spring:message code="tip.jugCertificateTemplate.title"/>', effect: 'appear'});
 
             dwr.util.setEscapeHtml(false);
             

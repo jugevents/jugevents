@@ -208,7 +208,7 @@
         <property name="commandClass" value="it.jugpadova.bean.EditJugger"/>
         <property name="commandName" value="jugger"/>
         <property name="formView" value="jugger/editJugger"/>
-        <property name="successView" value="redirect:/jugger/confirmUpdateJugger.html"/>
+        <property name="successView" value="redirect:/jugger/edit.form"/>
     </bean>
 
     <bean name="/adminjugger/reliability.form" id="reliabilityEditController"

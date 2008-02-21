@@ -17,17 +17,26 @@ import it.jugpadova.Blos;
 import it.jugpadova.Daos;
 import it.jugpadova.bean.EditJugger;
 import it.jugpadova.bean.RequireReliability;
+import it.jugpadova.bean.TimeZoneBean;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
 import it.jugpadova.po.Jugger;
 
+import it.jugpadova.util.Utilities;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTimeZone;
+import org.joda.time.tz.FixedDateTimeZone;
 import org.parancoe.plugins.world.Country;
 import org.parancoe.web.BaseFormController;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -35,6 +44,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.RequestContext;
 
 /**
  * Controller for editing Jugger informations.
@@ -70,7 +80,8 @@ public abstract class JuggerEditController extends BaseFormController {
                 isRequireReliability(),
                 ej.getRequireReliability().getComment());
         ModelAndView mv = onSubmit(command, errors);
-        mv.addObject("id", ej.getJugger().getId());
+        mv.addObject("jugger.user.username", ej.getJugger().getUser().getUsername());
+        Utilities.addMessageCode(mv, "juggerUpdateSuccessful");
         return mv;
     }
 
@@ -94,6 +105,20 @@ public abstract class JuggerEditController extends BaseFormController {
         return ej;
     }
 
+    @Override
+    protected Map referenceData(HttpServletRequest req) throws Exception {
+        RequestContext rc = (RequestContext) req.getAttribute("requestContext");
+        List<TimeZoneBean> timezones = new ArrayList();
+        Date now = new Date();
+        for (int i = -12; i <= 12; i++) {
+            DateTimeZone fdtz = FixedDateTimeZone.forOffsetHours(i);
+            timezones.add(new TimeZoneBean(fdtz.getID(), fdtz.getShortName(now.getTime(), rc.getLocale())));
+        }
+        Map result = new HashMap();
+        result.put("timezones", timezones);
+        return result;
+    }
+    
     public Logger getLogger() {
         return logger;
     }

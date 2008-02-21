@@ -52,9 +52,19 @@ public class Utilities {
             String... messageArguments) {
         ModelAndView mv =
                 new ModelAndView("redirect:/home/message.html");
-        mv.addObject("messageCode", messageCode);
+        addMessageCode(mv, messageCode);
         addMessageArguments(mv, messageArguments);
         return mv;
+    }
+
+    /**
+     * Add the messageCode parameter, used by spring:message in the message page.
+     * 
+     * @param mv The view
+     * @param messageCode The message code
+     */
+    public static void addMessageCode(ModelAndView mv, String messageCode) {
+        mv.addObject("messageCode", messageCode);
     }
     
     /**

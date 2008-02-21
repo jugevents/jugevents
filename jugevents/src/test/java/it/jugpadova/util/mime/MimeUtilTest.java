@@ -63,6 +63,16 @@ public class MimeUtilTest extends TestCase {
         String result = MimeUtil.getMimeType(content);
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test of getMimeType method, of class MimeUtil.
+     */
+    public void testGetMimeTypeForPdf() throws IOException {
+        byte[] content = loadToByteArray("it/jugpadova/util/mime/template.pdf");
+        String expResult = "application/pdf";
+        String result = MimeUtil.getMimeType(content);
+        assertEquals(expResult, result);
+    }
     
     /**
      * Test of getMajorComponent method, of class MimeUtil.

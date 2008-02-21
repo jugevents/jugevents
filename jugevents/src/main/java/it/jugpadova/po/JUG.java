@@ -27,6 +27,7 @@ import javax.persistence.Transient;
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.parancoe.plugins.world.Country;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.CascadeValidation;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Validator;
 
@@ -37,43 +38,40 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.Validato
  */
 @Entity
 @NamedQueries(value = {@NamedQuery(name = "JUG.findByPartialName", query =
-        "from JUG j where upper(j.name) like upper(?) order by j.name asc"), @NamedQuery(name =
-        "JUG.findByPartialJugNameAndCountry", query =
-        "from JUG jug where upper(jug.name) like upper(?) and upper(jug.country.englishName) like upper(?) order by jug.name asc"), @NamedQuery(name =
-        "JUG.findByNameAndCountryEN", query =
-        "from JUG jug where upper(jug.name) = upper(?) and upper(jug.country.englishName) = upper(?) order by jug.name asc"),
-        @NamedQuery(name =
-            "JUG.findByICName", query =
-            "from JUG jug where upper(jug.name) = upper(?) order by jug.name asc")
-        , @NamedQuery(name =
-        "JUG.findByPartialJugNameAndCountryAndContinent", query =
-        "from JUG j where upper(j.name) like upper(?) and upper(j.country.localName) like upper(?) and upper(j.country.continent.name) like upper(?) order by j.name asc")})
-@Validator(value=JUGValidator.class)
+"from JUG j where upper(j.name) like upper(?) order by j.name asc"), @NamedQuery(name =
+"JUG.findByPartialJugNameAndCountry", query =
+"from JUG jug where upper(jug.name) like upper(?) and upper(jug.country.englishName) like upper(?) order by jug.name asc"), @NamedQuery(name =
+"JUG.findByNameAndCountryEN", query =
+"from JUG jug where upper(jug.name) = upper(?) and upper(jug.country.englishName) = upper(?) order by jug.name asc"),
+@NamedQuery(name =
+"JUG.findByICName", query =
+"from JUG jug where upper(jug.name) = upper(?) order by jug.name asc"), @NamedQuery(name =
+"JUG.findByPartialJugNameAndCountryAndContinent", query =
+"from JUG j where upper(j.name) like upper(?) and upper(j.country.localName) like upper(?) and upper(j.country.continent.name) like upper(?) order by j.name asc")
+})
+@Validator(value = JUGValidator.class)
 public class JUG extends EntityBase {
 
     private static final long serialVersionUID = -40063909128565029L;
-
     /**
      * JUG name
      */
     @NotBlank
     private String name;
-
     @CascadeValidation
     private Country country;
-
     private String webSite;
-
     private Double latitude;
-
     private Double longitude;
-    
     private String infos;
-
     private Boolean modifiedKmlData;
-
     private byte[] logo;
-    
+    private String contactName;
+    @Email
+    private String contactEmail;
+    private String timeZoneId;
+    private byte[] certificateTemplate;
+
     public String getName() {
         return name;
     }
@@ -114,7 +112,7 @@ public class JUG extends EntityBase {
     public void setWebSite(String webSite) {
         this.webSite = webSite;
     }
-    
+
     @Column(length = 1024)
     public String getInfos() {
         return infos;
@@ -132,7 +130,8 @@ public class JUG extends EntityBase {
         this.modifiedKmlData = modifiedKmlData;
     }
 
-    @Lob @Basic(fetch = FetchType.LAZY)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     public byte[] getLogo() {
         return logo;
     }
@@ -141,11 +140,45 @@ public class JUG extends EntityBase {
         this.logo = logo;
     }
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    public byte[] getCertificateTemplate() {
+        return certificateTemplate;
+    }
+
+    public void setCertificateTemplate(byte[] certificateTemplate) {
+        this.certificateTemplate = certificateTemplate;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getTimeZoneId() {
+        return timeZoneId;
+    }
+
+    public void setTimeZoneId(String timeZoneId) {
+        this.timeZoneId = timeZoneId;
+    }
+
     @Transient
     public String getWebSiteUrl() {
         String result = this.getWebSite();
         if (this.getWebSite() != null && !this.getWebSite().contains("://")) {
-            result = "http://"+result;
+            result = "http://" + result;
         }
         return result;
     }

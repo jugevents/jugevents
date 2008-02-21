@@ -1,0 +1,5 @@
+<c:if test="${!empty param.messageCode}">
+<div id="messageBox" class="messageBox">
+    <spring:message code="${param.messageCode}" arguments="${param.messageArguments}" text="Unknown message code"/>
+</div>
+</c:if>

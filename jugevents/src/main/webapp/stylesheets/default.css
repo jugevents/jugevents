@@ -96,6 +96,10 @@ form br {
   color: red;
 }
 
+.messageBox {
+    color: green;
+}
+
 #topRuler{
   border: none;
   background-color: #000000;

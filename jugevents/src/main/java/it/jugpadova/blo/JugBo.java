@@ -256,6 +256,12 @@ public class JugBo {
         jug.setWebSite(newJUG.getWebSite());
         jug.setLongitude(newJUG.getLongitude());
         jug.setLatitude(newJUG.getLatitude());
+        jug.setTimeZoneId(newJUG.getTimeZoneId());
+        jug.setContactName(newJUG.getContactName());
+        jug.setContactEmail(newJUG.getContactEmail());
+        if (newJUG.getCertificateTemplate() != null && newJUG.getCertificateTemplate().length > 0) {
+            jug.setCertificateTemplate(newJUG.getCertificateTemplate());
+        }
         jug.setInfos(newJUG.getInfos());
         Long id = jug.getId();
         if (id == null) {
