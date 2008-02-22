@@ -23,6 +23,7 @@
                     
                     <form:form commandName="registration" method="POST" action="${cp}/event/registration.form">
                         <form:hidden path="event.id"/>
+                        <form:errors path="*" cssClass="errorBox"/>                        
                         <dl>
                             <dt><form:label path="participant.firstName"><spring:message code="first_name"/>:</form:label></dt>
                             <dd><form:input path="participant.firstName"/></dd>
@@ -30,12 +31,13 @@
                             <dd><form:input path="participant.lastName"/></dd>
                             <dt><form:label path="participant.email"><spring:message code="Email"/>:</form:label></dt>
                             <dd><form:input path="participant.email"/></dd>
+                            <dt><form:label path="participant.note"><spring:message code="Note"/>:</form:label></dt>
+                            <dd><form:textarea path="participant.note" rows="6"/></dd>
                             <dt><spring:message code="InsertCharactersInTheImage"/></dt>
                             <dd><form:input path="captchaResponse"/><br/><img src="${cp}/jcaptcha/image.html" alt="Captcha Image"/></dd>
                             <dt>&nbsp;</dt>
                             <dd><input type="submit" value="<spring:message code='RegisterYou'/>"/><br/><br/></dd>
                         </dl>
-                        <form:errors path="*" cssClass="errorBox"/>
                     </form:form>
                     <%@ include file="show.jspf"%>
                 </div>

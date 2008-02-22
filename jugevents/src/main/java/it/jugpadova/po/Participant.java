@@ -24,13 +24,14 @@ import javax.persistence.TemporalType;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.MaxLength;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 
 /**
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 5fbedb5de47e $
+ * @version $Revision: 2b73446ebfe8 $
  */
 @Entity
 @NamedQueries({
@@ -63,6 +64,8 @@ public class Participant extends EntityBase {
     private Date lastCertificateSentDate;
     private Date confirmationDate;
     private Boolean winner;
+    @MaxLength(value=255)
+    private String note;
 
     /** Creates a new instance of Participant */
     public Participant() {
@@ -158,5 +161,13 @@ public class Participant extends EntityBase {
     public void setWinner(Boolean winner) {
         this.winner = winner;
     }
+    
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }        
 
 }

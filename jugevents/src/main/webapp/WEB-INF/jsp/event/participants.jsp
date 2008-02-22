@@ -39,11 +39,12 @@
                 </fieldset>
         </div></div>
         <div class="displaytag">
-            <display:table name="participants" id="participantList" sort="list" pagesize="20" defaultsort="5" defaultorder="ascending" requestURI="participants.html" export="true">
+            <display:table name="participants" id="participantList" sort="list" pagesize="20" defaultsort="6" defaultorder="ascending" requestURI="participants.html" export="true">
                 <display:column title="#">${participantList_rowNum}</display:column>
                 <display:column property="firstName" titleKey="first_name" sortable="true" headerClass="sortable"/>
                 <display:column property="lastName" titleKey="last_name" sortable="true" headerClass="sortable"/>
                 <display:column property="email" titleKey="Email" sortable="true" headerClass="sortable"/>
+                <display:column property="note" titleKey="Note" sortable="true" headerClass="sortable"/>
                 <display:column property="creationDate" titleKey="JoinedAt" sortable="true" headerClass="sortable"/>
                 <display:column property="confirmationDate" titleKey="ConfirmedAt" sortable="true" headerClass="sortable"/>
                 <display:column media="html" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;">
@@ -62,11 +63,12 @@
         </div>
         <h2><spring:message code='NotConfirmedParticipantList'/></h2>
         <div class="displaytag">
-            <display:table name="participantsNotConfirmed" id="participantNotConfirmedList" sort="list" pagesize="20" defaultsort="5" defaultorder="ascending" requestURI="participants.html" export="true">
+            <display:table name="participantsNotConfirmed" id="participantNotConfirmedList" sort="list" pagesize="20" defaultsort="6" defaultorder="ascending" requestURI="participants.html" export="true">
                 <display:column title="#">${participantNotConfirmedList_rowNum}</display:column>
                 <display:column property="firstName" titleKey="first_name" sortable="true" headerClass="sortable"/>
                 <display:column property="lastName" titleKey="last_name" sortable="true" headerClass="sortable"/>
                 <display:column property="email" titleKey="Email" sortable="true" headerClass="sortable"/>
+                <display:column property="note" titleKey="Note" sortable="true" headerClass="sortable"/>
                 <display:column property="creationDate" titleKey="JoinedAt" sortable="true" headerClass="sortable"/>
                 <display:column media="html" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;">
                     <input onclick="participantBo.confirmParticipantOnAttendance(${participantNotConfirmedList.id}, this.checked)" type="checkbox" <c:if test="${participantNotConfirmedList.attended}">checked="${participantNotConfirmedList.attended}"</c:if> />
