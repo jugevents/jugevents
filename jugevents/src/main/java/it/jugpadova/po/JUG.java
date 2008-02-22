@@ -67,7 +67,7 @@ public class JUG extends EntityBase {
     private Boolean modifiedKmlData;
     private byte[] logo;
     private String contactName;
-    @Email
+    @Email(applyIf="contactEmail is not blank")
     private String contactEmail;
     private String timeZoneId;
     private byte[] certificateTemplate;
