@@ -29,6 +29,7 @@ import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
+import javax.servlet.http.HttpSession;
 import net.java.dev.footprint.exporter.Exporter;
 import net.java.dev.footprint.exporter.pdf.PdfExporterFactory;
 import net.java.dev.footprint.model.generated.FootprintProperties;
@@ -52,7 +53,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 5fbedb5de47e $
+ * @version $Revision: a47916c5df85 $
  */
 public class ParticipantBo {
 
@@ -313,4 +314,40 @@ public class ParticipantBo {
         return participantBeans;
     }
 
+    /**
+     * Update the value of a field of a participant
+     * 
+     * @param participantId The id of the participant
+     * @param field The field to update
+     * @param value The new value
+     */
+    @Transactional
+    public void updateParticipantFieldValue(Long participantId, String field, String value) {
+        try {
+            WebContext wctx = WebContextFactory.get();
+            ScriptSession session = wctx.getScriptSession();
+            Util util = new Util(session);
+            Participant participant = daos.getParticipantDao().read(participantId);
+             // TODO: maybe using reflection for updating fields?
+            if ("firstName".equals(field)) {
+                participant.setFirstName(value);
+            }
+            if ("lastName".equals(field)) {
+                participant.setLastName(value);
+            }
+            if ("email".equals(field)) {
+                participant.setEmail(value);
+            }
+            if ("note".equals(field)) { // TODO: maybe using reflection?
+                participant.setNote(value);
+            }
+            util.setValue(field+"_v_"+participantId, value);
+            util.setValue(field+"_f_"+participantId, value);
+        } catch (Exception e) {
+            logger.error("Error updating lot rejected",
+                    e);
+        }
+
+    }
+    
 }

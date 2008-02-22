@@ -96,6 +96,7 @@
             <dwr:include method="sendCertificateToAllParticipants"/>
             <dwr:include method="chooseWinnerForEvent"/>
             <dwr:include method="findAllWinnersForEvent"/>
+            <dwr:include method="updateParticipantFieldValue"/>
         </dwr:remote>
     </bean>
 
