@@ -18,6 +18,7 @@ import it.jugpadova.Daos;
 import it.jugpadova.blo.EventBo;
 import it.jugpadova.po.Participant;
 
+import it.jugpadova.util.Utilities;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,28 +45,11 @@ public abstract class ConfirmController extends BaseMultiActionController {
                 eventBo.confirmParticipant(req.getParameter("email"),
                 req.getParameter("code"));
         if (participant != null) {
-            result =new ModelAndView("redirect:/confirm/ok.html");
-            result.addObject("participantId", participant.getId());
+            result = Utilities.getMessageView("participant.registration.ok", participant.getFirstName(), participant.getEvent().getTitle());
         } else {
-            result =new ModelAndView("redirect:/confirm/failed.html");
+            result = Utilities.getMessageView("participant.registration.failed");
         }
         return result;
-    }
-
-    public ModelAndView failed(HttpServletRequest req,
-            HttpServletResponse res) {
-        return new ModelAndView("event/registration/failed");
-    }
-
-    public ModelAndView ok(HttpServletRequest req,
-            HttpServletResponse res) {
-        Long participantId =
-                new Long(req.getParameter("participantId"));
-        Participant participant = blo().getEventBo().searchParticipantById(participantId);
-        ModelAndView mv =
-                new ModelAndView("event/registration/ok");
-        mv.addObject("participant", participant);
-        return mv;
     }
     
     /**

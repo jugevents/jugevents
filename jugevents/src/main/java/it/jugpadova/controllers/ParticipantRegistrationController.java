@@ -74,7 +74,7 @@ public abstract class ParticipantRegistrationController extends BaseFormControll
         } else {
             Participant p = prevParticipant.get(0);
             if (p.getConfirmed().booleanValue()) {
-                return new ModelAndView("event/registration/yet");
+                return Utilities.getMessageView("participant.registration.yetRegistered");
             } else {
                 blo().getEventBo().
                         refreshRegistration(registration.getEvent(), p, baseUrl);
