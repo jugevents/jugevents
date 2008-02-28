@@ -104,7 +104,7 @@ public class ServicesBo {
      */
     // Metodo da chiamare all' interno di un contesto transazionale
     @Transactional(readOnly = false, propagation = Propagation.MANDATORY)
-    void requireReliability( Jugger jugger,  String motivation) {
+    void requireReliability( Jugger jugger,  String motivation, String baseURL) {
         JuggerDao jdao = daos.getJuggerDao();
         ReliabilityRequestDao rrdao = daos.getReliabilityRequestDao();
 
@@ -126,7 +126,7 @@ public class ServicesBo {
         jdao.update(jugger);
 
         // send mail to admin-jugevents
-        sendEmail(jugger, "", "A jugger has required reliability",
+        sendEmail(jugger, baseURL, "A jugger has required reliability",
                 "it/jugpadova/request-reliability2admin.vm", internalMail,
                 adminMailJE, motivation);
         logger.info("Jugger " + jugger.getUser().getUsername() +
@@ -135,12 +135,12 @@ public class ServicesBo {
 
     @Transactional
     public String requireReliabilityOnExistingJugger(String emailJugger,
-            String motivation) {
+            String motivation, String baseURL) {
         Jugger jugger = daos.getJuggerDao().findByEmail(emailJugger);
 
         try {
 
-            requireReliability(jugger, motivation);
+            requireReliability(jugger, motivation, baseURL);
             return "true";
 
         } catch (Exception e) {

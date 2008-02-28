@@ -123,7 +123,7 @@ public class JuggerBo {
         jugger.setConfirmationCode(generateConfirmationCode(jugger));
         Long id = juggerDao.create(jugger);
         if (requiredReliability) {
-            servicesBo.requireReliability(jugger, motivation);
+            servicesBo.requireReliability(jugger, motivation, baseUrl);
         }
         sendEmail(jugger, baseUrl, "Please Confirm your Jugger registration",
                 jugger.getConfirmationCode(),
@@ -440,11 +440,11 @@ public class JuggerBo {
      */
     @Transactional
     public void update(Jugger jugger, boolean requiredReliability,
-            String motivation) {
+            String motivation, String baseURL) {
 
         JuggerDao juggerDao = daos.getJuggerDao();
         if (requiredReliability) {
-            servicesBo.requireReliability(jugger, motivation);
+            servicesBo.requireReliability(jugger, motivation, baseURL);
         }
 
         User newUser = updateUser(jugger.getUser());

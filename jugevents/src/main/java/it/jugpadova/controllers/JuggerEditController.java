@@ -78,7 +78,7 @@ public abstract class JuggerEditController extends BaseFormController {
         }
         blo().getJuggerBO().update(ej.getJugger(), ej.getRequireReliability().
                 isRequireReliability(),
-                ej.getRequireReliability().getComment());
+                ej.getRequireReliability().getComment(), Utilities.getBaseUrl(req));
         ModelAndView mv = onSubmit(command, errors);
         mv.addObject("jugger.user.username", ej.getJugger().getUser().getUsername());
         Utilities.addMessageCode(mv, "juggerUpdateSuccessful");
