@@ -21,6 +21,7 @@ import it.jugpadova.exception.UserAlreadyPresentsException;
 import it.jugpadova.exception.UserNotEnabledException;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
+import it.jugpadova.util.SecurityUtilities;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
+import org.acegisecurity.providers.encoding.Md5PasswordEncoder;
 import org.acegisecurity.providers.encoding.MessageDigestPasswordEncoder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -162,7 +164,10 @@ public class JuggerBo {
                     getUsername() + " already enabled");
         }
         jugger.getUser().setEnabled(true);
-        jugger.getUser().setPassword(password);
+        String encryptedPWD = SecurityUtilities.encodePassword(password, jugger.getUser().
+                getUsername());
+        jugger.getUser().setPassword(encryptedPWD);
+        //jugger.getUser().setPassword(password);
         // one way code...so regenerate it
         jugger.setConfirmationCode(generateConfirmationCode(jugger));
         daos.getJuggerDao().update(jugger);
@@ -178,7 +183,9 @@ public class JuggerBo {
             throw new UserNotEnabledException("User " + jugger.getUser().
                     getUsername() + " is not enabled");
         }
-        jugger.getUser().setPassword(password);
+        String encryptedPWD = SecurityUtilities.encodePassword(password, jugger.getUser().
+                    getUsername());
+        jugger.getUser().setPassword(encryptedPWD);
         // one way code...so regenerate it
         jugger.setChangePasswordCode(generateConfirmationCode(jugger));
         daos.getJuggerDao().update(jugger);

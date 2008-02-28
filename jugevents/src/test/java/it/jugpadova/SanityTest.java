@@ -1,5 +1,8 @@
 package it.jugpadova;
 
+import org.acegisecurity.providers.dao.DaoAuthenticationProvider;
+import org.acegisecurity.providers.encoding.Md5PasswordEncoder;
+
 import it.jugpadova.blo.EventBo;
 import it.jugpadova.blo.FilterBo;
 import it.jugpadova.blo.JuggerBo;
@@ -92,6 +95,18 @@ public class SanityTest extends JugEventsBaseTest {
         checkSpringBean("juggerController");
         checkSpringBean("registrationController");
         checkSpringBean("confirmController");
+    }
+    /**
+     * Checks the correct configuration for the security.
+     */
+    public void testSecurity() {
+    	/*
+    	DaoAuthenticationProvider dap = (DaoAuthenticationProvider)ctx.getBean("daoAuthenticationProvider");
+    	//assertTrue(dap.getPasswordEncoder() instanceof Md5PasswordEncoder);
+    	//System.out.println(dap.getPasswordEncoder().getClass().getName());
+    	String pluginSecurityFilterDefinitions = (String)ctx.getBean("pluginSecurityFilterDefinitions");
+    	assertTrue(pluginSecurityFilterDefinitions.contains("/adminjugger/**=ROLE_ADMIN"));
+       */
     }
 
     private void checkSpringBean(String id) {
