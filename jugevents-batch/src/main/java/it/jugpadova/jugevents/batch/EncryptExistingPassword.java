@@ -5,7 +5,7 @@ package it.jugpadova.jugevents.batch;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-// import java.nio.charset.Charset;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
-import org.acegisecurity.providers.encoding.Md5PasswordEncoder;
+// import org.acegisecurity.providers.encoding.Md5PasswordEncoder;
 
 /**
  * Batch to encrypt(md5) plain text password existing in jugevents 
@@ -61,7 +61,7 @@ public class EncryptExistingPassword {
                 String username = selectUsersRs.getString("username");
                 String password = selectUsersRs.getString("password");
                 long id = selectUsersRs.getLong("id");
-                updateUserStmt.setString(1, encodePasswordWithAcegi(password, username));
+                updateUserStmt.setString(1, encodePassword(password, username));
                 updateUserStmt.setString(2, password);
                 updateUserStmt.setLong(3, id);
                 rowUpdated += updateUserStmt.executeUpdate();
@@ -83,22 +83,22 @@ public class EncryptExistingPassword {
         }
     }
 
-    /* ONLY JAVA 6
-    private static String encodePassword(String rawPass, String username) throws NoSuchAlgorithmException {
-        byte[] digest = md.digest((rawPass+"{" + username + "}").getBytes(Charset.forName("UTF-8")));
+    private static String encodePassword(String rawPass, String username) throws UnsupportedEncodingException {
+        byte[] digest = md.digest((rawPass+"{" + username + "}").getBytes("UTF-8"));
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < digest.length; i++) {
             result.append(Integer.toHexString(((char)digest[i]) & 0xFF));
         }
         return result.toString();
     }
-      */
 
+    /*
     private static String encodePasswordWithAcegi(String rawPass, String username) {
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
         return encoder.encodePassword(rawPass, username);
     }
-
+    */
+    
     /**
      * @param args
      */
