@@ -55,7 +55,6 @@ public abstract class JuggerAdminController extends BaseMultiActionController {
 	 * @return
 	 */
 	public ModelAndView delete(HttpServletRequest req, HttpServletResponse res) {
-
 		String username = req.getParameter("username");
 		blo().getJuggerBO().delete(username);
 		return new ModelAndView("redirect:/adminjugger/list.html");
@@ -73,7 +72,7 @@ public abstract class JuggerAdminController extends BaseMultiActionController {
 			HttpServletResponse res) {
 		String username = req.getParameter("username");
 		ModelAndView mv = new ModelAndView("jugger/admin/viewJugger");
-		mv.addObject("jugger", dao().getJuggerDao().searchByUsername(username));
+		mv.addObject("jugger", blo().getJuggerBO().searchByUsername(username));
 		return mv;
 	}
 
