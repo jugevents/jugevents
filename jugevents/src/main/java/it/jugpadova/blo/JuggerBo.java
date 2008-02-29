@@ -388,9 +388,14 @@ public class JuggerBo {
             }
             // effect.highlight("jugger.jug.latitude");
 
-            util.setValue("jugger.jug.infos", jug.getInfos());
         // effect.highlight("jugger.jug.infos");
 
+            util.setValue("jugger.jug.timeZoneId", jug.getTimeZoneId());
+            util.setValue("jugger.jug.contactName", jug.getContactName());
+            util.setValue("jugger.jug.contactEmail", jug.getContactEmail());
+
+            util.setValue("jugger.jug.infos", jug.getInfos());
+            
         // fixJugFields(false);
         }
 

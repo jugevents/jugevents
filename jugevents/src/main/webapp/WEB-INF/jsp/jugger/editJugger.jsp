@@ -169,7 +169,7 @@
                                 </form:label></dt>
                                 <dd>
                                     <input type="file" name="jugger.jug.certificateTemplate" id="jugger.jug.certificateTemplate"  <c:if test="${!jugger.reliable}">readonly="readonly" disabled="disabled"</c:if>/><br/>
-                                           <a href="${cp}/docs/certificate.odt" target="certificate" class="smallText">Certificate example</a>
+                                    <a href="${cp}/docs/certificate.odt" target="certificate" class="smallText"><spring:message code="Example"/></a>
                                 </dd>
                                 <dt><form:label path="jugger.jug.infos">
                                         <spring:message code="juggerRegistrationJUGInfos" />
