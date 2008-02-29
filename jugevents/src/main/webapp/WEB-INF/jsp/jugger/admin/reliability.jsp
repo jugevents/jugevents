@@ -48,6 +48,16 @@
                             </dl>
                         </fieldset>
                         
+                        <fieldset><legend>JUG</legend>
+                            <span id="jugLogo"><img style="float: right;" src="${cp}/bin/jugLogo.bin?id=${jugger.jug.id}" alt="JUG Logo" width="100"/></span>
+                            <dl>
+                                <dt><form:label path="jug.name">
+                                <spring:message code="juggerRegistrationJUGName" />
+                                </form:label></dt>
+                                <dd><form:input path="jug.name" readonly="true"/></dd>
+                        	</dl>
+                        </fieldset>
+                        
                         <fieldset>
                             	<legend><spring:message code="ReliabilityRequest"/></legend>     
                             	 <dt><form:label path="reliability"><spring:message code="Reliability"/></form:label></dt>
