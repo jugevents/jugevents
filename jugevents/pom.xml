@@ -101,14 +101,14 @@
         <dependency>
             <groupId>org.parancoe</groupId>
             <artifactId>parancoe-plugin-security-encrypt</artifactId>
-            <version>0.3.4</version>
+            <version>0.3.4.1</version>
             <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.parancoe</groupId>
             <artifactId>parancoe-plugin-world</artifactId>
-            <version>0.3.4</version>
+            <version>0.3.4.1</version>
             <scope>compile</scope>
         </dependency>
         
