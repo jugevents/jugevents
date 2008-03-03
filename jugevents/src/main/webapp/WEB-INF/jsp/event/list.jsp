@@ -139,6 +139,8 @@
                                 <dd><input type="checkbox" name="badgeIncludeCountry" id="badgeIncludeCountry" onchange="updateBadge()"/></dd>
                                 <dt><label><spring:message code="IncludeTheDescription"/>:</label></dt>
                                 <dd><input type="checkbox" name="badgeIncludeTheDescription" id="badgeIncludeTheDescription" onchange="updateBadge()"/></dd>
+                                <dt><label><spring:message code="MaxNumberOfResults"/>:</label></dt>
+                                <dd><input type="text" name="maxResults" id="maxResults" onchange="updateBadge()" size="2"/></dd>
                                 <dt><label><spring:message code="Style"/>:</label></dt>
                                 <dd><input type="radio" name="badgeStyle" value="none" checked="true" onchange="updateBadge()"/><spring:message code='None'/>&nbsp;<input type="radio" name="badgeStyle" value="simple" onchange="updateBadge()"/><spring:message code='Simple'/></dd>
                                 <dt><label><spring:message code="badgeCopyThisCode"/></label></dt>
@@ -185,7 +187,7 @@
             }
 
             function updateBadge() {
-            eventBo.updateBadgePanel($('continent').value, $('country').value, $('jugName').value, $('pastEvents').checked, $$('input[type=radio][name=orderByDate]').find(function(el) { return el.checked }).value, $('badgeIncludeJUGName').checked, $('badgeIncludeCountry').checked, $('badgeIncludeTheDescription').checked, $$('input[type=radio][name=badgeStyle]').find(function(el) { return el.checked }).value, '${requestScope.lang}');
+            eventBo.updateBadgePanel($('continent').value, $('country').value, $('jugName').value, $('pastEvents').checked, $$('input[type=radio][name=orderByDate]').find(function(el) { return el.checked }).value, $('badgeIncludeJUGName').checked, $('badgeIncludeCountry').checked, $('badgeIncludeTheDescription').checked, $$('input[type=radio][name=badgeStyle]').find(function(el) { return el.checked }).value, '${requestScope.lang}', $('maxResults').value);
             }
 
         </script>

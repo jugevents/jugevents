@@ -233,6 +233,14 @@ public abstract class EventController extends BaseMultiActionController {
             eventSearch.setJugName(req.getParameter("jugName"));
             eventSearch.setPastEvents(java.lang.Boolean.parseBoolean(req.getParameter("pastEvents")));
             eventSearch.setOrderByDate(req.getParameter("order"));
+            String maxResults = req.getParameter("maxResults");
+            if (StringUtils.isNotBlank(maxResults)) {
+                try {
+                    eventSearch.setMaxResults(new Integer(maxResults));
+                } catch (NumberFormatException numberFormatException) {
+                /* ignore it */
+                }
+            }
             java.util.List<it.jugpadova.po.Event> events =
                     blo().getEventBo().search(eventSearch);
             boolean showJUGName =

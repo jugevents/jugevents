@@ -2,7 +2,7 @@ package it.jugpadova.bean;
 
 /**
  * Bean for the event search form.
- * 
+ *
  * @author Lucio Benfante
  */
 public class EventSearch {
@@ -12,7 +12,8 @@ public class EventSearch {
     private String jugName;
     private boolean pastEvents;
     private String orderByDate="asc";
-    
+    private Integer maxResults;
+
     public EventSearch() {
     }
 
@@ -55,5 +56,13 @@ public class EventSearch {
     public void setOrderByDate(String orderByDate) {
         this.orderByDate = orderByDate;
     }
-            
+
+    public Integer getMaxResults() {
+        return maxResults;
+    }
+
+    public void setMaxResults(Integer maxResults) {
+        this.maxResults = maxResults;
+    }
+
 }

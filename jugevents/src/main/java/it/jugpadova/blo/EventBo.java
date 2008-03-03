@@ -61,9 +61,9 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 
 /**
  * Business logic for the event management.
- * 
+ *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 4974be385253 $
+ * @version $Revision: 07ca81ccd7d6 $
  */
 public class EventBo {
 
@@ -210,7 +210,11 @@ public class EventBo {
                 eventCriteria.addOrder(Order.asc("startDate"));
                 eventCriteria.addOrder(Order.asc("creationDate"));
             }
-            events = daos.getEventDao().searchByCriteria(eventCriteria);
+            if (eventSearch.getMaxResults() == null) {
+                events = daos.getEventDao().searchByCriteria(eventCriteria);
+            } else {
+                events = daos.getEventDao().searchByCriteria(eventCriteria, 0, eventSearch.getMaxResults().intValue());
+            }
             for (Event event : events) {
                 event.getParticipants().size();
             }
@@ -400,7 +404,7 @@ public class EventBo {
     public void updateBadgePanel(String continent, String country,
             String jugName, String pastEvents, String orderByDate,
             String jebShowJUGName, String jebShowCountry,
-            String jebShowDescription, String badgeStyle, String locale) {
+            String jebShowDescription, String badgeStyle, String locale, String maxResults) {
         WebContext wctx = WebContextFactory.get();
         HttpServletRequest req = wctx.getHttpServletRequest();
         ScriptSession session = wctx.getScriptSession();
@@ -417,6 +421,13 @@ public class EventBo {
         eventSearch.setJugName(jugName);
         eventSearch.setPastEvents(java.lang.Boolean.parseBoolean(pastEvents));
         eventSearch.setOrderByDate(orderByDate);
+        if (StringUtils.isNotBlank(maxResults)) {
+            try {
+                eventSearch.setMaxResults(new Integer(maxResults));
+            } catch (NumberFormatException numberFormatException) {
+            /* ignore it */
+            }
+        }
         java.util.List<it.jugpadova.po.Event> events = this.search(eventSearch);
         boolean showJUGName =
                 java.lang.Boolean.parseBoolean(jebShowJUGName);
@@ -427,7 +438,7 @@ public class EventBo {
         util.setValue("badgeCode", this.getBadgePageCode(baseUrl, continent,
                 country, jugName, pastEvents, orderByDate, jebShowJUGName,
                 jebShowCountry, jebShowDescription,
-                badgeStyle, locale));
+                badgeStyle, locale, maxResults));
         util.setValue("badgePreview", this.getBadgeHtmlCode(events, dateFormat,
                 baseUrl, showJUGName, showCountry, showDescription, badgeStyle));
     }
@@ -444,7 +455,7 @@ public class EventBo {
             String country, String jugName, String pastEvents,
             String orderByDate, String jebShowJUGName, String jebShowCountry,
             String jebShowDescription, String badgeStyle,
-            String lang) {
+            String lang, String maxResults) {
         StringBuffer result = new StringBuffer();
         result.append("<script type=\"text/javascript\" src=\"").append(baseUrl).
                 append("/event/badge.html");
@@ -539,6 +550,14 @@ public class EventBo {
                     }
                     result.append("lang=").append(
                             URLEncoder.encode(lang, "UTF-8"));
+                    first = false;
+                }
+                if (StringUtils.isNotBlank(maxResults)) {
+                    if (!first) {
+                        result.append('&');
+                    }
+                    result.append("maxResults=").append(
+                            URLEncoder.encode(maxResults, "UTF-8"));
                     first = false;
                 }
             }
