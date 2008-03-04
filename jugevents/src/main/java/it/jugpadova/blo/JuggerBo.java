@@ -14,11 +14,13 @@
 package it.jugpadova.blo;
 
 import it.jugpadova.Daos;
+import it.jugpadova.bean.JuggerSearch;
 import it.jugpadova.dao.JuggerDao;
 import it.jugpadova.exception.EmailAlreadyPresentException;
 import it.jugpadova.exception.UserAlreadyEnabledException;
 import it.jugpadova.exception.UserAlreadyPresentsException;
 import it.jugpadova.exception.UserNotEnabledException;
+import it.jugpadova.po.Event;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.util.SecurityUtilities;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +46,10 @@ import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
 import org.directwebremoting.proxy.dwr.Util;
 import org.directwebremoting.proxy.scriptaculous.Effect;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.parancoe.plugins.security.Authority;
 import org.parancoe.plugins.security.AuthorityDao;
 import org.parancoe.plugins.security.SecureUtility;
@@ -300,6 +307,25 @@ public class JuggerBo {
         }
         return result;
     }
+    
+    
+    
+    @Transactional(readOnly = true)
+    public List findPartialJugName(String partialJugName) {
+        List<String> result = new ArrayList<String>();
+        if (!StringUtils.isBlank(partialJugName)) {
+            try {
+                List<JUG> jugs = getDaos().getJUGDao().
+                findByPartialName("%" + partialJugName + "%");
+                for (JUG jug : jugs) {
+                    result.add(jug.getName());
+                }
+            } catch (Exception e) {
+                logger.error("Error completing the JUG Name", e);
+            }
+        }
+        return result;
+    }
 
     @Transactional
     public void disableJugger(String username) {
@@ -317,6 +343,43 @@ public class JuggerBo {
         logger.info("User: " + username + " has been enabled");
     }
 
+    @Transactional(readOnly = true)
+    public List<Jugger> searchJugger(JuggerSearch juggerSearch)
+    {
+    	List<Jugger> juggers = new LinkedList<Jugger>();
+        try {
+            DetachedCriteria searchCriteria =
+                    DetachedCriteria.forClass(Jugger.class);
+            if (StringUtils.isNotBlank(juggerSearch.getJUGName()))
+               {
+            	DetachedCriteria jugCriteria =
+            		searchCriteria.createCriteria("jug");
+            	jugCriteria.add(Restrictions.like("name", juggerSearch.getJUGName(), MatchMode.ANYWHERE));        	
+               }
+            if (StringUtils.isNotBlank(juggerSearch.getUsername()))
+            {
+         	DetachedCriteria usernameCriteria =
+         		searchCriteria.createCriteria("user");
+         	usernameCriteria.add(Restrictions.like("username", juggerSearch.getUsername(), MatchMode.ANYWHERE));        	
+            }
+            if (juggerSearch.getRRStatus()!= JuggerSearch.INVALID_STATUS)
+            {
+         	DetachedCriteria statusCriteria =
+         		searchCriteria.createCriteria("reliabilityRequest");
+         	statusCriteria.add(Restrictions.eq("status", juggerSearch.getRRStatus()));	
+            }     
+            
+            
+           
+            juggers = daos.getJuggerDao().searchByCriteria(searchCriteria);
+        } catch (Exception e) {
+            logger.error("Error searching events", e);
+        }
+
+        return juggers;
+    }
+    
+    
     public String getConfirmationSenderEmailAddress() {
         return confirmationSenderEmailAddress;
     }

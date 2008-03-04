@@ -1,7 +1,7 @@
 <%@ include file="../../common.jspf" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<%@page import="java.util.HashMap"%>
+
 <%@page import="java.util.EnumSet"%>
 <%@page import="it.jugpadova.util.RRStatus"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -67,7 +67,7 @@
 	                                 
 	                                 <dt><form:label path="reliabilityRequest.status"><spring:message code="RR.status"/></form:label></dt>
 	                                 <dd><form:select path="reliabilityRequest.status" onchange="javascript:changeReliability();">
-	                                 <% EnumSet<RRStatus> es = (EnumSet<RRStatus>)request.getAttribute("statusList");
+	                                 <% EnumSet<RRStatus> es = EnumSet.allOf(RRStatus.class);
 	                                    boolean disabledOption=false;
 	                                    for(RRStatus rrs:es)
 	                                    {

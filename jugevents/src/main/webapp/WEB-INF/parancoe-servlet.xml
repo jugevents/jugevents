@@ -58,9 +58,12 @@
             <dwr:include method="findPartialCountryWithContinent"/>
             <dwr:include method="findPartialJugNameWithCountryAndContinent"/>
             <dwr:include method="findPartialCountry"/>
+            <dwr:include method="findPartialJugName"/>
             <dwr:include method="findPartialJugNameWithCountry"/>
             <dwr:include method="readOnlyJugFields"/>
             <dwr:include method="populateJugFields"/>
+           
+            
 
         </dwr:remote>
     </bean>
@@ -181,6 +184,18 @@
         <property name="formView" value="jugger/registration/setpwd" />
         <property name="successView" value="redirect:/home/message.html?messageCode=jugger.registration.success" />
     </bean>
+    
+    
+    <!-- Form to search jugger (admin)-->
+    <bean name="/adminjugger/juggersearch.form" id="juggerSearchController"
+          class="it.jugpadova.controllers.JuggerSearchController"
+          parent="abstractController">
+        <property name="commandClass"
+                  value="it.jugpadova.bean.JuggerSearch" />
+        <property name="commandName" value="juggerSearch" />
+       <property name="formView" value="jugger/admin/juggers"/>
+       <property name="successView" value="jugger/admin/juggers"/>
+    </bean>
 
     <!-- Form to change password -->
     <bean name="/jugger/changePassword.form" id="juggerChangePasswordController"
@@ -218,7 +233,7 @@
         <property name="commandClass" value="it.jugpadova.po.Jugger"/>
         <property name="commandName" value="jugger"/>
         <property name="formView" value="jugger/admin/reliability"/>
-        <property name="successView" value="redirect:/adminjugger/list.html"/>
+        <property name="successView" value="redirect:/adminjugger/juggersearch.form"/>
 
     </bean>
 

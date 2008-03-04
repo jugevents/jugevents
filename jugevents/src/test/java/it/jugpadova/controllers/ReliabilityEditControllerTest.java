@@ -29,8 +29,7 @@ public class ReliabilityEditControllerTest extends ControllerTest {
 	        req = new MockHttpServletRequest("GET", "/adminjugger/reliability.form");
 	        req.setParameter("jugger.user.username", "enrico");
 	        ModelAndView mv = controller.handleRequest(req, res);
-	        EnumSet es =(EnumSet)req.getAttribute("statusList");
-	        assertTrue(es.size()==5);
+	        
 	        
 	    }
 

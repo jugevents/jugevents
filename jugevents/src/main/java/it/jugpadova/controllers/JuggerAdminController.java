@@ -34,19 +34,7 @@ public abstract class JuggerAdminController extends BaseMultiActionController {
 		return logger;
 	}
 
-	/**
-	 * List all juggers.
-	 * 
-	 * @param req
-	 * @param res
-	 * @return
-	 */
-	public ModelAndView list(HttpServletRequest req, HttpServletResponse res) {
-		ModelAndView mv = new ModelAndView("jugger/admin/listJuggers");
-		mv.addObject("juggers", blo().getJuggerBO().searchAllOrderByUsername());
-		return mv;
-	}
-
+	
 	/**
 	 * Delete jugger.
 	 * 
@@ -57,7 +45,7 @@ public abstract class JuggerAdminController extends BaseMultiActionController {
 	public ModelAndView delete(HttpServletRequest req, HttpServletResponse res) {
 		String username = req.getParameter("username");
 		blo().getJuggerBO().delete(username);
-		return new ModelAndView("redirect:/adminjugger/list.html");
+		return new ModelAndView("redirect:/adminjugger/juggersearch.form");
 
 	}
 
@@ -87,7 +75,7 @@ public abstract class JuggerAdminController extends BaseMultiActionController {
 			HttpServletResponse res) {
 		String username = req.getParameter("username");
 		blo().getJuggerBO().enableJugger(username);
-		return new ModelAndView("redirect:/adminjugger/list.html");
+		return new ModelAndView("redirect:/adminjugger/juggersearch.form");
 
 	}
 
@@ -102,7 +90,7 @@ public abstract class JuggerAdminController extends BaseMultiActionController {
 			HttpServletResponse res) {
 		String username = req.getParameter("username");
 		blo().getJuggerBO().disableJugger(username);
-		return new ModelAndView("redirect:/adminjugger/list.html");
+		return new ModelAndView("redirect:/adminjugger/juggersearch.form");
 
 	}
 
