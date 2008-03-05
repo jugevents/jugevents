@@ -103,7 +103,7 @@
                                                     }
                                                     %>
                                                 </authz:authorize>
-                                                <c:if test="${today lt event.startDate}">
+                                                <c:if test="${today le event.startDate}">
                                                     <a href="registration.form?event.id=${event.id}"><spring:message code="register"/></a>
                                                 </c:if>
                                                 <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
