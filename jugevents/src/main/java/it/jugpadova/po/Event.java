@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.joda.time.*;
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 
@@ -198,4 +199,17 @@ public class Event extends EntityBase {
                 false);
         return filteredDescription;
     }
+    
+    /**
+     * Decide if the registration is open or not, based on the event data
+     * 
+     * @param event The event
+     * @return true if the registration is open. False, otherwise.
+     */
+    @Transient
+    public boolean getRegistrationOpen() {
+        DateMidnight today = new DateMidnight();
+        return today.compareTo(new DateMidnight(this.startDate)) <= 0;
+    }
+    
 }

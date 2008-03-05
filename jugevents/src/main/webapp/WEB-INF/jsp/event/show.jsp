@@ -24,7 +24,7 @@
                             <a href="${cp}/event/delete.html?id=${event.id}" onclick="return confirm('${confirmDeleteEventMessage}')"><spring:message code="delete"/></a>
                         </c:if>
                     </authz:authorize>
-                    <c:if test="${today le event.startDate}">
+                    <c:if test="${event.registrationOpen}">
                         <a href="${cp}/event/registration.form?event.id=${event.id}"><spring:message code="register"/></a>
                     </c:if>
                     <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
