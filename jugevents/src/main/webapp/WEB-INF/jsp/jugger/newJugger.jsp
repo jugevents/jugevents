@@ -78,10 +78,15 @@
                                         <img id="tip_jugLogo" src="${cp}/images/question16x16.png" />&nbsp;<spring:message code="juggerRegistrationLogo" />
                                 </form:label></dt>
                                 <dd><input type="file" name="jugger.jug.logo" id="jugger.jug.logo"/></dd>
-                                <dt><form:label path="jugger.jug.longitude"><spring:message code="juggerRegistrationLongitude"/></form:label></dt>                            
-                                <dd><form:input path="jugger.jug.longitude"  /></dd>
+                                <dt><form:label path="jugger.jug.longitude"><img id="tip_jugCoordinates" src="${cp}/images/question16x16.png" />&nbsp;<spring:message code="juggerRegistrationLongitude"/></form:label></dt>                            
+                                <dd>
+                                    <form:input path="jugger.jug.longitude"  /><br/>
+                                    <a href="http://www.travelgis.com/geocode/" target="geocoding" class="smallText"><spring:message code="FindYourLocation" text="Find Your Location"/></a>
+                                </dd>
                                 <dt><form:label path="jugger.jug.latitude"><spring:message code="juggerRegistrationLatitude"/></form:label></dt>                            
-                                <dd><form:input path="jugger.jug.latitude" /></dd>
+                                <dd>
+                                    <form:input path="jugger.jug.latitude" />
+                                </dd>
                                 <dt>
                                     <form:label path="jugger.jug.infos"><spring:message code="juggerRegistrationJUGInfos"/></form:label>
                                 </dt>
@@ -107,6 +112,7 @@
 
 new Tip($('tip_reliability'), '<spring:message code="tip.reliability"/>', {title: '<spring:message code="tip.reliability.title"/>', effect: 'appear'});
 new Tip($('tip_jugLogo'), '<spring:message code="tip.jugLogo"/>', {title: '<spring:message code="tip.jugLogo.title"/>', effect: 'appear'});
+new Tip($('tip_jugCoordinates'), '<spring:message code="tip.jugCoordinates"/>', {title: '<spring:message code="tip.jugCoordinates.title"/>', effect: 'appear'});
 
 dwr.util.setEscapeHtml(false);
 

@@ -145,9 +145,12 @@
                                 </form:label></dt>
                                 <dd><input type="file" name="jugger.jug.logo" id="jugger.jug.logo"  <c:if test="${!jugger.reliable}">readonly="readonly" disabled="disabled"</c:if>/></dd>
                                 <dt><form:label path="jugger.jug.longitude">
-                                        <spring:message code="juggerRegistrationLongitude" />
+                                        <img id="tip_jugCoordinates" src="${cp}/images/question16x16.png" />&nbsp;<spring:message code="juggerRegistrationLongitude" />
                                 </form:label></dt>
-                                <dd><form:input path="jugger.jug.longitude" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
+                                <dd>
+                                    <form:input path="jugger.jug.longitude" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/><br/>
+                                    <a href="http://www.travelgis.com/geocode/" target="geocoding" class="smallText"><spring:message code="FindYourLocation" text="Find Your Location"/></a>
+                                </dd>
                                 <dt><form:label path="jugger.jug.latitude">
                                         <spring:message code="juggerRegistrationLatitude" />
                                 </form:label></dt>
@@ -206,6 +209,7 @@
 
             new Tip($('tip_jugLogo'), '<spring:message code="tip.jugLogo"/>', {title: '<spring:message code="tip.jugLogo.title"/>', effect: 'appear'});
             new Tip($('tip_jugCertificateTemplate'), '<spring:message code="tip.jugCertificateTemplate"/>', {title: '<spring:message code="tip.jugCertificateTemplate.title"/>', effect: 'appear'});
+            new Tip($('tip_jugCoordinates'), '<spring:message code="tip.jugCoordinates"/>', {title: '<spring:message code="tip.jugCoordinates.title"/>', effect: 'appear'});
 
             dwr.util.setEscapeHtml(false);
             
