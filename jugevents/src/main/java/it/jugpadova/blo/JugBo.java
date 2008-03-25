@@ -18,6 +18,9 @@ import it.jugpadova.dao.JUGDao;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
 
 import nu.xom.Builder;
@@ -25,6 +28,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 
+import nu.xom.Serializer;
 import org.apache.log4j.Logger;
 import org.parancoe.plugins.world.Continent;
 import org.parancoe.plugins.world.ContinentDao;
@@ -39,7 +43,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class JugBo {
 
     private static final Logger logger = Logger.getLogger(JugBo.class);
-    private static final String EARTH_NAMESPACE = "http://earth.google.com/kml/2.1";
+    private static final String EARTH_NAMESPACE =
+            "http://earth.google.com/kml/2.1";
     private Daos daos;
     private String defaultKmlUrl;
     private ServicesBo servicesBo;
@@ -64,14 +69,14 @@ public class JugBo {
     }
 
     /**
-	 * Update the list of JUGs taking data from a KML file.
-	 * 
-	 * @param kmlUrl
-	 *            The URL of the KML file. If null, it's used the defaultKmlUrl.
-	 * @return Log messages
-	 */
+     * Update the list of JUGs taking data from a KML file.
+     * 
+     * @param kmlUrl
+     *            The URL of the KML file. If null, it's used the defaultKmlUrl.
+     * @return Log messages
+     */
     @Transactional
-	public void updateJugList(String kmlUrl) throws Exception {
+    public void updateJugList(String kmlUrl) throws Exception {
         logger.info("Update JUG List started...");
         logger.info("kmlUrl = " + kmlUrl);
         if (kmlUrl == null) {
@@ -97,9 +102,11 @@ public class JugBo {
             }
             Continent continentPo = continentDao.findByName(continentName);
             if (continentPo != null) {
-                String continentUrl = continent.getFirstChildElement("Link", EARTH_NAMESPACE)
-                        .getFirstChildElement("href", EARTH_NAMESPACE).getValue();                        
-                logger.info("Loading " + continentName + " countries from "+continentUrl+".");
+                String continentUrl = continent.getFirstChildElement("Link",
+                        EARTH_NAMESPACE).getFirstChildElement("href",
+                        EARTH_NAMESPACE).getValue();
+                logger.info("Loading " + continentName + " countries from " +
+                        continentUrl + ".");
                 Builder continentParser = new Builder();
                 continentUrl = continentUrl.replaceFirst("http:", "https:");
                 Document continentDoc = continentParser.build(continentUrl);
@@ -110,23 +117,36 @@ public class JugBo {
                     Element country = countries.get(j);
                     String countryName = country.getFirstChildElement("name",
                             EARTH_NAMESPACE).getValue();
-                    Country countryPo = countryDao.findByEnglishName(countryName);
+                    Country countryPo =
+                            countryDao.findByEnglishName(countryName);
                     if (countryPo != null) {
                         logger.info("Loading " + countryName + " JUGs.");
-                        Elements placemarks = country.getChildElements("Placemark", EARTH_NAMESPACE);
+                        Elements placemarks =
+                                country.getChildElements("Placemark",
+                                EARTH_NAMESPACE);
                         for (int k = 0; k < placemarks.size(); k++) {
                             Element placemark = placemarks.get(k);
-                            String jugName = placemark.getFirstChildElement("name", EARTH_NAMESPACE).getValue();
+                            String jugName =
+                                    placemark.getFirstChildElement("name",
+                                    EARTH_NAMESPACE).getValue();
                             String description = placemark.getFirstChildElement("description",
                                     EARTH_NAMESPACE).getValue();
-                            Element point = placemark.getFirstChildElement("Point", EARTH_NAMESPACE);
-                            String coordinatesStr = point.getFirstChildElement("coordinates", EARTH_NAMESPACE).getValue();
+                            Element point =
+                                    placemark.getFirstChildElement("Point",
+                                    EARTH_NAMESPACE);
+                            String coordinatesStr =
+                                    point.getFirstChildElement("coordinates",
+                                    EARTH_NAMESPACE).getValue();
                             String[] coordinatesArr = coordinatesStr.split(",");
-                            Double longitude = Double.parseDouble(coordinatesArr[0]);
-                            Double latitude = Double.parseDouble(coordinatesArr[1]);
+                            Double longitude =
+                                    Double.parseDouble(coordinatesArr[0]);
+                            Double latitude =
+                                    Double.parseDouble(coordinatesArr[1]);
                             JUG jug = jugDao.findByName(jugName);
-                            if (jug != null && jug.isModifiedKmlData() != null && jug.isModifiedKmlData().booleanValue()) {
-                                logger.info("Skipping updating of " + jugName + " kml data, because yet modified through JUG Events.");
+                            if (jug != null && jug.isModifiedKmlData() != null &&
+                                    jug.isModifiedKmlData().booleanValue()) {
+                                logger.info("Skipping updating of " + jugName +
+                                        " kml data, because yet modified through JUG Events.");
                             } else {
                                 if (jug == null) {
                                     logger.info("Creating a new JUG: " + jugName);
@@ -144,18 +164,20 @@ public class JugBo {
                             }
                         }
                     } else {
-                        logger.warn("Country " + countryName + " not found in the database. Not loading its JUGs.");
+                        logger.warn("Country " + countryName +
+                                " not found in the database. Not loading its JUGs.");
                     }
                 }
             } else {
-                logger.warn("Continent " + continentName + " not found in the database. Not loading its JUGs.");
+                logger.warn("Continent " + continentName +
+                        " not found in the database. Not loading its JUGs.");
             }
         }
         logger.info("Update JUG List completed...");
     }
 
     @Transactional
-	public Document buildKml() {
+    public Document buildKml() {
         Element kml = new Element("kml", EARTH_NAMESPACE);
         Element document = new Element("Document", EARTH_NAMESPACE);
         kml.appendChild(document);
@@ -163,10 +185,15 @@ public class JugBo {
         documentName.appendChild("Java User Group International");
         Element documentDescription = new Element("description",
                 EARTH_NAMESPACE);
-        documentDescription.appendChild("\nGeographic location, leaders and web site information for JUGs from\n" + "around the world. For convenience, they are grouped by continent." + "Instructions for submitting new JUG entries can be found" + "<a href=\"http://wiki.java.net/bin/view/JUGs/JUG-MAP\">here</a>." + "<br/>&nbsp;<br/><img src=\"http://sv-web-jug.dev.java.net/images/jug_leaders_large.gif\"><br/>&nbsp;");
+        documentDescription.appendChild("\nGeographic location, leaders and web site information for JUGs from\n" +
+                "around the world. For convenience, they are grouped by continent." +
+                "Instructions for submitting new JUG entries can be found" +
+                "<a href=\"http://wiki.java.net/bin/view/JUGs/JUG-MAP\">here</a>." +
+                "<br/>&nbsp;<br/><img src=\"http://sv-web-jug.dev.java.net/images/jug_leaders_large.gif\"><br/>&nbsp;");
         document.appendChild(documentName);
         document.appendChild(documentDescription);
-        List<Continent> continents = getDaos().getContinentDao().findByPartialName("%");
+        List<Continent> continents =
+                getDaos().getContinentDao().findByPartialName("%");
         for (Continent continent : continents) {
             Element continentFolder = null;
             List<Country> countries = continent.getCountries();
@@ -206,21 +233,7 @@ public class JugBo {
                             countryFolder.appendChild(countryOpen);
                             continentFolder.appendChild(countryFolder);
                         }
-                        Element placemark = new Element("Placemark",
-                                EARTH_NAMESPACE);
-                        Element jugName = new Element("name", EARTH_NAMESPACE);
-                        jugName.appendChild(jug.getName());
-                        Element jugDescription = new Element("description",
-                                EARTH_NAMESPACE);
-                        jugDescription.appendChild("\n" + jug.getInfos() + "\n");
-                        Element point = new Element("Point", EARTH_NAMESPACE);
-                        Element coordinates = new Element("coordinates",
-                                EARTH_NAMESPACE);
-                        coordinates.appendChild(jug.getLongitude() + "," + jug.getLatitude() + ",0");
-                        point.appendChild(coordinates);
-                        placemark.appendChild(jugName);
-                        placemark.appendChild(jugDescription);
-                        placemark.appendChild(point);
+                        Element placemark = buildKmlPlacemark(jug);
                         countryFolder.appendChild(placemark);
                     }
                 }
@@ -230,7 +243,7 @@ public class JugBo {
     }
 
     @Transactional
-	public JUG saveJUG(Jugger jugger) {
+    public JUG saveJUG(Jugger jugger) throws IOException {
         JUG newJUG = jugger.getJug();
         JUGDao jugDao = daos.getJUGDao();
         CountryDao countryDao = daos.getCountryDao();
@@ -242,12 +255,19 @@ public class JugBo {
         } else {
             // check if this jugger could update the JUG attribute
             if (!servicesBo.isJuggerReliable(jugger.getReliability())) {
-                logger.warn("Jugger " + jugger.getUser().getUsername() + " is not reliable!");
+                logger.warn("Jugger " + jugger.getUser().getUsername() +
+                        " is not reliable!");
                 return jug;
             }// end of if
+
         }// end of if
 
-        jug.setModifiedKmlData(evaluateModifiedKmlDate(newJUG, jug));
+        final Boolean modifiedKmlData = evaluateModifiedKmlData(newJUG, jug);
+        if (modifiedKmlData) {
+            jug.setModifiedKmlData(modifiedKmlData);
+        } else {
+            jug.setModifiedKmlData(newJUG.isModifiedKmlData());
+        }
         jug.setName(newJUG.getName());
         jug.setCountry(countryDao.findByEnglishName(newJUG.getCountry().getEnglishName()));
         if (newJUG.getLogo() != null && newJUG.getLogo().length > 0) {
@@ -259,7 +279,8 @@ public class JugBo {
         jug.setTimeZoneId(newJUG.getTimeZoneId());
         jug.setContactName(newJUG.getContactName());
         jug.setContactEmail(newJUG.getContactEmail());
-        if (newJUG.getCertificateTemplate() != null && newJUG.getCertificateTemplate().length > 0) {
+        if (newJUG.getCertificateTemplate() != null &&
+                newJUG.getCertificateTemplate().length > 0) {
             jug.setCertificateTemplate(newJUG.getCertificateTemplate());
         }
         jug.setInfos(newJUG.getInfos());
@@ -272,17 +293,57 @@ public class JugBo {
             jugDao.update(jug);
             logger.info("JUG with name " + jug.getName() + " has been updated");
         }
+        if (modifiedKmlData) {
+            final Element kmlPlacemark = buildKmlPlacemark(jug);
+            final ByteArrayOutputStream kmlText = new ByteArrayOutputStream();
+            Serializer serializer = new Serializer(kmlText);
+            serializer.setIndent(4);
+            serializer.setMaxLength(64);
+            serializer.setLineSeparator("\n");
+            serializer.write(new Document(kmlPlacemark));
+            this.servicesBo.sendUpdatedKmlDataEmail(jugger, jug, id == null,
+                    kmlText.toString("UTF-8"));
+        }
         return jug;
     }
 
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public byte[] retrieveJugLogo(Long jugId) {
         JUG jug = daos.getJUGDao().read(jugId);
         return jug.getLogo();
     }
-    
-    private Boolean evaluateModifiedKmlDate(JUG newJUG, JUG oldJUG) {
-        return (newJUG.getLongitude() != null && !newJUG.getLongitude().equals(oldJUG.getLongitude())) || (newJUG.getLatitude() != null && !newJUG.getLatitude().equals(oldJUG.getLatitude())) || (newJUG.getInfos() != null && !newJUG.getInfos().equals(oldJUG.getInfos()));
+
+    private Element buildKmlPlacemark(JUG jug) {
+        Element placemark = new Element("Placemark", EARTH_NAMESPACE);
+        Element jugName = new Element("name", EARTH_NAMESPACE);
+        jugName.appendChild(jug.getName());
+        Element jugDescription =
+                new Element("description", EARTH_NAMESPACE);
+        jugDescription.appendChild("\n" + jug.getInfos() + "\n");
+        Element point = new Element("Point", EARTH_NAMESPACE);
+        Element coordinates =
+                new Element("coordinates", EARTH_NAMESPACE);
+        coordinates.appendChild(jug.getLongitude() + "," + jug.getLatitude() +
+                ",0");
+        Element style = 
+                new Element("styleUrl", EARTH_NAMESPACE);
+        style.appendChild("#jugStyle");
+        jugDescription.appendChild("\n" + jug.getInfos() + "\n");
+        point.appendChild(coordinates);
+        placemark.appendChild(jugName);
+        placemark.appendChild(jugDescription);
+        placemark.appendChild(point);
+        placemark.appendChild(style);
+        return placemark;
+    }
+
+    private Boolean evaluateModifiedKmlData(JUG newJUG, JUG oldJUG) {
+        return (newJUG.getLongitude() != null &&
+                !newJUG.getLongitude().equals(oldJUG.getLongitude())) ||
+                (newJUG.getLatitude() != null &&
+                !newJUG.getLatitude().equals(oldJUG.getLatitude())) ||
+                (newJUG.getInfos() != null &&
+                !newJUG.getInfos().equals(oldJUG.getInfos()));
     }
 
     public ServicesBo getServicesBo() {

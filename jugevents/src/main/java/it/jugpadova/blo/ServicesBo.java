@@ -1,9 +1,11 @@
 package it.jugpadova.blo;
 
+import it.jugpadova.Conf;
 import it.jugpadova.Daos;
 import it.jugpadova.dao.JuggerDao;
 import it.jugpadova.dao.ReliabilityRequestDao;
 import it.jugpadova.po.Event;
+import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.ReliabilityRequest;
 import it.jugpadova.util.RRStatus;
@@ -17,6 +19,7 @@ import java.util.Map;
 import javax.mail.internet.MimeMessage;
 
 import org.acegisecurity.Authentication;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
 import org.parancoe.plugins.security.User;
@@ -30,15 +33,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 /**
- * General porpouse BO for reliability services. The methods defined in this 
+ * General porpouse BO for reliability services. The methods defined in this
  * class should be called only by the others BO.
- * 
+ *
  * @author Enrico Giurin
- * 
+ *
  */
 public class ServicesBo {
-	
-	
 
     /**
      * min value for threshold access.
@@ -56,6 +57,121 @@ public class ServicesBo {
     private String internalMail;
     private String confirmationSenderEmailAddress;
     private Daos daos;
+    private Conf conf;
+    private String kmlUpdateFromAddress;
+    private String kmlUpdateToAddress;
+    private String kmlUpdateReplyAddress;
+    private String kmlUpdateSubjectPrefix = "[MAP][JUGEVENTS]";
+    private String kmlUpdateEmailTemplate =
+            "it/jugpadova/kmlUpdateEmailTemplate.vm";
+
+    /**
+     * Get the value of conf
+     *
+     * @return the value of conf
+     */
+    public Conf getConf() {
+        return this.conf;
+    }
+
+    /**
+     * Set the value of conf
+     *
+     * @param newconf new value of conf
+     */
+    public void setConf(Conf newconf) {
+        this.conf = newconf;
+    }
+
+    /**
+     * Get the value of kmlUpdateReplyAddress
+     *
+     * @return the value of kmlUpdateReplyAddress
+     */
+    public String getKmlUpdateReplyAddress() {
+        return this.kmlUpdateReplyAddress;
+    }
+
+    /**
+     * Set the value of kmlUpdateReplyAddress
+     *
+     * @param newkmlUpdateReplyAddress new value of kmlUpdateReplyAddress
+     */
+    public void setKmlUpdateReplyAddress(String newkmlUpdateReplyAddress) {
+        this.kmlUpdateReplyAddress = newkmlUpdateReplyAddress;
+    }
+
+    /**
+     * Get the value of kmlUpdateEmailTemplate
+     *
+     * @return the value of kmlUpdateEmailTemplate
+     */
+    public String getKmlUpdateEmailTemplate() {
+        return this.kmlUpdateEmailTemplate;
+    }
+
+    /**
+     * Set the value of kmlUpdateEmailTemplate
+     *
+     * @param newkmlUpdateEmailTemplate new value of kmlUpdateEmailTemplate
+     */
+    public void setKmlUpdateEmailTemplate(String newkmlUpdateEmailTemplate) {
+        this.kmlUpdateEmailTemplate = newkmlUpdateEmailTemplate;
+    }
+
+    /**
+     * Get the value of kmlUpdateSubjectPrefix
+     *
+     * @return the value of kmlUpdateSubjectPrefix
+     */
+    public String getKmlUpdateSubjectPrefix() {
+        return this.kmlUpdateSubjectPrefix;
+    }
+
+    /**
+     * Set the value of kmlUpdateSubjectPrefix
+     *
+     * @param newkmlUpdateSubjectPrefix new value of kmlUpdateSubjectPrefix
+     */
+    public void setKmlUpdateSubjectPrefix(String newkmlUpdateSubjectPrefix) {
+        this.kmlUpdateSubjectPrefix = newkmlUpdateSubjectPrefix;
+    }
+
+    /**
+     * Get the value of kmlUpdateToAddress
+     *
+     * @return the value of kmlUpdateToAddress
+     */
+    public String getKmlUpdateToAddress() {
+        return this.kmlUpdateToAddress;
+    }
+
+    /**
+     * Set the value of kmlUpdateToAddress
+     *
+     * @param newkmlUpdateToAddress new value of kmlUpdateToAddress
+     */
+    public void setKmlUpdateToAddress(String newkmlUpdateToAddress) {
+        this.kmlUpdateToAddress = newkmlUpdateToAddress;
+    }
+
+    /**
+     * Get the value of kmlUpdateFromAddress
+     *
+     * @return the value of kmlUpdateFromAddress
+     */
+    public String getKmlUpdateFromAddress() {
+        return this.kmlUpdateFromAddress;
+    }
+
+    /**
+     * Set the value of kmlUpdateFromAddress
+     *
+     * @param newkmlUpdateFromAddress new value of kmlUpdateFromAddress
+     */
+    public void setKmlUpdateFromAddress(String newkmlUpdateFromAddress) {
+        this.kmlUpdateFromAddress = newkmlUpdateFromAddress;
+    }
 
     public double getThresholdAccess() {
         return thresholdAccess;
@@ -67,7 +183,7 @@ public class ServicesBo {
 
     /**
      * Returns true if jugger is reliable according to jugevents policies.
-     * 
+     *
      * @param jugger
      * @return
      */
@@ -93,18 +209,15 @@ public class ServicesBo {
 
         return false;
     }
-    
-    
-    
 
     /**
      * Business method to require Reliability.
-     * 
+     *
      * @param jug
      */
     // Metodo da chiamare all' interno di un contesto transazionale
     @Transactional(readOnly = false, propagation = Propagation.MANDATORY)
-    void requireReliability( Jugger jugger,  String motivation, String baseURL) {
+    void requireReliability( Jugger jugger, String motivation, String baseURL) {
         JuggerDao jdao = daos.getJuggerDao();
         ReliabilityRequestDao rrdao = daos.getReliabilityRequestDao();
 
@@ -147,25 +260,67 @@ public class ServicesBo {
             logger.error(e.toString(), e);
             return "false";
         }
-       }
-    
-    @Transactional
-    public void updateReliability(Jugger jugger, String baseUrl)
-    {
-    	Jugger ej = daos.getJuggerDao().read(jugger.getId());
-    	ej.setReliability(jugger.getReliability());
-    	ej.getReliabilityRequest().setAdminResponse(jugger.getReliabilityRequest().getAdminResponse());
-    	ej.getReliabilityRequest().setDateAdminResponse(new Date(System.currentTimeMillis()));
-    	ej.getReliabilityRequest().setStatus(jugger.getReliabilityRequest().getStatus());
-    	daos.getReliabilityRequestDao().update(ej.getReliabilityRequest());
-    	daos.getJuggerDao().update(ej);
-    	sendAdminEmail(jugger, baseUrl, "Response to the Request for Reliability",  "it/jugpadova/response-ReliabilityAdmin.vm", confirmationSenderEmailAddress, jugger.getEmail());
-    	
-    	logger.info("Request for reliability for the jugger " + jugger.getUser().getUsername() +
-        " has been processed with success");
     }
 
+    @Transactional
+    public void updateReliability(Jugger jugger, String baseUrl) {
+        Jugger ej = daos.getJuggerDao().read(jugger.getId());
+        ej.setReliability(jugger.getReliability());
+        ej.getReliabilityRequest().setAdminResponse(jugger.getReliabilityRequest().getAdminResponse());
+        ej.getReliabilityRequest().setDateAdminResponse(new Date(System.currentTimeMillis()));
+        ej.getReliabilityRequest().setStatus(jugger.getReliabilityRequest().getStatus());
+        daos.getReliabilityRequestDao().update(ej.getReliabilityRequest());
+        daos.getJuggerDao().update(ej);
+        sendAdminEmail(jugger, baseUrl,
+                "Response to the Request for Reliability",
+                "it/jugpadova/response-ReliabilityAdmin.vm",
+                confirmationSenderEmailAddress, jugger.getEmail());
 
+        logger.info("Request for reliability for the jugger " +
+                jugger.getUser().getUsername() +
+                " has been processed with success");
+    }
+
+    /**
+     * Send an email with the upadted kml data and fragment.
+     *
+     * @param jugger The jugger that did the update
+     * @param jug The updated JUG
+     * @param isNewJug True if it's a new JUG
+     */
+    void sendUpdatedKmlDataEmail(final Jugger jugger, final JUG jug,
+            final boolean isNewJug, final String kmlPlacemark) {
+        MimeMessagePreparator preparator = new MimeMessagePreparator() {
+
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+                message.setTo(getKmlUpdateToAddress());
+                message.setFrom(getKmlUpdateFromAddress());
+                message.setReplyTo(getKmlUpdateReplyAddress());
+                if (isNewJug) {
+                    message.setSubject(getKmlUpdateSubjectPrefix() +
+                            "The \"" + jug.getName() + "\" has been added");
+                } else {
+                    message.setSubject(getKmlUpdateSubjectPrefix() +
+                            "The \"" + jug.getName() + "\" has been updated");
+                }
+                Map model = new HashMap();
+                model.put("jug", jug);
+                model.put("jugeventsBaseUrl", conf.getJugeventsBaseUrl());
+                model.put("jugEventsEmailLogoUrl", conf.getJugeventsBaseUrl() +
+                        "/images/jugeventsLogoReflectedWhite.jpg");
+                model.put("jugger", jugger);
+                model.put("kmlPlacemark", StringEscapeUtils.escapeHtml(kmlPlacemark));
+                String text = VelocityEngineUtils.mergeTemplateIntoString(
+                        velocityEngine, getKmlUpdateEmailTemplate(), model);
+                message.setText(text, true);
+            }
+        };
+        this.mailSender.send(preparator);
+        logger.info("Sent updated kml email for \"" + jug.getName() +
+                "\" to " + getKmlUpdateToAddress() + " from " +
+                getKmlUpdateFromAddress());
+    }
 
     private void sendEmail(final Jugger jugger, final String baseUrl,
             final String subject, final String template, final String sender,
@@ -193,7 +348,6 @@ public class ServicesBo {
         this.mailSender.send(preparator);
     }
 
-    
     private void sendAdminEmail(final Jugger jugger, final String baseUrl,
             final String subject, final String template, final String sender,
             final String mailTo) {
@@ -208,10 +362,13 @@ public class ServicesBo {
                 Map model = new HashMap();
                 model.put("jugger", jugger);
                 model.put("baseUrl", baseUrl);
-                model.put("motivation", jugger.getReliabilityRequest().getMotivation());
-                model.put("adminResponse", jugger.getReliabilityRequest().getAdminResponse());
-                model.put("dateRequest", jugger.getReliabilityRequest().getDateRequest());
-               
+                model.put("motivation",
+                        jugger.getReliabilityRequest().getMotivation());
+                model.put("adminResponse",
+                        jugger.getReliabilityRequest().getAdminResponse());
+                model.put("dateRequest",
+                        jugger.getReliabilityRequest().getDateRequest());
+
                 String text = VelocityEngineUtils.mergeTemplateIntoString(
                         velocityEngine, template, model);
                 message.setText(text, true);
@@ -220,7 +377,6 @@ public class ServicesBo {
         this.mailSender.send(preparator);
     }
 
-    
     /**
      * Retrieves the current authenticated user.
      * @return
@@ -267,7 +423,7 @@ public class ServicesBo {
      * This method return true in one of these two cases:
      * <ol>
      *  <li>The user identified by username is the authentified user</li>
-     *  <li>The authentified user is in the role of ROLE_ADMIN</li> 
+     *  <li>The authentified user is in the role of ROLE_ADMIN</li>
      *  </ol>
      * @param username
      */
@@ -285,6 +441,7 @@ public class ServicesBo {
         return isAdmin(currentUser);
 
     } // end of method
+
 
     boolean isCurrentUserAuthorized(User user) {
         return checkAuthorization(user.getUsername());
@@ -317,11 +474,12 @@ public class ServicesBo {
             return authentication.getName();
         }
         return null; //not so good...
+
     }
 
     /**
      * Check if the current user can manage an event.
-     * 
+     *
      * @param event The event to manage
      * @return true if the user can manage the event
      */
@@ -390,12 +548,12 @@ public class ServicesBo {
         this.daos = daos;
     }
 
-	public String getConfirmationSenderEmailAddress() {
-		return confirmationSenderEmailAddress;
-	}
+    public String getConfirmationSenderEmailAddress() {
+        return confirmationSenderEmailAddress;
+    }
 
-	public void setConfirmationSenderEmailAddress(
-			String confirmationSenderEmailAddress) {
-		this.confirmationSenderEmailAddress = confirmationSenderEmailAddress;
-	}
+    public void setConfirmationSenderEmailAddress(
+            String confirmationSenderEmailAddress) {
+        this.confirmationSenderEmailAddress = confirmationSenderEmailAddress;
+    }
 }

@@ -27,4 +27,8 @@ public class Conf extends BaseConf  {
     public String getAnalyticsKey() {
         return getConfiguration().getString("analyticsKey");
     }
+    
+    public String getJugeventsBaseUrl() {
+        return getConfiguration().getString("jugeventsBaseUrl");
+    }
 }

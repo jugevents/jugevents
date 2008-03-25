@@ -82,6 +82,9 @@
         <property name="adminMailJE" value="${email.admin}"/>
         <property name="mailSender" ref="mailSender"/>
         <property name="velocityEngine" ref="velocityEngine"/>
+        <property name="kmlUpdateFromAddress" value="${email.kmlUpdateFrom}"/>
+        <property name="kmlUpdateToAddress" value="${email.kmlUpdateTo}"/>
+        <property name="kmlUpdateReplyAddress" value="${email.kmlUpdateReply}"/>
         <dwr:remote javascript="servicesBo">
             <dwr:include method="requireReliabilityOnExistingJugger"/>
         </dwr:remote>

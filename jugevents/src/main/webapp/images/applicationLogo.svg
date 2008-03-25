@@ -6,6 +6,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="744.09448819"
@@ -13,14 +14,56 @@
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
-   sodipodi:docbase="/home/lucio/MyWorks/Parancoe_google/parancoe/examples/jugevents/jugevents/src/main/webapp/images"
+   sodipodi:docbase="/home/lucio/MyWorks/jugevents/jugevents/src/main/webapp/images"
    sodipodi:docname="applicationLogo.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/lucio/MyWorks/Parancoe_google/parancoe/examples/jugevents/jugevents/src/main/webapp/images/applicationLogo.png"
    inkscape:export-xdpi="88"
    inkscape:export-ydpi="88">
   <defs
-     id="defs4" />
+     id="defs4">
+    <linearGradient
+       id="linearGradient3343">
+      <stop
+         id="stop3345"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:1;" />
+      <stop
+         id="stop3347"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3343"
+       id="linearGradient3355"
+       gradientUnits="userSpaceOnUse"
+       x1="357.52859"
+       y1="804.75702"
+       x2="357.52859"
+       y2="761.26636"
+       gradientTransform="matrix(1,0,0,1.6495703,-445.28566,-2164.2885)" />
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask3351">
+      <rect
+         style="fill:url(#linearGradient3355);fill-opacity:1;stroke:none;stroke-opacity:1"
+         id="rect3353"
+         width="469.45749"
+         height="67.743469"
+         x="-289.06833"
+         y="-891.92218"
+         transform="matrix(1,0,-0.4999983,-0.8660264,0,0)" />
+    </mask>
+    <filter
+       inkscape:collect="always"
+       id="filter3621">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.5165219"
+         id="feGaussianBlur3623" />
+    </filter>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -92,5 +135,54 @@
          id="tspan2163"
          x="393.0191"
          y="562.6427">Beta</tspan></text>
+    <g
+       id="g3625"
+       inkscape:export-filename="/home/lucio/MyWorks/jugevents/jugevents/src/main/webapp/images/jugeventsLogoReflectedWhite.png"
+       inkscape:export-xdpi="36.963631"
+       inkscape:export-ydpi="36.963631">
+      <g
+         id="g2233">
+        <g
+           id="g2220"
+           transform="matrix(0.944453,0,0,0.944453,-1.44173,75.186067)"
+           style="stroke:#ffffd5;stroke-width:2.11762786;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           inkscape:export-filename="applicationLogo.png"
+           inkscape:export-xdpi="88.235291"
+           inkscape:export-ydpi="88.235291">
+          <text
+             sodipodi:linespacing="125%"
+             id="text2222"
+             y="736.83472"
+             x="172.57362"
+             style="font-size:76.94921875px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#0000d1;fill-opacity:1;stroke:#ffffd5;stroke-width:2.11762786;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:URW Bookman L"
+             xml:space="preserve"><tspan
+               sodipodi:role="line"
+               id="tspan2224"
+               x="172.57362"
+               y="736.83472">JUG Events</tspan></text>
+        </g>
+        <text
+           xml:space="preserve"
+           style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch"
+           x="392.91785"
+           y="733.71497"
+           id="text2226"
+           sodipodi:linespacing="100%"><tspan
+             sodipodi:role="line"
+             id="tspan2228"
+             x="392.91785"
+             y="733.71497">Beta</tspan></text>
+      </g>
+      <use
+         mask="url(#mask3351)"
+         style="fill:none;opacity:0.59922179;filter:url(#filter3621)"
+         height="1052.3622"
+         width="744.09448"
+         transform="matrix(1,0,-0.5773476,-0.7,445.28566,1312.0317)"
+         id="use2240"
+         xlink:href="#g2233"
+         y="0"
+         x="0" />
+    </g>
   </g>
 </svg>

@@ -69,9 +69,11 @@
                             <p>Ogni JUG pu&ograve; gestire le proprie informazioni
                             in JUG Events e tenere quindi aggiornato questo file KML.</p>
                             <p style="text-align: center;"><a href="${cp}/service/kml.html">Scarica il file KML</a></p>
-                            <p>Questo file KML &egrave; prodotto usando i dati presenti nel database di JUG Events. I dati
-                                originali sono stati estratti dalla
-                            <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>.</p>
+                            <p>Questo file KML &egrave; prodotto usando i dati presenti nel database di JUG Events.
+                            &Egrave; un sottoinsieme della pi&ugrave; estesa
+                            <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>
+                            mantenuta in java.net.</p>
+                            <p style="text-align: center;"><a href="http://tinyurl.com/ynktb2" target="jugmap">Guarda la java.net JUGs Map</a></p>
                         </c:when>
                         <c:when test="${requestScope.lang eq 'fr'}">
                             <h2>KML pour le JUG map</h2>
@@ -111,12 +113,13 @@
                         </c:when>
                         <c:otherwise>
                             <h2>KML for a JUG map</h2>
-                            <p>Every JUG can manage its information in JUG Events and
-                            mantain updated this KML file.</p>
+                            <p>Every JUG can manage its information in JUG Events which updates this KML file.</p>
                             <p style="text-align: center;"><a href="${cp}/service/kml.html">Download the KML file</a></p>
-                            <p>This KML file is produced from the data of the JUG Events database. The original data has been
-                                imported from the
-                            <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>.</p>
+                            <p>This KML file is produced from the data of the JUG Events database. It is a subset of
+                            this more comprehensive
+                            <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>
+                            mantained at java.net.</p>
+                            <p style="text-align: center;"><a href="http://tinyurl.com/ynktb2" target="jugmap">View java.net JUGs Map</a></p>
                         </c:otherwise>
                     </c:choose>
                 </div>
