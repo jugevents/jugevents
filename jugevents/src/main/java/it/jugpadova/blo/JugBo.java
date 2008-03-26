@@ -29,6 +29,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 
 import nu.xom.Serializer;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.parancoe.plugins.world.Continent;
 import org.parancoe.plugins.world.ContinentDao;
@@ -325,7 +326,7 @@ public class JugBo {
                 new Element("coordinates", EARTH_NAMESPACE);
         coordinates.appendChild(jug.getLongitude() + "," + jug.getLatitude() +
                 ",0");
-        Element style = 
+        Element style =
                 new Element("styleUrl", EARTH_NAMESPACE);
         style.appendChild("#jugStyle");
         point.appendChild(coordinates);
@@ -337,12 +338,11 @@ public class JugBo {
     }
 
     private Boolean evaluateModifiedKmlData(JUG newJUG, JUG oldJUG) {
-        return (newJUG.getLongitude() != null &&
-                !newJUG.getLongitude().equals(oldJUG.getLongitude())) ||
-                (newJUG.getLatitude() != null &&
-                !newJUG.getLatitude().equals(oldJUG.getLatitude())) ||
-                (newJUG.getInfos() != null &&
-                !newJUG.getInfos().equals(oldJUG.getInfos()));
+        return ((newJUG.getLongitude() != null && newJUG.getLatitude() != null &&
+                StringUtils.isNotBlank(newJUG.getInfos())) &&
+                (!newJUG.getLongitude().equals(oldJUG.getLongitude()) ||
+                !newJUG.getLatitude().equals(oldJUG.getLatitude()) ||
+                !newJUG.getInfos().equals(oldJUG.getInfos())));
     }
 
     public ServicesBo getServicesBo() {
