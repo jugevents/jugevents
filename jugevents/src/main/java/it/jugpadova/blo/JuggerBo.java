@@ -25,6 +25,7 @@ import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.util.SecurityUtilities;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -113,7 +114,7 @@ public class JuggerBo {
     @Transactional
     public void newJugger(Jugger jugger, String baseUrl,
             boolean requiredReliability, String motivation)
-            throws EmailAlreadyPresentException, UserAlreadyPresentsException {
+            throws EmailAlreadyPresentException, UserAlreadyPresentsException, IOException {
         // retrieves dao
         JuggerDao juggerDao = daos.getJuggerDao();
         // check if it exists yet a jugger with the same email
@@ -508,7 +509,7 @@ public class JuggerBo {
      */
     @Transactional
     public void update(Jugger jugger, boolean requiredReliability,
-            String motivation, String baseURL) {
+            String motivation, String baseURL) throws IOException {
 
         JuggerDao juggerDao = daos.getJuggerDao();
         if (requiredReliability) {
