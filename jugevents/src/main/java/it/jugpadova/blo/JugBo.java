@@ -328,7 +328,6 @@ public class JugBo {
         Element style = 
                 new Element("styleUrl", EARTH_NAMESPACE);
         style.appendChild("#jugStyle");
-        jugDescription.appendChild("\n" + jug.getInfos() + "\n");
         point.appendChild(coordinates);
         placemark.appendChild(jugName);
         placemark.appendChild(jugDescription);
