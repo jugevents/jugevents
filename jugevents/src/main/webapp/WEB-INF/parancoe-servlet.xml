@@ -85,9 +85,7 @@
         <property name="kmlUpdateFromAddress" value="${email.kmlUpdateFrom}"/>
         <property name="kmlUpdateToAddress" value="${email.kmlUpdateTo}"/>
         <property name="kmlUpdateReplyAddress" value="${email.kmlUpdateReply}"/>
-        <dwr:remote javascript="servicesBo">
-            <dwr:include method="requireReliabilityOnExistingJugger"/>
-        </dwr:remote>
+        
     </bean>
 
     <bean id="participantBo" class="it.jugpadova.blo.ParticipantBo" autowire="byType">
@@ -291,6 +289,26 @@
             </value>
         </constructor-arg>
     </bean>
+    
+    <bean id="ajaxBo" class="it.jugpadova.blo.ajax.SecuredAjaxBo">
+    	<property name="blos" ref="blos"/>    	
+    </bean>
+    
+    <bean id="DWRAjaxBo" class="it.jugpadova.blo.ajax.DWRAjaxBo">
+    	<property name="ajaxBo" ref="ajaxBo"/>
+    	<dwr:remote javascript="ajaxBoJS">
+            <dwr:include method="requireReliabilityOnExistingJugger"/>
+        </dwr:remote>
+    </bean>
+    
+    
+    <bean id="beanNames" class="java.util.ArrayList">    	
+        <constructor-arg>
+            <list>
+            	<value>ajaxBo</value>                
+            </list>
+        </constructor-arg>
+    </bean>    
     <!--  end security section -->
 
     <!-- begin dwr section -->

@@ -6,7 +6,7 @@
     <head>
         <%@ include file="../head.jspf" %>
         <script src="${cp}/dwr/interface/juggerBo.js" type="text/javascript"></script>
-		<script src="${cp}/dwr/interface/servicesBo.js" type="text/javascript"></script>
+		<script src="${cp}/dwr/interface/ajaxBoJS.js" type="text/javascript"></script>
         <script src="${cp}/javascripts/modal.js" type="text/javascript"></script>
         <style type="text/css">
 
@@ -246,7 +246,7 @@
 			  // var s = document.getElementById('jugger.email');      
 			  // var k = document.getElementById('commentr'); 		
               comeBack();			  
-              servicesBo.requireReliabilityOnExistingJugger($('jugger.email').value, $('commentr').value, "<%= Utilities.getBaseUrl(request) %>", function(data)
+              ajaxBoJS.requireReliabilityOnExistingJugger($('jugger.email').value, $('commentr').value, "<%= Utilities.getBaseUrl(request) %>", function(data)
 	              {				    
 				    if(data == 'true')
 					{
