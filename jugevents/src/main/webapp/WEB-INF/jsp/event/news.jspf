@@ -1,16 +1,25 @@
-<ul id="news">
+<div id="news">
     <c:forEach  items="${news}" var="newsMessage">
         <c:choose>
-        <c:when test="${newsMessage.type eq 'UPCOMING_EVENT'}">
-            <li class="upcoming">
-                <b><fmt:formatDate value="${newsMessage.date}" type="date"/>:</b> <spring:message code="upcomingEventMessage" arguments="${newsMessage.arguments}"/>
-            </li>
-        </c:when>
-        <c:when test="${newsMessage.type eq 'NEW_EVENT'}">
-            <li class="new">
-                <b><fmt:formatDate value="${newsMessage.date}" type="date"/>:</b> <spring:message code="newEventMessage" arguments="${newsMessage.arguments}"/>
-            </li>
-        </c:when>
+            <c:when test="${newsMessage.type eq 'UPCOMING_EVENT'}">
+                <div class="postit postitGreen">
+                    <div class="postitText">
+                        <div class="postitDate"><fmt:formatDate value="${newsMessage.date}" type="date" dateStyle="short"/></div>
+                        <div class="postitContent">&quot;<a href="${newsMessage.eventUrl}">${newsMessage.eventTitle}</a>&quot;</div>
+                        <div class="postitSignature"><a href="${newsMessage.jugUrl}">${newsMessage.jugName}</a></div>
+                    </div>
+                </div>
+            </c:when>
+            <c:when test="${newsMessage.type eq 'NEW_EVENT'}">
+                <div class="postit postitYellow">
+                    <div class="postitText">
+                        <div class="postitDate"><fmt:formatDate value="${newsMessage.date}" type="date" dateStyle="short"/> <span class="postitNew"><spring:message code="New"/></span></div>
+                        <div class="postitContent">&quot;<a href="${newsMessage.eventUrl}">${newsMessage.eventTitle}</a>&quot;</div>
+                        <div class="postitSignature"><a href="${newsMessage.jugUrl}">${newsMessage.jugName}</a></div>
+                    </div>
+                </div>
+            </c:when>
         </c:choose>
     </c:forEach>
-</ul>
+    <br style="clear: both;"/>
+</div>

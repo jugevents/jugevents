@@ -136,53 +136,119 @@
          x="393.0191"
          y="562.6427">Beta</tspan></text>
     <g
-       id="g3625"
-       inkscape:export-filename="/home/lucio/MyWorks/jugevents/jugevents/src/main/webapp/images/jugeventsLogoReflectedWhite.png"
-       inkscape:export-xdpi="36.963631"
-       inkscape:export-ydpi="36.963631">
+       id="g3789">
       <g
-         id="g2233">
+         id="g3812"
+         inkscape:export-filename="/home/lucio/MyWorks/jugevents/jugevents/src/main/webapp/images/applicationLogo.png"
+         inkscape:export-xdpi="47.802025"
+         inkscape:export-ydpi="47.802025">
         <g
-           id="g2220"
-           transform="matrix(0.944453,0,0,0.944453,-1.44173,75.186067)"
-           style="stroke:#ffffd5;stroke-width:2.11762786;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           inkscape:export-filename="applicationLogo.png"
-           inkscape:export-xdpi="88.235291"
-           inkscape:export-ydpi="88.235291">
-          <text
-             sodipodi:linespacing="125%"
-             id="text2222"
-             y="736.83472"
-             x="172.57362"
-             style="font-size:76.94921875px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#0000d1;fill-opacity:1;stroke:#ffffd5;stroke-width:2.11762786;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:URW Bookman L"
-             xml:space="preserve"><tspan
-               sodipodi:role="line"
-               id="tspan2224"
-               x="172.57362"
-               y="736.83472">JUG Events</tspan></text>
+           id="g3776"
+           transform="matrix(0.4688527,0,0,0.4688527,154.01009,409.7516)">
+          <g
+             transform="matrix(0.6001462,0,0,0.6001462,279.74531,206.7203)"
+             id="g3721">
+            <path
+               style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:7.08661413;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline"
+               d="M 198.01122,576.01131 C 196.39872,567.94881 173.39967,605.8523 162.53622,629.76131 C 153.30033,657.50762 155.68309,647.36444 151.24872,670.07381 C 146.81434,692.78318 149.63622,684.31756 144.79872,720.59881 C 145.33622,756.88006 143.3206,800.28319 153.39872,815.19881 C 179.06434,816.13943 186.99247,766.42069 213.06122,765.21131 C 224.28004,765.32179 242.09117,765.64168 264.12372,784.56131 C 285.85729,803.2242 288.4456,810.36131 300.67372,808.74881 C 312.90184,807.13631 314.37997,801.22381 313.03622,778.11131 C 311.69247,754.99881 308.46747,745.72693 295.29872,716.29881 C 282.12997,686.87068 260.40412,662.54182 242.37587,643.48846 C 218.48639,618.24059 200.86338,597.10661 198.01122,576.01131 z "
+               id="path2222"
+               sodipodi:nodetypes="cccccczssssc" />
+            <path
+               sodipodi:nodetypes="cccccsc"
+               id="path9019"
+               d="M 198.01122,576.01131 C 196.39872,567.94881 173.39967,605.8523 162.53622,629.76131 C 153.30033,657.50762 155.68309,647.36444 151.24872,670.07381 C 149.03153,681.42849 146.79643,700.86658 146.34291,706.12401 C 180.06073,675.97699 209.98761,662.38311 275.54488,683.33101 C 266.2138,671.18861 251.38999,653.01514 242.37587,643.48846 C 218.48639,618.24059 200.86338,597.10661 198.01122,576.01131 z "
+               style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:7.08661413;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline" />
+            <path
+               style="fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:7.08661413;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+               d="M 254.86476,683.51131 C 254.86476,696.49906 244.79697,709.72735 231.06747,709.72735 C 217.33797,709.72735 201.35769,697.57406 201.35769,684.58631 C 201.35769,671.59856 206.64435,654.90637 226.76747,656.75778 C 246.39003,658.56313 254.86476,670.52356 254.86476,683.51131 z "
+               id="path4168"
+               sodipodi:nodetypes="csssc" />
+            <path
+               style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:7.08661413;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline"
+               d="M 149.42794,670.05365 C 138.03462,674.64928 113.62037,697.43592 100.79091,714.861 C 91.408176,715.81842 94.184696,711.70151 87.387006,712.18022 C 82.504156,712.65893 80.972276,715.24397 80.876536,717.54178 C 80.780796,719.83959 87.099776,717.44604 83.940286,721.37147 C 80.780796,725.2969 78.100016,729.50955 68.621536,732.47756 C 59.143056,735.44557 54.834656,731.71163 46.026376,733.2435 C 37.218096,734.77538 37.026616,735.34982 33.388406,738.60506 C 29.750206,741.8603 30.611886,741.8603 31.473566,746.26444 C 32.335246,750.66858 33.292666,752.48767 36.835126,756.22162 C 40.377586,759.95557 40.281846,760.53002 45.643406,761.20022 C 51.004976,761.87041 56.653766,756.79607 58.281376,758.9024 C 59.908996,761.00873 53.972976,763.59377 52.153876,769.62553 C 50.334776,775.65729 48.994386,777.38065 51.004976,783.02944 C 53.015556,788.67823 55.409116,789.06118 60.579196,790.6888 C 65.749266,792.31641 67.089656,792.60365 71.685286,789.5399 C 76.280906,786.47615 77.142586,778.52955 78.578726,779.96568 C 80.014856,781.40181 75.610716,788.58248 77.429816,795.28444 C 79.248916,801.98639 81.355246,802.65659 85.855126,804.47569 C 90.355016,806.29479 92.557086,805.62458 95.046376,801.02897 C 97.535676,796.43335 95.142126,794.5185 95.812316,788.391 C 96.482516,782.2635 96.195286,782.16776 98.110126,778.05084 C 100.02498,773.93393 101.17388,771.34889 103.4717,771.92334 C 105.76951,772.49779 103.75893,775.94451 107.30139,780.34865 C 110.84385,784.75279 111.4183,787.14635 117.64154,789.5399 C 123.86478,791.93346 127.02428,792.0292 132.19435,789.92287 C 137.36443,787.81654 137.93888,785.61447 138.32185,781.11459 C 138.70482,776.61471 137.93888,775.37006 133.72622,771.92334 C 129.51356,768.47662 126.44982,770.77444 121.47123,767.32772 C 116.49264,763.881 116.10967,761.3917 113.81186,758.13647 C 111.51405,754.88124 111.89701,756.98756 112.27998,754.30678 C 112.66295,751.626 114.38631,749.71115 115.34373,747.41334 C 116.30115,745.11553 113.9076,745.4985 116.10967,745.11553 C 118.31174,744.73256 122.71588,747.9878 124.15201,745.88147 C 125.58814,743.77514 125.58815,742.43475 123.38607,738.60506 C 121.184,734.77537 119.93936,736.40299 115.34373,730.56272 C 118.0205,719.77864 133.63048,704.71233 146.36419,696.4785 C 160.94383,687.05106 160.82126,665.45803 149.42794,670.05365 z "
+               id="path8047"
+               sodipodi:nodetypes="cccsssssssssssssssssssssssssssssssscss" />
+            <path
+               style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:7.08661413;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline"
+               d="M 263.96844,667.43558 C 258.8777,660.98731 288.70016,674.3055 306.71462,668.6569 C 324.72908,663.0083 329.00371,652.16909 336.0263,644.84117 C 343.04889,637.51325 334.04166,641.6352 334.80498,639.34523 C 335.56831,637.05526 333.7701,629.90329 339.0796,635.68128 L 359.84203,658.27568 C 364.25488,663.0779 358.01005,653.8484 348.23949,660.10766 C 338.46894,666.36692 337.24762,675.67948 320.7598,683.31273 C 304.27199,690.94598 282.26328,690.60905 282.28823,690.64065 L 263.96844,667.43558 z "
+               id="path13910"
+               sodipodi:nodetypes="csssssssss" />
+            <g
+               id="g33521"
+               style="stroke-width:7.08661413;stroke-miterlimit:4;stroke-dasharray:none;display:inline"
+               transform="translate(5.0487263,483.02381)">
+              <path
+                 sodipodi:nodetypes="ccccc"
+                 id="path32550"
+                 d="M 357.18667,142.46885 C 408.21334,79.349928 491.53032,48.521318 534.18542,39.219583 L 536.57729,45.996562 C 467.74444,62.606805 401.70212,96.757466 362.36906,149.64448 L 357.18667,142.46885 z "
+                 style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:7.08661413;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+              <path
+                 id="path14881"
+                 d="M 547.22754,40.978775 C 545.72593,57.519133 520.93506,41.813293 536.23302,34.06809 C 541.04968,31.963389 547.32008,35.517078 547.22754,40.978775 z "
+                 style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:7.08661413;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+              <path
+                 id="path32548"
+                 d="M 323.05093,140.34125 C 338.05384,156.11829 352.52353,172.51437 367.86011,187.90405 C 374.5165,178.05107 369.98617,162.68627 367.07334,151.37761 C 362.51549,135.44128 343.22731,132.74372 329.12633,134.25642 C 326.4425,134.50092 319.27592,136.39022 323.05093,140.34125 z "
+                 style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:7.08661413;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+            </g>
+          </g>
         </g>
-        <text
-           xml:space="preserve"
-           style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch"
-           x="392.91785"
-           y="733.71497"
-           id="text2226"
-           sodipodi:linespacing="100%"><tspan
-             sodipodi:role="line"
-             id="tspan2228"
-             x="392.91785"
-             y="733.71497">Beta</tspan></text>
+        <g
+           id="g3625"
+           inkscape:export-filename="/home/lucio/MyWorks/jugevents/jugevents/src/main/webapp/images/applicationLogo.png"
+           inkscape:export-xdpi="53.227627"
+           inkscape:export-ydpi="53.227627"
+           transform="translate(12.078661,-35.430739)">
+          <g
+             id="g3515">
+            <g
+               id="g2233">
+              <g
+                 inkscape:export-ydpi="88.235291"
+                 inkscape:export-xdpi="88.235291"
+                 inkscape:export-filename="applicationLogo.png"
+                 style="stroke:#ffffd5;stroke-width:2.11762786;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                 transform="matrix(0.944453,0,0,0.944453,-1.44173,75.186067)"
+                 id="g2220">
+                <text
+                   xml:space="preserve"
+                   style="font-size:76.94921875px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#0000d1;fill-opacity:1;stroke:#ffffd5;stroke-width:2.11762786;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:URW Bookman L"
+                   x="172.57362"
+                   y="736.83472"
+                   id="text2222"
+                   sodipodi:linespacing="125%"><tspan
+                     y="736.83472"
+                     x="172.57362"
+                     id="tspan2224"
+                     sodipodi:role="line"><tspan
+   id="tspan3491"
+   style="fill:#ff6600">JUG</tspan> Events</tspan></text>
+              </g>
+              <text
+                 sodipodi:linespacing="100%"
+                 id="text2226"
+                 y="733.71497"
+                 x="392.91785"
+                 style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch"
+                 xml:space="preserve"><tspan
+                   y="733.71497"
+                   x="392.91785"
+                   id="tspan2228"
+                   sodipodi:role="line">Beta</tspan></text>
+            </g>
+            <use
+               x="0"
+               y="0"
+               xlink:href="#g2233"
+               id="use2240"
+               transform="matrix(1,0,-0.5773476,-0.7,445.28566,1312.0317)"
+               width="744.09448"
+               height="1052.3622"
+               style="opacity:0.59922174;fill:none;filter:url(#filter3621)"
+               mask="url(#mask3351)" />
+          </g>
+        </g>
       </g>
-      <use
-         mask="url(#mask3351)"
-         style="fill:none;opacity:0.59922179;filter:url(#filter3621)"
-         height="1052.3622"
-         width="744.09448"
-         transform="matrix(1,0,-0.5773476,-0.7,445.28566,1312.0317)"
-         id="use2240"
-         xlink:href="#g2233"
-         y="0"
-         x="0" />
     </g>
   </g>
 </svg>

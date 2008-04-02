@@ -1,10 +1,5 @@
 <%@ include file="../common.jspf" %>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%@page import="it.jugpadova.util.Utilities"%>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <%@ include file="../head.jspf" %>
         <script src="${cp}/dwr/interface/juggerBo.js" type="text/javascript"></script>
 		<script src="${cp}/dwr/interface/ajaxBoJS.js" type="text/javascript"></script>
         <script src="${cp}/javascripts/modal.js" type="text/javascript"></script>
@@ -15,7 +10,7 @@
     position: fixed;    
     z-index: 10;
 	background-color: white;
-	/* display: none; */
+	display: none;
 	width: 	18em;
 	height: 10em;
 	border: 2px solid blue;
@@ -66,14 +61,7 @@
 </style>
 <![endif]>
 <![endif]-->
-        
-    </head>
-    <body>
-        <div id="nonFooter">
-            <jsp:include page="../header.jsp"/>
-            <div id="content">
-                <div id="content_main">
-                                        
+                                                
                     <h1><spring:message code="Edit-Jugger"/></h1>
                     
                     <%@ include file="../message.jspf" %>
@@ -187,11 +175,6 @@
                         </dl>
                         
                     </form:form>
-                </div>
-                <jsp:include page="../menu.jsp"/>
-            </div>
-        </div>
-        <jsp:include page="../footer.jsp"/>
         
        <div id="mww">    
 			<table width="60%" align="center" valign="center">
@@ -263,7 +246,4 @@
 	              });		 
             }
         </script>
-       
-        
-    </body>
-</html>
+               

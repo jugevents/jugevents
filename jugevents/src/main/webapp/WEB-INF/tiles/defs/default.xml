@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <definition name="template.main" template="/WEB-INF/tiles/templates/main.jsp">
+        <put-attribute name="header" value="/WEB-INF/jsp/header.jsp"/>
+        <put-attribute name="menu" value="/WEB-INF/jsp/menu.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/jsp/footer.jsp"/>
+    </definition>
+
+    <definition name="template.central" template="/WEB-INF/tiles/templates/central.jsp">
+        <put-attribute name="header" value="/WEB-INF/jsp/header.jsp"/>
+        <put-attribute name="menu" value="/WEB-INF/jsp/menu.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/jsp/footer.jsp"/>
+    </definition>
+        
+    <definition name="acegilogin" extends="template.main">
+        <put-attribute name="main" value="/WEB-INF/jsp/acegilogin.jsp"/>
+        <put-attribute name="sidebar" value="/WEB-INF/jsp/main_sidebar.jsp"/>
+    </definition>
+    
+    <definition name="event/list" extends="template.main">
+        <put-attribute name="main" value="/WEB-INF/jsp/event/list.jsp"/>
+        <put-attribute name="sidebar" value="/WEB-INF/jsp/main_sidebar.jsp"/>
+    </definition>
+
+    <definition name="event/show" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/event/show.jsp"/>
+    </definition>
+
+    <definition name="event/edit" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/event/edit.jsp"/>
+    </definition>
+
+    <definition name="event/participants" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/event/participants.jsp"/>
+    </definition>
+
+    <definition name="event/registration" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/event/registration.jsp"/>
+    </definition>
+
+    <definition name="event/winners" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/event/winners.jsp"/>
+    </definition>
+
+    <definition name="service/services" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/service/services.jsp"/>
+    </definition>
+
+    <definition name="jugger/editJugger" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/jugger/editJugger.jsp"/>
+    </definition>
+
+    <definition name="jugger/newJugger" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/jugger/newJugger.jsp"/>
+    </definition>
+
+    <definition name="jugger/admin/juggers" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/jugger/admin/juggers.jsp"/>
+    </definition>
+
+    <definition name="jugger/admin/reliability" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/jugger/admin/reliability.jsp"/>
+    </definition>
+
+    <definition name="jugger/admin/viewJugger" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/jugger/admin/viewJugger.jsp"/>
+    </definition>
+
+    <definition name="jugger/registration/setpwd" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/jugger/registration/setpwd.jsp"/>
+    </definition>
+
+    <definition name="admin/conf" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/admin/conf.jsp"/>
+    </definition>
+
+    <definition name="admin/index" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/admin/index.jsp"/>
+    </definition>
+    
+    <definition name="admin/logs" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/admin/logs.jsp"/>
+    </definition>
+    
+    <definition name="admin/spring" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/admin/spring.jsp"/>
+    </definition>
+
+    <definition name="message" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/message.jsp"/>
+    </definition>
+
+    <definition name="genericError" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/genericError.jsp"/>
+    </definition>
+
+    <definition name="accessDenied" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/accessDenied.jsp"/>
+    </definition>
+
+    <definition name="welcome" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/welcome.jsp"/>
+    </definition>
+
+    <definition name="404" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/404.jsp"/>
+    </definition>
+
+    <definition name="500" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/500.jsp"/>
+    </definition>
+
+    <definition name="pwdrecovery/passwordRecovery" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/pwdrecovery/passwordRecovery.jsp"/>
+    </definition>
+
+    <definition name="pwdrecovery/setpwd" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/pwdrecovery/setpwd.jsp"/>
+    </definition>
+    
+</tiles-definitions>

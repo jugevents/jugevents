@@ -1,7 +1,4 @@
 <%@ include file="../common.jspf" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
     <style type="text/css" media="screen">
         .person {
             width: 300px;
@@ -15,7 +12,6 @@
             background: yellow;
         }
     </style>
-    <%@ include file="../head.jspf" %>
     <script src="${cp}/dwr/interface/participantBo.js" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
         var eventId = ${event.id};
@@ -66,14 +62,10 @@
             participantBo.setWinner(id, false)
         }
     </script>
-</head>
-<body>
-<div id="nonFooter">
-    <jsp:include page="../header.jsp"/>
-    <div id="content">
-        <div id="content_main">
             <h1><spring:message code="PrizeDrawingFor"/> <fmt:formatDate value="${event.startDate}" type="date" dateStyle="full" /></h1>
-            <a href="${cp}/event/show.html?id=${event.id}"><spring:message code="BackToTheEvent"/></a>
+            <div class="secondaryMenu">
+                <a href="${cp}/event/show.html?id=${event.id}"><spring:message code="BackToTheEvent"/></a>
+            </div>
             <br/>
             <div id="theWheel">
                 <div id="p1"
@@ -96,10 +88,6 @@
                     <li id="winner${participant.id}"><c:out value="${participant.firstName} ${participant.lastName}"/> [<a href="#" onclick="deleteWinner(${participant.id}, 'winner${participant.id}'); return false;">X</a>]</li>
                 </c:forEach>
             </ul>
-        </div>
-        <jsp:include page="../menu.jsp"/>
-    </div>
-    <jsp:include page="../footer.jsp"/>
     <script language="javascript">
         function pausecomp(millis)
         {
@@ -112,5 +100,3 @@
             while (curDate - date < millis);
         }
     </script>
-</body>
-</html>

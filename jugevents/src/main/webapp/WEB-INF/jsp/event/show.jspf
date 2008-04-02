@@ -1,6 +1,4 @@
 <dl>
-    <dt><spring:message code="event.title"/>:</dt>
-    <dd>${event.title}&nbsp;</dd>
     <dt><spring:message code="event.location"/>:</dt>
     <dd>${event.location}&nbsp;</dd>
     <dt><spring:message code="event.directions"/>:</dt>

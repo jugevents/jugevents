@@ -1,73 +1,75 @@
 <%@ page pageEncoding="UTF-8" %>
 <div id="content_about">
-    <p class="menuTitle"><spring:message code="About"/></p>
-    <c:choose>
-        <c:when test="${requestScope.lang eq 'it'}">
-            <p>JUGEvents permette di ricercare e iscriversi gli eventi
-                organizzati da un JUG. Il responsabile di un JUG pu&ograve;
-                <a href="${cp}/jugger/registration.form">liberamente registrarsi</a>
-            ed iniziare ad inserire gli eventi organizzati dal proprio JUG.</p>
-            <p>JUGEvents &egrave; ancora in sviluppo. Se incontri problemi
-                o vuoi suggerire nuove funzionlit&agrave;, scrivi a
-            <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
-            <p>JUGEvents &egrave; un progetto del
-                <a href="http://www.jugpadova.it">JUG Padova</a>. Chiunque pu&ograve;
-            partecipare.</p>
-        </c:when>
-        <c:when test="${requestScope.lang eq 'fr'}">
-            <p>Avec JUGEvents vous pouvez rechercher les évènements organisés par les JUGs,
-                et vous y inscrire. Les organisateurs des JUGs peuvent
-                <a href="${cp}/jugger/registration.form">gratuitement obtenir un compte</a>
-            et commencer à gérer leurs évènements.</p>
-            <p>JUGEvents est toujours en cours de développement. Si vous découvrez un problème,
-                ou si vous avez une idée pour améliorer le site, écrivez à
-            <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
-            <p>JUGEvents est un projet du <a href="http://www.jugpadova.it">JUG Padova</a>.
-            Tout le monde peut y participer.</p>
-        </c:when>
-        <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
-            <p>Através do JUGEvents você pode procurar eventos realizados por JUGs,
-                e registrar-se neles. Um representante do JUG pode
-                <a href="${cp}/jugger/registration.form">obter uma conta gratuitamente</a>
-            e comeár a gerenciar os eventos de seu JUG.</p>
-            <p>JUGEvents é um projeto em desenvolvimento. Se você encontrar falhas
-                ou quiser sugerir melhorias e novas funcionalidades, por favor escreva para
-            <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
-            <p>JUGEvents é um projeto livre desenvolvido pelo <a href="http://www.jugpadova.it">JUG Padova</a>.
-            Qualquer pessoa pode participar.</p>
-        </c:when>
-        <c:when test="${requestScope.requestContext.locale eq 'pt_PT'}">
-            <p>Através do JUGEvents você pode procurar eventos realizados por JUGs,
-                e registar-se neles. Um representante do JUG pode
-                <a href="${cp}/jugger/registration.form">obter uma conta gratuitamente</a>
-            e começar a gerir os eventos do seu JUG.</p>
-            <p>JUGEvents é um projecto em desenvolvimento. Se encontrar falhas
-                ou quiser sugerir melhorias e novas funcionalidades, por favor escreva para
-            <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
-            <p>JUGEvents é um projecto livre desenvolvido pelo <a href="http://www.jugpadova.it">JUG Padova</a>.
-            Qualquer pessoa pode participar.</p>
-        </c:when>
-        <c:when test="${requestScope.lang eq 'pl'}">
-            <p>Dzięki JUGEvents możesz wyszukiwać wydarzenia organizowane przez JUGi,
-                i zapisywać się na nie. Przedstawiciel JUGa może
-                <a href="${cp}/jugger/registration.form">uzyskać darmowe konto</a>
-            i rozpocząć zarządzanie wydarzeniami swojego JUGa.</p>
-            <p>JUGEvents jest nadal rozwijane. Jeśli napotkasz problem,
-                lub jeśli chcesz zasugerować nową funkcjonalność, napisz do
-            <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
-            <p>JUGEvents został stworzony przez <a href="http://www.jugpadova.it">JUG Padova</a>.
-            Każdy może dołączyć.</p>
-        </c:when>
-        <c:otherwise>
-            <p>With JUGEvents You can search for events organized by JUGs,
-                and register to them. A JUG representative can
-                <a href="${cp}/jugger/registration.form">freely obtain an account</a>
-            and start to manage the events of his JUG.</p>
-            <p>JUGEvents is still in development. If You find any problem with it,
-                or if You want to suggest any new feature, please write to
-            <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
-            <p>JUGEvents is a <a href="http://www.jugpadova.it">JUG Padova</a>
-            project. Anyone can partecipate.</p>
-        </c:otherwise>
-    </c:choose>
+    <div id="content_about_text">
+        <p class="boxTitle"><spring:message code="About"/></p>
+        <c:choose>
+            <c:when test="${requestScope.lang eq 'it'}">
+                <p>JUGEvents permette di ricercare e iscriversi gli eventi
+                    organizzati da un JUG. Il responsabile di un JUG pu&ograve;
+                    <a href="${cp}/jugger/registration.form">liberamente registrarsi</a>
+                ed iniziare ad inserire gli eventi organizzati dal proprio JUG.</p>
+                <p>JUGEvents &egrave; ancora in sviluppo. Se incontri problemi
+                    o vuoi suggerire nuove funzionlit&agrave;, scrivi a
+                <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+                <p>JUGEvents &egrave; un progetto del
+                    <a href="http://www.jugpadova.it">JUG Padova</a>. Chiunque pu&ograve;
+                partecipare.</p>
+            </c:when>
+            <c:when test="${requestScope.lang eq 'fr'}">
+                <p>Avec JUGEvents vous pouvez rechercher les évènements organisés par les JUGs,
+                    et vous y inscrire. Les organisateurs des JUGs peuvent
+                    <a href="${cp}/jugger/registration.form">gratuitement obtenir un compte</a>
+                et commencer à gérer leurs évènements.</p>
+                <p>JUGEvents est toujours en cours de développement. Si vous découvrez un problème,
+                    ou si vous avez une idée pour améliorer le site, écrivez à
+                <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+                <p>JUGEvents est un projet du <a href="http://www.jugpadova.it">JUG Padova</a>.
+                Tout le monde peut y participer.</p>
+            </c:when>
+            <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
+                <p>Através do JUGEvents você pode procurar eventos realizados por JUGs,
+                    e registrar-se neles. Um representante do JUG pode
+                    <a href="${cp}/jugger/registration.form">obter uma conta gratuitamente</a>
+                e comeár a gerenciar os eventos de seu JUG.</p>
+                <p>JUGEvents é um projeto em desenvolvimento. Se você encontrar falhas
+                    ou quiser sugerir melhorias e novas funcionalidades, por favor escreva para
+                <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+                <p>JUGEvents é um projeto livre desenvolvido pelo <a href="http://www.jugpadova.it">JUG Padova</a>.
+                Qualquer pessoa pode participar.</p>
+            </c:when>
+            <c:when test="${requestScope.requestContext.locale eq 'pt_PT'}">
+                <p>Através do JUGEvents você pode procurar eventos realizados por JUGs,
+                    e registar-se neles. Um representante do JUG pode
+                    <a href="${cp}/jugger/registration.form">obter uma conta gratuitamente</a>
+                e começar a gerir os eventos do seu JUG.</p>
+                <p>JUGEvents é um projecto em desenvolvimento. Se encontrar falhas
+                    ou quiser sugerir melhorias e novas funcionalidades, por favor escreva para
+                <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+                <p>JUGEvents é um projecto livre desenvolvido pelo <a href="http://www.jugpadova.it">JUG Padova</a>.
+                Qualquer pessoa pode participar.</p>
+            </c:when>
+            <c:when test="${requestScope.lang eq 'pl'}">
+                <p>Dzięki JUGEvents możesz wyszukiwać wydarzenia organizowane przez JUGi,
+                    i zapisywać się na nie. Przedstawiciel JUGa może
+                    <a href="${cp}/jugger/registration.form">uzyskać darmowe konto</a>
+                i rozpocząć zarządzanie wydarzeniami swojego JUGa.</p>
+                <p>JUGEvents jest nadal rozwijane. Jeśli napotkasz problem,
+                    lub jeśli chcesz zasugerować nową funkcjonalność, napisz do
+                <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+                <p>JUGEvents został stworzony przez <a href="http://www.jugpadova.it">JUG Padova</a>.
+                Każdy może dołączyć.</p>
+            </c:when>
+            <c:otherwise>
+                <p>With JUGEvents You can search for events organized by JUGs,
+                    and register to them. A JUG representative can
+                    <a href="${cp}/jugger/registration.form">freely obtain an account</a>
+                and start to manage the events of his JUG.</p>
+                <p>JUGEvents is still in development. If You find any problem with it,
+                    or if You want to suggest any new feature, please write to
+                <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+                <p>JUGEvents is a <a href="http://www.jugpadova.it">JUG Padova</a>
+                project. Anyone can partecipate.</p>
+            </c:otherwise>
+        </c:choose>
+    </div>
 </div>

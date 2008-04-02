@@ -85,7 +85,7 @@ public class Utilities {
                 }
                 arguments.append(arg);
             }
-            mv.addObject("messageArguments", arguments);
+            mv.addObject("messageArguments", arguments.toString());
         }
     }
     

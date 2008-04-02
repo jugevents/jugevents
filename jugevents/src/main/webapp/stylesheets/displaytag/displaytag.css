@@ -5,6 +5,7 @@
 }
 
 .displaytag th, .displaytag td {
+        font-size: 11px;
 	padding: 2px 4px 2px 4px !important;
 	text-align: left;
 	vertical-align: top;

@@ -3,6 +3,7 @@ package it.jugpadova.bean;
 import it.jugpadova.po.Event;
 
 import java.util.Date;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * A message in the news and upcomings list.
@@ -11,6 +12,7 @@ import java.util.Date;
  */
 public class NewsMessage {
 
+    public static final int TITLE_MAX_LENGTH = 50;
     public static final String TYPE_NEWS = "NEWS";
     public static final String TYPE_NEW_EVENT = "NEW_EVENT";
     public static final String TYPE_UPCOMING_EVENT = "UPCOMING_EVENT";
@@ -70,18 +72,38 @@ public class NewsMessage {
     }
 
     public Object[] getArguments() {
-        if (TYPE_UPCOMING_EVENT.equals(this.type) || TYPE_NEW_EVENT.equals(this.type)) {
+        if (TYPE_UPCOMING_EVENT.equals(this.type) ||
+                TYPE_NEW_EVENT.equals(this.type)) {
             if (event.getOwner() != null) {
-                return new Object[]{event.getTitle(), event.getOwner().getJug().getName(), event.getOwner().getJug().getWebSiteUrl(), getEventUrl(baseUrl, event)};
+                return new Object[]{getEventTitle(), getJugName(),
+                            getJugUrl(), getEventUrl()
+                        };
             } else {
-                return new Object[]{event.getTitle(), "JUG Events", baseUrl, getEventUrl(baseUrl, event)};                
+                return new Object[]{getEventTitle(), "JUG Events",
+                            baseUrl, getEventUrl()
+                        };
             }
         }
         return new Object[]{};
     }
-    
+
     private String getEventUrl(String baseUrl, Event event) {
-        return baseUrl+"/event/show.html?id="+event.getId();
+        return baseUrl + "/event/show.html?id=" + event.getId();
     }
-    
+
+    public String getEventTitle() {
+        return StringUtils.abbreviate(event.getTitle(), TITLE_MAX_LENGTH);
+    }
+
+    public String getJugName() {
+        return event.getOwner().getJug().getName();
+    }
+
+    public String getJugUrl() {
+        return event.getOwner().getJug().getWebSiteUrl();
+    }
+
+    public String getEventUrl() {
+        return getEventUrl(baseUrl, event);
+    }
 }
