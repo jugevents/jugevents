@@ -15,6 +15,7 @@
     </span>
 </h1>
 <a href="#" onclick="updateBadge(); $('webBadge').show(); new Effect.ScrollTo('webBadge', {offset: -24}); return false;"><spring:message code="GetBadgeLink"/></a>
+<a name="searchForm"></a>
 <form:form commandName="eventSearch" method="POST" action="${cp}/event/search.form">
     <fieldset>
         <legend><spring:message code='Search'/></legend>
