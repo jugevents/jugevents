@@ -257,7 +257,7 @@ clear: left;
     text-align: center;
 }
 
-.button {
+.je_button {
     background: white url(../images/button80x25.png) no-repeat;
     width: 96px;
     height: 22px;    
@@ -267,7 +267,7 @@ clear: left;
     margin: 2px auto 2px auto;
 }
 
-.button a {
+.je_button a {
     text-decoration: none;
 }
 
