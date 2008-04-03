@@ -1,10 +1,11 @@
 <html>
-<body>
+<body style="background-color: white; padding: 2em;">
+<a href="${baseUrl}"><img src="${baseUrl}/images/jugeventsLogoReflectedWhite.jpg" alt="JUG Events Logo" style="border: 0; width: 206px; height: 50px;"/></a>
 <p>Hi <b>${participant.firstName} ${participant.lastName}</b>,<br/>
 attached you'll find your signed certificate for your presence at
 &quot;${participant.event.title}&quot;.</p>
 <p>Best Regards,<br/>
-The JUG Events Team<br/>
+<a href="mailto:info@jugevents.org">The JUG Events Team</a><br/>
 <a href="http://www.jugevents.org">www.jugevents.org</a></p>
 </body>
 </html>

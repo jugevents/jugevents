@@ -1,10 +1,11 @@
 <html>
-<body>
+<body style="background-color: white; padding: 2em;">
+<a href="${baseUrl}"><img src="${baseUrl}/images/jugeventsLogoReflectedWhite.jpg" alt="JUG Events Logo" style="border: 0; width: 206px; height: 50px;"/></a>
 <p>Hi <b>${jugger.firstName} ${jugger.lastName}</b>,<br/>
 You are registering to the <a href="${baseUrl}">JUG Events</a> application.</p>
 <p>Please confirm you registration by clicking on the following link:</p>
 <p><a href="${baseUrl}/jugger/enable.form?username=${username}&code=${oneWayCode}">${baseUrl}/jugger/enable.form?username=${username}&code=${oneWayCode}</a></p>
-<p>Best Regards,<br>
-The JUG Events Team</p>
+<p>Kind Regards,<br>
+<a href="mailto:info@jugevents.org">The JUG Events Team</a></p>
 </body>
 </html>

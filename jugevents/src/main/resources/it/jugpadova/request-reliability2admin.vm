@@ -1,16 +1,12 @@
 <html>
-<body>
-<h3>
-The jugger identified by ${username} has required to increase his
-reliability. </h3>
-<div>
-  motivation: <br>
-  "${motivation}"
-</div>
-<br>
-<div>
+<body style="background-color: white; padding: 2em;">
+<a href="${baseUrl}"><img src="${baseUrl}/images/jugeventsLogoReflectedWhite.jpg" alt="JUG Events Logo" style="border: 0; width: 206px; height: 50px;"/></a>
+<p>The jugger identified by ${username} has required to increase his reliability.</p>
+<p>Motivation: <br/>
+&quot;${motivation}&quot;</p>
+<p>
   You can grant or revoke his reliablility using this 
-  <a href="${baseUrl}/adminjugger/reliability.form?jugger.user.username=${username}">link</a>  
-</div>
+  <a href="${baseUrl}/adminjugger/reliability.form?jugger.user.username=${username}">link</a>.
+</p>
 </body>
 </html>

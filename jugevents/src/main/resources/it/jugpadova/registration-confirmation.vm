@@ -1,13 +1,14 @@
 <html>
-<body>
-<h3>Hi ${participant.firstName} ${participant.lastName}, You are registering to ${event.title}!</h3>
-
-<div>
-   Please confirm you registration clicking on the following link:
-</div>
-<div>
-    <a href="${baseUrl}/confirm/registration.html?email=${email}&code=${confirmationCode}">${baseUrl}/confirm/registration.html?email=${email}&code=${confirmationCode}</a>
-</div>
+<body style="background-color: white; padding: 2em;">
+<a href="${baseUrl}"><img src="${baseUrl}/images/jugeventsLogoReflectedWhite.jpg" alt="JUG Events Logo" style="border: 0; width: 206px; height: 50px;"/></a>
+<p>Hi ${participant.firstName} ${participant.lastName},<br/>
+You are registering to <span style="font-weight: bold;">${event.title}!<span></p>
+<p>Please confirm you registration clicking on the following link:</p>
+<p><a href="${baseUrl}/confirm/registration.html?email=${email}&code=${confirmationCode}">${baseUrl}/confirm/registration.html?email=${email}&code=${confirmationCode}</a></p>
+<p>If You didn't requested this <em>registration</em> action, please ignore this message and
+continue to access to <a href="${baseUrl}">JUG Events</a> as usually. If you want to
+signal an abuse, please write to <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+<p>Best Regards,<br/>
+<a href="mailto:info@jugevents.org">The JUG Events Team</a></p>
 </body>
-
 </html>
