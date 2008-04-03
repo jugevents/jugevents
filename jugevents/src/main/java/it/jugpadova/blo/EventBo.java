@@ -64,7 +64,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 71ec4e7f2a7a $
+ * @version $Revision: 4726a3cacd0c $
  */
 public class EventBo {
 
@@ -627,7 +627,7 @@ public class EventBo {
                         "<div class=\"jeb_jug_name\"><span class=\"jeb_text\">");
                 if (event.getOwner() != null) {
                     result.append("<a href=\"").append(event.getOwner().getJug().
-                            getWebSite()).append("\">").append(event.getOwner().
+                            getWebSiteUrl()).append("\">").append(event.getOwner().
                             getJug().getName()).append("</a>");
                 }
                 result.append("</span></div>");
