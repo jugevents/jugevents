@@ -7,8 +7,8 @@
 in JUG Events.</p>
 <table>
 <tr><td style="text-align: right; font-weight: bold;">JUG Name:</td><td>${jug.name}</td></tr>
-<tr><td style="text-align: right; font-weight: bold;">Country:</td><td>${jug.country.englishName}</td></tr>
-<tr><td style="text-align: right; font-weight: bold;">Continent:</td><td>${jug.country.continent.name}</td></tr>
+<tr><td style="text-align: right; font-weight: bold;">Country:</td><td>$!{jug.country.englishName}</td></tr>
+<tr><td style="text-align: right; font-weight: bold;">Continent:</td><td>$!{jug.country.continent.name}</td></tr>
 </table>
 <p>The KML placemark for this JUG is:</p>
 <pre>
