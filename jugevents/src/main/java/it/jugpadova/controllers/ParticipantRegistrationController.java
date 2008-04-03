@@ -35,6 +35,7 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.octo.captcha.service.CaptchaService;
+import it.jugpadova.exception.RegistrationNotOpenException;
 
 public abstract class ParticipantRegistrationController extends BaseFormController {
 
@@ -95,6 +96,10 @@ public abstract class ParticipantRegistrationController extends BaseFormControll
         if (sid != null) {
             Event event = blo().getEventBo().retrieveEvent(Long.parseLong(sid));
             if (event != null) {
+                if (!event.getRegistrationOpen()) {
+                    throw new RegistrationNotOpenException("The registration isn't open, you can't register to the event",
+                            event);
+                }
                 result.setEvent(event);
                 // for event showing fragment
                 req.setAttribute("event", event);
@@ -102,7 +107,7 @@ public abstract class ParticipantRegistrationController extends BaseFormControll
                 throw new IllegalArgumentException("No event with id " + sid);
             }
         } else {
-            result.setEvent(new Event());
+            throw new IllegalArgumentException("The event must be specified");
         }
         result.setCaptchaId(req.getSession().getId());
         result.setCaptchaService(captchaService);

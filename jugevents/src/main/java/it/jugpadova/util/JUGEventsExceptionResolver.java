@@ -5,6 +5,7 @@ package it.jugpadova.util;
 
 import it.jugpadova.exception.ParancoeAccessDeniedException;
 
+import it.jugpadova.exception.RegistrationNotOpenException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,6 +42,9 @@ public class JUGEventsExceptionResolver extends ExceptionResolver {
         }
         if (e instanceof MaxUploadSizeExceededException) {
             return Utilities.getMessageView("upload.maximumSizeExceeded", Long.toString(multipartResolver.getFileUpload().getSizeMax()));
+        }
+        if (e instanceof RegistrationNotOpenException) {
+            return Utilities.getMessageView("participant.registration.notOpen", ((RegistrationNotOpenException)e).getEvent().getTitle());
         }
         logger.error("Unexpected exception", e);
         return super.resolveException(req, res, object, e);
