@@ -25,6 +25,7 @@
         </dwr:remote>
     </bean>
     <bean id="eventBO" class="it.jugpadova.blo.EventBo" autowire="byType">
+        <property name="messageSource" ref="messageSource"/>
         <property name="mailSender" ref="mailSender"/>
         <property name="velocityEngine" ref="velocityEngine"/>
         <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>

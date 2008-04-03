@@ -53,6 +53,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
+import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -63,7 +64,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 07ca81ccd7d6 $
+ * @version $Revision: 71ec4e7f2a7a $
  */
 public class EventBo {
 
@@ -75,6 +76,15 @@ public class EventBo {
     private String confirmationSenderEmailAddress;
     private int upcomingEventDays = 7;
     private int newEventDays = 7;
+    private MessageSource messageSource;
+
+    public MessageSource getMessageSource() {
+        return messageSource;
+    }
+
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }        
 
     public Daos getDaos() {
         return daos;
@@ -213,7 +223,8 @@ public class EventBo {
             if (eventSearch.getMaxResults() == null) {
                 events = daos.getEventDao().searchByCriteria(eventCriteria);
             } else {
-                events = daos.getEventDao().searchByCriteria(eventCriteria, 0, eventSearch.getMaxResults().intValue());
+                events = daos.getEventDao().searchByCriteria(eventCriteria, 0,
+                        eventSearch.getMaxResults().intValue());
             }
             for (Event event : events) {
                 event.getParticipants().size();
@@ -404,7 +415,8 @@ public class EventBo {
     public void updateBadgePanel(String continent, String country,
             String jugName, String pastEvents, String orderByDate,
             String jebShowJUGName, String jebShowCountry,
-            String jebShowDescription, String badgeStyle, String locale, String maxResults) {
+            String jebShowDescription, String jebShowParticipants,
+            String badgeStyle, String locale, String maxResults) {
         WebContext wctx = WebContextFactory.get();
         HttpServletRequest req = wctx.getHttpServletRequest();
         ScriptSession session = wctx.getScriptSession();
@@ -425,7 +437,7 @@ public class EventBo {
             try {
                 eventSearch.setMaxResults(new Integer(maxResults));
             } catch (NumberFormatException numberFormatException) {
-            /* ignore it */
+                /* ignore it */
             }
         }
         java.util.List<it.jugpadova.po.Event> events = this.search(eventSearch);
@@ -435,12 +447,15 @@ public class EventBo {
                 java.lang.Boolean.parseBoolean(jebShowCountry);
         boolean showDescription =
                 java.lang.Boolean.parseBoolean(jebShowDescription);
+        boolean showParticipants =
+                java.lang.Boolean.parseBoolean(jebShowParticipants);
         util.setValue("badgeCode", this.getBadgePageCode(baseUrl, continent,
                 country, jugName, pastEvents, orderByDate, jebShowJUGName,
-                jebShowCountry, jebShowDescription,
+                jebShowCountry, jebShowDescription, jebShowParticipants,
                 badgeStyle, locale, maxResults));
         util.setValue("badgePreview", this.getBadgeHtmlCode(events, dateFormat,
-                baseUrl, showJUGName, showCountry, showDescription, badgeStyle));
+                baseUrl, showJUGName, showCountry, showDescription,
+                showParticipants, badgeStyle, locale));
     }
 
     public String getBadgeCode(String badgeHtmlCode) {
@@ -454,8 +469,8 @@ public class EventBo {
     public String getBadgePageCode(String baseUrl, String continent,
             String country, String jugName, String pastEvents,
             String orderByDate, String jebShowJUGName, String jebShowCountry,
-            String jebShowDescription, String badgeStyle,
-            String lang, String maxResults) {
+            String jebShowDescription, String jebShowParticipants,
+            String badgeStyle, String lang, String maxResults) {
         StringBuffer result = new StringBuffer();
         result.append("<script type=\"text/javascript\" src=\"").append(baseUrl).
                 append("/event/badge.html");
@@ -468,6 +483,7 @@ public class EventBo {
                     StringUtils.isNotBlank(jebShowJUGName) ||
                     StringUtils.isNotBlank(jebShowCountry) ||
                     StringUtils.isNotBlank(jebShowDescription) ||
+                    StringUtils.isNotBlank(jebShowParticipants) ||
                     StringUtils.isNotBlank(badgeStyle) ||
                     StringUtils.isNotBlank(lang)) {
                 result.append('?');
@@ -536,6 +552,14 @@ public class EventBo {
                             URLEncoder.encode(jebShowDescription, "UTF-8"));
                     first = false;
                 }
+                if (StringUtils.isNotBlank(jebShowParticipants)) {
+                    if (!first) {
+                        result.append('&');
+                    }
+                    result.append("jeb_showParticipants=").append(
+                            URLEncoder.encode(jebShowParticipants, "UTF-8"));
+                    first = false;
+                }
                 if (StringUtils.isNotBlank(badgeStyle)) {
                     if (!first) {
                         result.append('&');
@@ -572,7 +596,7 @@ public class EventBo {
 
     public String getBadgeHtmlCode(List<Event> events, DateFormat dateFormat,
             String baseUrl, boolean showJUGName, boolean showCountry,
-            boolean showDescription, String badgeStyle) {
+            boolean showDescription, boolean showParticipants, String badgeStyle, String lang) {
         StringBuffer result = new StringBuffer();
         if ("simple".equals(badgeStyle)) {
             result.append("<style type=\"text/css\"><!--\n");
@@ -582,6 +606,7 @@ public class EventBo {
             result.append(".jeb_title {margin-left: 15px;}\n");
             result.append(".jeb_jug_name {margin-left: 15px;}\n");
             result.append(".jeb_country {margin-left: 15px;}\n");
+            result.append(".jeb_participants {margin-left: 15px;}\n");
             result.append(".jeb_description {margin-left: 15px;}\n");
             result.append("--></style>\n");
         }
@@ -616,6 +641,13 @@ public class EventBo {
                             getLocalName());
                 }
                 result.append("</span></div>");
+            }
+            if (showParticipants) {
+                result.append(
+                        "<div class=\"jeb_participants\"><span id=\"jeb_participants_label\" class=\"jeb_text\">").
+                        append(messageSource.getMessage("Participants", null, "Participants", StringUtils.isNotBlank(lang)? new Locale(lang) : Locale.ENGLISH )).
+                        append(": </span><span class=\"jeb_text\">").append(event.getNumberOfParticipants()).
+                        append("</span></div>");
             }
             if (showDescription) {
                 result.append(

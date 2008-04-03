@@ -249,12 +249,14 @@ public abstract class EventController extends BaseMultiActionController {
                     java.lang.Boolean.parseBoolean(req.getParameter("jeb_showCountry"));
             boolean showDescription =
                     java.lang.Boolean.parseBoolean(req.getParameter("jeb_showDescription"));
+            boolean showParticipants =
+                    java.lang.Boolean.parseBoolean(req.getParameter("jeb_showParticipants"));
             String badgeStyle = req.getParameter("jeb_style");
             EventBo eventBo = blo().getEventBo();
             String result =
                     eventBo.getBadgeCode(eventBo.getBadgeHtmlCode(events,
                     dateFormat, baseUrl, showJUGName, showCountry,
-                    showDescription, badgeStyle));
+                    showDescription, showParticipants, badgeStyle, locale));
             // flush it in the res
             res.setHeader("Cache-Control", "no-store");
             res.setHeader("Pragma", "no-cache");
