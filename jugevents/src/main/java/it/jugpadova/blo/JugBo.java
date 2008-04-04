@@ -29,6 +29,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 
 import nu.xom.Serializer;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.parancoe.plugins.world.Continent;
@@ -270,7 +271,8 @@ public class JugBo {
             jug.setModifiedKmlData(newJUG.isModifiedKmlData());
         }
         jug.setName(newJUG.getName());
-        jug.setCountry(countryDao.findByEnglishName(newJUG.getCountry().getEnglishName()));
+        jug.setCountry(countryDao.findByEnglishName(newJUG.getCountry().
+                getEnglishName()));
         if (newJUG.getLogo() != null && newJUG.getLogo().length > 0) {
             jug.setLogo(newJUG.getLogo());
         }
@@ -295,15 +297,9 @@ public class JugBo {
             logger.info("JUG with name " + jug.getName() + " has been updated");
         }
         if (modifiedKmlData) {
-            final Element kmlPlacemark = buildKmlPlacemark(jug);
-            final ByteArrayOutputStream kmlText = new ByteArrayOutputStream();
-            Serializer serializer = new Serializer(kmlText);
-            serializer.setIndent(4);
-            serializer.setMaxLength(64);
-            serializer.setLineSeparator("\n");
-            serializer.write(new Document(kmlPlacemark));
             this.servicesBo.sendUpdatedKmlDataEmail(jugger, jug, id == null,
-                    kmlText.toString("UTF-8"));
+                    buildKmlPlacemarkText(jug, jugger.getFirstName() + " " +
+                    jugger.getLastName(), jugger.getEmail()));
         }
         return jug;
     }
@@ -320,7 +316,7 @@ public class JugBo {
         jugName.appendChild(jug.getName());
         Element jugDescription =
                 new Element("description", EARTH_NAMESPACE);
-        jugDescription.appendChild("\n" + jug.getInfos() + "\n");
+        jugDescription.appendChild(jug.getInfos());
         Element point = new Element("Point", EARTH_NAMESPACE);
         Element coordinates =
                 new Element("coordinates", EARTH_NAMESPACE);
@@ -337,12 +333,71 @@ public class JugBo {
         return placemark;
     }
 
-    private Boolean evaluateModifiedKmlData(JUG newJUG, JUG oldJUG) {
+    /**
+     * Build the text of a KML placemark for a JUG using the XOM library.
+     * 
+     * @param jug The JUG for wich producing the placemark
+     * @return The text of the placemark
+     */
+    private String buildKmlPlacemarkTextByXOM(JUG jug) throws IOException {
+        final Element kmlPlacemark = buildKmlPlacemark(jug);
+        final ByteArrayOutputStream kmlText = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(kmlText);
+        serializer.setIndent(4);
+        serializer.setMaxLength(64);
+        serializer.setLineSeparator("\n");
+        serializer.write(new Document(kmlPlacemark));
+        return kmlText.toString("UTF-8");
+    }
+
+    /**
+     * Build the text of a KML placemark for a JUG.
+     * 
+     * @param jug The JUG for wich producing the placemark
+     * @return The text of the placemark
+     */
+    public String buildKmlPlacemarkText(JUG jug, String leaderName,
+            String leaderEmail) throws IOException {
+        final String SPACER = "    ";
+        final String EOL = "\n";
+        StringBuilder sb = new StringBuilder();
+        sb.append("<Placemark>").append(EOL);
+        sb.append(SPACER).append("<name>").append(StringEscapeUtils.escapeXml(jug.getName())).
+                append("</name>").append(EOL);
+        sb.append(SPACER).append("<description>").append(EOL);
+        sb.append(SPACER).append(" <![CDATA[").append(EOL);
+        sb.append(SPACER).append(SPACER).append(StringEscapeUtils.escapeXml(jug.getInfos())).
+                append("<br/>").append(EOL);
+        if (StringUtils.isNotBlank(leaderName) &&
+                StringUtils.isNotBlank(leaderEmail)) {
+            sb.append(SPACER).append(SPACER).append("<b>Leader:</b> ").append("<a href=\"mailto:").
+                    append(leaderEmail).append("\">").append(StringEscapeUtils.escapeXml(leaderName)).
+                    append("</a>").append("<br/>").append(EOL);
+        }
+        if (StringUtils.isNotBlank(jug.getWebSite())) {
+            sb.append(SPACER).append(SPACER).append("<b>Site:</b> ").append("<a href=\"").
+                    append(jug.getWebSiteUrl()).append("\">").append(jug.getWebSite()).
+                    append("</a>").append("<br/>").append(EOL);
+        }
+        sb.append(SPACER).append(" ]]>").append(EOL);
+        sb.append(SPACER).append("</description>").append(EOL);
+        sb.append(SPACER).append("<Point>").append(EOL);
+        sb.append(SPACER).append(SPACER).append("<coordinates>").append(jug.getLongitude()).
+                append(",").append(jug.getLatitude()).append(",0").append("</coordinates>").
+                append(EOL);
+        sb.append(SPACER).append("</Point>").append(EOL);
+        sb.append(SPACER).append("<styleUrl>#jugStyle</styleUrl>").append(EOL);
+        sb.append("</Placemark>");
+        return sb.toString();
+    }
+
+    Boolean evaluateModifiedKmlData(JUG newJUG, JUG oldJUG) {
         return ((newJUG.getLongitude() != null && newJUG.getLatitude() != null &&
-                StringUtils.isNotBlank(newJUG.getInfos())) &&
+                StringUtils.isNotBlank(newJUG.getInfos()) && StringUtils.isNotBlank(newJUG.getWebSite())) &&
                 (!newJUG.getLongitude().equals(oldJUG.getLongitude()) ||
                 !newJUG.getLatitude().equals(oldJUG.getLatitude()) ||
-                !newJUG.getInfos().equals(oldJUG.getInfos())));
+                !newJUG.getInfos().equals(oldJUG.getInfos()) ||
+                !newJUG.getWebSite().equals(oldJUG.getWebSite())));
     }
 
     public ServicesBo getServicesBo() {

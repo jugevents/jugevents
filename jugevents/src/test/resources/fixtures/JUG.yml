@@ -4,9 +4,17 @@
   webSite: http://www.jugpadova.it
   latitude: 11.89364
   longitude: 45.40945
+  infos: Leader: <a href="mailto:lucio.benfante@jugpadova.it">Lucio Benfante</a> (<a href="http://www.jugpadova.it">site</a>)
 - &JUG-Sardegna
   name: JUG Sardegna
   country: *Country-IT
   webSite: http://www.jugsardegna.org
   latitude: 0
   longitude: 0
+- &JUG-GOJAVA
+  name: GOJAVA
+  country: *Country-BR
+  webSite: www.gojava.org
+  latitude: -16.666921744733
+  longitude: -49.269009502375
+  infos: Grupo de Usuários JAVA Estado de Goiás

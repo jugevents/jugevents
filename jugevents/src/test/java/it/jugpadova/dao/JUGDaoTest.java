@@ -34,7 +34,7 @@ public class JUGDaoTest extends JugEventsBaseTest {
 
     public void testFindByPartialName() {
         List<JUG> jugs = jugDao.findByPartialName("%J%");
-        assertSize(2, jugs);
+        assertSize(3, jugs);
     }
     
     public void testFindByPartialJugNameAndCountry() {
