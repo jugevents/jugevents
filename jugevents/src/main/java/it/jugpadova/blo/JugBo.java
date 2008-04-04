@@ -375,9 +375,8 @@ public class JugBo {
                     append("</a>").append("<br/>").append(EOL);
         }
         if (StringUtils.isNotBlank(jug.getWebSite())) {
-            sb.append(SPACER).append(SPACER).append("<b>Site:</b> ").append("<a href=\"").
-                    append(jug.getWebSiteUrl()).append("\">").append(jug.getWebSite()).
-                    append("</a>").append("<br/>").append(EOL);
+            sb.append(SPACER).append(SPACER).append("<b>Site:</b> ").
+                    append(jug.getWebSiteUrl()).append(EOL);
         }
         sb.append(SPACER).append(" ]]>").append(EOL);
         sb.append(SPACER).append("</description>").append(EOL);

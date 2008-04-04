@@ -26,7 +26,7 @@ public class JugBoTest extends JugEventsBaseTest {
                 "     <![CDATA[\n" +
                 "        Grupo de Usu&#225;rios JAVA Estado de Goi&#225;s<br/>\n" +
                 "        <b>Leader:</b> <a href=\"mailto:raphael.adrien@gmail.com\">Raphael Adrien</a><br/>\n" +
-                "        <b>Site:</b> <a href=\"http://www.gojava.org\">www.gojava.org</a><br/>\n" +
+                "        <b>Site:</b> http://www.gojava.org\n" +
                 "     ]]>\n" +
                 "    </description>\n" +
                 "    <Point>\n" +
