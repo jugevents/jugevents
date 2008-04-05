@@ -5,6 +5,7 @@ import it.jugpadova.po.JUG;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Test of the JugBo methods.
@@ -106,5 +107,11 @@ public class JugBoTest extends JugEventsBaseTest {
     private JUG getGojavaJug() {
         JUG jug = jugBo.getDaos().getJUGDao().findByName("GOJAVA");
         return jug;
+    }
+    
+    public void testEscapeXml() {
+        String result = "Grupo de Usu&#225;rios JAVA Estado de Goi&#225;s";
+        String  escaped = StringEscapeUtils.escapeXml("Grupo de Usu\u00E1rios JAVA Estado de Goi\u00E1s");
+        assertEquals(result, escaped);
     }
 }
