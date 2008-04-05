@@ -33,9 +33,10 @@ public class JugBoTest extends JugEventsBaseTest {
                 "    <Point>\n" +
                 "        <coordinates>-49.269009502375,-16.666921744733,0</coordinates>\n" +
                 "    </Point>\n" +
-                "    <styleUrl>#jugStyle</styleUrl>" +
-                "\n</Placemark>";
+                "    <styleUrl>#jugStyle</styleUrl>\n" +
+                "</Placemark>";
         JUG jug = jugBo.getDaos().getJUGDao().findByName("GOJAVA");
+        jug.setInfos("Grupo de Usu\u00E1rios JAVA Estado de Goi\u00E1s");
         String placemark = this.jugBo.buildKmlPlacemarkText(jug,
                 "Raphael Adrien", "raphael.adrien@gmail.com");
         assertEquals(result, placemark);
