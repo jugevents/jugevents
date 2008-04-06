@@ -1,7 +1,7 @@
 <%@ include file="../common.jspf" %>
 <%@page import="it.jugpadova.util.Utilities"%>
         <script src="${cp}/dwr/interface/juggerBo.js" type="text/javascript"></script>
-		<script src="${cp}/dwr/interface/ajaxBoJS.js" type="text/javascript"></script>
+		<script src="${cp}/dwr/interface/AjaxMethodsJS.js" type="text/javascript"></script>
         <script src="${cp}/javascripts/modal.js" type="text/javascript"></script>
         <style type="text/css">
 
@@ -229,7 +229,7 @@
 			  // var s = document.getElementById('jugger.email');      
 			  // var k = document.getElementById('commentr'); 		
               comeBack();			  
-              ajaxBoJS.requireReliabilityOnExistingJugger($('jugger.email').value, $('commentr').value, "<%= Utilities.getBaseUrl(request) %>", function(data)
+              AjaxMethodsJS.requireReliabilityOnExistingJugger($('jugger.email').value, $('commentr').value, "<%= Utilities.getBaseUrl(request) %>", function(data)
 	              {				    
 				    if(data == 'true')
 					{

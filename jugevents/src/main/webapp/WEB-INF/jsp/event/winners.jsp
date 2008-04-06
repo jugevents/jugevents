@@ -12,7 +12,7 @@
             background: yellow;
         }
     </style>
-    <script src="${cp}/dwr/interface/participantBo.js" type="text/javascript"></script>
+    <script src="${cp}/dwr/interface/AjaxMethodsJS.js" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
         var eventId = ${event.id};
         var people = new Array();
@@ -31,7 +31,7 @@
                         item.remove();
                     })
 
-                    participantBo.findAllWinnersForEvent(eventId, function(data) {
+                    AjaxMethodsJS.findAllWinnersForEvent(eventId, function(data) {
                         $A(data).each(function(winner) {
                             Element.insert($('winnersList'), new Element('li', {'id':'winner'+winner.id}).update(winner.firstName + ' ' + winner.lastName + '  [<a href="#" onclick="deleteWinner('+winner.id+', \'winner'+winner.id+'\')">X</a>]'));
                         })
@@ -50,7 +50,7 @@
 
         function chooseWinner() {
             $('p3').removeClassName('winner');
-                    participantBo.chooseWinnerForEvent(eventId, function(data) {
+                    AjaxMethodsJS.chooseWinnerForEvent(eventId, function(data) {
                         people = $A(data);
                         updateDivs();
                         intervalId = setInterval(doShift, 500);
@@ -59,7 +59,7 @@
 
         function deleteWinner(id, domId) {
             Effect.SwitchOff(domId);
-            participantBo.setWinner(id, false)
+            AjaxMethodsJS.setWinner(id, false)
         }
     </script>
             <h1><spring:message code="PrizeDrawingFor"/> <fmt:formatDate value="${event.startDate}" type="date" dateStyle="full" /></h1>

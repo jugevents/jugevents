@@ -81,16 +81,7 @@
         <property name="mailSender" ref="mailSender"/>
         <property name="velocityEngine" ref="velocityEngine"/>
         <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>
-        <dwr:remote javascript="participantBo">
-            <dwr:include method="setAttended"/>
-            <dwr:include method="setWinner"/>
-            <dwr:include method="confirmParticipantOnAttendance"/>
-            <dwr:include method="sendCertificateToParticipant"/>
-            <dwr:include method="sendCertificateToAllParticipants"/>
-            <dwr:include method="chooseWinnerForEvent"/>
-            <dwr:include method="findAllWinnersForEvent"/>
-            <dwr:include method="updateParticipantFieldValue"/>
-        </dwr:remote>
+        
     </bean>
     <bean id="daos" parent="abstractDaoProvider">
         <property name="proxyInterfaces">
@@ -263,17 +254,27 @@
         </constructor-arg>
     </bean>
     
-    <bean id="ajaxBo" class="it.jugpadova.blo.ajax.SecuredAjaxBo">
+    <bean id="ajaxMethods" class="it.jugpadova.blo.ajax.SecuredAjaxBo">
     	<property name="blos" ref="blos"/>    	
-    </bean>
+    </bean>    
     
-    <bean id="DWRAjaxBo" class="it.jugpadova.blo.ajax.DWRAjaxBo">
-    	<property name="ajaxBo" ref="ajaxBo"/>
-    	<dwr:remote javascript="ajaxBoJS">
+    <bean id="DWRAjaxBo" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="ajaxMethods"/>
+        <property name="proxyInterfaces"
+            value="it.jugpadova.blo.ajax.AjaxMethods"  />
+        <dwr:remote javascript="AjaxMethodsJS">
             <dwr:include method="requireReliabilityOnExistingJugger"/>
+            
+            <dwr:include method="setAttended"/>
+            <dwr:include method="setWinner"/>
+            <dwr:include method="confirmParticipantOnAttendance"/>
+            <dwr:include method="sendCertificateToParticipant"/>
+            <dwr:include method="sendCertificateToAllParticipants"/>
+            <dwr:include method="chooseWinnerForEvent"/>
+            <dwr:include method="findAllWinnersForEvent"/>
+            <dwr:include method="updateParticipantFieldValue"/>
         </dwr:remote>
     </bean>
-    
     
     <bean id="securedBeanNames" class="java.util.ArrayList">    	
         <constructor-arg>

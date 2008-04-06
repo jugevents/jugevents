@@ -53,7 +53,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: a47916c5df85 $
+ * @version $Revision: 733b6fd512bf $
  */
 public class ParticipantBo {
 
@@ -149,7 +149,7 @@ public class ParticipantBo {
 
     @Transactional
     public void sendCertificateToParticipant(long participantId, String baseUrl)
-            throws Exception {
+             {
         try {
             WebContext wctx = WebContextFactory.get();
             ScriptSession session = wctx.getScriptSession();
@@ -173,13 +173,13 @@ public class ParticipantBo {
             logger.info("Sent certificate for the participant " + participantId);
         } catch (Exception ex) {
             logger.error("Error generating a certificate", ex);
-            throw ex;
+            throw new RuntimeException(ex);
         }
     }
 
     @Transactional
     public void sendCertificateToAllParticipants(long eventId, String baseUrl)
-            throws Exception {
+             {
         WebContext wctx = WebContextFactory.get();
         ScriptSession session = wctx.getScriptSession();
         Util util = new Util(session);
