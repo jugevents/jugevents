@@ -20,6 +20,17 @@
   description: "Meeting di novembre del JUG Padova"
   filter: Textile
   owner: *Jugger-lucio
+- &Event-jugpdgiu
+  title: "JUG Padova Meeting #38"
+  startDate: 06/24/2008
+  startTime: "09:00 AM"
+  endDate: 06/24/2007
+  endTime: "01:00 PM"
+  location: DEI
+  directions: "Aula Ce"
+  description: "Meeting di giugno del JUG Padova"
+  filter: Textile
+  owner: *Jugger-lucio
 - &Event-future
   title: "Future Meeting"
   startDate: 11/24/2020

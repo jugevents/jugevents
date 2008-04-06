@@ -64,7 +64,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 4726a3cacd0c $
+ * @version $Revision: 16ec79ce352c $
  */
 public class EventBo {
 
@@ -84,7 +84,7 @@ public class EventBo {
 
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
-    }        
+    }
 
     public Daos getDaos() {
         return daos;
@@ -360,16 +360,23 @@ public class EventBo {
         if (!StringUtils.isBlank(partialLocation) &&
                 !StringUtils.isBlank(username)) {
             try {
+                Map<String, Event> yetAdded = new HashMap<String, Event>();
                 List<Event> events = getDaos().getEventDao().
                         findEventByPartialLocationAndOwner(
                         "%" + partialLocation + "%", username);
                 Iterator<Event> itEvents = events.iterator();
                 while (itEvents.hasNext()) {
                     Event event = itEvents.next();
-                    result.add(event.getLocation() + "<div class=\"informal\">" +
+                    final String listItem =
+                            event.getLocation() + "<div class=\"informal\">" +
                             event.getDirections() + "</div>" +
                             "<div class=\"informal hidden\">" + event.getId() +
-                            "</div>");
+                            "</div>";
+                    final String listItemSignature = event.getLocation()+event.getDirections();
+                    if (!yetAdded.containsKey(listItemSignature)) {
+                        result.add(listItem);
+                        yetAdded.put(listItemSignature, event);
+                    }
                 }
             } catch (Exception e) {
                 logger.error("Error completing the location", e);
@@ -596,7 +603,8 @@ public class EventBo {
 
     public String getBadgeHtmlCode(List<Event> events, DateFormat dateFormat,
             String baseUrl, boolean showJUGName, boolean showCountry,
-            boolean showDescription, boolean showParticipants, String badgeStyle, String lang) {
+            boolean showDescription, boolean showParticipants, String badgeStyle,
+            String lang) {
         StringBuffer result = new StringBuffer();
         if ("simple".equals(badgeStyle)) {
             result.append("<style type=\"text/css\"><!--\n");
@@ -645,7 +653,9 @@ public class EventBo {
             if (showParticipants) {
                 result.append(
                         "<div class=\"jeb_participants\"><span id=\"jeb_participants_label\" class=\"jeb_text\">").
-                        append(messageSource.getMessage("Participants", null, "Participants", StringUtils.isNotBlank(lang)? new Locale(lang) : Locale.ENGLISH )).
+                        append(messageSource.getMessage("Participants", null,
+                        "Participants", StringUtils.isNotBlank(lang) ? new Locale(lang)
+                        : Locale.ENGLISH)).
                         append(": </span><span class=\"jeb_text\">").append(event.getNumberOfParticipants()).
                         append("</span></div>");
             }
