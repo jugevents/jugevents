@@ -7,8 +7,7 @@
     <session-factory>
         <!-- no more required - see database.xml
         <mapping class="org.parancoe.persistence.security.UserProfile"/>
-        <mapping class="org.parancoe.persistence.security.Authorities"/>
-        <mapping class="it.jugpadova.po.Person"/> 
+        <mapping class="org.parancoe.persistence.security.Authorities"/>        
         -->
     </session-factory>
 </hibernate-configuration>

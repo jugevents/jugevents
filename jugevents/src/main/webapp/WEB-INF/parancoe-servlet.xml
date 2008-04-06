@@ -16,14 +16,7 @@
     <!-- Authomatic DAO definition from persistent classes -->
     <parancoe:define-daos basePackage="it.jugpadova"/>
     <parancoe-web:define-controllers basePackage="it.jugpadova.controllers" parent="abstractController"/>
-    <bean id="personBO" class="it.jugpadova.blo.PersonBo">
-        <property name="dao" ref="personDao"/>
-        <dwr:remote javascript="personBO">
-            <dwr:include method="populateArchive"/>
-            <dwr:include method="retrievePerson"/>
-            <dwr:include method="showPerson"/>
-        </dwr:remote>
-    </bean>
+
     <bean id="eventBO" class="it.jugpadova.blo.EventBo" autowire="byType">
         <property name="messageSource" ref="messageSource"/>
         <property name="mailSender" ref="mailSender"/>
@@ -105,8 +98,6 @@
           class="it.jugpadova.controllers.HomeController" parent="abstractController"/>
     <bean name="/admin/*.html" id="adminController"
           class="it.jugpadova.controllers.AdminController" parent="abstractController"/>
-    <bean name="/people/*.html" id="peopleController"
-          class="it.jugpadova.controllers.PeopleController" parent="abstractController"/>
     <bean name="/event/*.html" id="eventController"
           class="it.jugpadova.controllers.EventController" parent="abstractController"/>
     <bean name="/jugger/*.html" id="juggerController"
@@ -122,14 +113,7 @@
     <!--  override bean definition in parancoe-servlet.xml  -->
     <!-- sends exceptions to genericError.jsp -->
     <bean id="exceptionResolver" class="it.jugpadova.util.JUGEventsExceptionResolver" autowire="byType"/>
-    <bean name="/people/edit.form" id="peopleEditController"
-          class="it.jugpadova.controllers.PeopleEditController"
-          parent="abstractController">
-        <property name="commandClass" value="it.jugpadova.po.Person"/>
-        <property name="commandName" value="person"/>
-        <property name="formView" value="people/edit"/>
-        <property name="successView" value="redirect:list.html"/>
-    </bean>
+    
     <bean name="/event/search.form" id="eventSearchController"
           class="it.jugpadova.controllers.EventSearchController"
           parent="abstractController">
@@ -291,8 +275,7 @@
         If debug="true" point your browser to /<your context>/dwr/index.html
     -->
     <dwr:controller id="dwrController" debug="true"/>
-    <dwr:configuration>
-        <dwr:convert type="bean" class="it.jugpadova.po.Person" />
+    <dwr:configuration>        
         <dwr:convert class="it.jugpadova.bean.ParticipantBean" type="bean"/>
     </dwr:configuration>
     <!-- end dwr section -->
