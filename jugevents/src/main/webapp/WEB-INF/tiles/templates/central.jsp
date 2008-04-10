@@ -5,9 +5,6 @@
     
     <head>        
         <%@ include file="/WEB-INF/jsp/head.jspf" %>
-        <link href="${cp}/event/rss.html?continent=${eventSearch.continent}&country=${eventSearch.country}&jugName=${eventSearch.jugName}&pastEvents=${eventSearch.pastEvents}&order=${eventSearch.orderByDate}" rel="alternate" title="RSS" type="application/rss+xml" />
-        <script src="${cp}/dwr/interface/juggerBo.js" type="text/javascript"></script>
-        <script src="${cp}/dwr/interface/eventBo.js" type="text/javascript"></script>
     </head>
     <body>
         <div id="nonFooter">

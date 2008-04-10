@@ -470,6 +470,38 @@ div#news .postitText .postitSignature a:hover {
     color: gray;
 }
 
+div#content_textSearch_result {
+    margin: 1em 0 0 0;
+    font-size: 11px;
+}
+
+div#content_textSearch_result .eventDate {
+    font-weight: bold;
+    float: left;
+}
+
+div#content_textSearch_result  .eventContent {
+    text-align: left;
+    margin: 0 0 0 0;
+    font-style: normal;
+    clear: both;
+}
+
+div#content_textSearch_result .eventSignature {
+    text-align: right;
+    text-decoration: none;
+}
+
+div#content_textSearch_result .eventSignature a {
+    text-decoration: none;
+    color: black;
+}
+
+div#content_textSearch_result  .eventSignature a:hover {
+    text-decoration: none;
+    color: gray;
+}
+
 div.rounded div {
     padding: 0;
     margin: 0;

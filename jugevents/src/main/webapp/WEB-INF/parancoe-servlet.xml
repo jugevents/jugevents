@@ -28,6 +28,7 @@
             <dwr:include method="findPartialLocation"/>
             <dwr:include method="copyDirectionsFromEvent"/>
             <dwr:include method="updateBadgePanel"/>
+            <dwr:include method="fullTextSearch"/>
         </dwr:remote>
     </bean>
     <bean id="filterBO" class="it.jugpadova.blo.FilterBo" autowire="byType">
@@ -119,8 +120,8 @@
           parent="abstractController">
         <property name="commandClass" value="it.jugpadova.bean.EventSearch"/>
         <property name="commandName" value="eventSearch"/>
-        <property name="formView" value="event/list"/>
-        <property name="successView" value="event/list"/>
+        <property name="formView" value="event/search"/>
+        <property name="successView" value="event/search"/>
     </bean>
     <bean name="/event/edit.form" id="eventEditController"
           class="it.jugpadova.controllers.EventEditController"

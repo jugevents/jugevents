@@ -2,6 +2,7 @@ package it.jugpadova.po;
 
 import it.jugpadova.blo.FilterBo;
 
+import it.jugpadova.util.NotPassedEventsFilterFactory;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +10,9 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -17,6 +21,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FullTextFilterDef;
+import org.hibernate.search.annotations.FullTextFilterDefs;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.Store;
 import org.joda.time.*;
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
@@ -27,16 +39,21 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * @author Lucio Benfante
  */
 @Entity
+@Indexed
 @NamedQueries(value = {@NamedQuery(name = "Event.findCurrentEvents", query =
-        "from Event e where e.startDate >= current_date()"),
-        @NamedQuery(name = "Event.findEventByPartialLocation", query =
-        "from Event e where lower(e.location) like lower(?) order by e.location"),
-        @NamedQuery(name = "Event.findEventByPartialLocationAndOwner", query =
-        "from Event e where lower(e.location) like lower(?) and e.owner.user.username = ? order by e.location"),
-        @NamedQuery(name = "Event.findUpcomingEvents", query =
-        "from Event e where e.startDate >= current_date() and e.startDate <= ? order by e.startDate"),
-        @NamedQuery(name = "Event.findNewEvents", query =
-        "from Event e where e.startDate >= current_date() and e.creationDate >= ? order by e.startDate")})
+    "from Event e where e.startDate >= current_date()"),
+    @NamedQuery(name = "Event.findEventByPartialLocation", query =
+    "from Event e where lower(e.location) like lower(?) order by e.location"),
+    @NamedQuery(name = "Event.findEventByPartialLocationAndOwner", query =
+    "from Event e where lower(e.location) like lower(?) and e.owner.user.username = ? order by e.location"),
+    @NamedQuery(name = "Event.findUpcomingEvents", query =
+    "from Event e where e.startDate >= current_date() and e.startDate <= ? order by e.startDate"),
+    @NamedQuery(name = "Event.findNewEvents", query =
+    "from Event e where e.startDate >= current_date() and e.creationDate >= ? order by e.startDate")
+})
+@FullTextFilterDefs({
+    @FullTextFilterDef(name="notPassedEvents", impl=NotPassedEventsFilterFactory.class)
+})
 public class Event extends EntityBase {
 
     @NotBlank
@@ -54,7 +71,20 @@ public class Event extends EntityBase {
     private Jugger owner;
     private Date creationDate;
 
-    @ManyToOne    
+    /**
+     * Get the entity id.
+     * 
+     * @return the entity id.
+     */
+    @Id
+    @DocumentId
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Override
+    public Long getId() {
+        return this.id;
+    }
+
+    @ManyToOne
     public Jugger getOwner() {
         return owner;
     }
@@ -64,6 +94,7 @@ public class Event extends EntityBase {
     }
 
     @Column(length = 1024)
+    @Field(index = Index.TOKENIZED, store = Store.NO)
     public String getDirections() {
         return directions;
     }
@@ -85,6 +116,7 @@ public class Event extends EntityBase {
     public Event() {
     }
 
+    @Field(index = Index.TOKENIZED, store = Store.NO)
     public String getTitle() {
         return title;
     }
@@ -94,6 +126,7 @@ public class Event extends EntityBase {
     }
 
     @Temporal(value = TemporalType.DATE)
+    @Field(index = Index.UN_TOKENIZED, store = Store.YES)
     public Date getStartDate() {
         return startDate;
     }
@@ -127,6 +160,7 @@ public class Event extends EntityBase {
         this.endTime = endTime;
     }
 
+    @Field(index = Index.TOKENIZED, store = Store.NO)
     public String getLocation() {
         return location;
     }
@@ -136,6 +170,7 @@ public class Event extends EntityBase {
     }
 
     @Column(length = 4096)
+    @Field(index = Index.TOKENIZED, store = Store.NO)
     public String getDescription() {
         return description;
     }
@@ -144,8 +179,7 @@ public class Event extends EntityBase {
         this.description = description;
     }
 
-    @OneToMany(mappedBy = "event", cascade =
-            {CascadeType.ALL})
+    @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
     public List<Participant> getParticipants() {
         return participants;
     }
@@ -199,7 +233,7 @@ public class Event extends EntityBase {
                 false);
         return filteredDescription;
     }
-    
+
     /**
      * Decide if the registration is open or not, based on the event data
      * 
@@ -211,5 +245,4 @@ public class Event extends EntityBase {
         DateMidnight today = new DateMidnight();
         return today.compareTo(new DateMidnight(this.startDate)) <= 0;
     }
-    
 }

@@ -12,25 +12,29 @@
         <!-- <property name="jndiName" value="jdbc/jugeventsDS"/>  -->
     </bean>
 
-    <!-- HSQLDB session factory -->    
+    <!-- HSQLDB session factory -->
     <bean id="sessionFactory" parent="abstractSessionFactory">
         <property name="hibernateProperties">
             <props merge="true">
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
+                <prop key="hibernate.search.default.indexBase">${lucene.indexes.root.path}</prop>
             </props>
         </property>
     </bean>
-    
+
     <!-- MySQL session factory -->
-    <!--     
+    <!--
     <bean id="sessionFactory" parent="abstractSessionFactory">
         <property name="hibernateProperties">
             <props merge="true">
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
+                <prop key="hibernate.search.default.indexBase">${lucene.indexes.root.path}</prop>
             </props>
         </property>
     </bean>
@@ -44,11 +48,13 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
+                <prop key="hibernate.search.default.indexBase">${lucene.indexes.root.path}</prop>
             </props>
         </property>
     </bean>
-     -->
-     
+    -->
+
     <!-- Derby session factory -->
 	<!--
     <bean id="sessionFactory" parent="abstractSessionFactory">
@@ -57,13 +63,15 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
+                <prop key="hibernate.search.default.indexBase">${lucene.indexes.root.path}</prop>
             </props>
         </property>
     </bean>
 	-->
-    
+
     <!-- Authomatic discovering of persistent classes -->
     <parancoe:discover-persistent-classes basePackage="it.jugpadova"/>
     <parancoe:discover-persistent-classes basePackage="org.parancoe.persistence.security"/>
-    
+
 </beans>

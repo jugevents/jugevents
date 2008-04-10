@@ -46,6 +46,7 @@
                             <directory>${basedir}/src/main/webapp/WEB-INF</directory>
                             <includes>
                                 <include>parancoe-servlet.xml</include>
+                                <include>database.xml</include>
                             </includes>
                         </resource>
                     </webResources>
@@ -332,6 +333,8 @@
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
         </dependency>
+        
+        <!-- Other -->
         <dependency>
             <groupId>com.plink</groupId>
             <artifactId>plextile</artifactId>
@@ -390,6 +393,11 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>3.0.0.ga</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search</artifactId>
+            <version>3.0.0.GA</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>

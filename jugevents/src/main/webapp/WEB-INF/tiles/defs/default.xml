@@ -17,12 +17,16 @@
         
     <definition name="acegilogin" extends="template.main">
         <put-attribute name="main" value="/WEB-INF/jsp/acegilogin.jsp"/>
-        <put-attribute name="sidebar" value="/WEB-INF/jsp/main_sidebar.jsp"/>
+        <put-attribute name="sidebar" value="/WEB-INF/jsp/about_sidebar.jsp"/>
     </definition>
     
     <definition name="event/list" extends="template.main">
         <put-attribute name="main" value="/WEB-INF/jsp/event/list.jsp"/>
         <put-attribute name="sidebar" value="/WEB-INF/jsp/main_sidebar.jsp"/>
+    </definition>
+
+    <definition name="event/search" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/event/search.jsp"/>
     </definition>
 
     <definition name="event/show" extends="template.central">

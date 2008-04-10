@@ -44,11 +44,20 @@ import com.sun.syndication.feed.rss.Description;
 import com.sun.syndication.feed.rss.Guid;
 import com.sun.syndication.feed.rss.Item;
 import com.sun.syndication.io.WireFeedOutput;
+import it.jugpadova.util.Utilities;
 
 public abstract class EventController extends BaseMultiActionController {
 
     private static Logger logger =
             Logger.getLogger(EventController.class);
+
+    public ModelAndView list(HttpServletRequest req,
+            HttpServletResponse res) {
+        ModelAndView mv = new ModelAndView("event/list");
+        mv.addObject("news",
+                blo().getEventBo().buildNewsMessages(Utilities.getBaseUrl(req)));
+        return mv;
+    }
 
     public ModelAndView delete(HttpServletRequest req,
             HttpServletResponse res) {
@@ -238,7 +247,7 @@ public abstract class EventController extends BaseMultiActionController {
                 try {
                     eventSearch.setMaxResults(new Integer(maxResults));
                 } catch (NumberFormatException numberFormatException) {
-                /* ignore it */
+                    /* ignore it */
                 }
             }
             java.util.List<it.jugpadova.po.Event> events =

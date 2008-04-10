@@ -95,6 +95,13 @@ public abstract class AdminController extends BaseMultiActionController {
         return new ModelAndView("redirect:/admin/logs.html");
     }
 
+    public ModelAndView regenerateLuceneIndexes(HttpServletRequest req,
+            HttpServletResponse res) throws Exception {
+        blo().getEventBo().regenerateLuceneIndexes();
+        logger.info("Regenerated the Lucene indexes");
+        return new ModelAndView("redirect:/admin/logs.html");
+    }
+
     public Logger getLogger() {
         return logger;
     }

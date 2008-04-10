@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 
 import javax.mail.internet.MimeMessage;
@@ -42,16 +43,27 @@ import javax.servlet.http.HttpServletRequest;
 import org.acegisecurity.providers.encoding.MessageDigestPasswordEncoder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryParser.ParseException;
 import org.apache.velocity.app.VelocityEngine;
 import org.directwebremoting.ScriptSession;
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
 import org.directwebremoting.proxy.dwr.Util;
 import org.directwebremoting.proxy.scriptaculous.Effect;
+import org.hibernate.CacheMode;
+import org.hibernate.FlushMode;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.search.FullTextQuery;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
 import org.joda.time.DateTime;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -64,7 +76,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 16ec79ce352c $
+ * @version $Revision: 750851fb2a96 $
  */
 public class EventBo {
 
@@ -236,6 +248,89 @@ public class EventBo {
         return events;
     }
 
+    /**
+     * Execute a full text search on events.
+     * 
+     * @param searchQuery The text to search
+     * @param maxResults The max number of results. No limit if maxResults <= 0.
+     * @return The list of events matching the query
+     */
+    @Transactional(readOnly = true)
+    public List<Event> search(String searchQuery, boolean pastEvents,
+            int maxResults) throws ParseException {
+        List<Event> result = null;
+        Session session =
+                this.daos.getEventDao().
+                getHibernateTemplate().
+                getSessionFactory().getCurrentSession();
+        FullTextSession fullTextSession = Search.createFullTextSession(session);
+        MultiFieldQueryParser parser = new MultiFieldQueryParser(new String[]{"title", "location", "directions", "description", "startDate"},
+                new StandardAnalyzer());
+        org.apache.lucene.search.Query query = parser.parse(searchQuery);
+        FullTextQuery hibQuery =
+                fullTextSession.createFullTextQuery(query, Event.class);
+        if (!pastEvents) {
+            hibQuery.enableFullTextFilter("notPassedEvents");
+        }
+        if (maxResults > 0) {
+            hibQuery.setMaxResults(maxResults);
+        }
+        result = hibQuery.list();
+        return result;
+    }
+
+    /**
+     * Ajax method for a full text search on events.
+     * 
+     * @param searchQuery The text to search
+     * @param maxResults The max number of results. No limit if maxResults <= 0.
+     */
+    @Transactional(readOnly = true)
+    public void fullTextSearch(String searchQuery, boolean pastEvents,
+            String locale, int maxResults) {
+        if (StringUtils.isNotBlank(searchQuery)) {
+            WebContext wctx = WebContextFactory.get();
+            HttpServletRequest req = wctx.getHttpServletRequest();
+            ScriptSession session = wctx.getScriptSession();
+            Util util = new Util(session);
+            java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(
+                    java.text.DateFormat.SHORT, new Locale(locale));
+            java.lang.String baseUrl =
+                    "http://" + req.getServerName() + ":" + req.getServerPort() +
+                    req.getContextPath();
+            List<Event> events = null;
+            try {
+                events = this.search(searchQuery, pastEvents, maxResults);
+            } catch (ParseException pex) {
+                logger.info("Error parsing query: " + searchQuery);
+            } catch (Exception ex) {
+                logger.error("Error searching events", ex);
+            }
+            if (events != null && events.size() > 0) {
+                StringBuilder sb = new StringBuilder();
+                for (Event event : events) {
+                    sb.append("<div>\n");
+                    sb.append("<div class=\"eventDate\">").append(dateFormat.format(event.getStartDate())).
+                            append("</div>");
+                    if (event.getOwner() != null) {
+                        sb.append("<div class=\"eventSignature\"><a href=\"").
+                                append(event.getOwner().getJug().getWebSiteUrl()).
+                                append("\">").append(event.getOwner().getJug().
+                                getName()).append("</a></div>");
+                    }
+                    sb.append("<div class=\"eventContent\"><a href=\"").
+                            append(baseUrl).append("/event/show.html?id=").
+                            append(event.getId()).append("\">").
+                            append(event.getTitle()).append("</a></div>");
+                    sb.append("</div>\n");
+                }
+                util.setValue("content_textSearch_result", sb.toString(), false);
+            } else {
+                util.setValue("content_textSearch_result", "", false);
+            }
+        }
+    }
+
     @Transactional
     public void save(Event event) {
         boolean isNew = false;
@@ -372,7 +467,8 @@ public class EventBo {
                             event.getDirections() + "</div>" +
                             "<div class=\"informal hidden\">" + event.getId() +
                             "</div>";
-                    final String listItemSignature = event.getLocation()+event.getDirections();
+                    final String listItemSignature = event.getLocation() +
+                            event.getDirections();
                     if (!yetAdded.containsKey(listItemSignature)) {
                         result.add(listItem);
                         yetAdded.put(listItemSignature, event);
@@ -706,6 +802,29 @@ public class EventBo {
             }
         }
         return messages;
+    }
+
+    @Transactional
+    public void regenerateLuceneIndexes() {
+        Session session =
+                this.daos.getEventDao().
+                getHibernateTemplate().
+                getSessionFactory().getCurrentSession();
+        FullTextSession fullTextSession = Search.createFullTextSession(session);
+        fullTextSession.setFlushMode(FlushMode.MANUAL);
+        fullTextSession.setCacheMode(CacheMode.IGNORE);
+        ScrollableResults results = fullTextSession.createCriteria(Event.class).
+                scroll(ScrollMode.FORWARD_ONLY);
+        int index = 0;
+        while (results.next()) {
+            index++;
+            fullTextSession.index(results.get(0)); //index each element
+
+            if (index % 50 == 0) {
+                fullTextSession.clear(); //clear every batchSize since the queue is processed
+
+            }
+        }
     }
 
     public ServicesBo getServicesBo() {

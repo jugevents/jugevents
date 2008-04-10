@@ -62,7 +62,6 @@ public abstract class EventSearchController extends BaseFormController {
 
     @Override
     protected Object formBackingObject(HttpServletRequest req) throws Exception {
-        req.setAttribute("news", blo().getEventBo().buildNewsMessages(Utilities.getBaseUrl(req)));
         return new EventSearch();
     }
 
