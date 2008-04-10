@@ -4,7 +4,7 @@
     <p class="boxTitle"><spring:message code="Search" text="?Search?"/>&nbsp;<span class="smallText"><a href="${cp}/event/search.form"><spring:message code="AdvancedSearch" text="?Advanced Search?"/></a></span></p>
     <form id="fullTextSearch" action="" method="GET">
         <input id="fullTextQuery" name="fullTextQuery" type="text" value="${param['fullTextQuery']}"/><br/>
-        <input id="pastEvents" name="pastEvents" type="checkbox"/>&nbsp;<span class="smallText"><spring:message code="search.pastEvents"/></span>
+        <input id="pastEvents" name="pastEvents" type="checkbox" <c:if test="${param['pastEvents'] == 'on'}">checked="checked"</c:if>/>&nbsp;<span class="smallText"><spring:message code="search.pastEvents"/></span>
     </form>
     <div id="content_textSearch_result"></div>
 </div>
