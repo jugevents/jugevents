@@ -1,6 +1,6 @@
 <%@ include file="common.jspf" %>
 <div id="content_menu">
-    <span class="menuLevel0"><a href="${cp}"><spring:message code="News" text="?News?"/></a></span>
+    <span class="menuLevel0"><a href="${cp}/"><spring:message code="News" text="?News?"/></a></span>
     <span class="menuLevel0"><a href="${cp}/event/search.form"><spring:message code="Search"/></a></span>
     <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">   			
         <span class="menuLevel0"><a href="${cp}/event/edit.form"><spring:message code="NewEvent"/></a></span>
