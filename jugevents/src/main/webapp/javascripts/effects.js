@@ -1,5 +1,3 @@
-// script.aculo.us effects.js v1.8.0, Tue Nov 06 15:01:40 +0300 2007
-
 // Copyright (c) 2005-2007 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 // Contributors:
 //  Justin Palmer (http://encytemedia.com/)
@@ -511,7 +509,7 @@ Effect.ScrollTo = function(element) {
   var options = arguments[1] || { },
     scrollOffsets = document.viewport.getScrollOffsets(),
     elementOffsets = $(element).cumulativeOffset(),
-    max = (window.height || document.body.scrollHeight) - document.viewport.getHeight();  
+    max = document.viewport.getScrollOffsets[0] - document.viewport.getHeight(); 
 
   if (options.offset) elementOffsets[1] += options.offset;
 
@@ -1076,11 +1074,11 @@ if (document.defaultView && document.defaultView.getComputedStyle) {
   Element.getStyles = function(element) {
     element = $(element);
     var css = element.currentStyle, styles;
-    styles = Element.CSS_PROPERTIES.inject({ }, function(hash, property) {
-      hash.set(property, css[property]);
-      return hash;
+    styles = Element.CSS_PROPERTIES.inject({ }, function(results, property) {
+      results[property] = css[property];
+      return results;
     });
-    if (!styles.opacity) styles.set('opacity', element.getOpacity());
+    if (!styles.opacity) styles.opacity = element.getOpacity();
     return styles;
   };
 };

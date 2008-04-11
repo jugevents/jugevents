@@ -23,7 +23,7 @@
             <form:label path="directions"><spring:message code="event.directions"/></form:label><br/>
             (<a href="http://hobix.com/textile/" target="Filter">Textile</a>)
         </dt>
-        <dd><form:textarea path="directions" cols="38" rows="5" onkeyup="filterBo.populatePreview($(directions).value, 'Textile', 'directionsPreview')"/></dd>
+        <dd><form:textarea path="directions" cols="38" rows="5"/></dd>
         <dt>&nbsp;</dt>
         <dd><div id="directionsPreview" class="preview">${requestScope.event.filteredDirections}&nbsp;</div></dd>
         <dt><form:label path="startDate"><spring:message code="event.startDate"/></form:label></dt>
@@ -140,7 +140,7 @@
             <form:label path="description"><spring:message code="event.description"/></form:label><br/>
             (<a href="http://hobix.com/textile/" target="Filter">Textile</a>)
         </dt>
-        <dd><form:textarea path="description" cols="38" rows="8" onkeyup="filterBo.populatePreview($(description).value, 'Textile', 'descriptionPreview')"/></dd>
+        <dd><form:textarea path="description" cols="38" rows="8" /></dd>
         <dt>&nbsp;</dt>
         <dd><div id="descriptionPreview" class="preview">${requestScope.event.filteredDescription}&nbsp;</div></dd>
         <dt>&nbsp;</dt>
@@ -161,4 +161,15 @@ autocompleter.setChoices(data)
 function populateDirections(selectedElement) {
 eventBo.copyDirectionsFromEvent(selectedElement.childNodes[3].childNodes[0].nodeValue);
 }
+
+new Form.Element.Observer('description', 2,
+    function(el, value) {
+        filterBo.populatePreview(value, 'Textile', 'descriptionPreview');
+    });
+
+new Form.Element.Observer('directions', 2,
+    function(el, value) {
+        filterBo.populatePreview(value, 'Textile', 'directionsPreview');
+    });
+    
 </script>
