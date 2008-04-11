@@ -61,10 +61,12 @@ public abstract class EventSearchController extends BaseFormController {
     }
 
     @Override
-    protected Object formBackingObject(HttpServletRequest req) throws Exception {
-        return new EventSearch();
+    protected boolean isFormSubmission(HttpServletRequest request) {
+        return true;
     }
 
+    
+    
     protected abstract Daos dao();
 
     protected abstract Blos blo();

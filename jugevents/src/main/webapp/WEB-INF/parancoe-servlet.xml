@@ -120,6 +120,7 @@
           parent="abstractController">
         <property name="commandClass" value="it.jugpadova.bean.EventSearch"/>
         <property name="commandName" value="eventSearch"/>
+        <property name="bindOnNewForm" value="true" />        
         <property name="formView" value="event/search"/>
         <property name="successView" value="event/search"/>
     </bean>

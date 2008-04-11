@@ -14,7 +14,7 @@
 </h1>
 <a href="#" onclick="updateBadge(); $('webBadge').show(); new Effect.ScrollTo('webBadge', {offset: -24}); return false;"><spring:message code="GetBadgeLink"/></a>
 <a name="searchForm"></a>
-<form:form commandName="eventSearch" method="POST" action="${cp}/event/search.form">
+<form:form commandName="eventSearch" method="GET" action="${cp}/event/search.form">
     <fieldset>
         <legend><spring:message code='Search'/></legend>
         <dl>
@@ -35,73 +35,59 @@
 
 <c:choose>
     <c:when test="${not empty events}">
-        <table class="dataList">
-            <thead>
-                <tr>
-                    <th>JUG</th>
-                    <th><spring:message code="Event"/></th>
-                    <th><spring:message code="Date"/></th>
-                    <th>#</th>
-                    <th style="width: 30px;">&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>
-                <jsp:useBean id="today" class="java.util.Date"/>
-                <c:forEach var="event" items="${events}" varStatus="status">
+        <div class="displaytag">
+            <display:table name="events" id="event" sort="list" pagesize="20" requestURI="search.form" export="true">
+                <display:column media="html" sortProperty="hostingOrganizationName" title="JUG" sortable="true" headerClass="sortable">
                     <c:choose>
-                        <c:when test="${status.count % 2 == 0}">
-                            <c:set var="rowStyle" value="evenRow"/>
+                        <c:when test="${!empty event.hostingOrganizationUrl}">
+                            <a href="${event.hostingOrganizationUrl}" target="JUGSite">${event.hostingOrganizationName}</a>
                         </c:when>
                         <c:otherwise>
-                            <c:set var="rowStyle" value="oddRow"/>
+                        ${event.hostingOrganizationName}
                         </c:otherwise>
                     </c:choose>
-                    <tr class="${rowStyle}">
-                        <c:choose>
-                            <c:when test="${!empty event.owner.jug.webSite}">
-                                <td><a href="${event.owner.jug.webSite}" target="JUGSite">${event.owner.jug.name}</a></td>
-                            </c:when>
-                            <c:otherwise>
-                                <td>${event.owner.jug.name}</td>
-                            </c:otherwise>
-                        </c:choose>
-                        <td><a href="${cp}/event/show.html?id=${event.id}">${event.title}</a></td>
-                        <td nowrap="true"><fmt:formatDate value="${event.startDate}" /></td>
-                        <td>${event.numberOfParticipants}</td>
-                        <td class="actionColumn">
-                            <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-                                <%
+                </display:column>
+                <display:column media="csv xml excel pdf" property="hostingOrganizationName" title="JUG" sortable="true" headerClass="sortable"/>
+                <display:column media="html" sortProperty="title" titleKey="Event" sortable="true" headerClass="sortable">
+                    <a href="${cp}/event/show.html?id=${event.id}">${event.title}</a>
+                </display:column>
+                <display:column media="csv xml excel pdf" property="title" titleKey="Event" sortable="true" headerClass="sortable"/>
+                <display:column sortProperty="startDate" titleKey="Date" sortable="true" headerClass="sortable">
+                    <fmt:formatDate value="${event.startDate}" dateStyle="SHORT" />
+                </display:column>
+                <display:column property="numberOfParticipants" title="#" sortable="true" headerClass="sortable"/>
+                <display:column media="html" title="" sortable="false" headerClass="actionColumn" class="actionColumn">
+                    <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
+                        <%
             if (blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
-                                %>
-                                <a href="edit.form?id=${event.id}"><spring:message code="edit"/></a>
-                                <%            }
-                                %>
-                            </authz:authorize>
-                            <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-                                <%
+                        %>
+                        <a href="edit.form?id=${event.id}"><spring:message code="edit"/></a>
+                        <%            }
+                        %>
+                    </authz:authorize>
+                    <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
+                        <%
             if (blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
-                                %>
-                                <spring:message code='confirmDeleteEvent' var="confirmDeleteEventMessage"/>
-                                <a href="delete.html?id=${event.id}" onclick="return confirm('${confirmDeleteEventMessage}')"><spring:message code="delete"/></a>
-                                <%            }
-                                %>
-                            </authz:authorize>
-                            <c:if test="${event.registrationOpen}">
-                                <a href="registration.form?event.id=${event.id}"><spring:message code="register"/></a>
-                            </c:if>
-                            <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-                                <%
+                        %>
+                        <spring:message code='confirmDeleteEvent' var="confirmDeleteEventMessage"/>
+                        <a href="delete.html?id=${event.id}" onclick="return confirm('${confirmDeleteEventMessage}')"><spring:message code="delete"/></a>
+                        <%            }
+                        %>
+                    </authz:authorize>
+                    <c:if test="${event.registrationOpen}">
+                        <a href="registration.form?event.id=${event.id}"><spring:message code="register"/></a>
+                    </c:if>
+                    <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
+                        <%
             if (blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
-                                %>
-                                <a href="participants.html?id=${event.id}"><spring:message code="participants"/></a>
-                                <%            }
-                                %>
-                            </authz:authorize>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                        %>
+                        <a href="participants.html?id=${event.id}"><spring:message code="participants"/></a>
+                        <%            }
+                        %>
+                    </authz:authorize>
+                </display:column>
+            </display:table>
+        </div>
     </c:when>
     <c:otherwise>
         <c:if test="${not empty requestScope.showNoResultsMessage}">

@@ -114,3 +114,8 @@
 	border-top: none;
 	margin-bottom: -5px;
 }
+
+.displaytag td.actionColumn {
+    background-color: #ffcccc;
+    width: 120px;
+}

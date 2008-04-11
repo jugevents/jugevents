@@ -186,9 +186,7 @@ public abstract class EventController extends BaseMultiActionController {
                         "/event/show.html?id=" + event.getId());
                 guid.setPermaLink(true);
                 item.setGuid(guid);
-                Jugger jugger = event.getOwner();
-                item.setAuthor(jugger.getFirstName() + " " +
-                        jugger.getLastName());
+                item.setAuthor(event.getHostingOrganizationName());
                 item.setTitle(event.getTitle());
                 item.setExpirationDate(event.getEndDate() != null
                         ? event.getEndDate() : event.getStartDate());

@@ -245,4 +245,33 @@ public class Event extends EntityBase {
         DateMidnight today = new DateMidnight();
         return today.compareTo(new DateMidnight(this.startDate)) <= 0;
     }
+    
+    /**
+     * Return the name of the hosting organization.
+     * 
+     * @return The name of the hosting organization. Or "" if there is no hosting organization.
+     */
+    @Transient
+    public String getHostingOrganizationName() {
+        String result = "";
+        if (this.getOwner() != null) {
+            result = this.getOwner().getJug().getName();
+        }
+        return result;
+    }
+    
+    /**
+     * Return the URL of the hosting organization.
+     * 
+     * @return The URL of the hosting organization. Or "" if there is no hosting organization URL/Web site.
+     */
+    @Transient
+    public String getHostingOrganizationUrl() {
+        String result = "";
+        if (this.getOwner() != null) {
+            result = this.getOwner().getJug().getWebSiteUrl();
+        }
+        return result;
+    }
+    
 }
