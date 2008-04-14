@@ -399,7 +399,7 @@
     </bean>
     <bean id="colorBlue" class="java.awt.Color" >
         <constructor-arg index="0">
-            <value>255</value>
+            <value>0.0</value>
         </constructor-arg>
         <constructor-arg index="1">
             <value>0.0</value>
