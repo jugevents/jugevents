@@ -388,12 +388,24 @@
     </bean>
     <bean id="colorGreen" class="java.awt.Color" >
         <constructor-arg index="0">
-            <value>8355840</value>
+            <value>0.0</value>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <value>1.0</value>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <value>0.0</value>
         </constructor-arg>
     </bean>
     <bean id="colorBlue" class="java.awt.Color" >
         <constructor-arg index="0">
             <value>255</value>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <value>0.0</value>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <value>1.0</value>
         </constructor-arg>
     </bean>
     <bean name="/jcaptcha/*.html" id="jCaptchaController"
