@@ -18,6 +18,7 @@ import it.jugpadova.Daos;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
 import it.jugpadova.po.Event;
 
+import it.jugpadova.po.Registration;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,6 +42,8 @@ public abstract class EventEditController extends BaseFormController {
             ServletRequestDataBinder binder) throws Exception {
         binder.registerCustomEditor(Date.class,
                 new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true));
+        binder.registerCustomEditor(Date.class, "registration.startRegistration", new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy HH:mm"), true));
+        binder.registerCustomEditor(Date.class, "registration.endRegistration", new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy HH:mm"), true));
     }
 
     @Override
@@ -68,12 +71,19 @@ public abstract class EventEditController extends BaseFormController {
             if (event == null) {
                 throw new Exception();
             }
+            if (event.getRegistration() == null) {
+                event.setRegistration(new Registration());
+            }
             blo().getEventBo().checkUserAuthorization(event);
             return event;
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;
         } catch (Exception e) {
             Event event = new Event();
+            final Registration registration = new Registration();
+            registration.setStartRegistration(new Date());
+            registration.setEndRegistration(registration.getStartRegistration());
+            event.setRegistration(registration);            
             return event;
         }
     }

@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,10 +28,10 @@ import org.hibernate.search.annotations.FullTextFilterDef;
 import org.hibernate.search.annotations.FullTextFilterDefs;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Store;
 import org.joda.time.*;
 import org.parancoe.persistence.po.hibernate.EntityBase;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.CascadeValidation;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 
 /**
@@ -52,7 +53,8 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
     "from Event e where e.startDate >= current_date() and e.creationDate >= ? order by e.startDate")
 })
 @FullTextFilterDefs({
-    @FullTextFilterDef(name="notPassedEvents", impl=NotPassedEventsFilterFactory.class)
+    @FullTextFilterDef(name = "notPassedEvents", impl =
+    NotPassedEventsFilterFactory.class)
 })
 public class Event extends EntityBase {
 
@@ -70,6 +72,8 @@ public class Event extends EntityBase {
     private String filter = "Textile";
     private Jugger owner;
     private Date creationDate;
+    @CascadeValidation
+    private Registration registration;
 
     /**
      * Get the entity id.
@@ -205,12 +209,21 @@ public class Event extends EntityBase {
         this.creationDate = creationDate;
     }
 
+    @Embedded
+    public Registration getRegistration() {
+        return registration;
+    }
+
+    public void setRegistration(Registration registration) {
+        this.registration = registration;
+    }
+
     @Transient
     public int getNumberOfParticipants() {
         int result = 0;
         if (getParticipants() != null) {
             for (Participant p : getParticipants()) {
-                if (p.getConfirmed().booleanValue()) {
+                if (p.getConfirmed() != null && p.getConfirmed().booleanValue()) {
                     result++;
                 }
             }
@@ -242,10 +255,26 @@ public class Event extends EntityBase {
      */
     @Transient
     public boolean getRegistrationOpen() {
-        DateMidnight today = new DateMidnight();
-        return today.compareTo(new DateMidnight(this.startDate)) <= 0;
+        boolean result = false;
+        final Registration reg = this.getRegistration();
+        if (thereAreNoRegistrationRules(reg)) { // old way
+            result = todayIsBeforeTheEndOfTheStartDay();
+        } else {
+            if (reg.getEnabled().booleanValue()) {
+                if (reg.getManualActivation() != null) {
+                    result = reg.getManualActivation();
+                } else {
+                    // TODO complete with other rules
+                    if (partecipantsAreUnderTheLimit(reg) &&
+                            todayIsInTheRegistrationInterval(reg)) {
+                        result = true;
+                    }
+                }
+            }
+        }
+        return result;
     }
-    
+
     /**
      * Return the name of the hosting organization.
      * 
@@ -259,7 +288,7 @@ public class Event extends EntityBase {
         }
         return result;
     }
-    
+
     /**
      * Return the URL of the hosting organization.
      * 
@@ -273,5 +302,40 @@ public class Event extends EntityBase {
         }
         return result;
     }
-    
+
+    private boolean partecipantsAreUnderTheLimit(final Registration reg) {
+        return reg.getMaxParticipants() == null ||
+                this.getNumberOfParticipants() <
+                reg.getMaxParticipants().longValue();
+    }
+
+    private boolean todayIsBeforeTheEndOfTheStartDay() {
+        boolean result;
+        // old way
+        DateMidnight today = new DateMidnight();
+        result =today.compareTo(new DateMidnight(this.startDate)) <= 0;
+        return result;
+    }
+
+    private boolean thereAreNoRegistrationRules(final Registration reg) {
+        return reg == null ||
+                (reg != null && reg.getEnabled() &&
+                reg.getManualActivation() == null &&
+                reg.getStartRegistration() == null &&
+                reg.getEndRegistration() == null &&
+                reg.getMaxParticipants() == null);
+    }
+
+    private boolean todayIsInTheRegistrationInterval(Registration reg) {
+        boolean result = true;
+        Date now = new Date();
+        if ((reg.getStartRegistration() != null &&
+                reg.getStartRegistration().compareTo(now) > 0) ||
+                (reg.getEndRegistration() != null &&
+                reg.getEndRegistration().compareTo(now) < 0) ||
+                (reg.getEndRegistration() == null && !todayIsBeforeTheEndOfTheStartDay())) {
+            result = false;
+        }
+        return result;
+    }
 }

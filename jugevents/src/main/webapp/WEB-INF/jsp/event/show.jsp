@@ -28,6 +28,25 @@
 
 <c:if test="${event.registrationOpen}">
     <a href="${cp}/event/registration.form?event.id=${event.id}"><div class="je_button"><spring:message code="register"/></div></a>
+    <c:if test="${(!empty event.registration) && event.registration.registrationRulesAreApplied}">
+        <c:if test="${!empty event.registration.maxParticipants}">
+            <div style="text-align: center;">
+                <spring:message code="event.registration.message.availableSeats" text="?event.registration.message.availableSeats?" arguments="${event.registration.maxParticipants - event.numberOfParticipants}"/>
+            </div>
+        </c:if>
+        <c:if test="${!empty event.registration.endRegistration}">
+            <div style="text-align: center;">
+                <fmt:formatDate value='${event.registration.endRegistration}' type='both' dateStyle='short' timeStyle="short" var="endRegistrationDate"/>
+                <spring:message code="event.registration.message.endRegistrationAt" text="?event.registration.message.endRegistrationAt?" arguments="${endRegistrationDate}"/>
+            </div>
+        </c:if>
+        <c:if test="${empty event.registration.endRegistration}">
+            <div style="text-align: center;">
+                <fmt:formatDate value='${event.startDate}' type='date' dateStyle='short' var="endRegistrationDate"/>
+                <spring:message code="event.registration.message.endRegistrationAt" text="?event.registration.message.endRegistrationAt?" arguments="${endRegistrationDate}"/>
+            </div>
+        </c:if>
+    </c:if>
 </c:if>
 
 <c:if test="${!empty event.owner}">
