@@ -19,6 +19,7 @@ import it.jugpadova.bean.NewsMessage;
 import it.jugpadova.dao.EventDao;
 import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
+import it.jugpadova.exception.RegistrationNotOpenException;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.Participant;
@@ -76,7 +77,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 750851fb2a96 $
+ * @version $Revision: ef489dc38253 $
  */
 public class EventBo {
 
@@ -264,7 +265,10 @@ public class EventBo {
                 getHibernateTemplate().
                 getSessionFactory().getCurrentSession();
         FullTextSession fullTextSession = Search.createFullTextSession(session);
-        MultiFieldQueryParser parser = new MultiFieldQueryParser(new String[]{"title", "location", "directions", "description", "startDate"},
+        MultiFieldQueryParser parser = new MultiFieldQueryParser(new String[]{
+                    "title", "location", "directions", "description",
+                    "startDate"
+                },
                 new StandardAnalyzer());
         org.apache.lucene.search.Query query = parser.parse(searchQuery);
         FullTextQuery hibQuery =
@@ -310,7 +314,8 @@ public class EventBo {
                 StringBuilder sb = new StringBuilder();
                 for (Event event : events) {
                     sb.append("<div>\n");
-                    sb.append("<div class=\"eventDate\">").append(dateFormat.format(event.getStartDate())).
+                    sb.append("<div class=\"eventDate\">").append(dateFormat.format(
+                            event.getStartDate())).
                             append("</div>");
                     if (event.getOwner() != null) {
                         sb.append("<div class=\"eventSignature\"><a href=\"").
@@ -500,15 +505,27 @@ public class EventBo {
         }
     }
 
+    /**
+     * Confirm the registration of a participant to an event.
+     * 
+     * @param email The email of the participant
+     * @param confirmationCode The confirmation code of the registration
+     * @return The confirmed participant, if all went well
+     * @throws it.jugpadova.exception.RegistrationNotOpenException When the participant can't be confirmed because the registration is yet closed
+     */
     @Transactional
-    public Participant confirmParticipant(String email, String confirmationCode) {
+    public Participant confirmParticipant(String email, String confirmationCode) throws RegistrationNotOpenException {
         ParticipantDao dao = daos.getParticipantDao();
         List<Participant> participants = dao.findByEmailAndConfirmationCodeAndConfirmed(email,
                 confirmationCode, Boolean.FALSE);
         if (participants != null && participants.size() > 0) {
             Participant p = participants.get(0);
-            p.setConfirmed(Boolean.TRUE);
-            p.setConfirmationDate(new Date());
+            if (p.getEvent().getRegistrationOpen()) {
+                p.setConfirmed(Boolean.TRUE);
+                p.setConfirmationDate(new Date());
+            } else {
+                throw new RegistrationNotOpenException(p.getEvent());
+            }
             return p;
         }
         return null;
@@ -564,7 +581,8 @@ public class EventBo {
     public String getBadgeCode(String badgeHtmlCode) {
         java.lang.StringBuffer result = new java.lang.StringBuffer();
         result.append("var badge=\'\';\n");
-        result.append("badge += '").append(javascriptize(badgeHtmlCode)).append("';\n");
+        result.append("badge += '").append(javascriptize(badgeHtmlCode)).append(
+                "';\n");
         result.append("document.write(badge);");
         return result.toString();
     }
@@ -704,8 +722,10 @@ public class EventBo {
         StringBuffer result = new StringBuffer();
         if ("simple".equals(badgeStyle)) {
             result.append("<style type=\"text/css\"><!--\n");
-            result.append(".jeb_event_odd {background-color: rgb(90%, 90%, 90%); padding: 4px;}\n");
-            result.append(".jeb_event_even {background-color: white; padding: 4px;}\n");
+            result.append(
+                    ".jeb_event_odd {background-color: rgb(90%, 90%, 90%); padding: 4px;}\n");
+            result.append(
+                    ".jeb_event_even {background-color: white; padding: 4px;}\n");
             result.append(".jeb_date {font-weight: bold;}\n");
             result.append(".jeb_title {margin-left: 15px;}\n");
             result.append(".jeb_jug_name {margin-left: 15px;}\n");
@@ -752,7 +772,8 @@ public class EventBo {
                         append(messageSource.getMessage("Participants", null,
                         "Participants", StringUtils.isNotBlank(lang) ? new Locale(lang)
                         : Locale.ENGLISH)).
-                        append(": </span><span class=\"jeb_text\">").append(event.getNumberOfParticipants()).
+                        append(": </span><span class=\"jeb_text\">").append(
+                        event.getNumberOfParticipants()).
                         append("</span></div>");
             }
             if (showDescription) {
@@ -768,7 +789,8 @@ public class EventBo {
     }
 
     private String javascriptize(String s) {
-        return s.replaceAll("\'", Matcher.quoteReplacement("\\'")).replaceAll("\\r\\n",
+        return s.replaceAll("\'", Matcher.quoteReplacement("\\'")).replaceAll(
+                "\\r\\n",
                 Matcher.quoteReplacement("\\n")).replaceAll("\\r",
                 Matcher.quoteReplacement("\\n")).replaceAll("\\n",
                 Matcher.quoteReplacement("\\n"));

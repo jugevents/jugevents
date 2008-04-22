@@ -16,6 +16,7 @@ package it.jugpadova.controllers;
 import it.jugpadova.Blos;
 import it.jugpadova.Daos;
 import it.jugpadova.blo.EventBo;
+import it.jugpadova.exception.RegistrationNotOpenException;
 import it.jugpadova.po.Participant;
 
 import it.jugpadova.util.Utilities;
@@ -35,23 +36,32 @@ public abstract class ConfirmController extends BaseMultiActionController {
             Logger.getLogger(ConfirmController.class);
 
     /**
-     *
+     * Confirm the registration of a participant.
      */
     public ModelAndView registration(HttpServletRequest req,
             HttpServletResponse res) {
         ModelAndView result = null;
         EventBo eventBo = blo().getEventBo();
-        Participant participant =
-                eventBo.confirmParticipant(req.getParameter("email"),
-                req.getParameter("code"));
-        if (participant != null) {
-            result = Utilities.getMessageView("participant.registration.ok", participant.getFirstName(), participant.getEvent().getTitle());
-        } else {
-            result = Utilities.getMessageView("participant.registration.failed");
+        try {
+            Participant participant =
+                    eventBo.confirmParticipant(req.getParameter("email"),
+                    req.getParameter("code"));
+            if (participant != null) {
+                result = Utilities.getMessageView("participant.registration.ok",
+                        participant.getFirstName(),
+                        participant.getEvent().getTitle());
+            } else {
+                result = Utilities.getMessageView(
+                        "participant.registration.failed");
+            }
+        } catch (RegistrationNotOpenException registrationNotOpenException) {
+            result = Utilities.getMessageView(
+                    "participant.registration.cantConfirmRegistrationClosed",
+                    registrationNotOpenException.getEvent().getTitle());
         }
         return result;
     }
-    
+
     /**
      * You don't have to implement this.
      *
