@@ -15,6 +15,7 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.Blos;
 import it.jugpadova.Daos;
+import it.jugpadova.po.JUG;
 import it.jugpadova.util.mime.MimeUtil;
 
 import java.io.BufferedInputStream;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,7 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Lucio Benfante
  *
  */
-@UrlMapping(value="/bin/*.bin")
+@UrlMapping(value = "/bin/*.bin")
 public abstract class BinController extends BaseMultiActionController {
 
     private static final Logger logger =
@@ -60,10 +62,11 @@ public abstract class BinController extends BaseMultiActionController {
             if (contentType == null) {
                 contentType = "image/jpeg";
             }
-            String fileExtension= MimeUtil.getMinorComponent(contentType);
+            String fileExtension = MimeUtil.getMinorComponent(contentType);
             res.setContentType(contentType);
             res.setContentLength(jugLogo.length);
-            res.setHeader("Content-Disposition", "filename=JugLogo."+fileExtension);
+            res.setHeader("Content-Disposition", "filename=JugLogo." +
+                    fileExtension);
             OutputStream out = new BufferedOutputStream(res.getOutputStream());
             out.write(jugLogo);
             out.flush();
@@ -83,6 +86,35 @@ public abstract class BinController extends BaseMultiActionController {
             in.close();
             out.flush();
             out.close();
+        }
+        return null;
+    }
+
+    /**
+     * Produce a preview of the current certificate for a JUG.
+     */
+    public ModelAndView jugCertificatePreview(HttpServletRequest req,
+            HttpServletResponse res) {
+        try {
+            Long id = new Long(req.getParameter("id"));
+            JUG jug = blo().getJugBo().retrieveJug(id);
+            InputStream jugCertificateTemplate =
+                    blo().getJugBo().retrieveJugCertificateTemplate(id);
+            byte[] jugCertificate = blo().getParticipantBo().buildCertificate(
+                    jugCertificateTemplate, "James Duke", jug.getName()+" Meeting",
+                    new Date(),
+                    jug.getName());
+            res.setContentType("application/pdf");
+            res.setContentLength(jugCertificate.length);
+            res.setHeader("Content-Disposition",
+                    "filename=JugCertificatePreview.pdf");
+            OutputStream out =
+                    new BufferedOutputStream(res.getOutputStream());
+            out.write(jugCertificate);
+            out.flush();
+            out.close();
+        } catch (Exception ex) {
+            logger.error("Error producing the certificate preview", ex);
         }
         return null;
     }

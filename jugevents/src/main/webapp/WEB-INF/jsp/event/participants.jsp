@@ -8,7 +8,7 @@
 
 <h2><spring:message code='ParticipantList'/></h2>
 <div class="secondaryMenu">
-    <a href="javascript:void(0)" onclick="AjaxMethodsJS.sendCertificateToAllParticipants(${event.id}, 'http://www.jugevents.org'); return false;"><spring:message code="SendAllCertificates"/></a>
+    <a href="javascript:void(0)" onclick="AjaxMethodsJS.sendCertificateToAllParticipants(${event.id}, '${conf.jugeventsBaseUrl}'); return false;"><spring:message code="SendAllCertificates"/></a>
     <a href="javascript:void(0)" onclick="$('addNewParticipantDiv').show(); $('participant.firstName').focus(); return false;"><spring:message code="AddParticipant"/></a>
 </div>
 <div id="sentCertificatesMessage"></div>
@@ -66,7 +66,7 @@
                </display:column>
                <display:column media="csv xml excel pdf" property="attended" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;" />
                <display:column media="html" titleKey="Certificate" sortable="false" style="text-align: center;">
-                   <a href="#" onclick="AjaxMethodsJS.sendCertificateToParticipant(${participantList.id}, 'http://www.jugevents.org'); return false"><spring:message code="SendCertificate"/></a>
+                   <a href="#" onclick="AjaxMethodsJS.sendCertificateToParticipant(${participantList.id}, '${conf.jugeventsBaseUrl}'); return false"><spring:message code="SendCertificate"/></a>
             <div id="certificateMsg${participantList.id}"><fmt:formatDate value="${participantList.lastCertificateSentDate}" type="date" dateStyle="short" /></div>
         </display:column>
         <display:column media="csv xml excel pdf" property="lastCertificateSentDate" titleKey="Certificate" sortable="false" style="text-align: center;" />

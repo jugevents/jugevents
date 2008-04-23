@@ -161,6 +161,7 @@
                                 <dd>
                                     <input type="file" name="jugger.jug.certificateTemplate" id="jugger.jug.certificateTemplate"  <c:if test="${!jugger.reliable}">readonly="readonly" disabled="disabled"</c:if>/><br/>
                                     <a href="${cp}/docs/certificate.odt" target="certificate" class="smallText"><spring:message code="Example"/></a>
+                                    <a href="${cp}/bin/jugCertificatePreview.bin?id=${jugger.jugger.jug.id}" target="certificate" class="smallText"><spring:message code="Preview"/></a>                                    
                                 </dd>
                                 <dt><form:label path="jugger.jug.infos">
                                         <spring:message code="juggerRegistrationJUGInfos" />

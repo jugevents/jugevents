@@ -13,12 +13,14 @@
 // limitations under the License.
 package it.jugpadova.blo;
 
+import it.jugpadova.Blos;
 import it.jugpadova.Daos;
 import it.jugpadova.bean.ParticipantBean;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +31,6 @@ import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
-import javax.servlet.http.HttpSession;
 import net.java.dev.footprint.exporter.Exporter;
 import net.java.dev.footprint.exporter.pdf.PdfExporterFactory;
 import net.java.dev.footprint.model.generated.FootprintProperties;
@@ -53,7 +54,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 733b6fd512bf $
+ * @version $Revision: 4f748cc47459 $
  */
 public class ParticipantBo {
 
@@ -64,6 +65,7 @@ public class ParticipantBo {
     private static final Logger logger =
             Logger.getLogger(ParticipantBo.class);
     private Daos daos;
+    private Blos blos;
     private DateFormat df = DateFormat.getDateInstance(DateFormat.LONG,
             Locale.US);
 
@@ -73,6 +75,14 @@ public class ParticipantBo {
 
     public void setDaos(Daos daos) {
         this.daos = daos;
+    }
+
+    public Blos getBlos() {
+        return blos;
+    }
+
+    public void setBlos(Blos blos) {
+        this.blos = blos;
     }
 
     public FootprintProperties getFootprintSettings() {
@@ -87,7 +97,8 @@ public class ParticipantBo {
         return confirmationSenderEmailAddress;
     }
 
-    public void setConfirmationSenderEmailAddress(String confirmationSenderEmailAddress) {
+    public void setConfirmationSenderEmailAddress(
+            String confirmationSenderEmailAddress) {
         this.confirmationSenderEmailAddress = confirmationSenderEmailAddress;
     }
 
@@ -148,8 +159,7 @@ public class ParticipantBo {
     }
 
     @Transactional
-    public void sendCertificateToParticipant(long participantId, String baseUrl)
-             {
+    public void sendCertificateToParticipant(long participantId, String baseUrl) {
         try {
             WebContext wctx = WebContextFactory.get();
             ScriptSession session = wctx.getScriptSession();
@@ -158,8 +168,11 @@ public class ParticipantBo {
                     daos.getParticipantDao().
                     read(Long.valueOf(participantId));
             Event event = participant.getEvent();
+            InputStream jugCertificateTemplate =
+                    blos.getJugBo().retrieveJugCertificateTemplate(
+                    event.getOwner().getJug().getId());
             byte[] certificate =
-                    buildCertificate(participant.getFirstName() + " " +
+                    buildCertificate(jugCertificateTemplate, participant.getFirstName() + " " +
                     participant.getLastName(), event.getTitle(),
                     event.getStartDate(), event.getOwner().getJug().
                     getName());
@@ -178,8 +191,7 @@ public class ParticipantBo {
     }
 
     @Transactional
-    public void sendCertificateToAllParticipants(long eventId, String baseUrl)
-             {
+    public void sendCertificateToAllParticipants(long eventId, String baseUrl) {
         WebContext wctx = WebContextFactory.get();
         ScriptSession session = wctx.getScriptSession();
         Util util = new Util(session);
@@ -190,8 +202,11 @@ public class ParticipantBo {
         for (Participant participant : participantList) {
             try {
                 Event event = participant.getEvent();
+                InputStream jugCertificateTemplate =
+                        blos.getJugBo().retrieveJugCertificateTemplate(
+                        event.getOwner().getJug().getId());
                 byte[] certificate =
-                        buildCertificate(participant.getFirstName() + " " +
+                        buildCertificate(jugCertificateTemplate, participant.getFirstName() + " " +
                         participant.getLastName(), event.getTitle(),
                         event.getStartDate(), event.getOwner().getJug().
                         getName());
@@ -215,7 +230,8 @@ public class ParticipantBo {
     private byte[] buildCertificate(String name, String title, Date date,
             String jug) throws Exception {
         Exporter jdbcExporter =
-                PdfExporterFactory.getPdfExporter(Exporter.DEFAULT_SIGNED_PDF_EXPORTER,
+                PdfExporterFactory.getPdfExporter(
+                Exporter.DEFAULT_SIGNED_PDF_EXPORTER,
                 new Object[]{this.footprintSettings});
         Map map = new HashMap();
         map.put("jug", jug);
@@ -226,6 +242,32 @@ public class ParticipantBo {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         jdbcExporter.export(outputStream, map);
         return outputStream.toByteArray();
+    }
+
+    public byte[] buildCertificate(InputStream certificateTemplate, String name,
+            String title, Date date,
+            String jug) throws Exception {
+        if (certificateTemplate != null) { // use a personalized certificate template
+
+            Exporter jdbcExporter =
+                    PdfExporterFactory.getPdfExporter(
+                    Exporter.DEFAULT_SIGNED_PDF_EXPORTER, new Class[]{
+                        FootprintProperties.class, InputStream.class
+                    },
+                    new Object[]{this.footprintSettings, certificateTemplate});
+            Map map = new HashMap();
+            map.put("jug", jug);
+            map.put("name", name);
+            map.put("title", title);
+            map.put("date", df.format(date));
+            map.put("certdate", df.format(new Date()));
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            jdbcExporter.export(outputStream, map);
+            return outputStream.toByteArray();
+        } else { // use the default certificate template
+
+            return buildCertificate(name, title, date, jug);
+        }
     }
 
     /**
@@ -273,7 +315,8 @@ public class ParticipantBo {
 
         int winner = (int) Math.round(Math.random() * totalParticipants);
         nonwinningParticipants.get(winner).setWinner(true);
-        daos.getParticipantDao().createOrUpdate(nonwinningParticipants.get(winner));
+        daos.getParticipantDao().createOrUpdate(nonwinningParticipants.get(
+                winner));
 
         List<ParticipantBean> nonwinningParticipantBeans =
                 convertParticipantList(nonwinningParticipants);
@@ -291,14 +334,14 @@ public class ParticipantBo {
         return winningParticipantBeans;
     }
 
-
     /**
      * Convert a list o Participant to a list of ParticipantBean.
      *
      * @param participants The list of Participant
      * @return The list of ParticipantBean
      */
-    private List<ParticipantBean> convertParticipantList(List<Participant> participants) {
+    private List<ParticipantBean> convertParticipantList(
+            List<Participant> participants) {
         List<ParticipantBean> participantBeans =
                 new ArrayList<ParticipantBean>(participants.size());
         for (Participant p : participants) {
@@ -322,13 +365,15 @@ public class ParticipantBo {
      * @param value The new value
      */
     @Transactional
-    public void updateParticipantFieldValue(Long participantId, String field, String value) {
+    public void updateParticipantFieldValue(Long participantId, String field,
+            String value) {
         try {
             WebContext wctx = WebContextFactory.get();
             ScriptSession session = wctx.getScriptSession();
             Util util = new Util(session);
-            Participant participant = daos.getParticipantDao().read(participantId);
-             // TODO: maybe using reflection for updating fields?
+            Participant participant = daos.getParticipantDao().read(
+                    participantId);
+            // TODO: maybe using reflection for updating fields?
             if ("firstName".equals(field)) {
                 participant.setFirstName(value);
             }
@@ -339,15 +384,15 @@ public class ParticipantBo {
                 participant.setEmail(value);
             }
             if ("note".equals(field)) { // TODO: maybe using reflection?
+
                 participant.setNote(value);
             }
-            util.setValue(field+"_v_"+participantId, value);
-            util.setValue(field+"_f_"+participantId, value);
+            util.setValue(field + "_v_" + participantId, value);
+            util.setValue(field + "_f_" + participantId, value);
         } catch (Exception e) {
             logger.error("Error updating lot rejected",
                     e);
         }
 
     }
-    
 }

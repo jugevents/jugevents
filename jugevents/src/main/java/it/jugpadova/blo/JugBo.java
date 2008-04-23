@@ -18,8 +18,10 @@ import it.jugpadova.dao.JUGDao;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 
@@ -310,6 +312,34 @@ public class JugBo {
         return jug.getLogo();
     }
 
+    /**
+     * Retrieve the personalized certificate template for a JUG.
+     * 
+     * @param jugId The ID of the JUG
+     * @return The personalized certificate template for the JUG. null if the JUG don't have a personalized certificate template.
+     */
+    @Transactional(readOnly = true)
+    public InputStream retrieveJugCertificateTemplate(Long jugId) {
+        InputStream result = null;
+        JUG jug = daos.getJUGDao().read(jugId);
+        byte[] certificateTemplate = jug.getCertificateTemplate();
+        if (certificateTemplate != null && certificateTemplate.length > 0) {
+            result = new ByteArrayInputStream(certificateTemplate);
+        }
+        return result;
+    }
+
+    /**
+     * Retrieve a JUG by ID.
+     * 
+     * @param jugId The ID of the JUG
+     * @return The plate for the JUG. null if the JUG don't have a personalized certificate template.
+     */
+    @Transactional(readOnly = true)
+    public JUG retrieveJug(Long jugId) {
+        return daos.getJUGDao().read(jugId);
+    }
+    
     private Element buildKmlPlacemark(JUG jug) {
         Element placemark = new Element("Placemark", EARTH_NAMESPACE);
         Element jugName = new Element("name", EARTH_NAMESPACE);
