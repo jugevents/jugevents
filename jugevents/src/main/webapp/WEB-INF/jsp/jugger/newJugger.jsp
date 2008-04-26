@@ -1,28 +1,28 @@
 <%@ include file="../common.jspf" %>
 <script src="${cp}/dwr/interface/juggerBo.js" type="text/javascript"></script>
 <script type="text/javascript">        
-function require()
-{     
-if($('requireReliability.requireReliability1').checked)
-{
-$('hcomment').show(); return false;
-}
-else
-{
-$('hcomment').hide(); return false;
-}   
-}  
+    function require()
+    {     
+        if($('requireReliability.requireReliability1').checked)
+        {
+            $('hcomment').show(); return false;
+        }
+        else
+        {
+            $('hcomment').hide(); return false;
+        }   
+    }  
 </script>
 
 <h2><spring:message code="juggerRegistrationTitle"/></h2>
 
-<form:form commandName="jugger" method="POST" action="${cp}/jugger/registration.form" onsubmit="enableJugFields(); return true;" enctype="multipart/form-data">
+<form:form commandName="jugger" method="post" action="${cp}/jugger/registration.form" onsubmit="enableJugFields(); return true;" enctype="multipart/form-data">
     <form:errors path="*" cssClass="errorBox"/>
     
-    <form:hidden path="jugger.id"/>
     
     <fieldset>
         <legend>Jugger</legend>                        
+        <form:hidden path="jugger.id"/>
         <dl>
             <dt><form:label path="jugger.firstName"><spring:message code="juggerRegistrationFirstName"/> (*)</form:label></dt>
             <dd><form:input path="jugger.firstName"/></dd>
@@ -42,7 +42,7 @@ $('hcomment').hide(); return false;
                     <spring:message code="requireReliability" />
             </form:label></dt>
             <dd><form:checkbox path="requireReliability.requireReliability" value='false'
-                 onclick="javascript:require();" />&nbsp;<img id="tip_reliability" src="${cp}/images/question16x16.png" /></dd>
+                               onclick="javascript:require();" />&nbsp;<img id="tip_reliability" src="${cp}/images/question16x16.png" alt="Help Tip"/></dd>
         </dl>
         <div id="hcomment" style="display: none;">
             <dl>
@@ -63,13 +63,13 @@ $('hcomment').hide(); return false;
             <dt><form:label path="jugger.jug.webSite"><spring:message code="juggerRegistrationWebSite"/></form:label></dt>                            
             <dd><form:input path="jugger.jug.webSite"    /></dd>
             <dt><form:label path="jugger.jug.logo">
-                <img id="tip_jugLogo" src="${cp}/images/question16x16.png" />&nbsp;<spring:message code="juggerRegistrationLogo" />
+                <img id="tip_jugLogo" src="${cp}/images/question16x16.png" alt="Help Tip"/>&nbsp;<spring:message code="juggerRegistrationLogo" />
             </form:label></dt>
             <dd><input type="file" name="jugger.jug.logo" id="jugger.jug.logo"/></dd>
-            <dt><form:label path="jugger.jug.longitude"><img id="tip_jugCoordinates" src="${cp}/images/question16x16.png" />&nbsp;<spring:message code="juggerRegistrationLongitude"/></form:label></dt>                            
+            <dt><form:label path="jugger.jug.longitude"><img id="tip_jugCoordinates" src="${cp}/images/question16x16.png" alt="Help Tip"/>&nbsp;<spring:message code="juggerRegistrationLongitude"/></form:label></dt>                            
             <dd>
                 <form:input path="jugger.jug.longitude"  /><br/>
-                <a href="http://www.travelgis.com/geocode/" target="geocoding" class="smallText"><spring:message code="FindYourLocation" text="Find Your Location"/></a>
+                <a href="http://www.travelgis.com/geocode/" rel="external" class="smallText"><spring:message code="FindYourLocation" text="Find Your Location"/></a>
             </dd>
             <dt><form:label path="jugger.jug.latitude"><spring:message code="juggerRegistrationLatitude"/></form:label></dt>                            
             <dd>
@@ -93,49 +93,49 @@ $('hcomment').hide(); return false;
 
 <script type="text/javascript">
 
-new Tip($('tip_reliability'), '<spring:message code="tip.reliability"/>', {title: '<spring:message code="tip.reliability.title"/>', effect: 'appear'});
-new Tip($('tip_jugLogo'), '<spring:message code="tip.jugLogo"/>', {title: '<spring:message code="tip.jugLogo.title"/>', effect: 'appear'});
-new Tip($('tip_jugCoordinates'), '<spring:message code="tip.jugCoordinates"/>', {title: '<spring:message code="tip.jugCoordinates.title"/>', effect: 'appear'});
+    new Tip($('tip_reliability'), '<spring:message code="tip.reliability"/>', {title: '<spring:message code="tip.reliability.title"/>', effect: 'appear'});
+    new Tip($('tip_jugLogo'), '<spring:message code="tip.jugLogo"/>', {title: '<spring:message code="tip.jugLogo.title"/>', effect: 'appear'});
+    new Tip($('tip_jugCoordinates'), '<spring:message code="tip.jugCoordinates"/>', {title: '<spring:message code="tip.jugCoordinates.title"/>', effect: 'appear'});
 
-dwr.util.setEscapeHtml(false);
+    dwr.util.setEscapeHtml(false);
 
-disableJugFields();
+    disableJugFields();
 
-new Autocompleter.DWR('jugger.jug.country.englishName', 'countryList', updateCountryList, { valueSelector: singleValueSelector, partialChars: 0, fullSearch: true });
-new Autocompleter.DWR('jugger.jug.name', 'jugList', updateJUGNameList, { valueSelector: singleValueSelector, partialChars: 0, fullSearch: true, afterUpdateElement: populateJugFields });
+    new Autocompleter.DWR('jugger.jug.country.englishName', 'countryList', updateCountryList, { valueSelector: singleValueSelector, partialChars: 0, fullSearch: true });
+    new Autocompleter.DWR('jugger.jug.name', 'jugList', updateJUGNameList, { valueSelector: singleValueSelector, partialChars: 0, fullSearch: true, afterUpdateElement: populateJugFields });
 
-function updateCountryList(autocompleter, token) {
-juggerBo.findPartialCountry(token, function(data) {
-autocompleter.setChoices(data)
-});
-}
+    function updateCountryList(autocompleter, token) {
+        juggerBo.findPartialCountry(token, function(data) {
+            autocompleter.setChoices(data)
+        });
+    }
 
-function updateJUGNameList(autocompleter, token) {
-juggerBo.findPartialJugNameWithCountry(token,  $('jugger.jug.country.englishName').value, function(data)  {
-autocompleter.setChoices(data)
-});
-}
+    function updateJUGNameList(autocompleter, token) {
+        juggerBo.findPartialJugNameWithCountry(token,  $('jugger.jug.country.englishName').value, function(data)  {
+            autocompleter.setChoices(data)
+        });
+    }
 
-function populateJugFields(jugName, selectedElement) {
-juggerBo.populateJugFields(jugName.value);
-}
+    function populateJugFields(jugName, selectedElement) {
+        juggerBo.populateJugFields(jugName.value);
+    }
 
-function disableJugFields() {
-var s = document.getElementById('jugger.jug.name');    
-juggerBo.readOnlyJugFields(s.value, false);
-}
+    function disableJugFields() {
+        var s = document.getElementById('jugger.jug.name');    
+        juggerBo.readOnlyJugFields(s.value, false);
+    }
 
-function enableJugFields() {
-parancoe.util.fullEnableFormElement('jugger.jug.country.englishName');
-parancoe.util.fullEnableFormElement('jugger.jug.webSite');
-parancoe.util.fullEnableFormElement('jugger.jug.logo');
-parancoe.util.fullEnableFormElement('jugger.jug.longitude');
-parancoe.util.fullEnableFormElement('jugger.jug.latitude');
-parancoe.util.fullEnableFormElement('jugger.jug.infos');
-}
+    function enableJugFields() {
+        parancoe.util.fullEnableFormElement('jugger.jug.country.englishName');
+        parancoe.util.fullEnableFormElement('jugger.jug.webSite');
+        parancoe.util.fullEnableFormElement('jugger.jug.logo');
+        parancoe.util.fullEnableFormElement('jugger.jug.longitude');
+        parancoe.util.fullEnableFormElement('jugger.jug.latitude');
+        parancoe.util.fullEnableFormElement('jugger.jug.infos');
+    }
 
-function singleValueSelector(tag) {
-return tag;
-}
+    function singleValueSelector(tag) {
+        return tag;
+    }
 
 </script>

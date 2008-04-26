@@ -13,9 +13,9 @@
 </div>
 <div id="sentCertificatesMessage"></div>
 <div id="addNewParticipantDiv" <c:if test="${showAddNewPartecipantDiv != 'true'}">style="display: none;"</c:if>><div>
-    <fieldset>
-        <legend><spring:message code="AddParticipant"/></legend>
-        <form:form commandName="registration" method="POST" action="${cp}/event/addParticipant.form">
+    <form:form commandName="registration" method="post" action="${cp}/event/addParticipant.form">
+        <fieldset>
+            <legend><spring:message code="AddParticipant"/></legend>
             <form:errors path="*" cssClass="errorBox"/>
             <form:hidden path="event.id"/>
             <dl>
@@ -26,12 +26,12 @@
                 <dt><form:label path="participant.email"><spring:message code="Email"/>:</form:label></dt>
                 <dd><form:input path="participant.email"/></dd>
                 <dt><form:label path="participant.note"><spring:message code="Note"/>:</form:label></dt>
-                <dd><form:textarea path="participant.note" rows="6"/></dd>
+                <dd><form:textarea path="participant.note" rows="6" cols="25"/></dd>
                 <dt>&nbsp;</dt>
                 <dd><input type="submit" value="<spring:message code="AddParticipant"/>"/><br/><br/></dd>
             </dl>
-        </form:form>
-    </fieldset>
+        </fieldset>
+    </form:form>
 </div></div>
 <div class="displaytag">
     <display:table name="participants" id="participantList" sort="list" pagesize="20" defaultsort="6" defaultorder="ascending" requestURI="participants.html" export="true">
@@ -59,10 +59,10 @@
         <display:column property="creationDate" titleKey="JoinedAt" sortable="true" headerClass="sortable"/>
         <display:column property="confirmationDate" titleKey="ConfirmedAt" sortable="true" headerClass="sortable"/>
         <display:column media="html" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;">
-            <input onclick="AjaxMethodsJS.setAttended(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.attended}">checked="${participantList.attended}"</c:if> />
+            <input onclick="AjaxMethodsJS.setAttended(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.attended}">checked="checked"</c:if> />
                </display:column>
                <display:column media="html" titleKey="Winner" sortable="true" headerClass="sortable" style="text-align: center;">
-                   <input onclick="AjaxMethodsJS.setWinner(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.winner}">checked="${participantList.winner}"</c:if> />
+                   <input onclick="AjaxMethodsJS.setWinner(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.winner}">checked="checked"</c:if> />
                </display:column>
                <display:column media="csv xml excel pdf" property="attended" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;" />
                <display:column media="html" titleKey="Certificate" sortable="false" style="text-align: center;">
@@ -98,23 +98,11 @@
     <display:column media="csv xml excel pdf" property="note" titleKey="Note" sortable="true" headerClass="sortable"/>
     <display:column property="creationDate" titleKey="JoinedAt" sortable="true" headerClass="sortable"/>
     <display:column media="html" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;">
-        <input onclick="AjaxMethodsJS.confirmParticipantOnAttendance(${participantNotConfirmedList.id}, this.checked)" type="checkbox" <c:if test="${participantNotConfirmedList.attended}">checked="${participantNotConfirmedList.attended}"</c:if> />
+        <input onclick="AjaxMethodsJS.confirmParticipantOnAttendance(${participantNotConfirmedList.id}, this.checked)" type="checkbox" <c:if test="${participantNotConfirmedList.attended}">checked="checked"</c:if> />
            </display:column>
            <display:column media="html" titleKey="Winner" sortable="true" headerClass="sortable" style="text-align: center;">
-               <input onclick="AjaxMethodsJS.setWinner(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.winner}">checked="${participantList.winner}"</c:if> />
+               <input onclick="AjaxMethodsJS.setWinner(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.winner}">checked="checked"</c:if> />
            </display:column>
            <display:column media="csv xml excel pdf" property="attended" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;" />
        </display:table>
        </div>
-<script language="javascript">
-    
-function pausecomp(millis)
-{
-var date = new Date();
-var curDate = null;
-        
-do { curDate = new Date(); }
-while(curDate-date < millis);
-}
-    
-</script>

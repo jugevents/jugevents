@@ -1,5 +1,6 @@
 <title>jugevents</title>
 <link href="${conf.jugeventsBaseUrl}/images/favicon.ico" rel="shortcut icon" />
+<link href="${cp}/event/rss.html?continent=${eventSearch.continent}&amp;country=${eventSearch.country}&amp;jugName=${eventSearch.jugName}&amp;pastEvents=${eventSearch.pastEvents}&amp;order=${eventSearch.orderByDate}" rel="alternate" title="RSS" type="application/rss+xml" />
 <%@ include file="meta.jspf" %>
 <%@ include file="stylesheets.jspf" %>
 <%@ include file="javascripts.jspf" %>

@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
 <div id="content_jugmap">
         <p class="boxTitle"><spring:message code="JugsMap" text="?JUGs Map?"/></p>
-        <a href="http://tinyurl.com/ynktb2" target="jugmap"><img src="${cp}/images/jugmap.png" alt="JUG International Map" style="border: 0; width: 190px; height: 109px;"/></a>
+        <a href="http://tinyurl.com/ynktb2" rel="external"><img src="${cp}/images/jugmap.png" alt="JUG International Map" style="border: 0; width: 190px; height: 109px;"/></a>
 </div>

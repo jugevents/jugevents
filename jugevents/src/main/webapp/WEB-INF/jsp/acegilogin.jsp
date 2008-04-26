@@ -12,7 +12,7 @@
             </font>
         </c:if>
     </div>
-    <form name="loginForm" action="<c:url value='securityCheck.secure'/>" method="post">
+    <form id="loginForm" action="<c:url value='securityCheck.secure'/>" method="post">
         <dl>
             <dt><label class="loginLabel" for="username"><spring:message code="username"/></label></dt>
             <dd><input id="username" class="loginField" type='text' name='j_username' tabindex="1" <c:if test="${not empty param.login_error}">value='<%= session.getAttribute(AuthenticationProcessingFilter.ACEGI_SECURITY_LAST_USERNAME_KEY)%>'</c:if>/></dd>
@@ -27,8 +27,8 @@
     <div id="registerMessage">
         <spring:message code="dontHaveAccount"/> <a href="${cp}/jugger/registration.form"><spring:message code="registerYou"/></a>
     </div>
-    <br>
-    <br>
+    <br/>
+    <br/>
     <div id="forgotPassword">
         <spring:message code="forgotPassword"/> <a href="${cp}/passwordRecovery.form"><spring:message code="Recover"/></a>
     </div>

@@ -3,18 +3,18 @@
 <script src="${cp}/dwr/interface/eventBo.js" type="text/javascript"></script>
 <h1>
     <spring:message code="SearchEvents"/>
-    <a href="${cp}/event/rss.html?continent=${eventSearch.continent}&country=${eventSearch.country}&jugName=${eventSearch.jugName}&pastEvents=${eventSearch.pastEvents}&order=${eventSearch.orderByDate}">
-        <img style="vertical-align: middle; border: none;" src="${cp}/images/feed-icon-14x14.png" />
+    <a href="${cp}/event/rss.html?continent=${eventSearch.continent}&amp;country=${eventSearch.country}&amp;jugName=${eventSearch.jugName}&amp;pastEvents=${eventSearch.pastEvents}&amp;order=${eventSearch.orderByDate}">
+        <img style="vertical-align: middle; border: none;" src="${cp}/images/feed-icon-14x14.png" alt="Feed icon"/>
     </a>
     <span class="smallText">
-        <a href="${cp}/event/rss.html?continent=${eventSearch.continent}&country=${eventSearch.country}&jugName=${eventSearch.jugName}&pastEvents=${eventSearch.pastEvents}&order=${eventSearch.orderByDate}">
+        <a href="${cp}/event/rss.html?continent=${eventSearch.continent}&amp;country=${eventSearch.country}&amp;jugName=${eventSearch.jugName}&amp;pastEvents=${eventSearch.pastEvents}&amp;order=${eventSearch.orderByDate}">
             <spring:message code="SearchFeed"/>
         </a>
     </span>
 </h1>
 <a href="#" onclick="updateBadge(); $('webBadge').show(); new Effect.ScrollTo('webBadge', {offset: -24}); return false;"><spring:message code="GetBadgeLink"/></a>
 <a name="searchForm"></a>
-<form:form commandName="eventSearch" method="GET" action="${cp}/event/search.form">
+<form:form commandName="eventSearch" method="get" action="${cp}/event/search.form">
     <fieldset>
         <legend><spring:message code='Search'/></legend>
         <dl>
@@ -40,7 +40,7 @@
                 <display:column media="html" sortProperty="hostingOrganizationName" title="JUG" sortable="true" headerClass="sortable">
                     <c:choose>
                         <c:when test="${!empty event.hostingOrganizationUrl}">
-                            <a href="${event.hostingOrganizationUrl}" target="JUGSite">${event.hostingOrganizationName}</a>
+                            <a href="${event.hostingOrganizationUrl}" rel="external">${event.hostingOrganizationName}</a>
                         </c:when>
                         <c:otherwise>
                         ${event.hostingOrganizationName}
@@ -112,9 +112,9 @@
             <dt><label><spring:message code="MaxNumberOfResults"/>:</label></dt>
             <dd><input type="text" name="maxResults" id="maxResults" onchange="updateBadge()" size="2"/></dd>
             <dt><label><spring:message code="Style"/>:</label></dt>
-            <dd><input type="radio" name="badgeStyle" value="none" checked="true" onchange="updateBadge()"/><spring:message code='None'/>&nbsp;<input type="radio" name="badgeStyle" value="simple" onchange="updateBadge()"/><spring:message code='Simple'/></dd>
+            <dd><input type="radio" name="badgeStyle" value="none" checked="checked" onchange="updateBadge()"/><spring:message code='None'/>&nbsp;<input type="radio" name="badgeStyle" value="simple" onchange="updateBadge()"/><spring:message code='Simple'/></dd>
             <dt><label><spring:message code="badgeCopyThisCode"/></label></dt>
-            <dd><textarea name="badgeCode" cols="35" rows="4" readonly="true">${badgeCode}</textarea></dd>
+            <dd><textarea name="badgeCode" cols="35" rows="4" readonly="readonly">${badgeCode}</textarea></dd>
             <dt><label><spring:message code="BadgePreview"/>:</label></dt>
             <dd><div id="badgePreview" style="margin-left: 10px; width: 200px; border: 1px solid gray; padding: 4px;">${badgePreview}</div></dd>
         </dl>

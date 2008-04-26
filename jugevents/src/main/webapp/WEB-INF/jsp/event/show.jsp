@@ -27,7 +27,7 @@
 <div class="eventTitle">${event.title}</div>
 
 <c:if test="${event.registrationOpen}">
-    <a href="${cp}/event/registration.form?event.id=${event.id}"><div class="je_button"><spring:message code="register"/></div></a>
+    <div class="je_button"><a href="${cp}/event/registration.form?event.id=${event.id}"><spring:message code="register"/></a></div>
     <c:if test="${(!empty event.registration) && event.registration.registrationRulesAreApplied}">
         <c:if test="${!empty event.registration.maxParticipants}">
             <div style="text-align: center;">
@@ -59,5 +59,5 @@
 <%@ include file="show.jspf" %>
 
 <c:if test="${event.registrationOpen}">
-    <a href="${cp}/event/registration.form?event.id=${event.id}"><div class="je_button"><spring:message code="register"/></div></a>
+    <div class="je_button"><a href="${cp}/event/registration.form?event.id=${event.id}"><spring:message code="register"/></a></div>
 </c:if>

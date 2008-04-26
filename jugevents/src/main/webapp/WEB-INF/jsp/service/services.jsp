@@ -63,7 +63,7 @@
             &Egrave; un sottoinsieme della pi&ugrave; estesa
             <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>
         mantenuta in java.net.</p>
-        <p style="text-align: center;"><a href="http://tinyurl.com/ynktb2" target="jugmap">Guarda la java.net JUGs Map</a></p>
+        <p style="text-align: center;"><a href="http://tinyurl.com/ynktb2">Guarda la java.net JUGs Map</a></p>
     </c:when>
     <c:when test="${requestScope.lang eq 'fr'}">
         <h2>KML pour le JUG map</h2>
@@ -109,6 +109,6 @@
             this more comprehensive
             <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>
         mantained at java.net.</p>
-        <p style="text-align: center;"><a href="http://tinyurl.com/ynktb2" target="jugmap">View java.net JUGs Map</a></p>
+        <p style="text-align: center;"><a href="http://tinyurl.com/ynktb2">View java.net JUGs Map</a></p>
     </c:otherwise>
 </c:choose>

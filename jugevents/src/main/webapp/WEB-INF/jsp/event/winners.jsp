@@ -88,15 +88,3 @@
                     <li id="winner${participant.id}"><c:out value="${participant.firstName} ${participant.lastName}"/> [<a href="#" onclick="deleteWinner(${participant.id}, 'winner${participant.id}'); return false;">X</a>]</li>
                 </c:forEach>
             </ul>
-    <script language="javascript">
-        function pausecomp(millis)
-        {
-            var date = new Date();
-            var curDate = null;
-
-            do {
-                curDate = new Date();
-            }
-            while (curDate - date < millis);
-        }
-    </script>

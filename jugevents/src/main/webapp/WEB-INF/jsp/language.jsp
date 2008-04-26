@@ -10,13 +10,13 @@ Map tmp = new HashMap(paramMap);
 tmp.remove("language");
 tmp.put("null", "null");
 List<String> paramKeyValuesList = Utils.convertToNameValueList(tmp, true);
-String queryString = "?" + StringUtils.join(paramKeyValuesList.iterator(), "&");
+String queryString = "?" + StringUtils.join(paramKeyValuesList.iterator(), "&amp;");
 %>
 <span id="language">
     <!-- lang: ${requestScope.lang} -->
     <!-- locale: ${requestScope.requestContext.locale} -->
     <c:forEach var="supportedLanguage" items="${conf.supportedLanguages}" varStatus="status">
-        <a href="<%=queryString%>&language=${supportedLanguage}" title="${supportedLanguage}">
+        <a href="<%=queryString%>&amp;language=${supportedLanguage}" title="${supportedLanguage}">
             <c:choose>
                 <c:when test="${requestScope.requestContext.locale eq supportedLanguage}">
                     <b><spring:message code="${supportedLanguage}"/></b>                

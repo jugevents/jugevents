@@ -3,7 +3,7 @@
 <div id="topRulerShadow">&nbsp;</div>
 <div id="header">
     <div id="logo">
-        <a href="${cp}/"><img src="${cp}/images/applicationLogo.jpg" alt="${artifactId} Logo" border="0" /></a>
+        <a href="${cp}/"><img src="${cp}/images/applicationLogo.jpg" alt="${artifactId} Logo" style="border: 0;" /></a>
     </div>
     <div id="login_menu">
         <authz:authorize ifNotGranted="ROLE_ADMIN,ROLE_PARANCOE,ROLE_JUGGER">
