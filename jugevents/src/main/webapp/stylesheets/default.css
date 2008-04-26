@@ -77,7 +77,7 @@ label {
 }
 
 input, textarea, select {
-    border: 1px solid lightgray;
+    border: 1px solid silver;
 }
 
 /*
@@ -328,7 +328,7 @@ clear: left;
     padding: 0 10px 0 0;
     margin: 0 0 0 0;
     text-align: center;
-    color: darkgray;
+    color: gray;
 }
 
 .vertical_filler {
@@ -355,7 +355,7 @@ clear: left;
 #loginTitle {
     font: 30px "Georgia", "Times New Roman", serif;
     text-align: center;
-    color: darkgray;
+    color: gray;
 }
 
 #loginMessageBox {
