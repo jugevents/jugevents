@@ -1,6 +1,7 @@
 package it.jugpadova;
 
 import it.jugpadova.po.Event;
+import it.jugpadova.po.EventLink;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.Participant;
@@ -21,6 +22,6 @@ public abstract class JugEventsBaseTest extends BaseTest {
 
     @Override
     public Class[] getFixtureClasses() {
-        return new Class[]{Continent.class, Country.class, User.class, Authority.class, UserAuthority.class, JUG.class, ReliabilityRequest.class, Jugger.class, Event.class, Participant.class};
+        return new Class[]{Continent.class, Country.class, User.class, Authority.class, UserAuthority.class, JUG.class, ReliabilityRequest.class, Jugger.class, Event.class, Participant.class, EventLink.class};
     }
 }

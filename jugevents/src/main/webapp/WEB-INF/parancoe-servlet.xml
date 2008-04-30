@@ -259,6 +259,7 @@
             <dwr:include method="chooseWinnerForEvent"/>
             <dwr:include method="findAllWinnersForEvent"/>
             <dwr:include method="updateParticipantFieldValue"/>
+            <dwr:include method="deleteEventResource"/>
         </dwr:remote>
     </bean>
     

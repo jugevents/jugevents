@@ -21,6 +21,7 @@ import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
 import it.jugpadova.exception.RegistrationNotOpenException;
 import it.jugpadova.po.Event;
+import it.jugpadova.po.EventResource;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.Participant;
 
@@ -77,7 +78,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: ef489dc38253 $
+ * @version $Revision: 2fcc8ee6acd5 $
  */
 public class EventBo {
 
@@ -450,6 +451,7 @@ public class EventBo {
         Event event = getDaos().getEventDao().read(id);
         if (event != null) {
             event.getParticipants().size();
+            event.getEventResources().size();
         }
         return event;
     }
@@ -848,7 +850,20 @@ public class EventBo {
             }
         }
     }
-
+    
+    @Transactional
+    public boolean deleteResource(long eventResource) {
+        try {
+            EventResource resource = daos.getEventResourceDao().read(
+                    eventResource);
+            daos.getEventResourceDao().delete(resource);
+        } catch (RuntimeException e) {
+            logger.error("Error deleting an event resource ("+eventResource+")", e);
+            throw e;
+        }
+        return true;
+    }
+    
     public ServicesBo getServicesBo() {
         return servicesBo;
     }

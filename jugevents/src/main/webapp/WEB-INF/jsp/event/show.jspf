@@ -26,4 +26,13 @@
     </c:if>
     <dt><spring:message code="event.description"/>:</dt>
     <dd><div class="preview">${event.filteredDescription}</div>&nbsp;</dd>
+    <dt><spring:message code="event.resources" text="?event.resources?"/>:</dt>
+    <dd>
+        <div class="displaytag">
+            <display:table name="event.eventResources">
+                <display:column property="description"/>            
+                <display:column property="url" autolink="true"/>
+            </display:table>
+        </div>
+    </dd>
 </dl>

@@ -49,6 +49,10 @@
         <put-attribute name="main" value="/WEB-INF/jsp/event/winners.jsp"/>
     </definition>
 
+    <definition name="event/resources" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/event/resources.jsp"/>
+    </definition>
+
     <definition name="service/services" extends="template.central">
         <put-attribute name="main" value="/WEB-INF/jsp/service/services.jsp"/>
     </definition>

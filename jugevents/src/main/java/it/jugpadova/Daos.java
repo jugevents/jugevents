@@ -14,6 +14,7 @@
 package it.jugpadova;
 
 import it.jugpadova.dao.EventDao;
+import it.jugpadova.dao.EventResourceDao;
 import it.jugpadova.dao.JUGDao;
 import it.jugpadova.dao.JuggerDao;
 import it.jugpadova.dao.ParticipantDao;
@@ -51,4 +52,6 @@ public interface Daos extends DaoProvider {
 	public JUGDao getJUGDao();
 
 	public ReliabilityRequestDao getReliabilityRequestDao();
+
+	public EventResourceDao getEventResourceDao();
 }

@@ -8,6 +8,11 @@
     </authz:authorize>
     <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
         <c:if test="${canCurrentUserManageEvent}">
+            <a href="${cp}/event/resources.html?id=${event.id}"><spring:message code="resources"/></a>
+        </c:if>
+    </authz:authorize>
+    <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
+        <c:if test="${canCurrentUserManageEvent}">
             <spring:message code='confirmDeleteEvent' var="confirmDeleteEventMessage"/>
             <a href="${cp}/event/delete.html?id=${event.id}" onclick="return confirm('${confirmDeleteEventMessage}')"><spring:message code="delete"/></a>
         </c:if>

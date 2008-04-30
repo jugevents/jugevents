@@ -30,6 +30,10 @@ function Parancoe() {
             this.enableFormElement(elementId);
             this.writeFormElement(elementId);
         }
+
+        this.hideRow = function (tableId, rowNum) {
+            $$('#'+tableId+' tr')[rowNum].hide();
+        }
         
     }
 

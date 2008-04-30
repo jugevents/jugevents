@@ -1,0 +1,28 @@
+- &EventLink-futureEventWebPage
+  description: "Web Page of the future event"
+  event: *Event-future
+  url: "http://www.jugpadova.it"
+- &EventLink-futureEventSlides01
+  description: "Slides of the future event 01"
+  event: *Event-future
+  url: "http://www.jugpadova.it/slides01"
+- &EventLink-futureEventSlides02
+  description: "Slides of the future event 02"
+  event: *Event-future
+  url: "http://www.jugpadova.it/slides02"
+- &EventLink-futureEventSlides03
+  description: "Slides of the future event 03"
+  event: *Event-future
+  url: "http://www.jugpadova.it/slides03"
+- &EventLink-futureEventSlides04
+  description: "Slides of the future event 04"
+  event: *Event-future
+  url: "http://www.jugpadova.it/slides04"
+- &EventLink-futureEventSlides01
+  description: "Slides of the future event 05"
+  event: *Event-future
+  url: "http://www.jugpadova.it/slides05"
+- &EventLink-futureEventSlides06
+  description: "Slides of the future event 06"
+  event: *Event-future
+  url: "http://www.jugpadova.it/slides06"

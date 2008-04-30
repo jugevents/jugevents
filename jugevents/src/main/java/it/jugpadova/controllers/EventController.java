@@ -282,6 +282,26 @@ public abstract class EventController extends BaseMultiActionController {
         return null;
     }
 
+    public ModelAndView resources(HttpServletRequest req,
+            HttpServletResponse res) {
+        ModelAndView mv =
+                new ModelAndView("event/resources");
+        try {
+            Long id = Long.parseLong(req.getParameter("id"));
+            Event event = blo().getEventBo().retrieveEvent(id);
+            if (event == null) {
+                throw new IllegalArgumentException("No event with id " + id);
+            }
+            blo().getEventBo().checkUserAuthorization(event);
+            mv.addObject("event", event);
+        } catch (ParancoeAccessDeniedException pade) {
+            throw pade;
+        } catch (Exception e) {
+            return genericError(e);
+        }
+        return mv;
+    }
+    
     public Logger getLogger() {
         return logger;
     }

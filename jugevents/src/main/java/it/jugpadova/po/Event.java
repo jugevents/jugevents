@@ -74,6 +74,7 @@ public class Event extends EntityBase {
     private Date creationDate;
     @CascadeValidation
     private Registration registration;
+    private List<EventResource> eventResources;
 
     /**
      * Get the entity id.
@@ -218,6 +219,15 @@ public class Event extends EntityBase {
         this.registration = registration;
     }
 
+    @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
+    public List<EventResource> getEventResources() {
+        return eventResources;
+    }
+
+    public void setEventResources(List<EventResource> eventResources) {
+        this.eventResources = eventResources;
+    }
+    
     @Transient
     public int getNumberOfParticipants() {
         int result = 0;
@@ -338,4 +348,6 @@ public class Event extends EntityBase {
         }
         return result;
     }
+    
+    
 }

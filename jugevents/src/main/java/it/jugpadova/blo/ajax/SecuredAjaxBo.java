@@ -12,80 +12,67 @@ import it.jugpadova.blo.ServicesBo;
  *
  */
 public class SecuredAjaxBo implements AjaxMethods {
-	private Blos blos = null;
 
-	
+    private Blos blos = null;
 
-	public Blos getBlos() {
-		return blos;
-	}
+    public Blos getBlos() {
+        return blos;
+    }
 
+    public void setBlos(Blos blos) {
+        this.blos = blos;
+    }
 
+    public String requireReliabilityOnExistingJugger(String emailJugger,
+            String motivation, String baseURL) {
+        return blos.getServicesBo().requireReliabilityOnExistingJugger(
+                emailJugger, motivation, baseURL);
+    }
 
-	public void setBlos(Blos blos) {
-		this.blos = blos;
-	}
+    public List<ParticipantBean> chooseWinnerForEvent(long eventId) {
+        return blos.getParticipantBo().chooseWinnerForEvent(eventId);
+    }
 
+    public void confirmParticipantOnAttendance(long participantId, boolean value) {
+        blos.getParticipantBo().confirmParticipantOnAttendance(participantId,
+                value);
 
+    }
 
-	public String requireReliabilityOnExistingJugger(String emailJugger,
-			String motivation, String baseURL) {		
-		return blos.getServicesBo().requireReliabilityOnExistingJugger(emailJugger, motivation, baseURL);
-	}
+    public List<ParticipantBean> findAllWinnersForEvent(long eventId) {
+        return blos.getParticipantBo().findAllWinnersForEvent(eventId);
+    }
 
+    public void sendCertificateToAllParticipants(long eventId, String baseUrl) {
+        blos.getParticipantBo().sendCertificateToAllParticipants(eventId,
+                baseUrl);
 
+    }
 
-	public List<ParticipantBean> chooseWinnerForEvent(long eventId) {		
-		return blos.getParticipantBo().chooseWinnerForEvent(eventId);
-	}
+    public void sendCertificateToParticipant(long participantId, String baseUrl) {
+        blos.getParticipantBo().sendCertificateToParticipant(participantId,
+                baseUrl);
 
+    }
 
+    public void setAttended(long participantId, boolean value) {
+        blos.getParticipantBo().setAttended(participantId, value);
 
-	public void confirmParticipantOnAttendance(long participantId, boolean value) {
-		blos.getParticipantBo().confirmParticipantOnAttendance(participantId, value);
-		
-	}
+    }
 
+    public void setWinner(long participantId, boolean value) {
+        blos.getParticipantBo().setWinner(participantId, value);
 
+    }
 
-	public List<ParticipantBean> findAllWinnersForEvent(long eventId) {
-		return blos.getParticipantBo().findAllWinnersForEvent(eventId);
-	}
+    public void updateParticipantFieldValue(Long participantId, String field,
+            String value) {
+        blos.getParticipantBo().updateParticipantFieldValue(participantId, field,
+                value);
 
+    }
 
-
-	public void sendCertificateToAllParticipants(long eventId, String baseUrl) {
-		blos.getParticipantBo().sendCertificateToAllParticipants(eventId, baseUrl);
-		
-	}
-
-
-
-	public void sendCertificateToParticipant(long participantId, String baseUrl) {
-		blos.getParticipantBo().sendCertificateToParticipant(participantId, baseUrl);
-		
-	}
-
-
-
-	public void setAttended(long participantId, boolean value) {
-		blos.getParticipantBo().setAttended(participantId, value);
-		
-	}
-
-
-
-	public void setWinner(long participantId, boolean value) {
-		blos.getParticipantBo().setWinner(participantId, value);
-		
-	}
-
-
-
-	public void updateParticipantFieldValue(Long participantId, String field,
-			String value) {
-		blos.getParticipantBo().updateParticipantFieldValue(participantId, field, value);
-		
-	}
-
+    public boolean deleteEventResource(long eventResource) {
+        return blos.getEventBo().deleteResource(eventResource);
+    }
 }
