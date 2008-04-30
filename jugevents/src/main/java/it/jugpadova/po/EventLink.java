@@ -2,6 +2,8 @@ package it.jugpadova.po;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -20,4 +22,8 @@ public class EventLink extends EventResource {
         this.url = url;
     }        
 
+    @Transient
+    public String getAbbreviatedUrl() {
+        return StringUtils.abbreviate(url, 40);
+    }
 }

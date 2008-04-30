@@ -8,7 +8,7 @@
 <div class="displaytag">
     <c:forEach items="${event.eventResources}" var="resource">
         <div id="res${resource.id}" style="border: 1px solid gray; padding: 5px; margin: 2px; float: left; width: 31%;">
-            <a href="${resource.url}">${resource.url}</a><br/>
+            <a href="${resource.url}">${resource.abbreviatedUrl}</a><br/>
             ${resource.description}
             <div style="text-align: right;">
             <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">

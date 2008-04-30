@@ -5,7 +5,7 @@
 - &EventLink-futureEventSlides01
   description: "Slides of the future event 01"
   event: *Event-future
-  url: "http://www.jugpadova.it/slides01"
+  url: "http://www.jugpadova.it/slides01/very/very/very/very/very/very/long"
 - &EventLink-futureEventSlides02
   description: "Slides of the future event 02"
   event: *Event-future
