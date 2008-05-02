@@ -29,7 +29,7 @@ import org.directwebremoting.proxy.dwr.Util;
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 4e23bd368c67 $
+ * @version $Revision: 6a85cae7ebba $
  */
 public class EventResourceBo {
 
@@ -104,6 +104,7 @@ public class EventResourceBo {
         return result;
     }
 
+    @Transactional(readOnly=true)
     public void fillEventResourceForm(Long eventResourceId) {
         WebContext wctx = WebContextFactory.get();
         ScriptSession session = wctx.getScriptSession();
