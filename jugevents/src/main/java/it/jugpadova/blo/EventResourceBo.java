@@ -29,11 +29,11 @@ import org.directwebremoting.proxy.dwr.Util;
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 6a85cae7ebba $
+ * @version $Revision: 926ecef1e891 $
  */
 public class EventResourceBo {
 
-    private static final Logger logger = Logger.getLogger(EventBo.class);
+    private static final Logger logger = Logger.getLogger(EventResourceBo.class);
     private Daos daos;
 
     public Daos getDaos() {
@@ -106,16 +106,21 @@ public class EventResourceBo {
 
     @Transactional(readOnly=true)
     public void fillEventResourceForm(Long eventResourceId) {
-        WebContext wctx = WebContextFactory.get();
-        ScriptSession session = wctx.getScriptSession();
-        Util util = new Util(session);
-        EventResource eventResource = daos.getEventResourceDao().read(
-                eventResourceId);
-        util.setValue("resourceId", eventResource.getId().toString());
-        if (eventResource instanceof EventLink) {
-            EventLink link = (EventLink) eventResource;
-            util.setValue("linkUrl", link.getUrl(), false);
-            util.setValue("linkDescription", link.getDescription(), false);
+        try {
+            WebContext wctx = WebContextFactory.get();
+            ScriptSession session = wctx.getScriptSession();
+            Util util = new Util(session);
+            EventResource eventResource = daos.getEventResourceDao().read(
+                    eventResourceId);
+            util.setValue("resourceId", eventResource.getId().toString());
+            if (eventResource instanceof EventLink) {
+                EventLink link = (EventLink) eventResource;
+                util.setValue("linkUrl", link.getUrl(), false);
+                util.setValue("linkDescription", link.getDescription(), false);
+            }
+        } catch (RuntimeException e) {
+            logger.error("Error filling the event resoutce form", e);
+            throw e;
         }
     }
 }

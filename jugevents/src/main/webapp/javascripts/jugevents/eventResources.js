@@ -34,7 +34,6 @@ function addNewResource(event) {
 }
 
 function modifyLinkResource(resourceId) {
-    dwr.util.setEscapeHtml(false);
     AjaxMethodsJS.fillEventResourceForm(resourceId,
     function (data) {
         $('addResourceButton').hide();
@@ -57,4 +56,5 @@ function clearEventResourceFields() {
     $('linkDescription').clear();  
 }
 
+dwr.util.setEscapeHtml(false);
 document.observe('dom:loaded', bindUI);

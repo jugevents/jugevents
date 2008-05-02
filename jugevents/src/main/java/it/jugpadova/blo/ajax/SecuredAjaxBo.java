@@ -4,7 +4,6 @@ import java.util.List;
 
 import it.jugpadova.Blos;
 import it.jugpadova.bean.ParticipantBean;
-import it.jugpadova.blo.ServicesBo;
 
 /**
  * This class manages security concerns for all the dwr methods.
@@ -82,9 +81,8 @@ public class SecuredAjaxBo implements AjaxMethods {
         return blos.getEventResourceBo().manageEventLinkResource(eventResourceId,
                 eventId, url, description, canUserManageTheEvent);
     }
-    
+
     public void fillEventResourceForm(Long eventResourceId) {
         blos.getEventResourceBo().fillEventResourceForm(eventResourceId);
     }
-    
 }
