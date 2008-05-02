@@ -29,7 +29,7 @@ import org.directwebremoting.proxy.dwr.Util;
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 926ecef1e891 $
+ * @version $Revision: 52a8d7d0c3ba $
  */
 public class EventResourceBo {
 
@@ -118,6 +118,7 @@ public class EventResourceBo {
                 util.setValue("linkUrl", link.getUrl(), false);
                 util.setValue("linkDescription", link.getDescription(), false);
             }
+            util.addFunctionCall("showResourceAddForm");
         } catch (RuntimeException e) {
             logger.error("Error filling the event resoutce form", e);
             throw e;

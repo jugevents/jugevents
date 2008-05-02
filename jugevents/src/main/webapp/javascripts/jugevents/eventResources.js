@@ -34,13 +34,14 @@ function addNewResource(event) {
 }
 
 function modifyLinkResource(resourceId) {
-    AjaxMethodsJS.fillEventResourceForm(resourceId,
-    function (data) {
-        $('addResourceButton').hide();
-        $('updateResourceButton').show();
-        $('resourceFormDiv').show();
-        new Effect.ScrollTo('resourceFormDiv', {offset: -24});
-    });
+    AjaxMethodsJS.fillEventResourceForm(resourceId);
+}
+
+function showResourceAddForm() {
+    $('addResourceButton').hide();
+    $('updateResourceButton').show();
+    $('resourceFormDiv').show();
+    new Effect.ScrollTo('resourceFormDiv', {offset: -24});    
 }
 
 function deleteEventResource(resourceId) {
