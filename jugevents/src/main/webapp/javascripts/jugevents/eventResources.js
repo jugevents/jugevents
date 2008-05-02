@@ -34,7 +34,7 @@ function addNewResource(event) {
 }
 
 function modifyLinkResource(resourceId) {
-    AjaxMethodsJS.fillEventResourceForm(resourceId);
+    eventResourceBo.fillEventResourceForm(resourceId);
 }
 
 function showResourceAddForm() {
