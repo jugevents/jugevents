@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import it.jugpadova.po.EventLink;
 import it.jugpadova.po.EventResource;
 import java.net.URLEncoder;
-import javax.naming.LinkRef;
 import org.apache.commons.lang.StringUtils;
 import org.directwebremoting.ScriptSession;
 import org.directwebremoting.WebContext;
@@ -30,7 +29,7 @@ import org.directwebremoting.proxy.dwr.Util;
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 77d8c4e6a021 $
+ * @version $Revision: 4e23bd368c67 $
  */
 public class EventResourceBo {
 
@@ -56,6 +55,7 @@ public class EventResourceBo {
         try {
             EventResource resource = daos.getEventResourceDao().read(
                     eventResourceId);
+            logger.info("Deleting resource "+eventResourceId+" for the event "+resource.getEvent().getId());
             daos.getEventResourceDao().delete(resource);
         } catch (RuntimeException e) {
             logger.error("Error deleting an event resource (" + eventResourceId +
@@ -75,10 +75,12 @@ public class EventResourceBo {
             link = new EventLink();
             link.setEvent(daos.getEventDao().read(eventId));
             display = "none";
+            logger.info("Creating new link resource for the event "+eventId+" ("+url+")");
         } else {
             // update resource
             link = daos.getEventLinkDao().read(eventResourceId);
             display = "block";
+            logger.info("Updating link resource "+eventResourceId+" for the event "+eventId+" ("+url+")");
         }
         link.setDescription(description);
         link.setUrl(url);
