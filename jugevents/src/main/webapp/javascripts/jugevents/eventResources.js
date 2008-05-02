@@ -34,7 +34,7 @@ function addNewResource(event) {
 }
 
 function modifyLinkResource(resourceId) {
-    eventResourceBo.fillEventResourceForm(resourceId);
+    AjaxMethodsJS.fillEventResourceForm(resourceId, {timeout: 5000});
 }
 
 function showResourceAddForm() {
