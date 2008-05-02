@@ -26,13 +26,20 @@
     </c:if>
     <dt><spring:message code="event.description"/>:</dt>
     <dd><div class="preview">${event.filteredDescription}</div>&nbsp;</dd>
-    <dt><spring:message code="event.resources" text="?event.resources?"/>:</dt>
-    <dd>
-        <div class="displaytag">
-            <display:table name="event.eventResources">
-                <display:column property="description"/>            
-                <display:column property="url" autolink="true"/>
-            </display:table>
-        </div>
-    </dd>
 </dl>
+<c:if test="${!empty event.eventResources}">
+    <spring:message code="event.resources" text="?event.resources?"/>:
+    <div id="resources">
+        <c:forEach items="${event.eventResources}" var="resource">
+            <jsp:include page="resources/link.jsp">
+                <jsp:param name="id" value="${resource.id}"/>
+                <jsp:param name="url" value="${resource.url}"/>
+                <jsp:param name="abbreviatedUrl" value="${resource.abbreviatedUrl}"/>
+                <jsp:param name="description" value="${resource.description}"/>
+                <jsp:param name="canUserManageTheEvent" value='false'/>
+                <jsp:param name="display" value="block"/>
+            </jsp:include>
+        </c:forEach>
+    </div>
+    <br style="clear: both;"/>
+</c:if>

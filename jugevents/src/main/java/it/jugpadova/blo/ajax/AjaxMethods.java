@@ -16,6 +16,7 @@ import org.acegisecurity.annotation.Secured;
  *
  */
 public interface AjaxMethods {
+
     @Secured({"ROLE_JUGGER"})
     String requireReliabilityOnExistingJugger( String emailJugger,
             String motivation, String baseURL);
@@ -47,4 +48,11 @@ public interface AjaxMethods {
 
     @Secured({"ROLE_JUGGER"})
     boolean deleteEventResource( long eventResource);
+
+    @Secured({"ROLE_JUGGER"})
+    String manageEventLinkResource( Long eventResourceId, Long eventId,
+            String url, String description, boolean canUserManageTheEvent);
+
+    @Secured({"ROLE_JUGGER"})
+    public void fillEventResourceForm(Long eventResourceId);
 }

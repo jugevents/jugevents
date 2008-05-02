@@ -14,6 +14,7 @@
 package it.jugpadova;
 
 import it.jugpadova.blo.EventBo;
+import it.jugpadova.blo.EventResourceBo;
 import it.jugpadova.blo.FilterBo;
 import it.jugpadova.blo.JugBo;
 import it.jugpadova.blo.JuggerBo;
@@ -25,13 +26,13 @@ import it.jugpadova.blo.ServicesBo;
 public class Blos {
 
     public SampleBlo sample;
-    
     public EventBo eventBo;
     public JuggerBo juggerBo;
     public FilterBo filterBo;
     public JugBo jugBo;
     public ServicesBo servicesBo;
     public ParticipantBo participantBo;
+    public EventResourceBo eventResourceBo;
 
     public SampleBlo getSample() {
         return sample;
@@ -39,7 +40,7 @@ public class Blos {
 
     public void setSample(SampleBlo sample) {
         this.sample = sample;
-    }    
+    }
 
     public EventBo getEventBo() {
         return eventBo;
@@ -73,20 +74,27 @@ public class Blos {
         this.jugBo = jugBo;
     }
 
-	public ServicesBo getServicesBo() {
-		return servicesBo;
-	}
+    public ServicesBo getServicesBo() {
+        return servicesBo;
+    }
 
-	public void setServicesBo(ServicesBo servicesBo) {
-		this.servicesBo = servicesBo;
-	}
+    public void setServicesBo(ServicesBo servicesBo) {
+        this.servicesBo = servicesBo;
+    }
 
-	public ParticipantBo getParticipantBo() {
-		return participantBo;
-	}
+    public ParticipantBo getParticipantBo() {
+        return participantBo;
+    }
 
-	public void setParticipantBo(ParticipantBo participantBo) {
-		this.participantBo = participantBo;
-	}
-        
+    public void setParticipantBo(ParticipantBo participantBo) {
+        this.participantBo = participantBo;
+    }
+
+    public EventResourceBo getEventResourceBo() {
+        return eventResourceBo;
+    }
+
+    public void setEventResourceBo(EventResourceBo eventResourceBo) {
+        this.eventResourceBo = eventResourceBo;
+    }
 }

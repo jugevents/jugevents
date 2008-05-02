@@ -14,6 +14,7 @@
 package it.jugpadova;
 
 import it.jugpadova.dao.EventDao;
+import it.jugpadova.dao.EventLinkDao;
 import it.jugpadova.dao.EventResourceDao;
 import it.jugpadova.dao.JUGDao;
 import it.jugpadova.dao.JuggerDao;
@@ -32,26 +33,27 @@ import org.parancoe.plugins.world.CountryDao;
  */
 public interface Daos extends DaoProvider {
 
-	
-	public EventDao getEventDao();
+    public EventDao getEventDao();
 
-	public ParticipantDao getParticipantDao();
+    public ParticipantDao getParticipantDao();
 
-	public JuggerDao getJuggerDao();
+    public JuggerDao getJuggerDao();
 
-	public UserDao getUserDao();
+    public UserDao getUserDao();
 
-	public AuthorityDao getAuthorityDao();
+    public AuthorityDao getAuthorityDao();
 
-	public CountryDao getCountryDao();
+    public CountryDao getCountryDao();
 
-	public ContinentDao getContinentDao();
+    public ContinentDao getContinentDao();
 
-	public UserAuthorityDao getUserAuthorityDao();
+    public UserAuthorityDao getUserAuthorityDao();
 
-	public JUGDao getJUGDao();
+    public JUGDao getJUGDao();
 
-	public ReliabilityRequestDao getReliabilityRequestDao();
+    public ReliabilityRequestDao getReliabilityRequestDao();
 
-	public EventResourceDao getEventResourceDao();
+    public EventResourceDao getEventResourceDao();
+
+    public EventLinkDao getEventLinkDao();
 }

@@ -73,6 +73,18 @@ public class SecuredAjaxBo implements AjaxMethods {
     }
 
     public boolean deleteEventResource(long eventResource) {
-        return blos.getEventBo().deleteResource(eventResource);
+        return blos.getEventResourceBo().deleteResource(eventResource);
     }
+
+    public String manageEventLinkResource(Long eventResourceId, Long eventId,
+            String url,
+            String description, boolean canUserManageTheEvent) {
+        return blos.getEventResourceBo().manageEventLinkResource(eventResourceId,
+                eventId, url, description, canUserManageTheEvent);
+    }
+    
+    public void fillEventResourceForm(Long eventResourceId) {
+        blos.getEventResourceBo().fillEventResourceForm(eventResourceId);
+    }
+    
 }

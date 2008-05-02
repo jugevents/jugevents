@@ -74,8 +74,9 @@
     <bean id="participantBo" class="it.jugpadova.blo.ParticipantBo" autowire="byType">
         <property name="mailSender" ref="mailSender"/>
         <property name="velocityEngine" ref="velocityEngine"/>
-        <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>
-        
+        <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>        
+    </bean>
+    <bean id="eventResourceBo" class="it.jugpadova.blo.EventResourceBo" autowire="byType">
     </bean>
     <bean id="daos" parent="abstractDaoProvider">
         <property name="proxyInterfaces">
@@ -233,6 +234,7 @@
                 /event/participants*=ROLE_ADMIN, ROLE_JUGGER
                 /event/winners*=ROLE_ADMIN, ROLE_JUGGER
                 /event/addparticipant*=ROLE_ADMIN, ROLE_JUGGER
+                /event/resources*=ROLE_ADMIN, ROLE_JUGGER
                 /jugger/edit*=ROLE_ADMIN, ROLE_JUGGER
                 /admin/**=ROLE_ADMIN
                 /**=IS_AUTHENTICATED_ANONYMOUSLY
@@ -249,8 +251,7 @@
         <property name="proxyInterfaces"
             value="it.jugpadova.blo.ajax.AjaxMethods"  />
         <dwr:remote javascript="AjaxMethodsJS">
-            <dwr:include method="requireReliabilityOnExistingJugger"/>
-            
+            <dwr:include method="requireReliabilityOnExistingJugger"/>            
             <dwr:include method="setAttended"/>
             <dwr:include method="setWinner"/>
             <dwr:include method="confirmParticipantOnAttendance"/>
@@ -260,16 +261,18 @@
             <dwr:include method="findAllWinnersForEvent"/>
             <dwr:include method="updateParticipantFieldValue"/>
             <dwr:include method="deleteEventResource"/>
+            <dwr:include method="manageEventLinkResource"/>
+            <dwr:include method="fillEventResourceForm"/>
         </dwr:remote>
     </bean>
     
     <bean id="securedBeanNames" class="java.util.ArrayList">    	
         <constructor-arg>
             <list>
-            	<value>ajaxBo</value>                
+            	<value>ajaxMethods</value>
             </list>
         </constructor-arg>
-    </bean>    
+    </bean>
     <!--  end security section -->
 
     <!-- begin dwr section -->

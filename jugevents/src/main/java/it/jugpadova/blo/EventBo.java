@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The JUG Events Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
 import it.jugpadova.exception.RegistrationNotOpenException;
 import it.jugpadova.po.Event;
-import it.jugpadova.po.EventResource;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.Participant;
 
+import it.jugpadova.util.Utilities;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -36,7 +36,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 
 import javax.mail.internet.MimeMessage;
@@ -78,7 +77,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 2fcc8ee6acd5 $
+ * @version $Revision: 77d8c4e6a021 $
  */
 public class EventBo {
 
@@ -252,7 +251,7 @@ public class EventBo {
 
     /**
      * Execute a full text search on events.
-     * 
+     *
      * @param searchQuery The text to search
      * @param maxResults The max number of results. No limit if maxResults <= 0.
      * @return The list of events matching the query
@@ -286,7 +285,7 @@ public class EventBo {
 
     /**
      * Ajax method for a full text search on events.
-     * 
+     *
      * @param searchQuery The text to search
      * @param maxResults The max number of results. No limit if maxResults <= 0.
      */
@@ -509,14 +508,15 @@ public class EventBo {
 
     /**
      * Confirm the registration of a participant to an event.
-     * 
+     *
      * @param email The email of the participant
      * @param confirmationCode The confirmation code of the registration
      * @return The confirmed participant, if all went well
      * @throws it.jugpadova.exception.RegistrationNotOpenException When the participant can't be confirmed because the registration is yet closed
      */
     @Transactional
-    public Participant confirmParticipant(String email, String confirmationCode) throws RegistrationNotOpenException {
+    public Participant confirmParticipant(String email, String confirmationCode)
+            throws RegistrationNotOpenException {
         ParticipantDao dao = daos.getParticipantDao();
         List<Participant> participants = dao.findByEmailAndConfirmationCodeAndConfirmed(email,
                 confirmationCode, Boolean.FALSE);
@@ -583,7 +583,8 @@ public class EventBo {
     public String getBadgeCode(String badgeHtmlCode) {
         java.lang.StringBuffer result = new java.lang.StringBuffer();
         result.append("var badge=\'\';\n");
-        result.append("badge += '").append(javascriptize(badgeHtmlCode)).append(
+        result.append("badge += '").append(
+                Utilities.javascriptize(badgeHtmlCode)).append(
                 "';\n");
         result.append("document.write(badge);");
         return result.toString();
@@ -790,14 +791,6 @@ public class EventBo {
         return result.toString();
     }
 
-    private String javascriptize(String s) {
-        return s.replaceAll("\'", Matcher.quoteReplacement("\\'")).replaceAll(
-                "\\r\\n",
-                Matcher.quoteReplacement("\\n")).replaceAll("\\r",
-                Matcher.quoteReplacement("\\n")).replaceAll("\\n",
-                Matcher.quoteReplacement("\\n"));
-    }
-
     @Transactional(readOnly = true)
     public void checkUserAuthorization(Event event)
             throws ParancoeAccessDeniedException {
@@ -850,20 +843,7 @@ public class EventBo {
             }
         }
     }
-    
-    @Transactional
-    public boolean deleteResource(long eventResource) {
-        try {
-            EventResource resource = daos.getEventResourceDao().read(
-                    eventResource);
-            daos.getEventResourceDao().delete(resource);
-        } catch (RuntimeException e) {
-            logger.error("Error deleting an event resource ("+eventResource+")", e);
-            throw e;
-        }
-        return true;
-    }
-    
+
     public ServicesBo getServicesBo() {
         return servicesBo;
     }

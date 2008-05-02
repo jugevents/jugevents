@@ -6,6 +6,7 @@ package it.jugpadova.util;
 import it.jugpadova.bean.NewJugger;
 import it.jugpadova.po.JUG;
 
+import java.util.regex.Matcher;
 import javax.servlet.http.HttpServletRequest;
 
 import org.parancoe.plugins.security.User;
@@ -18,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 public class Utilities {
-
 
     /**
      * Returns an instance of NewJugger with beans attributes set.
@@ -66,14 +66,15 @@ public class Utilities {
     public static void addMessageCode(ModelAndView mv, String messageCode) {
         mv.addObject("messageCode", messageCode);
     }
-    
+
     /**
      * Add the messageArguments parameter, used by spring:message in the message page.
      * 
      * @param mv The view
      * @param messageArguments The arguments to insert in the message
      */
-    public static void addMessageArguments(ModelAndView mv, String... messageArguments) {
+    public static void addMessageArguments(ModelAndView mv,
+            String... messageArguments) {
         if (messageArguments.length > 0) {
             StringBuilder arguments = new StringBuilder();
             boolean first = true;
@@ -88,8 +89,12 @@ public class Utilities {
             mv.addObject("messageArguments", arguments.toString());
         }
     }
-    
-    
-    
-    
+
+    public static String javascriptize(String s) {
+        return s.replaceAll("\'", Matcher.quoteReplacement("\\'")).replaceAll(
+                "\\r\\n",
+                Matcher.quoteReplacement("\\n")).replaceAll("\\r",
+                Matcher.quoteReplacement("\\n")).replaceAll("\\n",
+                Matcher.quoteReplacement("\\n"));
+    }
 }
