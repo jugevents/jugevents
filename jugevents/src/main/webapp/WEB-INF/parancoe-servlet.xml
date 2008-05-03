@@ -16,7 +16,6 @@
     <!-- Authomatic DAO definition from persistent classes -->
     <parancoe:define-daos basePackage="it.jugpadova"/>
     <parancoe-web:define-controllers basePackage="it.jugpadova.controllers" parent="abstractController"/>
-
     <bean id="eventBO" class="it.jugpadova.blo.EventBo" autowire="byType">
         <property name="messageSource" ref="messageSource"/>
         <property name="mailSender" ref="mailSender"/>
@@ -69,12 +68,11 @@
         <property name="kmlUpdateFromAddress" value="${email.kmlUpdateFrom}"/>
         <property name="kmlUpdateToAddress" value="${email.kmlUpdateTo}"/>
         <property name="kmlUpdateReplyAddress" value="${email.kmlUpdateReply}"/>
-        
     </bean>
     <bean id="participantBo" class="it.jugpadova.blo.ParticipantBo" autowire="byType">
         <property name="mailSender" ref="mailSender"/>
         <property name="velocityEngine" ref="velocityEngine"/>
-        <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>        
+        <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>
     </bean>
     <bean id="eventResourceBo" class="it.jugpadova.blo.EventResourceBo" autowire="byType">
         <dwr:remote javascript="eventResourceBo">
@@ -120,13 +118,12 @@
     <!--  override bean definition in parancoe-servlet.xml  -->
     <!-- sends exceptions to genericError.jsp -->
     <bean id="exceptionResolver" class="it.jugpadova.util.JUGEventsExceptionResolver" autowire="byType"/>
-    
     <bean name="/event/search.form" id="eventSearchController"
           class="it.jugpadova.controllers.EventSearchController"
           parent="abstractController">
         <property name="commandClass" value="it.jugpadova.bean.EventSearch"/>
         <property name="commandName" value="eventSearch"/>
-        <property name="bindOnNewForm" value="true" />        
+        <property name="bindOnNewForm" value="true" />
         <property name="formView" value="event/search"/>
         <property name="successView" value="event/search"/>
     </bean>
@@ -246,17 +243,15 @@
             </value>
         </constructor-arg>
     </bean>
-    
     <bean id="ajaxMethods" class="it.jugpadova.blo.ajax.SecuredAjaxBo">
-    	<property name="blos" ref="blos"/>    	
-    </bean>    
-    
+        <property name="blos" ref="blos"/>
+    </bean>
     <bean id="DWRAjaxBo" class="org.springframework.aop.framework.ProxyFactoryBean">
         <property name="target" ref="ajaxMethods"/>
         <property name="proxyInterfaces"
             value="it.jugpadova.blo.ajax.AjaxMethods"  />
         <dwr:remote javascript="AjaxMethodsJS">
-            <dwr:include method="requireReliabilityOnExistingJugger"/>            
+            <dwr:include method="requireReliabilityOnExistingJugger"/>
             <dwr:include method="setAttended"/>
             <dwr:include method="setWinner"/>
             <dwr:include method="confirmParticipantOnAttendance"/>
@@ -270,11 +265,10 @@
             <dwr:include method="fillEventResourceForm"/>
         </dwr:remote>
     </bean>
-    
-    <bean id="securedBeanNames" class="java.util.ArrayList">    	
+    <bean id="securedBeanNames" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-            	<value>ajaxMethods</value>
+                <value>ajaxMethods</value>
             </list>
         </constructor-arg>
     </bean>
@@ -286,8 +280,10 @@
         If debug="true" point your browser to /<your context>/dwr/index.html
     -->
     <dwr:controller id="dwrController" debug="true"/>
-    <dwr:configuration>        
+    <dwr:configuration>
         <dwr:convert class="it.jugpadova.bean.ParticipantBean" type="bean"/>
+        <dwr:convert class="java.lang.Exception" type="exception" />
+        <dwr:convert class="java.lang.StackTraceElement" type="bean"/>            
     </dwr:configuration>
     <!-- end dwr section -->
 
