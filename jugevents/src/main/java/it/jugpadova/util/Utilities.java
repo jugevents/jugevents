@@ -9,6 +9,7 @@ import it.jugpadova.po.JUG;
 import java.util.regex.Matcher;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.parancoe.plugins.security.User;
 import org.parancoe.plugins.world.Country;
 import org.springframework.web.servlet.ModelAndView;
@@ -84,7 +85,7 @@ public class Utilities {
                 } else {
                     first = false;
                 }
-                arguments.append(arg);
+                arguments.append(StringEscapeUtils.escapeHtml(arg));
             }
             mv.addObject("messageArguments", arguments.toString());
         }
