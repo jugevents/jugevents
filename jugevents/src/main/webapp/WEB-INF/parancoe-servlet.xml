@@ -75,11 +75,6 @@
         <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>
     </bean>
     <bean id="eventResourceBo" class="it.jugpadova.blo.EventResourceBo" autowire="byType">
-        <dwr:remote javascript="eventResourceBo">
-            <dwr:include method="deleteEventResource"/>
-            <dwr:include method="manageEventLinkResource"/>
-            <dwr:include method="fillEventResourceForm"/>
-        </dwr:remote>
     </bean>
     <bean id="daos" parent="abstractDaoProvider">
         <property name="proxyInterfaces">
@@ -263,6 +258,9 @@
             <dwr:include method="deleteEventResource"/>
             <dwr:include method="manageEventLinkResource"/>
             <dwr:include method="fillEventResourceForm"/>
+            <!-- Only for testing
+            <dwr:latencyfilter delay="1200"/>
+            -->
         </dwr:remote>
     </bean>
     <bean id="securedBeanNames" class="java.util.ArrayList">

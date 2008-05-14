@@ -6,7 +6,7 @@ function bindUI() {
 function manageResource(event) {
     event.stop();
     $('resourceForm').disable();
-    eventResourceBo.manageEventLinkResource($F('resourceId'), $F('eventId'), $F('linkUrl'), $F('linkDescription'), true,
+    AjaxMethodsJS.manageEventLinkResource($F('resourceId'), $F('eventId'), $F('linkUrl'), $F('linkDescription'), true,
     function (data) {
         if ($('addResourceButton').visible()) {
             var newResource = Builder.build(data);
@@ -34,7 +34,7 @@ function addNewResource(event) {
 }
 
 function modifyLinkResource(resourceId) {
-    eventResourceBo.fillEventResourceForm(resourceId);
+    AjaxMethodsJS.fillEventResourceForm(resourceId);
 }
 
 function showResourceAddForm() {
@@ -45,7 +45,7 @@ function showResourceAddForm() {
 }
 
 function deleteEventResource(resourceId) {
-    eventResourceBo.deleteEventResource(resourceId,
+    AjaxMethodsJS.deleteEventResource(resourceId,
     function (data) {
         if (data) Effect.toggle($('res'+resourceId));
     });

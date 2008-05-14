@@ -46,13 +46,16 @@ public interface AjaxMethods {
     void updateParticipantFieldValue( Long participantId, String field,
             String value);
 
-    @Secured({"ROLE_JUGGER"})
+    // TODO: Unsecured waiting to solve the problems with the proxy
+    // @Secured({"ROLE_JUGGER"})
     boolean deleteEventResource( long eventResource);
 
-    @Secured({"ROLE_JUGGER"})
+    // TODO: Unsecured waiting to solve the problems with the proxy
+    // @Secured({"ROLE_JUGGER"})
     String manageEventLinkResource( Long eventResourceId, Long eventId,
             String url, String description, boolean canUserManageTheEvent);
 
-    @Secured({"ROLE_JUGGER"})
+    // TODO: Unsecured waiting to solve the problems with the proxy
+    // @Secured({"ROLE_JUGGER"})
     public void fillEventResourceForm(Long eventResourceId);
 }

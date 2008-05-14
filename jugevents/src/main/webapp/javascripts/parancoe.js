@@ -13,11 +13,11 @@ function Parancoe() {
             $(elementId).enable();
         }
         
-         this.readOnlyFormElement = function (elementId) {
+        this.readOnlyFormElement = function (elementId) {
             $(elementId).readOnly = true;
         }
         
-         this.writeFormElement = function (elementId) {
+        this.writeFormElement = function (elementId) {
             $(elementId).readOnly = false;
         }
         
@@ -34,7 +34,15 @@ function Parancoe() {
         this.hideRow = function (tableId, rowNum) {
             $$('#'+tableId+' tr')[rowNum].hide();
         }
-        
+
+        this.focusFirstElementInPage = function () {
+            var forms = $A($$('form:first-of-type'));
+  
+            if (forms.length > 0) {
+                forms[0].focusFirstElement();
+            }
+        }
+                
     }
 
     this.util = new Util();
@@ -43,27 +51,27 @@ function Parancoe() {
 var parancoe = new Parancoe();
 
 function useLoadingMessage(message) {
-  var loadingMessage;
-  if (message) loadingMessage = message;
-  else loadingMessage = "Loading...";
+    var loadingMessage;
+    if (message) loadingMessage = message;
+    else loadingMessage = "Loading...";
 
-  dwr.engine.setPreHook(function() {
-    var messageZone = $('messageZone');
-    if (!messageZone) {
-      messageZone = document.createElement('div');
-      messageZone.setAttribute('id', 'messageZone');
+    dwr.engine.setPreHook(function() {
+        var messageZone = $('messageZone');
+        if (!messageZone) {
+            messageZone = document.createElement('div');
+            messageZone.setAttribute('id', 'messageZone');
                    
-      document.body.appendChild(messageZone);
-      var text = document.createTextNode(loadingMessage);
-      messageZone.appendChild(text);
-    }
-    else {
-      messageZone.innerHTML = loadingMessage;
-      messageZone.style.visibility = 'visible';
-    }
-  });
+            document.body.appendChild(messageZone);
+            var text = document.createTextNode(loadingMessage);
+            messageZone.appendChild(text);
+        }
+        else {
+            messageZone.innerHTML = loadingMessage;
+            messageZone.style.visibility = 'visible';
+        }
+    });
 
-  dwr.engine.setPostHook(function() {
-    $('messageZone').style.visibility = 'hidden';
-  });
+    dwr.engine.setPostHook(function() {
+        $('messageZone').style.visibility = 'hidden';
+    });
 }
