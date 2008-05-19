@@ -15,7 +15,9 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.Blos;
 import it.jugpadova.Daos;
+import it.jugpadova.po.Event;
 import it.jugpadova.po.JUG;
+import it.jugpadova.po.Participant;
 import it.jugpadova.util.mime.MimeUtil;
 
 import java.io.BufferedInputStream;
@@ -28,6 +30,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.parancoe.web.BaseMultiActionController;
 import org.parancoe.web.controller.annotation.UrlMapping;
@@ -107,7 +110,7 @@ public abstract class BinController extends BaseMultiActionController {
             res.setContentType("application/pdf");
             res.setContentLength(jugCertificate.length);
             res.setHeader("Content-Disposition",
-                    "filename=JugCertificatePreview.pdf");
+                    "attachment; filename=JugCertificatePreview.pdf");
             OutputStream out =
                     new BufferedOutputStream(res.getOutputStream());
             out.write(jugCertificate);
@@ -119,6 +122,44 @@ public abstract class BinController extends BaseMultiActionController {
         return null;
     }
 
+    /**
+     * Produce a certificate for a participant of an event.
+     */
+    public ModelAndView participantCertificate(HttpServletRequest req,
+            HttpServletResponse res) {
+        try {
+            Long id = new Long(req.getParameter("id"));
+            Participant participant = blo().getParticipantBo().retrieveParticipant(id);
+            Event event = participant.getEvent();
+            blo().getEventBo().checkUserAuthorization(event);
+            InputStream jugCertificateTemplate = null;
+            String jugName = null;            
+            if (participant.getEvent().getOwner() != null) {
+                JUG jug = participant.getEvent().getOwner().getJug();
+                jugName = jug.getName();
+                jugCertificateTemplate = blo().getJugBo().retrieveJugCertificateTemplate(jug.getId());
+            } else {
+                jugName = "";
+            }            
+            byte[] jugCertificate = blo().getParticipantBo().buildCertificate(
+                    jugCertificateTemplate, participant.getFirstName()+" "+participant.getLastName(), participant.getEvent().getTitle(),
+                    event.getStartDate(),
+                    jugName);
+            res.setContentType("application/pdf");
+            res.setContentLength(jugCertificate.length);
+            res.setHeader("Content-Disposition",
+                    "attachment; filename="+StringUtils.deleteWhitespace(participant.getLastName()+participant.getFirstName())+"Certificate.pdf");
+            OutputStream out =
+                    new BufferedOutputStream(res.getOutputStream());
+            out.write(jugCertificate);
+            out.flush();
+            out.close();
+        } catch (Exception ex) {
+            logger.error("Error producing the certificate", ex);
+        }
+        return null;
+    }
+    
     protected abstract Daos dao();
 
     protected abstract Blos blo();

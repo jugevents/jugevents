@@ -68,6 +68,7 @@
                <display:column media="html" titleKey="Certificate" sortable="false" style="text-align: center;">
                    <a href="#" onclick="AjaxMethodsJS.sendCertificateToParticipant(${participantList.id}, '${conf.jugeventsBaseUrl}'); return false"><spring:message code="SendCertificate"/></a>
             <div id="certificateMsg${participantList.id}"><fmt:formatDate value="${participantList.lastCertificateSentDate}" type="date" dateStyle="short" /></div>
+            <a href="${cp}/bin/participantCertificate.bin?id=${participantList.id}"><spring:message code="DownloadCertificate" text="?DownloadCertificate?"/></a>
         </display:column>
         <display:column media="csv xml excel pdf" property="lastCertificateSentDate" titleKey="Certificate" sortable="false" style="text-align: center;" />
     </display:table>

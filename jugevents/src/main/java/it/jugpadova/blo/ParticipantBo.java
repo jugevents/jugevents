@@ -54,7 +54,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 4f748cc47459 $
+ * @version $Revision: ccf14f7dec87 $
  */
 public class ParticipantBo {
 
@@ -395,4 +395,16 @@ public class ParticipantBo {
         }
 
     }
+    
+    /**
+     * Retrieve of participant by id
+     * 
+     * @param id The id of the participant
+     * @return The participant
+     */
+    @Transactional(readOnly=true)
+    public Participant retrieveParticipant(Long id) {
+        return daos.getParticipantDao().read(id);
+    }
+    
 }
