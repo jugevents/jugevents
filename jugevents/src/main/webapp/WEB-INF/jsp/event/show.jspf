@@ -31,14 +31,27 @@
     <spring:message code="event.resources" text="?event.resources?"/>:
     <div id="resources">
         <c:forEach items="${event.eventResources}" var="resource">
-            <jsp:include page="resources/link.jsp">
-                <jsp:param name="id" value="${resource.id}"/>
-                <jsp:param name="url" value="${resource.url}"/>
-                <jsp:param name="abbreviatedUrl" value="${resource.abbreviatedUrl}"/>
-                <jsp:param name="description" value="${resource.description}"/>
-                <jsp:param name="canUserManageTheEvent" value='false'/>
-                <jsp:param name="display" value="block"/>
-            </jsp:include>
+            <c:if test="${resource.class.name == 'it.jugpadova.po.EventLink'}">
+                <jsp:include page="resources/link.jsp">
+                    <jsp:param name="id" value="${resource.id}"/>
+                    <jsp:param name="url" value="${resource.url}"/>
+                    <jsp:param name="abbreviatedUrl" value="${resource.abbreviatedUrl}"/>
+                    <jsp:param name="description" value="${resource.description}"/>
+                    <jsp:param name="canUserManageTheEvent" value='false'/>
+                    <jsp:param name="display" value="block"/>
+                </jsp:include>
+            </c:if>
+            <c:if test="${resource.class.name == 'it.jugpadova.po.SlideShareResource'}">
+                <jsp:include page="resources/slideshare.jsp">
+                    <jsp:param name="id" value="${resource.id}"/>
+                    <jsp:param name="embedCode" value="${resource.embedCode}"/>
+                    <jsp:param name="url" value="${resource.url}"/>
+                    <jsp:param name="abbreviatedUrl" value="${resource.abbreviatedUrl}"/>
+                    <jsp:param name="description" value="${resource.description}"/>
+                    <jsp:param name="canUserManageTheEvent" value='false'/>
+                    <jsp:param name="display" value="block"/>
+                </jsp:include>
+            </c:if>
         </c:forEach>
     </div>
     <br style="clear: both;"/>

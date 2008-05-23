@@ -257,6 +257,7 @@
             <dwr:include method="updateParticipantFieldValue"/>
             <dwr:include method="deleteEventResource"/>
             <dwr:include method="manageEventLinkResource"/>
+            <dwr:include method="manageEventSlideShareResource"/>
             <dwr:include method="fillEventResourceForm"/>
             <!-- Only for testing
             <dwr:latencyfilter delay="1200"/>
@@ -506,4 +507,16 @@
         -->
     </bean>
     <!-- end Tiles 2 section -->
+    
+    <!-- start SlideShare API section -->
+    <bean id="slideShareApi" class="com.benfante.jslideshare.SlideShareAPIImpl">
+        <property name="connector" ref="slideShareConnector"/>
+    </bean>
+    
+    <bean id="slideShareConnector" class="com.benfante.jslideshare.SlideShareConnectorImpl">
+        <property name="apiKey" value="${slideshare.apiKey}"/>
+        <property name="sharedSecret" value="${slideshare.sharedSecret}"/>
+        <property name="soTimeout" value="10000"/>
+    </bean>
+    <!-- end SlideShare API section -->
 </beans>

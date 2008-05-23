@@ -13,11 +13,15 @@
 // limitations under the License.
 package it.jugpadova.blo;
 
+import com.benfante.jslideshare.SlideShareAPI;
+import com.benfante.jslideshare.messages.Slideshow;
 import it.jugpadova.Daos;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 import it.jugpadova.po.EventLink;
 import it.jugpadova.po.EventResource;
+import it.jugpadova.po.SlideShareResource;
+import it.jugpadova.util.Utilities;
 import java.net.URLEncoder;
 import org.apache.commons.lang.StringUtils;
 import org.directwebremoting.ScriptSession;
@@ -29,12 +33,13 @@ import org.directwebremoting.proxy.dwr.Util;
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 52a8d7d0c3ba $
+ * @version $Revision: 4cbe92b5cdfe $
  */
 public class EventResourceBo {
 
     private static final Logger logger = Logger.getLogger(EventResourceBo.class);
     private Daos daos;
+    private SlideShareAPI slideShareApi;
 
     public Daos getDaos() {
         return daos;
@@ -42,6 +47,14 @@ public class EventResourceBo {
 
     public void setDaos(Daos daos) {
         this.daos = daos;
+    }
+
+    public SlideShareAPI getSlideShareApi() {
+        return slideShareApi;
+    }
+
+    public void setSlideShareApi(SlideShareAPI slideShareApi) {
+        this.slideShareApi = slideShareApi;
     }
 
     /**
@@ -55,7 +68,8 @@ public class EventResourceBo {
         try {
             EventResource resource = daos.getEventResourceDao().read(
                     eventResourceId);
-            logger.info("Deleting resource "+eventResourceId+" for the event "+resource.getEvent().getId());
+            logger.info("Deleting resource " + eventResourceId +
+                    " for the event " + resource.getEvent().getId());
             daos.getEventResourceDao().delete(resource);
         } catch (RuntimeException e) {
             logger.error("Error deleting an event resource (" + eventResourceId +
@@ -75,12 +89,14 @@ public class EventResourceBo {
             link = new EventLink();
             link.setEvent(daos.getEventDao().read(eventId));
             display = "none";
-            logger.info("Creating new link resource for the event "+eventId+" ("+url+")");
+            logger.info("Creating new link resource for the event " + eventId +
+                    " (" + url + ")");
         } else {
             // update resource
             link = daos.getEventLinkDao().read(eventResourceId);
             display = "block";
-            logger.info("Updating link resource "+eventResourceId+" for the event "+eventId+" ("+url+")");
+            logger.info("Updating link resource " + eventResourceId +
+                    " for the event " + eventId + " (" + url + ")");
         }
         link.setDescription(description);
         link.setUrl(url);
@@ -104,7 +120,63 @@ public class EventResourceBo {
         return result;
     }
 
-    @Transactional(readOnly=true)
+    @Transactional
+    public String manageEventSlideShareResource(Long eventResourceId,
+            Long eventId,
+            String slideshareId, String description,
+            boolean canUserManageTheEvent) {
+        SlideShareResource slideshare = null;
+        String display = null;
+        if (eventResourceId == null) {
+            // new resource
+            slideshare = new SlideShareResource();
+            slideshare.setEvent(daos.getEventDao().read(eventId));
+            display = "none";
+            logger.info("Creating new slideshare resource for the event " +
+                    eventId + " (" + slideshareId + ")");
+        } else {
+            // update resource
+            slideshare = daos.getSlideShareResourceDao().read(eventResourceId);
+            display = "block";
+            logger.info("Updating slideshare resource " + eventResourceId +
+                    " for the event " + eventId + " (" + slideshareId + ")");
+        }
+        slideshare.setResourceId(slideshareId);
+        slideshare.setDescription(description);
+        String result = null;
+        Slideshow slideshow = null;
+        try {
+            slideshow = this.slideShareApi.getSlideshow(slideshareId);
+        } catch (Exception ex) {
+            logger.error("Error retrieving slideshare slideshow", ex);
+        }
+        if (slideshow != null && slideshow.getStatus() == 2) {
+            slideshare.setEmbedCode(slideshow.getEmbedCode());
+            slideshare.setUrl(slideshow.getPermalink());
+        } else {
+            slideshare.setEmbedCode(null);
+            slideshare.setUrl(null);
+        }
+        daos.getSlideShareResourceDao().createOrUpdate(slideshare);
+        WebContext wctx = WebContextFactory.get();
+        try {
+            StringBuilder fragUrl = new StringBuilder();
+            fragUrl.append("/WEB-INF/jsp/event/resources/slideshare.jsp");
+            Utilities.appendUrlParameter(fragUrl, "id", slideshare.getId().toString(), true);
+            Utilities.appendUrlParameter(fragUrl, "embedCode", slideshare.getEmbedCode(), true);
+            Utilities.appendUrlParameter(fragUrl, "url", slideshare.getUrl(), true);
+            Utilities.appendUrlParameter(fragUrl, "abbreviatedUrl", slideshare.getAbbreviatedUrl(), true);
+            Utilities.appendUrlParameter(fragUrl, "description", slideshare.getDescription(), true);
+            Utilities.appendUrlParameter(fragUrl, "canUserManageTheEvent", Boolean.toString(canUserManageTheEvent), true);
+            Utilities.appendUrlParameter(fragUrl, "display", display, true);
+            result = wctx.forwardToString(fragUrl.toString());
+        } catch (Exception ex) {
+            logger.error("Error calling slideshare page fragment", ex);
+        }
+        return result;
+    }
+
+    @Transactional(readOnly = true)
     public void fillEventResourceForm(Long eventResourceId) {
         try {
             WebContext wctx = WebContextFactory.get();
@@ -115,8 +187,16 @@ public class EventResourceBo {
             util.setValue("resourceId", eventResource.getId().toString());
             if (eventResource instanceof EventLink) {
                 EventLink link = (EventLink) eventResource;
+                util.setValue("resourceType", "link");
                 util.setValue("linkUrl", link.getUrl(), false);
                 util.setValue("linkDescription", link.getDescription(), false);
+            } else if (eventResource instanceof SlideShareResource) {
+                SlideShareResource slideShareResource =
+                        (SlideShareResource) eventResource;
+                util.setValue("resourceType", "slideshare");
+                util.setValue("slideshareId", slideShareResource.getResourceId());
+                util.setValue("slideshareDescription",
+                        slideShareResource.getDescription());
             }
             util.addFunctionCall("showResourceAddForm");
         } catch (RuntimeException e) {

@@ -66,5 +66,10 @@ public interface AjaxMethods {
 
     // TODO: Unsecured waiting to solve the problems with the proxy
     // @Secured({"ROLE_JUGGER"})
+    String manageEventSlideShareResource( Long eventResourceId, Long eventId,
+            String slideshareId, String description, boolean canUserManageTheEvent);
+    
+    // TODO: Unsecured waiting to solve the problems with the proxy
+    // @Secured({"ROLE_JUGGER"})
     public void fillEventResourceForm(Long eventResourceId);
 }

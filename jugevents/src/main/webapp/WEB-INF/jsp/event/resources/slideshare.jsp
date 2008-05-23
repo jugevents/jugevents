@@ -1,6 +1,14 @@
 <%@ include file="../../common.jspf" %>
-<div id="res${param.id}" style="border: 1px solid gray; padding: 5px; margin: 2px; float: left; width: 31%; display: ${param.display};}">
-    <a href="${param.url}"><c:out value="${param.abbreviatedUrl}" escapeXml="true"/></a><br/>
+<div id="res${param.id}" style="border: 1px solid gray; padding: 5px; margin: 2px; float: left; width: 425px; display: ${param.display};}">
+    <c:choose>
+        <c:when test="${!empty param.embedCode}">
+            <div>${param.embedCode}</div>
+            <a href="${param.url}"><c:out value="${param.abbreviatedUrl}" escapeXml="true"/></a><br/>
+        </c:when>
+        <c:otherwise>
+            <div style="margin: 20px; color: red;"><spring:message code="NotAvailabe" text="?NotAvailable?"/></div>    
+        </c:otherwise>
+    </c:choose>
     <c:out value="${param.description}" escapeXml="true"/>
     <div style="text-align: right;" class="smallText">
         <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
