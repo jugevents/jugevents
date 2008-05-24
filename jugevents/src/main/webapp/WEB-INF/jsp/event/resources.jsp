@@ -21,6 +21,15 @@
                 <jsp:param name="display" value="block"/>
             </jsp:include>
         </c:if>
+        <c:if test="${resource.class.name == 'it.jugpadova.po.FlickrResource'}">
+            <jsp:include page="resources/flickr.jsp">
+                <jsp:param name="id" value="${resource.id}"/>
+                <jsp:param name="tag" value="${resource.tag}"/>
+                <jsp:param name="description" value="${resource.description}"/>
+                <jsp:param name="canUserManageTheEvent" value='<%= blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
+                <jsp:param name="display" value="block"/>
+            </jsp:include>
+        </c:if>
         <c:if test="${resource.class.name == 'it.jugpadova.po.SlideShareResource'}">
             <jsp:include page="resources/slideshare.jsp">
                 <jsp:param name="id" value="${resource.id}"/>
@@ -44,9 +53,11 @@
             <dd>
                 <select id="resourceType" name="resourceType">
                     <option value="link">Web Link</option>
+                    <option value="flickr">Flickr</option>
                     <option value="slideshare">SlideShare</option>
                 </select>
                 <span id="linkLink" class="smallText">a simple Web link</span>
+                <span id="flickrLink" class="smallText" style="display: none;"><a href="http://www.flickr.com">www.flickr.com</a></span>
                 <span id="slideshareLink" class="smallText" style="display: none;"><a href="http://www.slideshare.net">www.slideshare.net</a></span>
             </dd>
         </dl>
@@ -56,6 +67,14 @@
                 <dd><input id="linkUrl" name="linkUrl" type="text" size="50"/></dd>
                 <dt><spring:message code="Description" text="?Description?"/>:</dt>
                 <dd><input id="linkDescription" name="linkDescription" type="text" size="50"/></dd>
+            </dl>
+        </div>
+        <div id="flickrFields" style="display: none;">
+            <dl>
+                <dt><spring:message code="Tag" text="?Tag?"/>:</dt>
+                <dd><input id="flickrTag" name="flickrTag" type="text" size="20"/>&nbsp;<img id="tip_flickrTag" src="${cp}/images/question16x16.png" alt="Help Tip"/></dd>
+                <dt><spring:message code="Description" text="?Description?"/>:</dt>
+                <dd><input id="flickrDescription" name="flickrDescription" type="text" size="50"/></dd>
             </dl>
         </div>
         <div id="slideshareFields" style="display: none;">
@@ -77,5 +96,6 @@
 </div>
 
 <script type="text/javascript">
+    new Tip($('tip_flickrTag'), '<spring:message code="tip.flickrTag" text="?tip.flickrTag?"/>', {title: '<spring:message code="tip.flickrTag.title" text="?tip.flickrTag.title?"/>', effect: 'appear'});
     new Tip($('tip_slideshareId'), '<spring:message code="tip.slideshareId" text="?tip.slideshareId?"/>', {title: '<spring:message code="tip.slideshareId.title" text="?tip.slideshareId.title?"/>', effect: 'appear'});
 </script>

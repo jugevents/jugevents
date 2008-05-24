@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 import it.jugpadova.po.EventLink;
 import it.jugpadova.po.EventResource;
+import it.jugpadova.po.FlickrResource;
 import it.jugpadova.po.SlideShareResource;
 import it.jugpadova.util.Utilities;
 import java.net.URLEncoder;
@@ -33,7 +34,7 @@ import org.directwebremoting.proxy.dwr.Util;
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 4cbe92b5cdfe $
+ * @version $Revision: 2051f93fe4f9 $
  */
 public class EventResourceBo {
 
@@ -120,6 +121,44 @@ public class EventResourceBo {
         return result;
     }
 
+    public String manageEventFlickrResource(Long eventResourceId, Long eventId,
+            String flickrTag, String description, boolean canUserManageTheEvent) {
+        FlickrResource flickr = null;
+        String display = null;
+        if (eventResourceId == null) {
+            // new resource
+            flickr = new FlickrResource();
+            flickr.setEvent(daos.getEventDao().read(eventId));
+            display = "none";
+            logger.info("Creating new flickr resource for the event " +
+                    eventId + " (" + flickrTag + ")");
+        } else {
+            // update resource
+            flickr = daos.getFlickrResourceDao().read(eventResourceId);
+            display = "block";
+            logger.info("Updating flickr resource " + eventResourceId +
+                    " for the event " + eventId + " (" + flickrTag + ")");
+        }
+        flickr.setTag(flickrTag);
+        flickr.setDescription(description);
+        String result = null;
+        daos.getFlickrResourceDao().createOrUpdate(flickr);
+        WebContext wctx = WebContextFactory.get();
+        try {
+            StringBuilder fragUrl = new StringBuilder();
+            fragUrl.append("/WEB-INF/jsp/event/resources/flickr.jsp");
+            Utilities.appendUrlParameter(fragUrl, "id", flickr.getId().toString(), true);
+            Utilities.appendUrlParameter(fragUrl, "tag", flickr.getTag(), true);
+            Utilities.appendUrlParameter(fragUrl, "description", flickr.getDescription(), true);
+            Utilities.appendUrlParameter(fragUrl, "canUserManageTheEvent", Boolean.toString(canUserManageTheEvent), true);
+            Utilities.appendUrlParameter(fragUrl, "display", display, true);
+            result = wctx.forwardToString(fragUrl.toString());
+        } catch (Exception ex) {
+            logger.error("Error calling flickr page fragment", ex);
+        }
+        return result;
+    }
+    
     @Transactional
     public String manageEventSlideShareResource(Long eventResourceId,
             Long eventId,
@@ -190,6 +229,13 @@ public class EventResourceBo {
                 util.setValue("resourceType", "link");
                 util.setValue("linkUrl", link.getUrl(), false);
                 util.setValue("linkDescription", link.getDescription(), false);
+            } else if (eventResource instanceof FlickrResource) {
+                FlickrResource flickrResource =
+                        (FlickrResource) eventResource;
+                util.setValue("resourceType", "flickr");
+                util.setValue("flickrTag", flickrResource.getTag());
+                util.setValue("flickrDescription",
+                        flickrResource.getDescription());
             } else if (eventResource instanceof SlideShareResource) {
                 SlideShareResource slideShareResource =
                         (SlideShareResource) eventResource;

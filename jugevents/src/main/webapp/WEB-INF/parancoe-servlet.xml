@@ -257,6 +257,7 @@
             <dwr:include method="updateParticipantFieldValue"/>
             <dwr:include method="deleteEventResource"/>
             <dwr:include method="manageEventLinkResource"/>
+            <dwr:include method="manageEventFlickrResource"/>
             <dwr:include method="manageEventSlideShareResource"/>
             <dwr:include method="fillEventResourceForm"/>
             <!-- Only for testing

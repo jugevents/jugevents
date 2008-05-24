@@ -26,6 +26,26 @@ function manageResource(event) {
             $('updateResourceButton').hide();
         });    
     }
+    if (resourceType == 'flickr') {
+        AjaxMethodsJS.manageEventFlickrResource($F('resourceId'), $F('eventId'), $F('flickrTag'), $F('flickrDescription'), true,
+        function (data) {
+            if ($('addResourceButton').visible()) {
+                var newResource = Builder.build(data);
+                $('resources').appendChild(newResource);
+                newResource.down('.flickr_badge_source').insert({before: b_txt});
+                Effect.toggle(newResource);
+            } else {
+                $('res'+$F('resourceId')).replace(data);
+                $('res'+$F('resourceId')).down('.flickr_badge_source').insert({before: b_txt});
+                new Effect.Highlight($('res'+$F('resourceId')));
+            }
+            $('resourceForm').enable();
+            clearEventResourceFields();
+            $('flickrTag').focus();
+            $('addResourceButton').show();
+            $('updateResourceButton').hide();
+        });    
+    }    
     if (resourceType == 'slideshare') {
         AjaxMethodsJS.manageEventSlideShareResource($F('resourceId'), $F('eventId'), $F('slideshareId'), $F('slideshareDescription'), true,
         function (data) {
@@ -51,6 +71,7 @@ function addNewResource(event) {
     clearEventResourceFields();
     $('addResourceButton').show();
     $('updateResourceButton').hide();
+    $('resourceType').enable();
     $('resourceFormDiv').show();
     new Effect.ScrollTo('resourceFormDiv', {offset: -24});
 }
@@ -78,6 +99,8 @@ function clearEventResourceFields() {
     $('resourceId').clear();
     $('linkUrl').clear();
     $('linkDescription').clear();  
+    $('flickrTag').clear();
+    $('flickrDescription').clear();  
     $('slideshareId').clear();
     $('slideshareDescription').clear();  
 }
@@ -85,6 +108,8 @@ function clearEventResourceFields() {
 function showResourceFields(event) {
     $('linkFields').hide();
     $('linkLink').hide();
+    $('flickrFields').hide();    
+    $('flickrLink').hide();
     $('slideshareFields').hide();    
     $('slideshareLink').hide();
     $($('resourceType').value+'Fields').show();
