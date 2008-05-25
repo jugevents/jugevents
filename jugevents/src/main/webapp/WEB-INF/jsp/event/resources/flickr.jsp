@@ -18,10 +18,10 @@
     </style>
     <table class="flickr_badge_uber_wrapper" cellpadding="0" cellspacing="10" border="0"><tr><td><a href="http://www.flickr.com" class="flickr_www">www.<strong style="color:#3993ff">flick<span style="color:#ff1c92">r</span></strong>.com</a><table cellpadding="0" cellspacing="10" border="0" class="flickr_badge_wrapper">
                     <tr>
-                        <script type="text/javascript" src="http://www.flickr.com/badge_code_v2.gne?show_name=1&count=7&display=latest&size=s&layout=h&source=all_tag&tag=${param.tag}"></script>
+                        <script type="text/javascript" src="http://www.flickr.com/badge_code_v2.gne?show_name=1&count=6&display=latest&size=s&layout=h&source=all_tag&tag=${param.tag}"></script>
                         <td class="flickr_badge_source" valign="center" align="center">
                             <table cellpadding="0" cellspacing="0" border="0"><tr>
-                                    <td class="flickr_badge_source_txt">Altre <a href="http://www.flickr.com/photos/tags/${param.tag}/"> foto o video provvisti di tag ${param.tag}</a>su Flickr</td>
+                                    <td class="flickr_badge_source_txt">Altre <a href="http://www.flickr.com/photos/tags/${param.tag}/"> foto o video provvisti di tag ${param.tag} </a>su Flickr</td>
                             </tr></table>
                         </td>
                     </tr>
