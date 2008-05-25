@@ -30,12 +30,10 @@
     <!-- End of Flickr Badge -->
     <c:out value="${param.description}" escapeXml="true"/>
     <div style="text-align: right;" class="smallText">
-        <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
-            <c:if test="${param.canUserManageTheEvent == 'true'}">                
-                <spring:message code='confirmDeleteEventResource' var="confirmDeleteEventResourceMessage" text="?confirmDeleteEventResourceMessage?"/>
-                <a href="#" onclick="modifyEventResource(${param.id}); $('resourceType').disable(); return false;"><spring:message code="modify" text="?modify?"/></a>
-                <a href="javascript: deleteEventResource(${param.id})" onclick="return confirm('${confirmDeleteEventResourceMessage}')"><spring:message code="delete"/></a>
-            </c:if>
-        </authz:authorize>
+        <c:if test="${param.canUserManageTheEvent == 'true'}">                
+            <spring:message code='confirmDeleteEventResource' var="confirmDeleteEventResourceMessage" text="?confirmDeleteEventResourceMessage?"/>
+            <a href="#" onclick="modifyEventResource(${param.id}); $('resourceType').disable(); return false;"><spring:message code="modify" text="?modify?"/></a>
+            <a href="javascript: deleteEventResource(${param.id})" onclick="return confirm('${confirmDeleteEventResourceMessage}')"><spring:message code="delete"/></a>
+        </c:if>
     </div>
 </div>
