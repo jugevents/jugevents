@@ -32,12 +32,23 @@ function manageResource(event) {
             if ($('addResourceButton').visible()) {
                 var newResource = Builder.build(data);
                 $('resources').appendChild(newResource);
-                newResource.down('.flickr_badge_source').insert({before: b_txt});
-                Effect.toggle(newResource);
+                new PeriodicalExecuter(function(pe) {
+                    if (typeof b_txt != 'undefined') {
+                        newResource.down('.flickr_badge_source').insert({before: b_txt});
+                        Effect.toggle(newResource);
+                        pe.stop();
+                    }
+                }, 1);
             } else {
-                $('res'+$F('resourceId')).replace(data);
-                $('res'+$F('resourceId')).down('.flickr_badge_source').insert({before: b_txt});
-                new Effect.Highlight($('res'+$F('resourceId')));
+                var resourceId = $F('resourceId');
+                $('res'+resourceId).replace(data);
+                new PeriodicalExecuter(function(pe) {
+                    if (typeof b_txt != 'undefined') {
+                        $('res'+resourceId).down('.flickr_badge_source').insert({before: b_txt});
+                        new Effect.Highlight($('res'+resourceId));
+                        pe.stop();
+                    }
+                }, 1);
             }
             $('resourceForm').enable();
             clearEventResourceFields();
