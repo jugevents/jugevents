@@ -34,7 +34,7 @@ import org.directwebremoting.proxy.dwr.Util;
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 2051f93fe4f9 $
+ * @version $Revision: 5207c7c51e27 $
  */
 public class EventResourceBo {
 
@@ -121,6 +121,7 @@ public class EventResourceBo {
         return result;
     }
 
+    @Transactional
     public String manageEventFlickrResource(Long eventResourceId, Long eventId,
             String flickrTag, String description, boolean canUserManageTheEvent) {
         FlickrResource flickr = null;
