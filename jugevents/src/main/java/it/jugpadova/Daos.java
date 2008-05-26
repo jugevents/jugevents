@@ -13,6 +13,7 @@
 // limitations under the License.
 package it.jugpadova;
 
+import it.jugpadova.dao.ArchiveVideoResourceDao;
 import it.jugpadova.dao.EventDao;
 import it.jugpadova.dao.EventLinkDao;
 import it.jugpadova.dao.EventResourceDao;
@@ -22,7 +23,6 @@ import it.jugpadova.dao.JuggerDao;
 import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.dao.ReliabilityRequestDao;
 import it.jugpadova.dao.SlideShareResourceDao;
-import it.jugpadova.po.FlickrResource;
 import org.parancoe.persistence.dao.DaoProvider;
 import org.parancoe.plugins.security.AuthorityDao;
 import org.parancoe.plugins.security.UserAuthorityDao;
@@ -63,4 +63,6 @@ public interface Daos extends DaoProvider {
     public SlideShareResourceDao getSlideShareResourceDao();
     
     public FlickrResourceDao getFlickrResourceDao();
+    
+    public ArchiveVideoResourceDao getArchiveVideoResourceDao();
 }

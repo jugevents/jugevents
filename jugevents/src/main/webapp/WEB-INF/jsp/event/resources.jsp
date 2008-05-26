@@ -41,6 +41,16 @@
                 <jsp:param name="display" value="block"/>
             </jsp:include>
         </c:if>
+        <c:if test="${resource.class.name == 'it.jugpadova.po.ArchiveVideoResource'}">
+            <jsp:include page="resources/archivevideo.jsp">
+                <jsp:param name="id" value="${resource.id}"/>
+                <jsp:param name="flashVideoUrl" value="${resource.flashVideoUrl}"/>
+                <jsp:param name="detailsUrl" value="${resource.detailsUrl}"/>
+                <jsp:param name="description" value="${resource.description}"/>
+                <jsp:param name="canUserManageTheEvent" value='<%= blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
+                <jsp:param name="display" value="block"/>
+            </jsp:include>
+        </c:if>
     </c:forEach>
 </div>
 <br style="clear: both;"/>
@@ -55,10 +65,12 @@
                     <option value="link">Web Link</option>
                     <option value="flickr">Flickr</option>
                     <option value="slideshare">SlideShare</option>
+                    <option value="archive">Archive.org video</option>
                 </select>
                 <span id="linkLink" class="smallText">a simple Web link</span>
                 <span id="flickrLink" class="smallText" style="display: none;"><a href="http://www.flickr.com">www.flickr.com</a></span>
                 <span id="slideshareLink" class="smallText" style="display: none;"><a href="http://www.slideshare.net">www.slideshare.net</a></span>
+                <span id="archiveLink" class="smallText" style="display: none;"><a href="http://www.archive.org">www.archive.org</a></span>
             </dd>
         </dl>
         <div id="linkFields">
@@ -85,6 +97,16 @@
                 <dd><input id="slideshareDescription" name="slideshareDescription" type="text" size="50"/></dd>
             </dl>
         </div>
+        <div id="archiveFields" style="display: none;">
+            <dl>
+                <dt><spring:message code="ArchiveDetailsUrl" text="?ArchiveDetailsUrl?"/>:</dt>
+                <dd><input id="archiveDetailsUrl" name="archiveDetailsUrl" type="text" size="50"/>&nbsp;<img id="tip_archiveDetailsUrl" src="${cp}/images/question16x16.png" alt="Help Tip"/></dd>
+                <dt><spring:message code="ArchiveFlashVideoUrl" text="?ArchiveFlashVideoUrl?"/>:</dt>
+                <dd><input id="archiveFlashVideoUrl" name="archiveFlashVideoUrl" type="text" size="50"/>&nbsp;<img id="tip_archiveFlashVideoUrl" src="${cp}/images/question16x16.png" alt="Help Tip"/></dd>
+                <dt><spring:message code="Description" text="?Description?"/>:</dt>
+                <dd><input id="archiveDescription" name="archiveDescription" type="text" size="50"/></dd>
+            </dl>
+        </div>
         <dl>
             <dt>&nbsp;</dt>
             <dd>
@@ -98,4 +120,6 @@
 <script type="text/javascript">
     new Tip($('tip_flickrTag'), '<spring:message code="tip.flickrTag" text="?tip.flickrTag?"/>', {title: '<spring:message code="tip.flickrTag.title" text="?tip.flickrTag.title?"/>', effect: 'appear'});
     new Tip($('tip_slideshareId'), '<spring:message code="tip.slideshareId" text="?tip.slideshareId?"/>', {title: '<spring:message code="tip.slideshareId.title" text="?tip.slideshareId.title?"/>', effect: 'appear'});
+    new Tip($('tip_archiveFlashVideoUrl'), '<spring:message code="tip.archiveFlashVideoUrl" text="?tip.archiveFlashVideoUrl?"/>', {title: '<spring:message code="tip.archiveFlashVideoUrl.title" text="?tip.archiveFlashVideoUrl.title?"/>', effect: 'appear'});
+    new Tip($('tip_archiveDetailsUrl'), '<spring:message code="tip.archiveDetailsUrl" text="?tip.archiveDetailsUrl?"/>', {title: '<spring:message code="tip.archiveDetailsUrl.title" text="?tip.archiveDetailsUrl.title?"/>', effect: 'appear'});
 </script>

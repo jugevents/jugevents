@@ -75,6 +75,24 @@ function manageResource(event) {
             $('updateResourceButton').hide();
         });    
     }
+    if (resourceType == 'archive') {
+        AjaxMethodsJS.manageEventArchiveVideoResource($F('resourceId'), $F('eventId'), $F('archiveFlashVideoUrl'), $F('archiveDetailsUrl'), $F('archiveDescription'), true,
+        function (data) {
+            if ($('addResourceButton').visible()) {
+                var newResource = Builder.build(data);
+                $('resources').appendChild(newResource);
+                Effect.toggle(newResource);
+            } else {
+                $('res'+$F('resourceId')).replace(data);
+                new Effect.Highlight($('res'+$F('resourceId')));
+            }
+            $('resourceForm').enable();
+            clearEventResourceFields();
+            $('archiveDetailsUrl').focus();
+            $('addResourceButton').show();
+            $('updateResourceButton').hide();
+        });    
+    }
 }
 
 function addNewResource(event) {
@@ -114,6 +132,9 @@ function clearEventResourceFields() {
     $('flickrDescription').clear();  
     $('slideshareId').clear();
     $('slideshareDescription').clear();  
+    $('archiveDetailsUrl').clear();
+    $('archiveFlashVideoUrl').clear();
+    $('archiveDescription').clear();  
 }
 
 function showResourceFields(event) {
@@ -123,6 +144,8 @@ function showResourceFields(event) {
     $('flickrLink').hide();
     $('slideshareFields').hide();    
     $('slideshareLink').hide();
+    $('archiveFields').hide();    
+    $('archiveLink').hide();
     $($('resourceType').value+'Fields').show();
     $($('resourceType').value+'Link').show();
 }

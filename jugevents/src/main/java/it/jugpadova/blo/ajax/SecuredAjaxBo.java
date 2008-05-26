@@ -95,8 +95,16 @@ public class SecuredAjaxBo implements AjaxMethods {
         return blos.getEventResourceBo().manageEventSlideShareResource(eventResourceId,
                 eventId, slideshareId, description, canUserManageTheEvent);
     }
+
+    public String manageEventArchiveVideoResource(Long eventResourceId,
+            Long eventId, String archiveFlashVideoUrl, String archiveDetailsUrl, String description,
+            boolean canUserManageTheEvent) {
+        return blos.getEventResourceBo().manageEventArchiveVideoResource(eventResourceId,
+                eventId, archiveFlashVideoUrl, archiveDetailsUrl, description, canUserManageTheEvent);
+    }
     
     public void fillEventResourceForm(Long eventResourceId) {
         blos.getEventResourceBo().fillEventResourceForm(eventResourceId);
     }
+
 }

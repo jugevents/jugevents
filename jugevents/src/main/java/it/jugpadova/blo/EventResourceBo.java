@@ -16,6 +16,7 @@ package it.jugpadova.blo;
 import com.benfante.jslideshare.SlideShareAPI;
 import com.benfante.jslideshare.messages.Slideshow;
 import it.jugpadova.Daos;
+import it.jugpadova.po.ArchiveVideoResource;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 import it.jugpadova.po.EventLink;
@@ -34,7 +35,7 @@ import org.directwebremoting.proxy.dwr.Util;
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 5207c7c51e27 $
+ * @version $Revision: b8584eaacad9 $
  */
 public class EventResourceBo {
 
@@ -148,10 +149,13 @@ public class EventResourceBo {
         try {
             StringBuilder fragUrl = new StringBuilder();
             fragUrl.append("/WEB-INF/jsp/event/resources/flickr.jsp");
-            Utilities.appendUrlParameter(fragUrl, "id", flickr.getId().toString(), true);
+            Utilities.appendUrlParameter(fragUrl, "id",
+                    flickr.getId().toString(), true);
             Utilities.appendUrlParameter(fragUrl, "tag", flickr.getTag(), true);
-            Utilities.appendUrlParameter(fragUrl, "description", flickr.getDescription(), true);
-            Utilities.appendUrlParameter(fragUrl, "canUserManageTheEvent", Boolean.toString(canUserManageTheEvent), true);
+            Utilities.appendUrlParameter(fragUrl, "description",
+                    flickr.getDescription(), true);
+            Utilities.appendUrlParameter(fragUrl, "canUserManageTheEvent",
+                    Boolean.toString(canUserManageTheEvent), true);
             Utilities.appendUrlParameter(fragUrl, "display", display, true);
             result = wctx.forwardToString(fragUrl.toString());
         } catch (Exception ex) {
@@ -159,7 +163,7 @@ public class EventResourceBo {
         }
         return result;
     }
-    
+
     @Transactional
     public String manageEventSlideShareResource(Long eventResourceId,
             Long eventId,
@@ -202,16 +206,69 @@ public class EventResourceBo {
         try {
             StringBuilder fragUrl = new StringBuilder();
             fragUrl.append("/WEB-INF/jsp/event/resources/slideshare.jsp");
-            Utilities.appendUrlParameter(fragUrl, "id", slideshare.getId().toString(), true);
-            Utilities.appendUrlParameter(fragUrl, "embedCode", slideshare.getEmbedCode(), true);
-            Utilities.appendUrlParameter(fragUrl, "url", slideshare.getUrl(), true);
-            Utilities.appendUrlParameter(fragUrl, "abbreviatedUrl", slideshare.getAbbreviatedUrl(), true);
-            Utilities.appendUrlParameter(fragUrl, "description", slideshare.getDescription(), true);
-            Utilities.appendUrlParameter(fragUrl, "canUserManageTheEvent", Boolean.toString(canUserManageTheEvent), true);
+            Utilities.appendUrlParameter(fragUrl, "id",
+                    slideshare.getId().toString(), true);
+            Utilities.appendUrlParameter(fragUrl, "embedCode",
+                    slideshare.getEmbedCode(), true);
+            Utilities.appendUrlParameter(fragUrl, "url", slideshare.getUrl(),
+                    true);
+            Utilities.appendUrlParameter(fragUrl, "abbreviatedUrl",
+                    slideshare.getAbbreviatedUrl(), true);
+            Utilities.appendUrlParameter(fragUrl, "description",
+                    slideshare.getDescription(), true);
+            Utilities.appendUrlParameter(fragUrl, "canUserManageTheEvent",
+                    Boolean.toString(canUserManageTheEvent), true);
             Utilities.appendUrlParameter(fragUrl, "display", display, true);
             result = wctx.forwardToString(fragUrl.toString());
         } catch (Exception ex) {
             logger.error("Error calling slideshare page fragment", ex);
+        }
+        return result;
+    }
+
+    public String manageEventArchiveVideoResource(Long eventResourceId,
+            Long eventId, String archiveFlashVideoUrl, String archiveDetailsUrl,
+            String description, boolean canUserManageTheEvent) {
+        ArchiveVideoResource archivevideo = null;
+        String display = null;
+        if (eventResourceId == null) {
+            // new resource
+            archivevideo = new ArchiveVideoResource();
+            archivevideo.setEvent(daos.getEventDao().read(eventId));
+            display = "none";
+            logger.info("Creating new archive video resource for the event " +
+                    eventId + " (" + archiveDetailsUrl + ")");
+        } else {
+            // update resource
+            archivevideo = daos.getArchiveVideoResourceDao().read(
+                    eventResourceId);
+            display = "block";
+            logger.info("Updating archive video resource " + eventResourceId +
+                    " for the event " + eventId + " (" + archiveFlashVideoUrl + ")");
+        }
+        archivevideo.setFlashVideoUrl(archiveFlashVideoUrl);
+        archivevideo.setDetailsUrl(archiveDetailsUrl);
+        archivevideo.setDescription(description);
+        String result = null;
+        daos.getArchiveVideoResourceDao().createOrUpdate(archivevideo);
+        WebContext wctx = WebContextFactory.get();
+        try {
+            StringBuilder fragUrl = new StringBuilder();
+            fragUrl.append("/WEB-INF/jsp/event/resources/archivevideo.jsp");
+            Utilities.appendUrlParameter(fragUrl, "id",
+                    archivevideo.getId().toString(), true);
+            Utilities.appendUrlParameter(fragUrl, "flashVideoUrl",
+                    archivevideo.getFlashVideoUrl(), true);
+            Utilities.appendUrlParameter(fragUrl, "detailsUrl",
+                    archivevideo.getDetailsUrl(), true);
+            Utilities.appendUrlParameter(fragUrl, "description",
+                    archivevideo.getDescription(), true);
+            Utilities.appendUrlParameter(fragUrl, "canUserManageTheEvent",
+                    Boolean.toString(canUserManageTheEvent), true);
+            Utilities.appendUrlParameter(fragUrl, "display", display, true);
+            result = wctx.forwardToString(fragUrl.toString());
+        } catch (Exception ex) {
+            logger.error("Error calling archive video page fragment", ex);
         }
         return result;
     }
@@ -244,6 +301,16 @@ public class EventResourceBo {
                 util.setValue("slideshareId", slideShareResource.getResourceId());
                 util.setValue("slideshareDescription",
                         slideShareResource.getDescription());
+            } else if (eventResource instanceof ArchiveVideoResource) {
+                ArchiveVideoResource archiveVideoResource =
+                        (ArchiveVideoResource) eventResource;
+                util.setValue("resourceType", "archive");
+                util.setValue("archiveFlashVideoUrl",
+                        archiveVideoResource.getFlashVideoUrl());
+                util.setValue("archiveDetailsUrl",
+                        archiveVideoResource.getDetailsUrl());
+                util.setValue("archiveDescription",
+                        archiveVideoResource.getDescription());
             }
             util.addFunctionCall("showResourceAddForm");
         } catch (RuntimeException e) {
