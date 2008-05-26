@@ -35,7 +35,7 @@ import org.directwebremoting.proxy.dwr.Util;
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: b8584eaacad9 $
+ * @version $Revision: 9a3cf6fe4ae9 $
  */
 public class EventResourceBo {
 
@@ -226,6 +226,7 @@ public class EventResourceBo {
         return result;
     }
 
+    @Transactional
     public String manageEventArchiveVideoResource(Long eventResourceId,
             Long eventId, String archiveFlashVideoUrl, String archiveDetailsUrl,
             String description, boolean canUserManageTheEvent) {
