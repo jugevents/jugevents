@@ -93,6 +93,24 @@ function manageResource(event) {
             $('updateResourceButton').hide();
         });    
     }
+    if (resourceType == 'youtube') {
+        AjaxMethodsJS.manageEventYouTubeResource($F('resourceId'), $F('eventId'), $F('youtubeId'), $F('youtubeDescription'), true,
+        function (data) {
+            if ($('addResourceButton').visible()) {
+                var newResource = Builder.build(data);
+                $('resources').appendChild(newResource);
+                Effect.toggle(newResource);
+            } else {
+                $('res'+$F('resourceId')).replace(data);
+                new Effect.Highlight($('res'+$F('resourceId')));
+            }
+            $('resourceForm').enable();
+            clearEventResourceFields();
+            $('youtubeId').focus();
+            $('addResourceButton').show();
+            $('updateResourceButton').hide();
+        });    
+    }
 }
 
 function addNewResource(event) {
@@ -135,6 +153,8 @@ function clearEventResourceFields() {
     $('archiveDetailsUrl').clear();
     $('archiveFlashVideoUrl').clear();
     $('archiveDescription').clear();  
+    $('youtubeId').clear();
+    $('youtubeDescription').clear();  
 }
 
 function showResourceFields(event) {
@@ -146,6 +166,8 @@ function showResourceFields(event) {
     $('slideshareLink').hide();
     $('archiveFields').hide();    
     $('archiveLink').hide();
+    $('youtubeFields').hide();    
+    $('youtubeLink').hide();
     $($('resourceType').value+'Fields').show();
     $($('resourceType').value+'Link').show();
 }

@@ -83,5 +83,11 @@ public interface AjaxMethods {
 
     // TODO: Unsecured waiting to solve the problems with the proxy
     // @Secured({"ROLE_JUGGER"})
+    String manageEventYouTubeResource(Long eventResourceId, Long eventId,
+            String youtubeVideoId, String description,
+            boolean canUserManageTheEvent);
+    
+    // TODO: Unsecured waiting to solve the problems with the proxy
+    // @Secured({"ROLE_JUGGER"})
     public void fillEventResourceForm(Long eventResourceId);
 }

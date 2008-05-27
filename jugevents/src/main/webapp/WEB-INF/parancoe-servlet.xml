@@ -260,6 +260,7 @@
             <dwr:include method="manageEventFlickrResource"/>
             <dwr:include method="manageEventSlideShareResource"/>
             <dwr:include method="manageEventArchiveVideoResource"/>
+            <dwr:include method="manageEventYouTubeResource"/>
             <dwr:include method="fillEventResourceForm"/>
             <!-- Only for testing
             <dwr:latencyfilter delay="1200"/>

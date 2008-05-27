@@ -85,26 +85,39 @@ public class SecuredAjaxBo implements AjaxMethods {
     public String manageEventFlickrResource(Long eventResourceId, Long eventId,
             String flickrTag,
             String description, boolean canUserManageTheEvent) {
-        return blos.getEventResourceBo().manageEventFlickrResource(eventResourceId,
+        return blos.getEventResourceBo().manageEventFlickrResource(
+                eventResourceId,
                 eventId, flickrTag, description, canUserManageTheEvent);
     }
-    
-    public String manageEventSlideShareResource(Long eventResourceId, Long eventId,
+
+    public String manageEventSlideShareResource(Long eventResourceId,
+            Long eventId,
             String slideshareId,
             String description, boolean canUserManageTheEvent) {
-        return blos.getEventResourceBo().manageEventSlideShareResource(eventResourceId,
+        return blos.getEventResourceBo().manageEventSlideShareResource(
+                eventResourceId,
                 eventId, slideshareId, description, canUserManageTheEvent);
     }
 
     public String manageEventArchiveVideoResource(Long eventResourceId,
-            Long eventId, String archiveFlashVideoUrl, String archiveDetailsUrl, String description,
+            Long eventId, String archiveFlashVideoUrl, String archiveDetailsUrl,
+            String description,
             boolean canUserManageTheEvent) {
-        return blos.getEventResourceBo().manageEventArchiveVideoResource(eventResourceId,
-                eventId, archiveFlashVideoUrl, archiveDetailsUrl, description, canUserManageTheEvent);
+        return blos.getEventResourceBo().manageEventArchiveVideoResource(
+                eventResourceId,
+                eventId, archiveFlashVideoUrl, archiveDetailsUrl, description,
+                canUserManageTheEvent);
     }
-    
+
+    public String manageEventYouTubeResource(Long eventResourceId, Long eventId,
+            String youtubeVideoId, String description,
+            boolean canUserManageTheEvent) {
+        return blos.getEventResourceBo().manageEventYouTubeResource(
+                eventResourceId,
+                eventId, youtubeVideoId, description, canUserManageTheEvent);
+    }
+
     public void fillEventResourceForm(Long eventResourceId) {
         blos.getEventResourceBo().fillEventResourceForm(eventResourceId);
     }
-
 }

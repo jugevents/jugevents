@@ -23,6 +23,7 @@ import it.jugpadova.dao.JuggerDao;
 import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.dao.ReliabilityRequestDao;
 import it.jugpadova.dao.SlideShareResourceDao;
+import it.jugpadova.dao.YouTubeResourceDao;
 import org.parancoe.persistence.dao.DaoProvider;
 import org.parancoe.plugins.security.AuthorityDao;
 import org.parancoe.plugins.security.UserAuthorityDao;
@@ -59,10 +60,12 @@ public interface Daos extends DaoProvider {
     public EventResourceDao getEventResourceDao();
 
     public EventLinkDao getEventLinkDao();
-    
+
     public SlideShareResourceDao getSlideShareResourceDao();
-    
+
     public FlickrResourceDao getFlickrResourceDao();
-    
+
     public ArchiveVideoResourceDao getArchiveVideoResourceDao();
+
+    public YouTubeResourceDao getYouTubeResourceDao();
 }

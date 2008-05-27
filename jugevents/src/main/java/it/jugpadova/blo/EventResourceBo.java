@@ -23,6 +23,7 @@ import it.jugpadova.po.EventLink;
 import it.jugpadova.po.EventResource;
 import it.jugpadova.po.FlickrResource;
 import it.jugpadova.po.SlideShareResource;
+import it.jugpadova.po.YouTubeResource;
 import it.jugpadova.util.Utilities;
 import java.net.URLEncoder;
 import org.apache.commons.lang.StringUtils;
@@ -35,7 +36,7 @@ import org.directwebremoting.proxy.dwr.Util;
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 9a3cf6fe4ae9 $
+ * @version $Revision: 8e486fe642d0 $
  */
 public class EventResourceBo {
 
@@ -274,6 +275,51 @@ public class EventResourceBo {
         return result;
     }
 
+    @Transactional
+    public String manageEventYouTubeResource(Long eventResourceId, Long eventId,
+            String youtubeVideoId, String description,
+            boolean canUserManageTheEvent) {
+        YouTubeResource youtube = null;
+        String display = null;
+        if (eventResourceId == null) {
+            // new resource
+            youtube = new YouTubeResource();
+            youtube.setEvent(daos.getEventDao().read(eventId));
+            display = "none";
+            logger.info("Creating new YouTube video resource for the event " +
+                    eventId + " (" + youtubeVideoId + ")");
+        } else {
+            // update resource
+            youtube = daos.getYouTubeResourceDao().read(
+                    eventResourceId);
+            display = "block";
+            logger.info("Updating YouTube video resource " + eventResourceId +
+                    " for the event " + eventId + " (" + youtubeVideoId + ")");
+        }
+        youtube.setVideoId(youtubeVideoId);
+        youtube.setDescription(description);
+        String result = null;
+        daos.getYouTubeResourceDao().createOrUpdate(youtube);
+        WebContext wctx = WebContextFactory.get();
+        try {
+            StringBuilder fragUrl = new StringBuilder();
+            fragUrl.append("/WEB-INF/jsp/event/resources/youtube.jsp");
+            Utilities.appendUrlParameter(fragUrl, "id",
+                    youtube.getId().toString(), true);
+            Utilities.appendUrlParameter(fragUrl, "videoId",
+                    youtube.getVideoId(), true);
+            Utilities.appendUrlParameter(fragUrl, "description",
+                    youtube.getDescription(), true);
+            Utilities.appendUrlParameter(fragUrl, "canUserManageTheEvent",
+                    Boolean.toString(canUserManageTheEvent), true);
+            Utilities.appendUrlParameter(fragUrl, "display", display, true);
+            result = wctx.forwardToString(fragUrl.toString());
+        } catch (Exception ex) {
+            logger.error("Error calling YouTube video page fragment", ex);
+        }
+        return result;
+    }
+    
     @Transactional(readOnly = true)
     public void fillEventResourceForm(Long eventResourceId) {
         try {
@@ -312,6 +358,13 @@ public class EventResourceBo {
                         archiveVideoResource.getDetailsUrl());
                 util.setValue("archiveDescription",
                         archiveVideoResource.getDescription());
+            } else if (eventResource instanceof YouTubeResource) {
+                YouTubeResource youTubeResource =
+                        (YouTubeResource) eventResource;
+                util.setValue("resourceType", "youtube");
+                util.setValue("youtubeId", youTubeResource.getVideoId());
+                util.setValue("youtubeDescription",
+                        youTubeResource.getDescription());
             }
             util.addFunctionCall("showResourceAddForm");
         } catch (RuntimeException e) {
