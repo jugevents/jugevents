@@ -1,6 +1,9 @@
 - &UserAuthority-admin-admin
   user: *User-admin
   authority: *Authority-admin
+- &UserAuthority-admin-jugger
+  user: *User-admin
+  authority: *Authority-jugger
 - &UserAuthority-lucio-jugger
   user: *User-lucio
   authority: *Authority-jugger
