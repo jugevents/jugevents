@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The Parancoe Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,36 +13,57 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 import it.jugpadova.bean.EnableJugger;
+import it.jugpadova.blo.JuggerBo;
 import it.jugpadova.exception.UserNotEnabledException;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.util.Utilities;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseFormController;
-import org.springframework.validation.BindException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springmodules.validation.bean.BeanValidator;
 
-public abstract class JuggerChangePasswordController extends BaseFormController {
+@Controller
+@RequestMapping("/jugger/changePassword.form")
+@SessionAttributes({JuggerChangePasswordController.JUGGER_ATTRIBUTE,
+    JuggerChangePasswordController.ENABLE_JUGGER_ATTRIBUTE
+})
+public class JuggerChangePasswordController {
 
     private static final Logger logger =
             Logger.getLogger(JuggerChangePasswordController.class);
-    private static final String JUGGER_ATTRIBUTE = "jugger";
+    public static final String FORM_VIEW = "pwdrecovery/setpwd";
+    public static final String JUGGER_ATTRIBUTE = "jugger";
+    public static final String ENABLE_JUGGER_ATTRIBUTE = "enablejugger";
+    @Autowired
+    private JuggerBo juggerBo;
+    @Autowired
+    @Qualifier("validator")
+    private BeanValidator validator;
 
-    @Override
-    protected ModelAndView onSubmit(HttpServletRequest req,
-            HttpServletResponse res, Object command,
-            BindException errors) throws Exception {
-        EnableJugger ej = (EnableJugger) command;
-        Jugger jugger = (Jugger) req.getAttribute(JUGGER_ATTRIBUTE);
-        String password = ej.getPassword();
+    @RequestMapping(method = RequestMethod.POST)
+    protected ModelAndView send(@ModelAttribute(JUGGER_ATTRIBUTE) Jugger jugger,
+            @ModelAttribute(ENABLE_JUGGER_ATTRIBUTE) EnableJugger enableJugger,
+            BindingResult result, SessionStatus status) {
+
         try {
-            blo().getJuggerBO().changePassword(jugger, password);
+            validator.validate(enableJugger, result);
+            if (result.hasErrors()) {
+                return new ModelAndView(FORM_VIEW);
+            }
+            status.setComplete();
+            juggerBo.changePassword(jugger, enableJugger.getPassword());
         } catch (UserNotEnabledException uaee) {
             logger.info("Trying to change " + jugger.getUser().getUsername() +
                     " password, but this user is disabled");
@@ -52,21 +73,28 @@ public abstract class JuggerChangePasswordController extends BaseFormController 
             logger.error(e, e);
             return Utilities.getMessageView("jugger.pwdchng.failed");
         }
-        return onSubmit(command, errors);
+        ModelAndView mv =
+                new ModelAndView(
+                "redirect:/home/message.html?messageCode=jugger.pwdchng.success");
+        return mv;
+    }
+    
+    
+    @RequestMapping(method = RequestMethod.GET)
+    public String form(@ModelAttribute(JUGGER_ATTRIBUTE) Jugger jugger,
+            @ModelAttribute(ENABLE_JUGGER_ATTRIBUTE) EnableJugger enableJugger) {
+        return FORM_VIEW;
     }
 
-    @Override
-    protected Object formBackingObject(HttpServletRequest req) throws Exception {
-        String username = null;
-        String changePasswordCode = null;
-        if ((username = req.getParameter("username")) == null) {
-            throw new Exception("No username found in the request!");
-        }
-        if ((changePasswordCode = req.getParameter("code")) == null) {
-            throw new Exception("No code found in the request!");
-        }
-        Jugger jugger = blo().getJuggerBO().
-                searchByUsernameAndChangePasswordCode(username,
+    @ModelAttribute(ENABLE_JUGGER_ATTRIBUTE)
+    public EnableJugger createEnableJugger() {
+        return new EnableJugger();
+    }
+
+    @ModelAttribute(JUGGER_ATTRIBUTE)
+    public Jugger retrieveJugger(@RequestParam("username") String username,
+            @RequestParam("code") String changePasswordCode) throws Exception {
+        Jugger jugger = juggerBo.searchByUsernameAndChangePasswordCode(username,
                 changePasswordCode);
         if (jugger == null) {
             logger.warn("Trying to change the password of the " + username +
@@ -76,15 +104,6 @@ public abstract class JuggerChangePasswordController extends BaseFormController 
                     " user doesn't exist, or the change password code (" +
                     changePasswordCode + ") doesn't correspond");
         }
-        req.setAttribute(JUGGER_ATTRIBUTE, jugger);
-        return new EnableJugger();
+        return jugger;
     }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
 }

@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The Parancoe Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,8 +13,6 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 import it.jugpadova.bean.Registration;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
@@ -25,61 +23,82 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseFormController;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.octo.captcha.service.CaptchaService;
+import it.jugpadova.blo.EventBo;
 import it.jugpadova.exception.RegistrationNotOpenException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springmodules.validation.bean.BeanValidator;
 
-public abstract class ParticipantRegistrationController extends BaseFormController {
+@Controller
+@RequestMapping("/event/registration.form")
+@SessionAttributes(ParticipantRegistrationController.REGISTRATION_ATTRIBUTE)
+public class ParticipantRegistrationController {
 
     private static final Logger logger =
             Logger.getLogger(ParticipantRegistrationController.class);
+    public static final String FORM_VIEW = "event/registration";
+    public static final String REGISTRATION_ATTRIBUTE = "registration";
+    @Autowired
     private CaptchaService captchaService;
+    @Autowired
+    private EventBo eventBo;
+    @Autowired
+    @Qualifier("validator")
+    private BeanValidator validator;
 
-    @Override
-    protected void initBinder(HttpServletRequest req,
-            ServletRequestDataBinder binder) throws Exception {
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) throws Exception {
         binder.registerCustomEditor(Date.class,
                 new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true));
     }
 
-    @Override
+    @RequestMapping(method = RequestMethod.POST)
     protected ModelAndView onSubmit(HttpServletRequest req,
-            HttpServletResponse res, Object command,
-            BindException errors) throws Exception {
-        Registration registration = (Registration) command;
-        if (registration.getEvent().getId() == null) {
-            return genericError("No valid event");
+            @ModelAttribute(REGISTRATION_ATTRIBUTE) Registration registration,
+            BindingResult result, SessionStatus status) throws Exception {
+        validator.validate(registration, result);
+        if (result.hasErrors()) {
+            return new ModelAndView(FORM_VIEW);
         }
-        String baseUrl =
-                "http://" + req.getServerName() + ":" + req.getServerPort() +
-                req.getContextPath();
-        List<Participant> prevParticipant = blo().getEventBo().
-                searchParticipantByEmailAndEventId(registration.getParticipant().
+        String baseUrl = Utilities.getBaseUrl(req);
+        List<Participant> prevParticipant = eventBo.searchParticipantByEmailAndEventId(registration.getParticipant().
                 getEmail(), registration.getEvent().getId());
+        status.setComplete();
         if (prevParticipant.size() == 0) {
-            blo().getEventBo().
-                    register(registration.getEvent(),
+            eventBo.register(registration.getEvent(),
                     registration.getParticipant(), baseUrl);
-            ModelAndView mv = onSubmit(command, errors);
+            ModelAndView mv =
+                    new ModelAndView(
+                    "redirect:/home/message.html?messageCode=participant.registration.sentMail");
             Utilities.addMessageArguments(mv, registration.getEvent().getTitle(),
                     registration.getParticipant().getEmail());
             return mv;
         } else {
             Participant p = prevParticipant.get(0);
             if (p.getConfirmed().booleanValue()) {
-                return Utilities.getMessageView("participant.registration.yetRegistered");
+                return Utilities.getMessageView(
+                        "participant.registration.yetRegistered");
             } else {
-                blo().getEventBo().
-                        refreshRegistration(registration.getEvent(), p, baseUrl);
-                ModelAndView mv = onSubmit(command, errors);
+                eventBo.refreshRegistration(registration.getEvent(), p, baseUrl);
+                ModelAndView mv =
+                        new ModelAndView(
+                        "redirect:/home/message.html?messageCode=participant.registration.sentMail");
                 Utilities.addMessageArguments(mv,
                         registration.getEvent().getTitle(),
                         registration.getParticipant().getEmail());
@@ -88,45 +107,32 @@ public abstract class ParticipantRegistrationController extends BaseFormControll
         }
     }
 
-    @Override
-    protected Object formBackingObject(HttpServletRequest req) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    public String form(
+            @ModelAttribute(REGISTRATION_ATTRIBUTE) Registration registration) {
+        return FORM_VIEW;
+    }
+
+    @ModelAttribute("registration")
+    protected Registration formBackingObject(@RequestParam("event.id") Long id,
+            HttpServletRequest req) {
         Registration result = new Registration();
         result.setParticipant(new Participant());
-        String sid = req.getParameter("event.id");
-        if (sid != null) {
-            Event event = blo().getEventBo().retrieveEvent(Long.parseLong(sid));
-            if (event != null) {
-                if (!event.getRegistrationOpen()) {
-                    throw new RegistrationNotOpenException("The registration isn't open, you can't register to the event",
-                            event);
-                }
-                result.setEvent(event);
-                // for event showing fragment
-                req.setAttribute("event", event);
-            } else {
-                throw new IllegalArgumentException("No event with id " + sid);
+        Event event = eventBo.retrieveEvent(id);
+        if (event != null) {
+            if (!event.getRegistrationOpen()) {
+                throw new RegistrationNotOpenException(
+                        "The registration isn't open, you can't register to the event",
+                        event);
             }
+            result.setEvent(event);
+            // for event showing fragment
+            req.setAttribute("event", event);
         } else {
-            throw new IllegalArgumentException("The event must be specified");
+            throw new IllegalArgumentException("No event with id " + id);
         }
         result.setCaptchaId(req.getSession().getId());
         result.setCaptchaService(captchaService);
         return result;
     }
-
-    public CaptchaService getCaptchaService() {
-        return captchaService;
-    }
-
-    public void setCaptchaService(CaptchaService captchaService) {
-        this.captchaService = captchaService;
-    }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
 }

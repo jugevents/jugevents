@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The Parancoe Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +13,8 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
-
+import it.jugpadova.blo.EventBo;
+import it.jugpadova.blo.JugBo;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,19 +24,29 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.parancoe.util.MemoryAppender;
-import org.parancoe.web.BaseMultiActionController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-public abstract class AdminController extends BaseMultiActionController {
+@Controller
+@RequestMapping("/admin/*.html")
+public class AdminController {
 
+    @Autowired
+    private JugBo jugBo;
+    @Autowired
+    private EventBo eventBo;
     private static final Logger logger =
             Logger.getLogger(AdminController.class);
 
+    @RequestMapping
     public ModelAndView index(HttpServletRequest req,
             HttpServletResponse res) {
         return new ModelAndView("admin/index", null);
     }
 
+    @RequestMapping
     public ModelAndView logs(HttpServletRequest req,
             HttpServletResponse res) {
         if ("true".equals(req.getParameter("clean"))) {
@@ -58,11 +67,13 @@ public abstract class AdminController extends BaseMultiActionController {
         return new ModelAndView("admin/logs", params);
     }
 
+    @RequestMapping
     public ModelAndView conf(HttpServletRequest req,
             HttpServletResponse res) {
         return new ModelAndView("admin/conf", null);
     }
 
+    @RequestMapping
     public ModelAndView spring(HttpServletRequest req,
             HttpServletResponse res) {
         return new ModelAndView("admin/spring", null);
@@ -89,24 +100,18 @@ public abstract class AdminController extends BaseMultiActionController {
         return StringUtils.join(lines);
     }
 
+    @RequestMapping
     public ModelAndView updateJugList(HttpServletRequest req,
             HttpServletResponse res) throws Exception {
-        blo().getJugBo().updateJugList(null);
+        jugBo.updateJugList(null);
         return new ModelAndView("redirect:/admin/logs.html");
     }
 
+    @RequestMapping
     public ModelAndView regenerateLuceneIndexes(HttpServletRequest req,
             HttpServletResponse res) throws Exception {
-        blo().getEventBo().regenerateLuceneIndexes();
+        eventBo.regenerateLuceneIndexes();
         logger.info("Regenerated the Lucene indexes");
         return new ModelAndView("redirect:/admin/logs.html");
     }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
 }

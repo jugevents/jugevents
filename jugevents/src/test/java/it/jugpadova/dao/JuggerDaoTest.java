@@ -1,10 +1,10 @@
 package it.jugpadova.dao;
 
-import it.jugpadova.Daos;
 import it.jugpadova.JugEventsBaseTest;
 import it.jugpadova.po.Jugger;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -12,12 +12,8 @@ import java.util.List;
  */
 public class JuggerDaoTest extends JugEventsBaseTest {
 
+    @Autowired
     private JuggerDao juggerDao;
-
-    public JuggerDaoTest() {
-        Daos daos = (Daos) ctx.getBean("daos");
-        juggerDao = daos.getJuggerDao();
-    }
 
     public void testFindByPartialJugNameAndCountryAndContinent() {
         List<Jugger> juggers = juggerDao.findByPartialJugNameAndCountryAndContinent("%J%", "%Ital%", "%Eur%");

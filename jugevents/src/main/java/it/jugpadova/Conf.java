@@ -18,17 +18,61 @@ import org.parancoe.util.BaseConf;
 /**
  * here you can put configuration specific getters
  */
-public class Conf extends BaseConf  {
+public class Conf extends BaseConf {
 
     public String getMyParam() {
         return getConfiguration().getString("myparam");
     }
-    
+
     public String getAnalyticsKey() {
         return getConfiguration().getString("analyticsKey");
     }
-    
+
     public String getJugeventsBaseUrl() {
         return getConfiguration().getString("jugeventsBaseUrl");
+    }
+
+    public String getConfirmationSenderEmailAddress() {
+        return getConfiguration().getString("confirmationSenderEmailAddress");
+    }
+
+    public int getUpcomingEventDays() {
+        return getConfiguration().getInt("upcomingEventDays", 7);
+    }
+
+    public int getNewEventDays() {
+        return getConfiguration().getInt("newEventDays", 7);
+    }
+
+    public String getDefaultKmlUrl() {
+        return getConfiguration().getString("defaultKmlUrl");
+    }
+
+    public double getThresholdAccess() {
+        return getConfiguration().getDouble("thresholdAccess", 1);
+    }
+
+    public String getAdminMailJE() {
+        return getConfiguration().getString("adminMailJE");
+    }
+
+    public String getKmlUpdateFromAddress() {
+        return getConfiguration().getString("kmlUpdateFromAddress");
+    }
+
+    public String getKmlUpdateToAddress() {
+        return getConfiguration().getString("kmlUpdateToAddress");
+    }
+
+    public String getKmlUpdateReplyAddress() {
+        return getConfiguration().getString("kmlUpdateReplyAddress");
+    }
+
+    public String getKmlUpdateSubjectPrefix() {
+        return getConfiguration().getString("kmlUpdateSubjectPrefix");
+    }
+    
+    public String getInternalMail() {
+        return getConfiguration().getString("internalMail");
     }
 }

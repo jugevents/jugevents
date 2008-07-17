@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The Parancoe Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,86 +13,95 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
-import it.jugpadova.exception.ParancoeAccessDeniedException;
+import it.jugpadova.blo.EventBo;
 import it.jugpadova.po.Event;
 
 import it.jugpadova.po.Registration;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseFormController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springmodules.validation.bean.BeanValidator;
 
-public abstract class EventEditController extends BaseFormController {
+@Controller
+@RequestMapping("/event/edit.form")
+@SessionAttributes("event")
+public class EventEditController {
+    public static final String FORM_VIEW = "event/edit";
 
     private static final Logger logger =
             Logger.getLogger(EventEditController.class);
+    @Autowired
+    private EventBo eventBo;
+    @Autowired
+    @Qualifier("validator")
+    private BeanValidator validator;
 
-    @Override
-    protected void initBinder(HttpServletRequest req,
-            ServletRequestDataBinder binder) throws Exception {
+    @InitBinder
+    public void initBinder(WebDataBinder binder) throws Exception {
         binder.registerCustomEditor(Date.class,
                 new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true));
-        binder.registerCustomEditor(Date.class, "registration.startRegistration", new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy HH:mm"), true));
-        binder.registerCustomEditor(Date.class, "registration.endRegistration", new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy HH:mm"), true));
+        binder.registerCustomEditor(Date.class, "registration.startRegistration",
+                new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy HH:mm"),
+                true));
+        binder.registerCustomEditor(Date.class, "registration.endRegistration",
+                new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy HH:mm"),
+                true));
     }
 
-    @Override
-    protected ModelAndView onSubmit(HttpServletRequest req,
-            HttpServletResponse res, Object command,
-            BindException errors) throws Exception {
-        Event event = null;
+    @RequestMapping(method = RequestMethod.POST)
+    public String save(@ModelAttribute("event") Event event,
+            BindingResult result, SessionStatus status) {
         try {
-            event = (Event) command;
-            blo().getEventBo().save(event);
-            return onSubmit(command, errors); // restituisce succesView
+            validator.validate(event, result);
+            if (result.hasErrors()) {
+                return FORM_VIEW;
+            }
+            eventBo.save(event);
+            status.setComplete();
+            return "redirect:show.html?id="+event.getId();
         } catch (Exception e) {
-            errors.reject("error.generic");
-            logger.error("Problema salvando l'evento " + event, e);
-            return showForm(req, res, errors);
+            result.reject("error.generic");
+            logger.error("Error saving the event " + event, e);
+            return FORM_VIEW;
         }
     }
 
-    /* If the id is passed, load the event and prepopulate the form */
-    @Override
-    protected Object formBackingObject(HttpServletRequest req) throws Exception {
-        try {
-            Long id = Long.parseLong(req.getParameter("id"));
-            Event event = blo().getEventBo().retrieveEvent(id);
-            if (event == null) {
-                throw new Exception();
+    @RequestMapping(method = RequestMethod.GET)
+    public String form(@ModelAttribute("event") Event event) {
+        return FORM_VIEW;
+    }
+
+    @ModelAttribute("event")
+    protected Event formBackingObject(@RequestParam(value = "id", required =
+            false) Long id) {
+        Event result = null;
+        if (id != null) {
+            result = eventBo.retrieveEvent(id);
+            if (result.getRegistration() == null) {
+                result.setRegistration(new Registration());
             }
-            if (event.getRegistration() == null) {
-                event.setRegistration(new Registration());
-            }
-            blo().getEventBo().checkUserAuthorization(event);
-            return event;
-        } catch (ParancoeAccessDeniedException pade) {
-            throw pade;
-        } catch (Exception e) {
-            Event event = new Event();
-            final Registration registration = new Registration();
+            eventBo.checkUserAuthorization(result);
+        } else {
+            result = new Event();
+            Registration registration = new Registration();
             registration.setStartRegistration(new Date());
             registration.setEndRegistration(registration.getStartRegistration());
-            event.setRegistration(registration);            
-            return event;
+            result.setRegistration(registration);
         }
+        return result;
     }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
 }

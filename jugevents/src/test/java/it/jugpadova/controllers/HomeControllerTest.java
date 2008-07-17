@@ -1,27 +1,22 @@
 package it.jugpadova.controllers;
 
 import org.parancoe.web.test.ControllerTest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 public class HomeControllerTest extends ControllerTest {
     
-    // non si riesce a iniettare dinamicamente?
+    @Autowired
     private HomeController controller;
-    
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();    // non togliere questa riga
-        controller = (HomeController) ctx.getBean("homeController");
-    }
-    
+        
     public void testNotNull() {
         assertNotNull(controller);
     }
     
     public void testWelcome() throws Exception {
         req = new MockHttpServletRequest("GET", "/home/welcome.html");
-        ModelAndView mv = controller.handleRequest(req, res);
+        ModelAndView mv = controller.welcome(req, res);
         assertEquals("welcome", mv.getViewName());
         assertNotNull(mv.getModel().get("something"));
     }

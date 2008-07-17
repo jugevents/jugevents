@@ -1,11 +1,13 @@
 package it.jugpadova.blo;
 
 import it.jugpadova.JugEventsBaseTest;
+import it.jugpadova.dao.JUGDao;
 import it.jugpadova.po.JUG;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Test of the JugBo methods.
@@ -14,11 +16,10 @@ import org.apache.commons.lang.StringEscapeUtils;
  */
 public class JugBoTest extends JugEventsBaseTest {
 
+    @Autowired
+    private JUGDao jugDao;
+    @Autowired
     private JugBo jugBo;
-
-    public JugBoTest() {
-        this.jugBo = (JugBo) ctx.getBean("jugBo");
-    }
 
     public void testBuildKmlPlacemarkText() throws IOException {
         String result = "<Placemark>\n" +
@@ -35,7 +36,7 @@ public class JugBoTest extends JugEventsBaseTest {
                 "    </Point>\n" +
                 "    <styleUrl>#jugStyle</styleUrl>\n" +
                 "</Placemark>";
-        JUG jug = jugBo.getDaos().getJUGDao().findByName("GOJAVA");
+        JUG jug = getGojavaJug();
         jug.setInfos("Grupo de Usu\u00E1rios JAVA Estado de Goi\u00E1s");
         String placemark = this.jugBo.buildKmlPlacemarkText(jug,
                 "Raphael Adrien", "raphael.adrien@gmail.com");
@@ -106,7 +107,8 @@ public class JugBoTest extends JugEventsBaseTest {
     }
 
     private JUG getGojavaJug() {
-        JUG jug = jugBo.getDaos().getJUGDao().findByName("GOJAVA");
+        JUG jug = jugDao.findByName("GOJAVA");
+        assertNotNull(jug);
         return jug;
     }
     

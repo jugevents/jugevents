@@ -22,6 +22,7 @@ public abstract class JugEventsBaseTest extends BaseTest {
 
     @Override
     public Class[] getFixtureClasses() {
-        return new Class[]{Continent.class, Country.class, User.class, Authority.class, UserAuthority.class, JUG.class, ReliabilityRequest.class, Jugger.class, Event.class, Participant.class, EventLink.class};
+//        return new Class[]{Continent.class, Country.class, User.class, Authority.class, UserAuthority.class, JUG.class, ReliabilityRequest.class, Jugger.class, EventLink.class, Event.class, Participant.class};
+        return new Class[]{Continent.class, Country.class, User.class, Authority.class, UserAuthority.class, JUG.class, ReliabilityRequest.class, Jugger.class, Event.class, EventLink.class, Participant.class};
     }
 }

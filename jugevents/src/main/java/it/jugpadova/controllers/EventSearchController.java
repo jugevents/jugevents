@@ -13,61 +13,40 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 import it.jugpadova.bean.EventSearch;
+import it.jugpadova.blo.EventBo;
 import it.jugpadova.po.Event;
-import it.jugpadova.util.Utilities;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseFormController;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-public abstract class EventSearchController extends BaseFormController {
+@Controller
+@RequestMapping("/event/search.form")
+public class EventSearchController {
 
     private static final Logger logger =
             Logger.getLogger(EventSearchController.class);
+    @Autowired
+    private EventBo eventBo;
 
-    @Override
-    protected void initBinder(HttpServletRequest req,
-            ServletRequestDataBinder binder) throws Exception {
-        binder.registerCustomEditor(Date.class,
-                new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true));
+    @ModelAttribute("eventSearch")
+    public EventSearch createBackingObject() {
+        return new EventSearch();
     }
 
-    @Override
-    protected ModelAndView onSubmit(HttpServletRequest req,
-            HttpServletResponse res, Object command,
-            BindException errors) throws Exception {
-        EventSearch eventSearch = (EventSearch) command;
-        List<Event> events = blo().getEventBo().search(eventSearch);
-        ModelAndView mv = onSubmit(command, errors);  
-        mv.addObject("servicesBo", blo().getServicesBo());
+    @RequestMapping
+    protected ModelAndView search(
+            @ModelAttribute("eventSearch") EventSearch eventSearch) {
+        List<Event> events = eventBo.search(eventSearch);
+        ModelAndView mv = new ModelAndView("event/search");
         mv.addObject("events", events);
-        if (events.isEmpty()) {
-            mv.addObject("showNoResultsMessage", "true");
-        }
+        mv.addObject("showNoResultsMessage", Boolean.toString(events.isEmpty()));
         return mv;
     }
-
-    @Override
-    protected boolean isFormSubmission(HttpServletRequest request) {
-        return true;
-    }
-
-    
-    
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
 }

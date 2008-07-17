@@ -13,11 +13,11 @@
 // limitations under the License.
 package it.jugpadova.dao;
 
-import it.jugpadova.Daos;
 import it.jugpadova.JugEventsBaseTest;
 import it.jugpadova.po.JUG;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -25,12 +25,8 @@ import java.util.List;
  */
 public class JUGDaoTest extends JugEventsBaseTest {
 
+    @Autowired
     private JUGDao jugDao;
-
-    public JUGDaoTest() {
-        Daos daos = (Daos) ctx.getBean("daos");
-        jugDao = daos.getJUGDao();
-    }
 
     public void testFindByPartialName() {
         List<JUG> jugs = jugDao.findByPartialName("%J%");
@@ -50,6 +46,7 @@ public class JUGDaoTest extends JugEventsBaseTest {
     
     public void testFindByICName() {
         JUG jug = jugDao.findByICName("jug padova");
+        assertNotNull(jug);
         assertEquals(jug.getName(), "JUG Padova");
     }
 

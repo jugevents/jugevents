@@ -20,7 +20,6 @@ import it.jugpadova.bean.Registration;
 import it.jugpadova.blo.EventBo;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
 import it.jugpadova.po.Event;
-import it.jugpadova.po.Jugger;
 import it.jugpadova.po.Participant;
 
 import java.io.OutputStreamWriter;
@@ -44,32 +43,48 @@ import com.sun.syndication.feed.rss.Description;
 import com.sun.syndication.feed.rss.Guid;
 import com.sun.syndication.feed.rss.Item;
 import com.sun.syndication.io.WireFeedOutput;
+import it.jugpadova.blo.ServicesBo;
+import it.jugpadova.dao.EventDao;
 import it.jugpadova.util.Utilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-public abstract class EventController extends BaseMultiActionController {
+@Controller
+@RequestMapping("/event/*.html")
+public class EventController extends BaseMultiActionController {
 
     private static Logger logger =
             Logger.getLogger(EventController.class);
 
+    @Autowired
+    private EventDao eventDao;
+    @Autowired
+    private EventBo eventBo;
+    @Autowired
+    private ServicesBo servicesBo;
+    
+    @RequestMapping
     public ModelAndView list(HttpServletRequest req,
             HttpServletResponse res) {
         ModelAndView mv = new ModelAndView("event/list");
         mv.addObject("news",
-                blo().getEventBo().buildNewsMessages(Utilities.getBaseUrl(req)));
+                eventBo.buildNewsMessages(Utilities.getBaseUrl(req)));
         return mv;
     }
 
+    @RequestMapping
     public ModelAndView delete(HttpServletRequest req,
             HttpServletResponse res) {
         try {
             Long id = Long.parseLong(req.getParameter("id"));
-            Event event = blo().getEventBo().retrieveEvent(id);
+            Event event = eventBo.retrieveEvent(id);
             if (event == null) {
                 throw new IllegalArgumentException("No event with id " + id);
             }
-            blo().getEventBo().checkUserAuthorization(event);
-            dao().getEventDao().delete(event);
-            logger.info("User " + blo().getServicesBo().authenticatedUsername() +
+            eventBo.checkUserAuthorization(event);
+            eventDao.delete(event);
+            logger.info("User " + servicesBo.authenticatedUsername() +
                     " deleted event with id=" + id);
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;
@@ -79,18 +94,19 @@ public abstract class EventController extends BaseMultiActionController {
         return new ModelAndView("redirect:search.form");
     }
 
+    @RequestMapping
     public ModelAndView show(HttpServletRequest req,
             HttpServletResponse res) {
         ModelAndView mv =
                 new ModelAndView("event/show");
         try {
             Long id = Long.parseLong(req.getParameter("id"));
-            Event event = blo().getEventBo().retrieveEvent(id);
+            Event event = eventBo.retrieveEvent(id);
             if (event == null) {
                 throw new IllegalArgumentException("No event with id " + id);
             }
             mv.addObject("event", event);
-            mv.addObject("canCurrentUserManageEvent", blo().getServicesBo().
+            mv.addObject("canCurrentUserManageEvent", servicesBo.
                     canCurrentUserManageEvent(event));
         } catch (Exception e) {
             return genericError(e);
@@ -98,20 +114,21 @@ public abstract class EventController extends BaseMultiActionController {
         return mv;
     }
 
+    @RequestMapping
     public ModelAndView participants(HttpServletRequest req,
             HttpServletResponse res) {
         ModelAndView mv =
                 new ModelAndView("event/participants");
         try {
             Long id = Long.parseLong(req.getParameter("id"));
-            Event event = blo().getEventBo().retrieveEvent(id);
+            Event event = eventBo.retrieveEvent(id);
             if (event == null) {
                 throw new IllegalArgumentException("No event with id " + id);
             }
-            blo().getEventBo().checkUserAuthorization(event);
-            List<Participant> participants = blo().getEventBo().
+            eventBo.checkUserAuthorization(event);
+            List<Participant> participants = eventBo.
                     searchConfirmedParticipantsByEventId(event.getId());
-            List<Participant> participantsNotConfirmed = blo().getEventBo().
+            List<Participant> participantsNotConfirmed = eventBo.
                     searchNotConfirmedParticipantsByEventId(event.getId());
             mv.addObject("event", event);
             mv.addObject("participants", participants);
@@ -128,22 +145,23 @@ public abstract class EventController extends BaseMultiActionController {
         return mv;
     }
 
+    @RequestMapping
     public ModelAndView winners(HttpServletRequest req,
             HttpServletResponse res) {
         ModelAndView mv =
                 new ModelAndView("event/winners");
         try {
             Long id = Long.parseLong(req.getParameter("id"));
-            Event event = blo().getEventBo().retrieveEvent(id);
+            Event event = eventBo.retrieveEvent(id);
             if (event == null) {
                 throw new IllegalArgumentException("No event with id " + id);
             }
-            blo().getEventBo().checkUserAuthorization(event);
+            eventBo.checkUserAuthorization(event);
             mv.addObject("event", event);
-            List<Participant> nonWinningParticipants = blo().getEventBo().
+            List<Participant> nonWinningParticipants = eventBo.
                     searchNonwinningParticipantsByEventId(id);
             mv.addObject("nonWinningParticipants", nonWinningParticipants);
-            List<Participant> winningParticipants = blo().getEventBo().
+            List<Participant> winningParticipants = eventBo.
                     searchWinningParticipantsByEventId(id);
             mv.addObject("winningParticipants", winningParticipants);
         } catch (ParancoeAccessDeniedException pade) {
@@ -154,6 +172,7 @@ public abstract class EventController extends BaseMultiActionController {
         return mv;
     }
 
+    @RequestMapping
     public ModelAndView rss(HttpServletRequest req,
             HttpServletResponse res) throws Exception {
         try {
@@ -163,7 +182,7 @@ public abstract class EventController extends BaseMultiActionController {
             eventSearch.setJugName(req.getParameter("jugName"));
             eventSearch.setPastEvents(Boolean.parseBoolean(req.getParameter("pastEvents")));
             eventSearch.setOrderByDate(req.getParameter("order"));
-            List<Event> events = blo().getEventBo().search(eventSearch);
+            List<Event> events = eventBo.search(eventSearch);
             Channel channel = new Channel("rss_2.0");
             channel.setTitle("JUG Event news");
             channel.setDescription("JUG Events news always updated");
@@ -217,6 +236,7 @@ public abstract class EventController extends BaseMultiActionController {
         return null;
     }
 
+    @RequestMapping
     public ModelAndView badge(HttpServletRequest req,
             HttpServletResponse res) throws Exception {
         try {
@@ -249,7 +269,7 @@ public abstract class EventController extends BaseMultiActionController {
                 }
             }
             java.util.List<it.jugpadova.po.Event> events =
-                    blo().getEventBo().search(eventSearch);
+                    eventBo.search(eventSearch);
             boolean showJUGName =
                     java.lang.Boolean.parseBoolean(req.getParameter("jeb_showJUGName"));
             boolean showCountry =
@@ -259,7 +279,6 @@ public abstract class EventController extends BaseMultiActionController {
             boolean showParticipants =
                     java.lang.Boolean.parseBoolean(req.getParameter("jeb_showParticipants"));
             String badgeStyle = req.getParameter("jeb_style");
-            EventBo eventBo = blo().getEventBo();
             String result =
                     eventBo.getBadgeCode(eventBo.getBadgeHtmlCode(events,
                     dateFormat, baseUrl, showJUGName, showCountry,
@@ -282,17 +301,18 @@ public abstract class EventController extends BaseMultiActionController {
         return null;
     }
 
+    @RequestMapping
     public ModelAndView resources(HttpServletRequest req,
             HttpServletResponse res) {
         ModelAndView mv =
                 new ModelAndView("event/resources");
         try {
             Long id = Long.parseLong(req.getParameter("id"));
-            Event event = blo().getEventBo().retrieveEvent(id);
+            Event event = eventBo.retrieveEvent(id);
             if (event == null) {
                 throw new IllegalArgumentException("No event with id " + id);
             }
-            blo().getEventBo().checkUserAuthorization(event);
+            eventBo.checkUserAuthorization(event);
             mv.addObject("event", event);
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;
@@ -306,7 +326,4 @@ public abstract class EventController extends BaseMultiActionController {
         return logger;
     }
 
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
 }

@@ -13,17 +13,14 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 import it.jugpadova.bean.JuggerSearch;
-import it.jugpadova.po.Jugger;
+import it.jugpadova.blo.JuggerBo;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.*;
 
-import org.parancoe.web.BaseFormController;
-import org.springframework.validation.BindException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -31,46 +28,22 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Enrico Giurin
  *
  */
-public abstract class JuggerSearchController extends BaseFormController {
+@Controller
+@RequestMapping("/adminjugger/juggersearch.form")
+public class JuggerSearchController {
+    @Autowired
+    private JuggerBo juggerBo;
 
-	/* (non-Javadoc)
-	 * @see org.parancoe.web.BaseFormController#getLogger()
-	 */
-	
+    @ModelAttribute("juggerSearch")
+    public JuggerSearch createBackingObject() {
+        return new JuggerSearch();
+    }
 
-	@Override
-	protected ModelAndView onSubmit(HttpServletRequest request,
-			HttpServletResponse response, Object command, BindException errors)
-			throws Exception {
-		JuggerSearch js = (JuggerSearch)command;
-		//really sorry Lucio...but I couldn't find better
-		request.getSession(false).setAttribute("Parancoe.JS", js);
-		ModelAndView mv = onSubmit(command, errors);
-		mv.addObject("juggers", blo().getJuggerBO().searchJugger(js));
-		return mv;
-	}
-
-	@Override
-	protected Object formBackingObject(HttpServletRequest request)
-			throws Exception {
-		// TODO Auto-generated method stub
-		//request.setAttribute("juggers", blo().getJuggerBO().searchAllOrderByUsername());
-		JuggerSearch js = (JuggerSearch)request.getSession(false).getAttribute("Parancoe.JS");
-		List<Jugger> list = null;
-		if(js == null)
-		{
-			list = blo().getJuggerBO().searchAllOrderByUsername();
-		}
-		else
-		{
-			list = blo().getJuggerBO().searchJugger(js);
-		}
-		request.setAttribute("juggers", list);		
-		return new JuggerSearch();
-	}
-	
-	protected abstract Daos dao();
-
-    protected abstract Blos blo();
-
+    @RequestMapping
+    public ModelAndView search(
+            @ModelAttribute("juggerSearch") JuggerSearch juggerSearch) {
+        ModelAndView mv = new ModelAndView("jugger/admin/juggers");
+        mv.addObject("juggers", juggerBo.searchJugger(juggerSearch));
+        return mv;
+    }
 }

@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The Parancoe Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 import it.jugpadova.bean.Registration;
+import it.jugpadova.blo.EventBo;
+import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
 
@@ -24,92 +24,105 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseFormController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springmodules.validation.bean.BeanValidator;
 
-public abstract class AddParticipantController extends BaseFormController {
+@Controller
+@RequestMapping("/event/addParticipant.form")
+@SessionAttributes(AddParticipantController.REGISTRATION_ATTRIBUTE)
+public class AddParticipantController {
 
     private static final Logger logger =
             Logger.getLogger(AddParticipantController.class);
+    public static final String FORM_VIEW = "event/participants";
+    public static final String REGISTRATION_ATTRIBUTE = "registration";
+    @Autowired
+    private EventBo eventBo;
+    @Autowired
+    private ParticipantDao participantDao;
+    @Autowired
+    @Qualifier("validator")
+    private BeanValidator validator;
 
-    @Override
-    protected void initBinder(HttpServletRequest req,
-            ServletRequestDataBinder binder) throws Exception {
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) throws Exception {
         binder.registerCustomEditor(Date.class,
                 new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true));
     }
 
-    @Override
-    protected void onBindAndValidate(HttpServletRequest req, Object command,
-            BindException errors) throws Exception {
-        if (errors.hasErrors()) {
-            Registration registration = (Registration) command;
-            Event event = blo().getEventBo().retrieveEvent(registration.getEvent().
-                    getId());
-            List<Participant> participants = blo().getEventBo().
-                    searchConfirmedParticipantsByEventId(event.getId());
-            req.setAttribute("event", event);
+//    protected void onBindAndValidate(HttpServletRequest req, Object command,
+//            BindException errors) throws Exception {
+//        if (errors.hasErrors()) {
+//            Registration registration = (Registration) command;
+//            Event event = eventBo.retrieveEvent(registration.getEvent().
+//                    getId());
+//            List<Participant> participants =
+//                    eventBo.searchConfirmedParticipantsByEventId(event.getId());
+//            req.setAttribute("event", event);
+//            req.setAttribute("participants", participants);
+//            req.setAttribute("showAddNewPartecipantDiv", "true");
+//        }
+//    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    protected ModelAndView onSubmit(HttpServletRequest req,
+            @ModelAttribute(REGISTRATION_ATTRIBUTE) Registration registration,
+            BindingResult result, SessionStatus status) throws Exception {
+        validator.validate(registration, result);
+        if (result.hasErrors()) {
+            List<Participant> participants =
+                    eventBo.searchConfirmedParticipantsByEventId(registration.getEvent().getId());
+            req.setAttribute("event", registration.getEvent());
             req.setAttribute("participants", participants);
             req.setAttribute("showAddNewPartecipantDiv", "true");
+            return new ModelAndView(FORM_VIEW);
         }
-    }
-
-    @Override
-    protected ModelAndView onSubmit(HttpServletRequest req,
-            HttpServletResponse res, Object command,
-            BindException errors) throws Exception {
-        Registration registration = (Registration) command;
-        if (registration.getEvent().getId() == null) {
-            return genericError("No valid event");
-        }
-        List<Participant> prevParticipant = blo().getEventBo().
-                searchParticipantByEmailAndEventId(registration.getParticipant().
+        List<Participant> prevParticipant = eventBo.searchParticipantByEmailAndEventId(registration.getParticipant().
                 getEmail(), registration.getEvent().getId());
         if (prevParticipant.size() == 0) {
-            blo().getEventBo().addParticipant(registration.getEvent(),
+            eventBo.addParticipant(registration.getEvent(),
                     registration.getParticipant());
         } else {
             Participant p = prevParticipant.get(0);
             p.setConfirmed(Boolean.TRUE);
-            dao().getParticipantDao().createOrUpdate(p);
+            participantDao.store(p);
             logger.info("Confirmed participant with id=" + p.getId());
         }
         ModelAndView mv = new ModelAndView("redirect:participants.html?id=" + registration.getEvent().
                 getId());
+        status.setComplete();
         return mv;
     }
 
-    @Override
-    protected Object formBackingObject(HttpServletRequest req) throws Exception {
+    @ModelAttribute(REGISTRATION_ATTRIBUTE)
+    protected Registration formBackingObject(@RequestParam("event.id") Long id,
+            HttpServletRequest req) {
         Registration result = new Registration();
         result.setParticipant(new Participant());
-        String sid = req.getParameter("event.id");
-        if (sid != null) {
-            Event event = blo().getEventBo().retrieveEvent(Long.parseLong(sid));
-            if (event != null) {
-                result.setEvent(event);
-                // for event showing fragment
-                req.setAttribute("event", event);
-            } else {
-                throw new IllegalArgumentException("No event with id " + sid);
-            }
+        Event event = eventBo.retrieveEvent(id);
+        if (event != null) {
+            result.setEvent(event);
+            // for event showing fragment
+            req.setAttribute("event", event);
         } else {
-            result.setEvent(new Event());
+            throw new IllegalArgumentException("No event with id " + id);
         }
         return result;
     }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
 }

@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The Parancoe Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,19 +13,23 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 import it.jugpadova.bean.PasswordRecovery;
+import it.jugpadova.blo.JuggerBo;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.util.Utilities;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseFormController;
-import org.springframework.validation.BindException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springmodules.validation.bean.BeanValidator;
 
 /**
  * Controller for password recovery.
@@ -33,47 +37,59 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Enrico Giurin
  *
  */
-public abstract class PasswordRecoveryController extends BaseFormController {
+@Controller
+@RequestMapping("/passwordRecovery.form")
+public class PasswordRecoveryController {
 
     private static final Logger logger =
             Logger.getLogger(PasswordRecoveryController.class);
+    public static final String FORM_VIEW = "pwdrecovery/passwordRecovery";
+    public static final String PASSWORD_RECOVERY_ATTRIBUTE = "passwordRecovery";
+    @Autowired
+    private JuggerBo juggerBo;
+    @Autowired
+    @Qualifier("validator")
+    private BeanValidator validator;
 
-    @Override
-    protected ModelAndView onSubmit(HttpServletRequest req,
-            HttpServletResponse res, Object command,
-            BindException errors) throws Exception {
+    @RequestMapping(method = RequestMethod.POST)
+    protected ModelAndView send(
+            @ModelAttribute(PASSWORD_RECOVERY_ATTRIBUTE) PasswordRecovery passwordRecovery,
+            BindingResult result, HttpServletRequest req) throws Exception {
 
-        PasswordRecovery pr = (PasswordRecovery) command;
-        String email = pr.getEmail();
+        validator.validate(passwordRecovery, result);
+        if (result.hasErrors()) {
+            return new ModelAndView(FORM_VIEW);
+        }
+
+        String email = passwordRecovery.getEmail();
         logger.debug("email: " + email);
-        Jugger jugger = blo().getJuggerBO().searchByEmail(email);
+        Jugger jugger = juggerBo.searchByEmail(email);
         if (jugger == null) {
-            errors.rejectValue("email", "juggerNotFoundByEmail");
-            return showForm(req, res, errors);
+            result.rejectValue("email", "juggerNotFoundByEmail");
+            return new ModelAndView(FORM_VIEW);
         }
         if (jugger.getUser().isEnabled() == false) {
-            errors.rejectValue("email", "juggerBlocked");
-            return showForm(req, res, errors);
+            result.rejectValue("email", "juggerBlocked");
+            return new ModelAndView(FORM_VIEW);
         }
-        blo().getJuggerBO().
-                passwordRecovery(jugger,
-                Utilities.getBaseUrl(req));
-        ModelAndView mv = onSubmit(command, errors);
+        juggerBo.passwordRecovery(jugger, Utilities.getBaseUrl(req));
+        ModelAndView mv =
+                new ModelAndView(
+                "redirect:/home/message.html?messageCode=jugger.pwdchng.sentMail");
         Utilities.addMessageArguments(mv, jugger.getEmail());
         return mv;
     }
 
-    @Override
-    protected Object formBackingObject(HttpServletRequest req) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    public String form(
+            @ModelAttribute(PASSWORD_RECOVERY_ATTRIBUTE) PasswordRecovery passwordRecovery) {
+        return FORM_VIEW;
+    }
+
+    @ModelAttribute(PASSWORD_RECOVERY_ATTRIBUTE)
+    protected PasswordRecovery formBackingObject(HttpServletRequest req) throws
+            Exception {
         return new PasswordRecovery();
     }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
-} // end of class
+}
 

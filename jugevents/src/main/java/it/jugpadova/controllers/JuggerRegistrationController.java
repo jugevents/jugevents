@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The Parancoe Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,111 +13,122 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 import it.jugpadova.bean.NewJugger;
 import it.jugpadova.bean.RequireReliability;
 import it.jugpadova.exception.EmailAlreadyPresentException;
 import it.jugpadova.exception.UserAlreadyPresentsException;
 import it.jugpadova.util.Utilities;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.parancoe.plugins.world.Country;
-import org.parancoe.web.BaseFormController;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.octo.captcha.service.CaptchaService;
+import it.jugpadova.blo.JuggerBo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.context.request.WebRequest;
+import org.springmodules.validation.bean.BeanValidator;
 
 /**
  * 
  * @author Enrico Giurin
  * 
  */
-public abstract class JuggerRegistrationController extends BaseFormController {
+@Controller
+@RequestMapping("/jugger/registration.form")
+@SessionAttributes(JuggerRegistrationController.JUGGER_ATTRIBUTE)
+public class JuggerRegistrationController {
 
-	private static final Logger logger = Logger
-			.getLogger(JuggerRegistrationController.class);
+    private static final Logger logger = Logger.getLogger(
+            JuggerRegistrationController.class);
+    public static final String FORM_VIEW = "jugger/newJugger";
+    public static final String JUGGER_ATTRIBUTE = "jugger";
+    @Autowired
+    private JuggerBo juggerBo;
+    @Autowired
+    private CaptchaService captchaService;
+    @Autowired
+    @Qualifier("validator")
+    private BeanValidator validator;
 
-	// captcha
-	private CaptchaService captchaService;
-
-	@Override
-	protected void initBinder(HttpServletRequest req,
-			ServletRequestDataBinder binder) throws Exception {
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(
-				new SimpleDateFormat("dd/MM/yyyy"), true));
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) throws Exception {
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(
+                new SimpleDateFormat("dd/MM/yyyy"), true));
         binder.registerCustomEditor(byte[].class,
                 new ByteArrayMultipartFileEditor());
-	}
+    }
 
-	@Override
-	protected void onBind(HttpServletRequest request, Object command)
-			throws Exception {
-		NewJugger jc = (NewJugger) command;
-		jc.getJugger().getUser().setPassword("xxx");
-	}
+//    @Override
+//    protected void onBind(HttpServletRequest request, Object command)
+//            throws Exception {
+//        NewJugger jc = (NewJugger) command;
+//        jc.getJugger().getUser().setPassword("xxx");
+//    }
 
-	@Override
-	protected ModelAndView onSubmit(HttpServletRequest req,
-			HttpServletResponse res, Object command, BindException errors)
-			throws Exception {
-		NewJugger jc = (NewJugger) command;
-		try {
-			blo().getJuggerBO().newJugger(jc.getJugger(),
-					Utilities.getBaseUrl(req), jc.getRequireReliability().isRequireReliability(),
-					jc.getRequireReliability().getComment());
-		} catch (EmailAlreadyPresentException e) {
-			errors.rejectValue("jugger.email", "emailalreadypresent", e
-					.getMessage());
-			logger.error(e);
-			return showForm(req, res, errors);
-		} catch (UserAlreadyPresentsException e) {
-			errors.rejectValue("jugger.user.username", "useralreadypresents", e
-					.getMessage());
-			logger.error(e);
-			return showForm(req, res, errors);
-		} finally {
-			if (jc.getJugger().getJug().getCountry() == null) {
-				jc.getJugger().getJug().setCountry(new Country());
-			}
-		}
-		ModelAndView mv = onSubmit(command, errors);
-		Utilities.addMessageArguments(mv, jc.getJugger().getEmail());
-		return mv;
-	}
+    @RequestMapping(method = RequestMethod.POST)
+    protected ModelAndView save(HttpServletRequest req,
+            @ModelAttribute(JUGGER_ATTRIBUTE) NewJugger jc,
+            BindingResult result, SessionStatus status) throws IOException {
+        try {
+            validator.validate(jc, result);
+            if (result.hasErrors()) {
+                return new ModelAndView(FORM_VIEW);
+            }
+            juggerBo.newJugger(jc.getJugger(),
+                    Utilities.getBaseUrl(req),
+                    jc.getRequireReliability().isRequireReliability(),
+                    jc.getRequireReliability().getComment());
+        } catch (EmailAlreadyPresentException e) {
+            result.rejectValue("jugger.email", "emailalreadypresent",
+                    e.getMessage());
+            logger.error(e);
+            return new ModelAndView(FORM_VIEW);
+        } catch (UserAlreadyPresentsException e) {
+            result.rejectValue("jugger.user.username", "useralreadypresents",
+                    e.getMessage());
+            logger.error(e);
+            return new ModelAndView(FORM_VIEW);
+        } finally {
+            if (jc.getJugger().getJug().getCountry() == null) {
+                jc.getJugger().getJug().setCountry(new Country());
+            }
+        }
+        ModelAndView mv = new ModelAndView("redirect:/home/message.html?messageCode=jugger.registration.sentMail");
+        Utilities.addMessageArguments(mv, jc.getJugger().getEmail());
+        status.setComplete();
+        return mv;
+    }
 
-	@Override
-	protected Object formBackingObject(HttpServletRequest req) throws Exception {
-		NewJugger jc = Utilities.newJuggerCaptcha();
-		jc.setCaptchaId(req.getSession().getId());
-		jc.setCaptchaService(captchaService);
-		jc.setRequireReliability(new RequireReliability());
-		return jc;
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    public String form(@ModelAttribute(JUGGER_ATTRIBUTE) NewJugger jugger) {
+        return FORM_VIEW;
+    }
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	protected abstract Daos dao();
-
-	protected abstract Blos blo();
-
-	public CaptchaService getCaptchaService() {
-		return captchaService;
-	}
-
-	public void setCaptchaService(CaptchaService captchaService) {
-		this.captchaService = captchaService;
-	}
+    @ModelAttribute(JUGGER_ATTRIBUTE)
+    public NewJugger formBackingObject(WebRequest req) {
+        NewJugger jc = Utilities.newJuggerCaptcha();
+        jc.setCaptchaId(req.getSessionId());
+        jc.setCaptchaService(captchaService);
+        jc.setRequireReliability(new RequireReliability());
+        return jc;
+    }
 }

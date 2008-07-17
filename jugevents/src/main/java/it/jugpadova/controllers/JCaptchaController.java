@@ -1,16 +1,17 @@
-/*
- * JCaptchaController.java
- *
- * Created on 3-ago-2007, 16.09.07
- *
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
+// Copyright 2006-2008 The Parancoe Team
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 package it.jugpadova.controllers;
-
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -21,26 +22,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseMultiActionController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.octo.captcha.service.image.ImageCaptchaService;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * A controller for managing jcaptcha verification.
  *
  * @author lucio
  */
-public abstract class JCaptchaController extends BaseMultiActionController {
+@Controller
+@RequestMapping("/jcaptcha/*.html")
+public class JCaptchaController {
 
-    private static final Logger logger = Logger.getLogger(JCaptchaController.class);
+    private static final Logger logger = Logger.getLogger(
+            JCaptchaController.class);
+    @Autowired
     private ImageCaptchaService captchaService;
 
-    public JCaptchaController() {
-    }
-
-    public ModelAndView image(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    @RequestMapping
+    public void image(HttpServletRequest req, HttpServletResponse res)
+            throws IOException {
         byte[] captchaChallengeAsJpeg = null;
         // the output stream to render the captcha image as jpeg into
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
@@ -50,10 +56,12 @@ public abstract class JCaptchaController extends BaseMultiActionController {
         String captchaId = req.getSession().getId();
 
         // call the ImageCaptchaService getChallenge method
-        BufferedImage challenge = captchaService.getImageChallengeForID(captchaId, req.getLocale());
+        BufferedImage challenge = captchaService.getImageChallengeForID(
+                captchaId, req.getLocale());
 
         // a jpeg encoder
-        JPEGImageEncoder jpegEncoder = JPEGCodec.createJPEGEncoder(jpegOutputStream);
+        JPEGImageEncoder jpegEncoder = JPEGCodec.createJPEGEncoder(
+                jpegOutputStream);
         jpegEncoder.encode(challenge);
 
         captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
@@ -67,28 +75,5 @@ public abstract class JCaptchaController extends BaseMultiActionController {
         resOutputStream.write(captchaChallengeAsJpeg);
         resOutputStream.flush();
         resOutputStream.close();
-        return null;
     }
-
-    public ImageCaptchaService getCaptchaService() {
-        return captchaService;
-    }
-
-    public void setCaptchaService(ImageCaptchaService captchaService) {
-        this.captchaService = captchaService;
-    }
-
-    /**
-     * You don't have to implement this. 
-     *
-     * @return The provider of DAOs
-     */
-    protected abstract Daos dao();
-
-    /**
-     * You don't have to implement this. 
-     *
-     * @return The provider of business logic objects
-     */
-    protected abstract Blos blo();
 }

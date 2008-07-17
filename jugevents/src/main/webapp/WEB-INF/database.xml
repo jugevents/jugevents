@@ -23,6 +23,13 @@
                 <prop key="hibernate.search.default.indexBase">${lucene.indexes.root.path}</prop>
             </props>
         </property>
+        <property name="eventListeners">
+            <map>
+                <entry key="merge">
+                    <bean class="org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener"/>
+                </entry>
+            </map>
+        </property>
     </bean>
 
     <!-- MySQL session factory -->
@@ -36,6 +43,13 @@
                 <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
                 <prop key="hibernate.search.default.indexBase">${lucene.indexes.root.path}</prop>
             </props>
+        </property>
+        <property name="eventListeners">
+            <map>
+                <entry key="merge">
+                    <bean class="org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener"/>
+                </entry>
+            </map>
         </property>
     </bean>
      -->
@@ -52,6 +66,13 @@
                 <prop key="hibernate.search.default.indexBase">${lucene.indexes.root.path}</prop>
             </props>
         </property>
+        <property name="eventListeners">
+            <map>
+                <entry key="merge">
+                    <bean class="org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener"/>
+                </entry>
+            </map>
+        </property>
     </bean>
     -->
 
@@ -67,11 +88,17 @@
                 <prop key="hibernate.search.default.indexBase">${lucene.indexes.root.path}</prop>
             </props>
         </property>
+        <property name="eventListeners">
+            <map>
+                <entry key="merge">
+                    <bean class="org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener"/>
+                </entry>
+            </map>
+        </property>
     </bean>
 	-->
 
     <!-- Authomatic discovering of persistent classes -->
     <parancoe:discover-persistent-classes basePackage="it.jugpadova"/>
-    <parancoe:discover-persistent-classes basePackage="org.parancoe.persistence.security"/>
 
 </beans>

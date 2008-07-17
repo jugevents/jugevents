@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The Parancoe Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,54 +13,56 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
+import it.jugpadova.blo.JuggerBo;
+import it.jugpadova.blo.ServicesBo;
 import it.jugpadova.po.Jugger;
-import it.jugpadova.util.RRStatus;
 import it.jugpadova.util.Utilities;
 
-import java.util.EnumSet;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.parancoe.web.BaseFormController;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  * Controller for managing reliability of the jugger. 
  * @author Enrico Giurin
  *
  */
-public abstract class ReliabilityEditController extends BaseFormController {
-	
-	
+@Controller
+@RequestMapping("/adminjugger/reliability.form")
+@SessionAttributes("jugger")
+public class ReliabilityEditController {
 
-	
+    public static final String FORM_VIEW = "jugger/admin/reliability";
+    @Autowired
+    private JuggerBo juggerBo;
+    @Autowired
+    private ServicesBo servicesBo;
 
-	@Override
-	protected ModelAndView onSubmit(HttpServletRequest request,
-			HttpServletResponse response, Object command, BindException errors)
-			throws Exception {
-		Jugger jugger = (Jugger)command;
-		//ReliabilityRequest rr = jugger.getReliabilityRequest();
-		blo().getServicesBo().updateReliability(jugger, Utilities.getBaseUrl(request));
-		return onSubmit(command, errors);
-			
-	}
+    @RequestMapping(method = RequestMethod.POST)
+    protected String update(HttpServletRequest request,
+            @ModelAttribute("jugger") Jugger jugger, BindingResult result) {
+        servicesBo.updateReliability(jugger, Utilities.getBaseUrl(request));
+        return "redirect:/adminjugger/juggersearch.form";
 
-	@Override
-	protected Object formBackingObject(HttpServletRequest request)
-			throws Exception {
-		
-		String username = request.getParameter("jugger.user.username");        
-        Jugger jugger = blo().getJuggerBO().searchByUsername(username);             
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String form(@ModelAttribute("jugger") Jugger jugger) {
+        return FORM_VIEW;
+    }
+
+    @ModelAttribute("jugger")
+    protected Jugger formBackingObject(
+            @RequestParam("jugger.user.username") String username) {
+        Jugger jugger = juggerBo.searchByUsername(username);
         return jugger;
-	}   
-	
-	protected abstract Daos dao();
-
-    protected abstract Blos blo();
-
+    }
 }

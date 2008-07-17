@@ -12,24 +12,25 @@ import net.java.dev.footprint.exporter.pdf.PdfExporterFactory;
 import net.java.dev.footprint.model.generated.FootprintProperties;
 
 import org.parancoe.web.test.BaseTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author lucio
  */
 public class FootprintTest extends BaseTest {
-
+    @Autowired
+    private FootprintProperties footprintProperties;
+    
     public void testConfiguration() {
-        FootprintProperties properties =
-                (FootprintProperties) this.ctx.getBean("footprintSettings");
-        assertNotNull(properties);
+        assertNotNull(footprintProperties);
     }
 
     public void testExporter() {
         try {
             Exporter exporter =
                     PdfExporterFactory.getPdfExporter(Exporter.DEFAULT_SIGNED_PDF_EXPORTER,
-                    new Object[]{this.ctx.getBean("footprintSettings")});
+                    new Object[]{footprintProperties});
             assertNotNull(exporter);
             Map map = new HashMap();
             map.put("jug", "JUG Padova JUG Padova JUG Padova JUG Padova JUG Padova JUG Padova JUG Padova JUG Padova");

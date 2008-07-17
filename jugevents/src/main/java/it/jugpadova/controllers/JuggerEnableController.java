@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The Parancoe Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,60 +13,85 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 import it.jugpadova.bean.EnableJugger;
+import it.jugpadova.blo.JuggerBo;
 import it.jugpadova.exception.UserAlreadyEnabledException;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.util.Utilities;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseFormController;
-import org.springframework.validation.BindException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springmodules.validation.bean.BeanValidator;
 
-public abstract class JuggerEnableController extends BaseFormController {
+@Controller
+@RequestMapping("/jugger/enable.form")
+@SessionAttributes({JuggerEnableController.JUGGER_ATTRIBUTE,
+    JuggerEnableController.ENABLE_JUGGER_ATTRIBUTE
+})
+public class JuggerEnableController {
 
     private static final Logger logger =
             Logger.getLogger(JuggerEnableController.class);
-    private static final String JUGGER_ATTRIBUTE = "jugger";
+    public static final String FORM_VIEW = "jugger/registration/setpwd";
+    public static final String JUGGER_ATTRIBUTE = "jugger";
+    public static final String ENABLE_JUGGER_ATTRIBUTE = "enablejugger";
+    @Autowired
+    private JuggerBo juggerBo;
+    @Autowired
+    @Qualifier("validator")
+    private BeanValidator validator;
 
-    @Override
-    protected ModelAndView onSubmit(HttpServletRequest req,
-            HttpServletResponse res, Object command,
-            BindException errors) throws Exception {
+    @RequestMapping(method = RequestMethod.POST)
+    protected ModelAndView send(@ModelAttribute(JUGGER_ATTRIBUTE) Jugger jugger,
+            @ModelAttribute(ENABLE_JUGGER_ATTRIBUTE) EnableJugger enableJugger,
+            BindingResult result, SessionStatus status) {
 
-        EnableJugger ej = (EnableJugger) command;
-        Jugger jugger = (Jugger) req.getAttribute(JUGGER_ATTRIBUTE);
-        String password = ej.getPassword();
         try {
-            blo().getJuggerBO().enableJugger(jugger, password);
+            validator.validate(enableJugger, result);
+            if (result.hasErrors()) {
+                return new ModelAndView(FORM_VIEW);
+            }
+            status.setComplete();
+            juggerBo.enableJugger(jugger, enableJugger.getPassword());
         } catch (UserAlreadyEnabledException uaee) {
             return Utilities.getMessageView("jugger.registration.already");
         } catch (Exception e) {
             logger.error(e, e);
             return Utilities.getMessageView("jugger.registration.failed");
         }
-        ModelAndView mv = onSubmit(command, errors);
+        ModelAndView mv =
+                new ModelAndView(
+                "redirect:/home/message.html?messageCode=jugger.registration.success");
         Utilities.addMessageArguments(mv, jugger.getFirstName());
         return mv;
     }
 
-    @Override
-    protected Object formBackingObject(HttpServletRequest req) throws Exception {
-        String username = null;
-        String confirmationCode = null;
-        if ((username = req.getParameter("username")) == null) {
-            throw new Exception("No username found in the request!");
-        }
-        if ((confirmationCode = req.getParameter("code")) == null) {
-            throw new Exception("No code found in the request!");
-        }
+    @RequestMapping(method = RequestMethod.GET)
+    public String form(@ModelAttribute(JUGGER_ATTRIBUTE) Jugger jugger,
+            @ModelAttribute(ENABLE_JUGGER_ATTRIBUTE) EnableJugger enableJugger) {
+        return FORM_VIEW;
+    }
+
+    @ModelAttribute(ENABLE_JUGGER_ATTRIBUTE)
+    public EnableJugger createEnableJugger() {
+        return new EnableJugger();
+    }
+
+    @ModelAttribute(JUGGER_ATTRIBUTE)
+    public Jugger retrieveJugger(@RequestParam("username") String username,
+            @RequestParam("code") String confirmationCode) throws Exception {
         Jugger jugger =
-                blo().getJuggerBO().searchByUsernameAndConfirmationCode(username,
+                juggerBo.searchByUsernameAndConfirmationCode(username,
                 confirmationCode);
         if (jugger == null) {
             logger.warn("Trying to enable " + username +
@@ -76,15 +101,6 @@ public abstract class JuggerEnableController extends BaseFormController {
                     " user doesn't exist, or the confirmation code (" +
                     confirmationCode + ") doesn't correspond");
         }
-        req.setAttribute(JUGGER_ATTRIBUTE, jugger);
-        return new EnableJugger();
+        return jugger;
     }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
 }

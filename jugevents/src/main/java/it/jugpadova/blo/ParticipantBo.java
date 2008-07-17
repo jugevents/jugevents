@@ -13,9 +13,9 @@
 // limitations under the License.
 package it.jugpadova.blo;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
+import it.jugpadova.Conf;
 import it.jugpadova.bean.ParticipantBean;
+import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
 
@@ -42,81 +42,40 @@ import org.directwebremoting.ScriptSession;
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
 import org.directwebremoting.proxy.dwr.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 /**
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: ccf14f7dec87 $
+ * @version $Revision: dfa2455c3721 $
  */
+@Component
 public class ParticipantBo {
 
-    private FootprintProperties footprintSettings;
-    private JavaMailSender mailSender;
-    private VelocityEngine velocityEngine;
-    private String confirmationSenderEmailAddress;
     private static final Logger logger =
             Logger.getLogger(ParticipantBo.class);
-    private Daos daos;
-    private Blos blos;
+    @Autowired
+    private ParticipantDao participantDao;
+    @Autowired
+    private FootprintProperties footprintSettings;
+    @Autowired
+    private JavaMailSender mailSender;
+    @Autowired
+    private VelocityEngine velocityEngine;
+    @Autowired
+    private JugBo jugBo;
+    @Autowired
+    private Conf conf;
     private DateFormat df = DateFormat.getDateInstance(DateFormat.LONG,
             Locale.US);
-
-    public Daos getDaos() {
-        return daos;
-    }
-
-    public void setDaos(Daos daos) {
-        this.daos = daos;
-    }
-
-    public Blos getBlos() {
-        return blos;
-    }
-
-    public void setBlos(Blos blos) {
-        this.blos = blos;
-    }
-
-    public FootprintProperties getFootprintSettings() {
-        return footprintSettings;
-    }
-
-    public void setFootprintSettings(FootprintProperties footprintSettings) {
-        this.footprintSettings = footprintSettings;
-    }
-
-    public String getConfirmationSenderEmailAddress() {
-        return confirmationSenderEmailAddress;
-    }
-
-    public void setConfirmationSenderEmailAddress(
-            String confirmationSenderEmailAddress) {
-        this.confirmationSenderEmailAddress = confirmationSenderEmailAddress;
-    }
-
-    public JavaMailSender getMailSender() {
-        return mailSender;
-    }
-
-    public void setMailSender(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
-
-    public VelocityEngine getVelocityEngine() {
-        return velocityEngine;
-    }
-
-    public void setVelocityEngine(VelocityEngine velocityEngine) {
-        this.velocityEngine = velocityEngine;
-    }
 
     /**
      * Set the attended flag of a participant.
@@ -124,10 +83,9 @@ public class ParticipantBo {
      * @param participantId The id of the participa
      * @param value true if attended
      */
-    @Transactional
     public void setAttended(long participantId, boolean value) {
         Participant participant =
-                daos.getParticipantDao().read(Long.valueOf(participantId));
+                participantDao.read(Long.valueOf(participantId));
         participant.setAttended(new Boolean(value));
     }
 
@@ -137,11 +95,10 @@ public class ParticipantBo {
      * @param participantId The id of the participa
      * @param value true if he's present
      */
-    @Transactional
     public void confirmParticipantOnAttendance(long participantId,
             boolean value) {
         Participant participant =
-                daos.getParticipantDao().read(Long.valueOf(participantId));
+                participantDao.read(Long.valueOf(participantId));
         participant.setAttended(new Boolean(value));
         participant.setConfirmed(new Boolean(value));
         if (value) {
@@ -151,25 +108,22 @@ public class ParticipantBo {
         }
     }
 
-    @Transactional
     public void setWinner(long participantId, boolean value) {
         Participant participant =
-                daos.getParticipantDao().read(Long.valueOf(participantId));
+                participantDao.read(Long.valueOf(participantId));
         participant.setWinner(new Boolean(value));
     }
 
-    @Transactional
     public void sendCertificateToParticipant(long participantId, String baseUrl) {
         try {
             WebContext wctx = WebContextFactory.get();
             ScriptSession session = wctx.getScriptSession();
             Util util = new Util(session);
             Participant participant =
-                    daos.getParticipantDao().
-                    read(Long.valueOf(participantId));
+                    participantDao.read(Long.valueOf(participantId));
             Event event = participant.getEvent();
             InputStream jugCertificateTemplate =
-                    blos.getJugBo().retrieveJugCertificateTemplate(
+                    jugBo.retrieveJugCertificateTemplate(
                     event.getOwner().getJug().getId());
             byte[] certificate =
                     buildCertificate(jugCertificateTemplate, participant.getFirstName() + " " +
@@ -190,20 +144,19 @@ public class ParticipantBo {
         }
     }
 
-    @Transactional
     public void sendCertificateToAllParticipants(long eventId, String baseUrl) {
         WebContext wctx = WebContextFactory.get();
         ScriptSession session = wctx.getScriptSession();
         Util util = new Util(session);
-        List<Participant> participantList = daos.getParticipantDao().
-                findPresentParticipantsByEventId(eventId);
+        List<Participant> participantList =
+                participantDao.findPresentParticipantsByEventId(eventId);
         int total = participantList.size();
         int count = 0;
         for (Participant participant : participantList) {
             try {
                 Event event = participant.getEvent();
                 InputStream jugCertificateTemplate =
-                        blos.getJugBo().retrieveJugCertificateTemplate(
+                        jugBo.retrieveJugCertificateTemplate(
                         event.getOwner().getJug().getId());
                 byte[] certificate =
                         buildCertificate(jugCertificateTemplate, participant.getFirstName() + " " +
@@ -290,7 +243,7 @@ public class ParticipantBo {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage,
                         true);
                 message.setTo(participant.getEmail());
-                message.setFrom(confirmationSenderEmailAddress);
+                message.setFrom(conf.getConfirmationSenderEmailAddress());
                 message.setSubject(subject);
                 Map model = new HashMap();
                 model.put("participant", participant);
@@ -306,16 +259,15 @@ public class ParticipantBo {
         this.mailSender.send(preparator);
     }
 
-    @Transactional
     public List<ParticipantBean> chooseWinnerForEvent(long eventId) {
-        List<Participant> nonwinningParticipants = daos.getParticipantDao().
-                findNonwinningParticipantsByEventId(eventId);
+        List<Participant> nonwinningParticipants =
+                participantDao.findNonwinningParticipantsByEventId(eventId);
 
         int totalParticipants = nonwinningParticipants.size();
 
         int winner = (int) Math.round(Math.random() * totalParticipants);
         nonwinningParticipants.get(winner).setWinner(true);
-        daos.getParticipantDao().createOrUpdate(nonwinningParticipants.get(
+        participantDao.store(nonwinningParticipants.get(
                 winner));
 
         List<ParticipantBean> nonwinningParticipantBeans =
@@ -324,11 +276,9 @@ public class ParticipantBo {
         return nonwinningParticipantBeans;
     }
 
-    @Transactional(readOnly = true)
     public List<ParticipantBean> findAllWinnersForEvent(long eventId) {
         List<Participant> winningParticipants =
-                daos.getParticipantDao().
-                findWinningParticipantsByEventId(eventId);
+                participantDao.findWinningParticipantsByEventId(eventId);
         List<ParticipantBean> winningParticipantBeans =
                 convertParticipantList(winningParticipants);
         return winningParticipantBeans;
@@ -364,14 +314,13 @@ public class ParticipantBo {
      * @param field The field to update
      * @param value The new value
      */
-    @Transactional
     public void updateParticipantFieldValue(Long participantId, String field,
             String value) {
         try {
             WebContext wctx = WebContextFactory.get();
             ScriptSession session = wctx.getScriptSession();
             Util util = new Util(session);
-            Participant participant = daos.getParticipantDao().read(
+            Participant participant = participantDao.read(
                     participantId);
             // TODO: maybe using reflection for updating fields?
             if ("firstName".equals(field)) {
@@ -395,16 +344,14 @@ public class ParticipantBo {
         }
 
     }
-    
+
     /**
      * Retrieve of participant by id
      * 
      * @param id The id of the participant
      * @return The participant
      */
-    @Transactional(readOnly=true)
     public Participant retrieveParticipant(Long id) {
-        return daos.getParticipantDao().read(id);
+        return participantDao.read(id);
     }
-    
 }

@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The JUG Events Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,27 +20,27 @@ import it.jugpadova.blo.JugBo;
 import it.jugpadova.blo.JuggerBo;
 import it.jugpadova.blo.ParticipantBo;
 
-import it.jugpadova.blo.SampleBlo;
 import it.jugpadova.blo.ServicesBo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component("blos")
 public class Blos {
 
-    public SampleBlo sample;
+    @Autowired
     public EventBo eventBo;
+    @Autowired
     public JuggerBo juggerBo;
+    @Autowired
     public FilterBo filterBo;
+    @Autowired
     public JugBo jugBo;
+    @Autowired
     public ServicesBo servicesBo;
+    @Autowired
     public ParticipantBo participantBo;
+    @Autowired
     public EventResourceBo eventResourceBo;
-
-    public SampleBlo getSample() {
-        return sample;
-    }
-
-    public void setSample(SampleBlo sample) {
-        this.sample = sample;
-    }
 
     public EventBo getEventBo() {
         return eventBo;

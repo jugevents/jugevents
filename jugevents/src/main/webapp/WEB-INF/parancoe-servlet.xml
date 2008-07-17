@@ -1,81 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:parancoe="http://www.parancoe.org/schema/parancoe"
-       xmlns:parancoe-web="http://www.parancoe.org/schema/parancoe-web"
        xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
        http://www.parancoe.org/schema/parancoe http://www.parancoe.org/schema/parancoe.xsd
-       http://www.parancoe.org/schema/parancoe-web http://www.parancoe.org/schema/parancoe-web.xsd
        http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd"
        default-lazy-init="false" >
 
-    <!-- ...if you need to define explicitly a DAO
-    <parancoe:dao interface="it.jugpadova.dao.PersonDao"/>
-    -->
+    <context:component-scan base-package="it.jugpadova"/>
+
     <!-- Authomatic DAO definition from persistent classes -->
     <parancoe:define-daos basePackage="it.jugpadova"/>
-    <parancoe-web:define-controllers basePackage="it.jugpadova.controllers" parent="abstractController"/>
-    <bean id="eventBO" class="it.jugpadova.blo.EventBo" autowire="byType">
-        <property name="messageSource" ref="messageSource"/>
-        <property name="mailSender" ref="mailSender"/>
-        <property name="velocityEngine" ref="velocityEngine"/>
-        <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>
-        <property name="upcomingEventDays" value="15" />
-        <property name="newEventDays" value="7" />
-        <dwr:remote javascript="eventBo">
-            <dwr:include method="findPartialLocation"/>
-            <dwr:include method="copyDirectionsFromEvent"/>
-            <dwr:include method="updateBadgePanel"/>
-            <dwr:include method="fullTextSearch"/>
-        </dwr:remote>
-    </bean>
-    <bean id="filterBO" class="it.jugpadova.blo.FilterBo" autowire="byType">
-        <dwr:remote javascript="filterBo">
-            <dwr:include method="populatePreview"/>
-        </dwr:remote>
-    </bean>
-    <bean id="juggerBo" class="it.jugpadova.blo.JuggerBo" autowire="byType">
-        <property name="jugBo" ref="jugBo"/>
-        <property name="servicesBo" ref="servicesBo"/>
-        <property name="mailSender" ref="mailSender"/>
-        <property name="velocityEngine" ref="velocityEngine"/>
-        <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>
-        <dwr:remote javascript="juggerBo">
-            <dwr:include method="findPartialContinent"/>
-            <dwr:include method="findPartialCountryWithContinent"/>
-            <dwr:include method="findPartialJugNameWithCountryAndContinent"/>
-            <dwr:include method="findPartialCountry"/>
-            <dwr:include method="findPartialJugName"/>
-            <dwr:include method="findPartialJugNameWithCountry"/>
-            <dwr:include method="readOnlyJugFields"/>
-            <dwr:include method="populateJugFields"/>
-        </dwr:remote>
-    </bean>
-    <bean id="jugBo" class="it.jugpadova.blo.JugBo" autowire="byType">
-        <property name="defaultKmlUrl">
-            <value>https://sv-web-jug.dev.java.net/kml/jug-leaders.kml</value>
+
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="webBindingInitializer">
+            <bean class="it.jugpadova.controllers.BasicWebAppBindingInitializer"/>
         </property>
-        <property name="servicesBo" ref="servicesBo"/>
     </bean>
-    <bean id="servicesBo" class="it.jugpadova.blo.ServicesBo" autowire="byType">
-        <property name="thresholdAccess" value="1"/>
-        <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>
-        <property name="internalMail" value="${email.internal}"/>
-        <property name="adminMailJE" value="${email.admin}"/>
-        <property name="mailSender" ref="mailSender"/>
-        <property name="velocityEngine" ref="velocityEngine"/>
-        <property name="kmlUpdateFromAddress" value="${email.kmlUpdateFrom}"/>
-        <property name="kmlUpdateToAddress" value="${email.kmlUpdateTo}"/>
-        <property name="kmlUpdateReplyAddress" value="${email.kmlUpdateReply}"/>
-    </bean>
-    <bean id="participantBo" class="it.jugpadova.blo.ParticipantBo" autowire="byType">
-        <property name="mailSender" ref="mailSender"/>
-        <property name="velocityEngine" ref="velocityEngine"/>
-        <property name="confirmationSenderEmailAddress" value="${email.noreply}"/>
-    </bean>
-    <bean id="eventResourceBo" class="it.jugpadova.blo.EventResourceBo" autowire="byType">
-    </bean>
+
     <bean id="daos" parent="abstractDaoProvider">
         <property name="proxyInterfaces">
             <value>it.jugpadova.Daos</value>
@@ -84,7 +29,8 @@
             <bean parent="genericDaoProvider"/>
         </property>
     </bean>
-    <bean id="blos" class="it.jugpadova.Blos" autowire="byType"/>
+
+    <bean id="conf" class="it.jugpadova.Conf" parent="abstractConf" name="conf"/>
 
     <!-- Multipart resolver -->
     <bean id="multipartResolver"
@@ -93,131 +39,10 @@
         <property name="maxUploadSize" value="100000"/>
     </bean>
 
-    <!-- Multi action Controllers -->
-    <bean name="/home/*.html" id="homeController"
-          class="it.jugpadova.controllers.HomeController" parent="abstractController"/>
-    <bean name="/admin/*.html" id="adminController"
-          class="it.jugpadova.controllers.AdminController" parent="abstractController"/>
-    <bean name="/event/*.html" id="eventController"
-          class="it.jugpadova.controllers.EventController" parent="abstractController"/>
-    <bean name="/jugger/*.html" id="juggerController"
-          class="it.jugpadova.controllers.JuggerController" parent="abstractController"/>
-    <bean name="/adminjugger/*.html" id="juggerAdminController"
-          class="it.jugpadova.controllers.JuggerAdminController" parent="abstractController"/>
-    <bean name="/confirm/*.html" id="confirmController"
-          class="it.jugpadova.controllers.ConfirmController" parent="abstractController"/>
-    <bean name="/service/*.html" id="serviceController"
-          class="it.jugpadova.controllers.ServiceController" parent="abstractController"/>
-
-
     <!--  override bean definition in parancoe-servlet.xml  -->
     <!-- sends exceptions to genericError.jsp -->
     <bean id="exceptionResolver" class="it.jugpadova.util.JUGEventsExceptionResolver" autowire="byType"/>
-    <bean name="/event/search.form" id="eventSearchController"
-          class="it.jugpadova.controllers.EventSearchController"
-          parent="abstractController">
-        <property name="commandClass" value="it.jugpadova.bean.EventSearch"/>
-        <property name="commandName" value="eventSearch"/>
-        <property name="bindOnNewForm" value="true" />
-        <property name="formView" value="event/search"/>
-        <property name="successView" value="event/search"/>
-    </bean>
-    <bean name="/event/edit.form" id="eventEditController"
-          class="it.jugpadova.controllers.EventEditController"
-          parent="abstractController">
-        <property name="commandClass" value="it.jugpadova.po.Event"/>
-        <property name="commandName" value="event"/>
-        <property name="formView" value="event/edit"/>
-        <property name="successView" value="redirect:search.form"/>
-    </bean>
-
-
-    <!-- Form to enable jugger -->
-    <bean name="/jugger/enable.form" id="juggerEnableController"
-          class="it.jugpadova.controllers.JuggerEnableController"
-          parent="abstractController">
-        <property name="commandClass"
-                  value="it.jugpadova.bean.EnableJugger" />
-        <property name="commandName" value="enablejugger" />
-        <property name="formView" value="jugger/registration/setpwd" />
-        <property name="successView" value="redirect:/home/message.html?messageCode=jugger.registration.success" />
-    </bean>
     
-    
-    <!-- Form to search jugger (admin)-->
-    <bean name="/adminjugger/juggersearch.form" id="juggerSearchController"
-          class="it.jugpadova.controllers.JuggerSearchController"
-          parent="abstractController">
-        <property name="commandClass"
-                  value="it.jugpadova.bean.JuggerSearch" />
-        <property name="commandName" value="juggerSearch" />
-        <property name="formView" value="jugger/admin/juggers"/>
-        <property name="successView" value="jugger/admin/juggers"/>
-    </bean>
-
-    <!-- Form to change password -->
-    <bean name="/jugger/changePassword.form" id="juggerChangePasswordController"
-          class="it.jugpadova.controllers.JuggerChangePasswordController"
-          parent="abstractController">
-        <property name="commandClass"
-                  value="it.jugpadova.bean.EnableJugger" />
-        <property name="commandName" value="enablejugger" />
-        <property name="formView" value="pwdrecovery/setpwd" />
-        <property name="successView" value="redirect:/home/message.html?messageCode=jugger.pwdchng.success" />
-    </bean>
-    <bean name="/jugger/registration.form" id="juggerRegistrationController"
-          class="it.jugpadova.controllers.JuggerRegistrationController"
-          parent="abstractController">
-        <property name="commandClass" value="it.jugpadova.bean.NewJugger"/>
-        <property name="commandName" value="jugger"/>
-        <property name="formView" value="jugger/newJugger"/>
-        <property name="successView" value="redirect:/home/message.html?messageCode=jugger.registration.sentMail"/>
-        <property name="captchaService" ref="captchaService"/>
-    </bean>
-    <bean name="/jugger/edit.form" id="juggerEditController"
-          class="it.jugpadova.controllers.JuggerEditController"
-          parent="abstractController">
-        <property name="commandClass" value="it.jugpadova.bean.EditJugger"/>
-        <property name="commandName" value="jugger"/>
-        <property name="formView" value="jugger/editJugger"/>
-        <property name="successView" value="redirect:/jugger/edit.form"/>
-    </bean>
-    <bean name="/adminjugger/reliability.form" id="reliabilityEditController"
-          class="it.jugpadova.controllers.ReliabilityEditController"
-          parent="abstractController">
-        <property name="commandClass" value="it.jugpadova.po.Jugger"/>
-        <property name="commandName" value="jugger"/>
-        <property name="formView" value="jugger/admin/reliability"/>
-        <property name="successView" value="redirect:/adminjugger/juggersearch.form"/>
-    </bean>
-    <bean name="/event/registration.form" id="registrationController"
-          class="it.jugpadova.controllers.ParticipantRegistrationController"
-          parent="abstractController">
-        <property name="commandClass" value="it.jugpadova.bean.Registration"/>
-        <property name="commandName" value="registration"/>
-        <property name="formView" value="event/registration"/>
-        <property name="successView" value="redirect:/home/message.html?messageCode=participant.registration.sentMail"/>
-        <property name="captchaService" ref="captchaService"/>
-    </bean>
-    <bean name="/event/addParticipant.form" id="addParticipantController"
-          class="it.jugpadova.controllers.AddParticipantController"
-          parent="abstractController">
-        <property name="commandClass" value="it.jugpadova.bean.Registration"/>
-        <property name="commandName" value="registration"/>
-        <property name="formView" value="event/participants"/>
-        <property name="successView" value="event/participants"/>
-    </bean>
-
-    <!-- controller for password recovery -->
-    <bean name="/passwordRecovery.form" id="passwordRecoveryController"
-          class="it.jugpadova.controllers.PasswordRecoveryController"
-          parent="abstractController">
-        <property name="commandClass" value="it.jugpadova.bean.PasswordRecovery"/>
-        <property name="commandName" value="passwordRecovery"/>
-        <property name="formView" value="pwdrecovery/passwordRecovery"/>
-        <property name="successView" value="redirect:/home/message.html?messageCode=jugger.pwdchng.sentMail"/>
-    </bean>
-
     <!--  begin security section -->
     <bean name="pluginSecurityFilterDefinitions" class="java.lang.String">
         <constructor-arg>
@@ -238,34 +63,11 @@
             </value>
         </constructor-arg>
     </bean>
-    <bean id="ajaxMethods" class="it.jugpadova.blo.ajax.SecuredAjaxBo">
-        <property name="blos" ref="blos"/>
-    </bean>
+    <!-- TODO verify AJAX security...at present, no security -->
     <bean id="DWRAjaxBo" class="org.springframework.aop.framework.ProxyFactoryBean">
         <property name="target" ref="ajaxMethods"/>
         <property name="proxyInterfaces"
             value="it.jugpadova.blo.ajax.AjaxMethods"  />
-        <dwr:remote javascript="AjaxMethodsJS">
-            <dwr:include method="requireReliabilityOnExistingJugger"/>
-            <dwr:include method="setAttended"/>
-            <dwr:include method="setWinner"/>
-            <dwr:include method="confirmParticipantOnAttendance"/>
-            <dwr:include method="sendCertificateToParticipant"/>
-            <dwr:include method="sendCertificateToAllParticipants"/>
-            <dwr:include method="chooseWinnerForEvent"/>
-            <dwr:include method="findAllWinnersForEvent"/>
-            <dwr:include method="updateParticipantFieldValue"/>
-            <dwr:include method="deleteEventResource"/>
-            <dwr:include method="manageEventLinkResource"/>
-            <dwr:include method="manageEventFlickrResource"/>
-            <dwr:include method="manageEventSlideShareResource"/>
-            <dwr:include method="manageEventArchiveVideoResource"/>
-            <dwr:include method="manageEventYouTubeResource"/>
-            <dwr:include method="fillEventResourceForm"/>
-            <!-- Only for testing
-            <dwr:latencyfilter delay="1200"/>
-            -->
-        </dwr:remote>
     </bean>
     <bean id="securedBeanNames" class="java.util.ArrayList">
         <constructor-arg>
@@ -415,10 +217,6 @@
             <value>1.0</value>
         </constructor-arg>
     </bean>
-    <bean name="/jcaptcha/*.html" id="jCaptchaController"
-          class="it.jugpadova.controllers.JCaptchaController" parent="abstractController">
-        <property name="captchaService" ref="captchaService"/>
-    </bean>
     <!-- end jcaptcha section -->
 
     <!-- start mail section -->
@@ -454,8 +252,7 @@
         </property>
     </bean>
     <!-- end mail section -->
-    <bean id="conf" class="it.jugpadova.Conf" parent="abstractConf" name="conf"/>
-
+    
     <!-- start footprint section -->
     <bean id="footprintSettings" class="net.java.dev.footprint.model.generated.FootprintProperties">
         <property name="title" value="JUG Event Certificate"/>

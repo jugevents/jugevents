@@ -15,10 +15,15 @@ package it.jugpadova.blo;
 
 import com.benfante.jslideshare.SlideShareAPI;
 import com.benfante.jslideshare.messages.Slideshow;
-import it.jugpadova.Daos;
+import it.jugpadova.dao.ArchiveVideoResourceDao;
+import it.jugpadova.dao.EventDao;
+import it.jugpadova.dao.EventLinkDao;
+import it.jugpadova.dao.EventResourceDao;
+import it.jugpadova.dao.FlickrResourceDao;
+import it.jugpadova.dao.SlideShareResourceDao;
+import it.jugpadova.dao.YouTubeResourceDao;
 import it.jugpadova.po.ArchiveVideoResource;
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Transactional;
 import it.jugpadova.po.EventLink;
 import it.jugpadova.po.EventResource;
 import it.jugpadova.po.FlickrResource;
@@ -31,34 +36,35 @@ import org.directwebremoting.ScriptSession;
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
 import org.directwebremoting.proxy.dwr.Util;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Business logic for the event resource management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 8e486fe642d0 $
+ * @version $Revision: dfa2455c3721 $
  */
+@Component
 public class EventResourceBo {
 
     private static final Logger logger = Logger.getLogger(EventResourceBo.class);
-    private Daos daos;
+    @Autowired
+    private EventResourceDao eventResourceDao;
+    @Autowired
+    private EventDao eventDao;
+    @Autowired
+    private EventLinkDao eventLinkDao;
+    @Autowired
+    private FlickrResourceDao flickrResourceDao;
+    @Autowired
+    private SlideShareResourceDao slideShareResourceDao;
+    @Autowired
+    private ArchiveVideoResourceDao archiveVideoResourceDao;
+    @Autowired
+    private YouTubeResourceDao youTubeResourceDao;
+    @Autowired
     private SlideShareAPI slideShareApi;
-
-    public Daos getDaos() {
-        return daos;
-    }
-
-    public void setDaos(Daos daos) {
-        this.daos = daos;
-    }
-
-    public SlideShareAPI getSlideShareApi() {
-        return slideShareApi;
-    }
-
-    public void setSlideShareApi(SlideShareAPI slideShareApi) {
-        this.slideShareApi = slideShareApi;
-    }
 
     /**
      * Delete an event resource.
@@ -66,14 +72,13 @@ public class EventResourceBo {
      * @param eventResourceId The id of the resource to delete
      * @return true if all went well.
      */
-    @Transactional
     public boolean deleteResource(long eventResourceId) {
         try {
-            EventResource resource = daos.getEventResourceDao().read(
+            EventResource resource = eventResourceDao.read(
                     eventResourceId);
             logger.info("Deleting resource " + eventResourceId +
                     " for the event " + resource.getEvent().getId());
-            daos.getEventResourceDao().delete(resource);
+            eventResourceDao.delete(resource);
         } catch (RuntimeException e) {
             logger.error("Error deleting an event resource (" + eventResourceId +
                     ")", e);
@@ -82,7 +87,6 @@ public class EventResourceBo {
         return true;
     }
 
-    @Transactional
     public String manageEventLinkResource(Long eventResourceId, Long eventId,
             String url, String description, boolean canUserManageTheEvent) {
         EventLink link = null;
@@ -90,20 +94,20 @@ public class EventResourceBo {
         if (eventResourceId == null) {
             // new resource
             link = new EventLink();
-            link.setEvent(daos.getEventDao().read(eventId));
+            link.setEvent(eventDao.read(eventId));
             display = "none";
             logger.info("Creating new link resource for the event " + eventId +
                     " (" + url + ")");
         } else {
             // update resource
-            link = daos.getEventLinkDao().read(eventResourceId);
+            link = eventLinkDao.read(eventResourceId);
             display = "block";
             logger.info("Updating link resource " + eventResourceId +
                     " for the event " + eventId + " (" + url + ")");
         }
         link.setDescription(description);
         link.setUrl(url);
-        daos.getEventLinkDao().createOrUpdate(link);
+        eventLinkDao.store(link);
         WebContext wctx = WebContextFactory.get();
         String result = null;
         try {
@@ -123,7 +127,6 @@ public class EventResourceBo {
         return result;
     }
 
-    @Transactional
     public String manageEventFlickrResource(Long eventResourceId, Long eventId,
             String flickrTag, String description, boolean canUserManageTheEvent) {
         FlickrResource flickr = null;
@@ -131,13 +134,13 @@ public class EventResourceBo {
         if (eventResourceId == null) {
             // new resource
             flickr = new FlickrResource();
-            flickr.setEvent(daos.getEventDao().read(eventId));
+            flickr.setEvent(eventDao.read(eventId));
             display = "none";
             logger.info("Creating new flickr resource for the event " +
                     eventId + " (" + flickrTag + ")");
         } else {
             // update resource
-            flickr = daos.getFlickrResourceDao().read(eventResourceId);
+            flickr = flickrResourceDao.read(eventResourceId);
             display = "block";
             logger.info("Updating flickr resource " + eventResourceId +
                     " for the event " + eventId + " (" + flickrTag + ")");
@@ -145,7 +148,7 @@ public class EventResourceBo {
         flickr.setTag(flickrTag);
         flickr.setDescription(description);
         String result = null;
-        daos.getFlickrResourceDao().createOrUpdate(flickr);
+        flickrResourceDao.store(flickr);
         WebContext wctx = WebContextFactory.get();
         try {
             StringBuilder fragUrl = new StringBuilder();
@@ -165,7 +168,6 @@ public class EventResourceBo {
         return result;
     }
 
-    @Transactional
     public String manageEventSlideShareResource(Long eventResourceId,
             Long eventId,
             String slideshareId, String description,
@@ -175,13 +177,13 @@ public class EventResourceBo {
         if (eventResourceId == null) {
             // new resource
             slideshare = new SlideShareResource();
-            slideshare.setEvent(daos.getEventDao().read(eventId));
+            slideshare.setEvent(eventDao.read(eventId));
             display = "none";
             logger.info("Creating new slideshare resource for the event " +
                     eventId + " (" + slideshareId + ")");
         } else {
             // update resource
-            slideshare = daos.getSlideShareResourceDao().read(eventResourceId);
+            slideshare = slideShareResourceDao.read(eventResourceId);
             display = "block";
             logger.info("Updating slideshare resource " + eventResourceId +
                     " for the event " + eventId + " (" + slideshareId + ")");
@@ -202,7 +204,7 @@ public class EventResourceBo {
             slideshare.setEmbedCode(null);
             slideshare.setUrl(null);
         }
-        daos.getSlideShareResourceDao().createOrUpdate(slideshare);
+        slideShareResourceDao.store(slideshare);
         WebContext wctx = WebContextFactory.get();
         try {
             StringBuilder fragUrl = new StringBuilder();
@@ -227,7 +229,6 @@ public class EventResourceBo {
         return result;
     }
 
-    @Transactional
     public String manageEventArchiveVideoResource(Long eventResourceId,
             Long eventId, String archiveFlashVideoUrl, String archiveDetailsUrl,
             String description, boolean canUserManageTheEvent) {
@@ -236,23 +237,24 @@ public class EventResourceBo {
         if (eventResourceId == null) {
             // new resource
             archivevideo = new ArchiveVideoResource();
-            archivevideo.setEvent(daos.getEventDao().read(eventId));
+            archivevideo.setEvent(eventDao.read(eventId));
             display = "none";
             logger.info("Creating new archive video resource for the event " +
                     eventId + " (" + archiveDetailsUrl + ")");
         } else {
             // update resource
-            archivevideo = daos.getArchiveVideoResourceDao().read(
+            archivevideo = archiveVideoResourceDao.read(
                     eventResourceId);
             display = "block";
             logger.info("Updating archive video resource " + eventResourceId +
-                    " for the event " + eventId + " (" + archiveFlashVideoUrl + ")");
+                    " for the event " + eventId + " (" + archiveFlashVideoUrl +
+                    ")");
         }
         archivevideo.setFlashVideoUrl(archiveFlashVideoUrl);
         archivevideo.setDetailsUrl(archiveDetailsUrl);
         archivevideo.setDescription(description);
         String result = null;
-        daos.getArchiveVideoResourceDao().createOrUpdate(archivevideo);
+        archiveVideoResourceDao.store(archivevideo);
         WebContext wctx = WebContextFactory.get();
         try {
             StringBuilder fragUrl = new StringBuilder();
@@ -275,7 +277,6 @@ public class EventResourceBo {
         return result;
     }
 
-    @Transactional
     public String manageEventYouTubeResource(Long eventResourceId, Long eventId,
             String youtubeVideoId, String description,
             boolean canUserManageTheEvent) {
@@ -284,13 +285,13 @@ public class EventResourceBo {
         if (eventResourceId == null) {
             // new resource
             youtube = new YouTubeResource();
-            youtube.setEvent(daos.getEventDao().read(eventId));
+            youtube.setEvent(eventDao.read(eventId));
             display = "none";
             logger.info("Creating new YouTube video resource for the event " +
                     eventId + " (" + youtubeVideoId + ")");
         } else {
             // update resource
-            youtube = daos.getYouTubeResourceDao().read(
+            youtube = youTubeResourceDao.read(
                     eventResourceId);
             display = "block";
             logger.info("Updating YouTube video resource " + eventResourceId +
@@ -299,7 +300,7 @@ public class EventResourceBo {
         youtube.setVideoId(youtubeVideoId);
         youtube.setDescription(description);
         String result = null;
-        daos.getYouTubeResourceDao().createOrUpdate(youtube);
+        youTubeResourceDao.store(youtube);
         WebContext wctx = WebContextFactory.get();
         try {
             StringBuilder fragUrl = new StringBuilder();
@@ -319,15 +320,13 @@ public class EventResourceBo {
         }
         return result;
     }
-    
-    @Transactional(readOnly = true)
+
     public void fillEventResourceForm(Long eventResourceId) {
         try {
             WebContext wctx = WebContextFactory.get();
             ScriptSession session = wctx.getScriptSession();
             Util util = new Util(session);
-            EventResource eventResource = daos.getEventResourceDao().read(
-                    eventResourceId);
+            EventResource eventResource = eventResourceDao.get(eventResourceId);
             util.setValue("resourceId", eventResource.getId().toString());
             if (eventResource instanceof EventLink) {
                 EventLink link = (EventLink) eventResource;

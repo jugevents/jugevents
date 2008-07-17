@@ -13,8 +13,6 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,19 +21,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseMultiActionController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * 
- */
-public abstract class HomeController extends BaseMultiActionController {
+@Controller
+@RequestMapping("/home/*.html")
+public class HomeController {
 
 	private static final Logger logger = Logger.getLogger(HomeController.class);
 
-	/**
-	 * 
-	 */
+        @RequestMapping
 	public ModelAndView welcome(HttpServletRequest req, HttpServletResponse res) {
 		Map params = new HashMap();
 		params.put("something", new Object());
@@ -45,6 +41,7 @@ public abstract class HomeController extends BaseMultiActionController {
 	/**
 	 * Login action
 	 */
+        @RequestMapping
 	public ModelAndView acegilogin(HttpServletRequest req,
 			HttpServletResponse res) {
 		Map params = new HashMap();
@@ -54,12 +51,14 @@ public abstract class HomeController extends BaseMultiActionController {
 	/**
 	 * Access denied
 	 */
+        @RequestMapping
 	public ModelAndView accessDenied(HttpServletRequest req,
 			HttpServletResponse res) {
 		Map params = new HashMap();
 		return new ModelAndView("accessDenied", params);
 	}
 
+        @RequestMapping
 	public ModelAndView message(HttpServletRequest req,
 			HttpServletResponse res) {
             ModelAndView mv = new ModelAndView("message");
@@ -68,48 +67,4 @@ public abstract class HomeController extends BaseMultiActionController {
             return mv;
         }
         
-	/**
-	 * 
-	 */
-	public ModelAndView pageThatRaiseAnException(HttpServletRequest req,
-			HttpServletResponse res) {
-		try {
-			throw new RuntimeException("BOOOM!!!");
-		} catch (Exception e) {
-			return genericError(e);
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public ModelAndView pageThatRaiseAnUnHandledException(
-			HttpServletRequest req, HttpServletResponse res) {
-		if (1 == 1) {
-			throw new RuntimeException("UNHANDLED BOOM!!!");
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Logger getLogger() {
-		return logger;
-	}
-
-	/**
-	 * You don't have to implement this.
-	 * 
-	 * @return The provider of DAOs
-	 */
-	protected abstract Daos dao();
-
-	/**
-	 * You don't have to implement this.
-	 * 
-	 * @return The provider of business logic objects
-	 */
-	protected abstract Blos blo();
 }

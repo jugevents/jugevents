@@ -13,38 +13,49 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 import it.jugpadova.bean.EditJugger;
 import it.jugpadova.bean.RequireReliability;
 import it.jugpadova.bean.TimeZoneBean;
+import it.jugpadova.blo.JuggerBo;
+import it.jugpadova.blo.ServicesBo;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
+import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
 
+import it.jugpadova.util.SecurityUtilities;
 import it.jugpadova.util.Utilities;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTimeZone;
 import org.joda.time.tz.FixedDateTimeZone;
+import org.parancoe.plugins.security.User;
 import org.parancoe.plugins.world.Country;
-import org.parancoe.web.BaseFormController;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContext;
+import org.springmodules.validation.bean.BeanValidator;
 
 /**
  * Controller for editing Jugger informations.
@@ -52,79 +63,102 @@ import org.springframework.web.servlet.support.RequestContext;
  * @author Enrico Giurin
  *
  */
-public abstract class JuggerEditController extends BaseFormController {
+@Controller
+@RequestMapping("/jugger/edit.form")
+@SessionAttributes(JuggerEditController.JUGGER_ATTRIBUTE)
+public class JuggerEditController {
 
     private static final Logger logger =
             Logger.getLogger(JuggerEditController.class);
+    public static final String FORM_VIEW = "jugger/editJugger";
+    public static final String JUGGER_ATTRIBUTE = "jugger";
+    @Autowired
+    private JuggerBo juggerBo;
+    @Autowired
+    private ServicesBo servicesBo;
+    @Autowired
+    @Qualifier("validator")
+    private BeanValidator validator;
 
-    @Override
-    protected void initBinder(HttpServletRequest req,
-            ServletRequestDataBinder binder) throws Exception {
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) throws Exception {
         binder.registerCustomEditor(Date.class,
                 new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true));
         binder.registerCustomEditor(byte[].class,
                 new ByteArrayMultipartFileEditor());
     }
 
-    /* questo viene chiamato solo in caso di una post a jugger/edit.form */
-    @Override
-    protected ModelAndView onSubmit(HttpServletRequest req,
-            HttpServletResponse res, Object command,
-            BindException errors) throws Exception {
+    @RequestMapping(method = RequestMethod.POST)
+    protected ModelAndView save(HttpServletRequest req,
+            @ModelAttribute(JUGGER_ATTRIBUTE) EditJugger ej,
+            BindingResult result, SessionStatus status) throws IOException {
 
-        EditJugger ej = (EditJugger) command;
-        if (StringUtils.isNotBlank(ej.getPassword())) {
-            ej.getJugger().getUser().setPassword(ej.getPassword());
+        validator.validate(ej, result);
+        if (result.hasErrors()) {
+            return new ModelAndView(FORM_VIEW);
         }
-        blo().getJuggerBO().update(ej.getJugger(), ej.getRequireReliability().
-                isRequireReliability(),
-                ej.getRequireReliability().getComment(), Utilities.getBaseUrl(req));
-        ModelAndView mv = onSubmit(command, errors);
-        mv.addObject("jugger.user.username", ej.getJugger().getUser().getUsername());
+        if (StringUtils.isNotBlank(ej.getPassword())) {
+            ej.getJugger().getUser().setPassword(SecurityUtilities.encodePassword(
+                    ej.getPassword(), ej.getJugger().getUser().getUsername()));
+        }
+        juggerBo.update(ej.getJugger(), ej.getRequireReliability().
+                isRequireReliability(), ej.getRequireReliability().getComment(),
+                Utilities.getBaseUrl(req));
+        ModelAndView mv = new ModelAndView("redirect:/jugger/edit.form");
+        mv.addObject("jugger.user.username",
+                ej.getJugger().getUser().getUsername());
         Utilities.addMessageCode(mv, "juggerUpdateSuccessful");
+        status.setComplete();
         return mv;
     }
 
-    @Override
-    protected Object formBackingObject(HttpServletRequest req) throws Exception {
-        String username = req.getParameter("jugger.user.username");
+    @RequestMapping(method = RequestMethod.GET)
+    public String form(@ModelAttribute(JUGGER_ATTRIBUTE) EditJugger jugger) {
+        return FORM_VIEW;
+    }
 
-        EditJugger ej = new EditJugger();
-        Jugger jugger = blo().getJuggerBO().searchByUsername(username);
-        if (!blo().getServicesBo().checkAuthorization(username)) {
+    @ModelAttribute("jugger")
+    protected EditJugger formBackingObject(
+            @RequestParam("jugger.user.username") String username) {
+        if (!servicesBo.checkAuthorization(username)) {
             throw new ParancoeAccessDeniedException("Forbidden access to user identified by " +
                     username);
         }
-
-        ej.setJugger(jugger);
-        ej.setRequireReliability(new RequireReliability());
-        ej.setReliable(blo().getServicesBo().isJuggerReliable(jugger.getReliability()));
-        if (jugger.getJug().getCountry() == null) {
-            jugger.getJug().setCountry(new Country());
+        EditJugger ej = new EditJugger();
+        Jugger jugger = juggerBo.searchByUsername(username);
+        Jugger newJugger = new Jugger();
+        BeanUtils.copyProperties(jugger, newJugger, new String[]{"jug", "user"});
+        User newUser = new User();
+        BeanUtils.copyProperties(jugger.getUser(), newUser);
+        newJugger.setUser(newUser);
+        JUG newJug = new JUG();
+        BeanUtils.copyProperties(jugger.getJug(), newJug,
+                new String[]{"country"});
+        newJugger.setJug(newJug);
+        Country newCountry = new Country();
+        if (jugger.getJug().getCountry() != null) {
+            BeanUtils.copyProperties(jugger.getJug().getCountry(), newCountry);
         }
+        newJug.setCountry(newCountry);
+        ej.setJugger(newJugger);
+        ej.setRequireReliability(new RequireReliability());
+        ej.setReliable(servicesBo.isJuggerReliable(
+                jugger.getReliability()));
         return ej;
     }
 
-    @Override
-    protected Map referenceData(HttpServletRequest req) throws Exception {
+    @ModelAttribute("timezones")
+    protected List<TimeZoneBean> getTimezones(HttpServletRequest req) throws
+            Exception {
         RequestContext rc = (RequestContext) req.getAttribute("requestContext");
         List<TimeZoneBean> timezones = new ArrayList();
         Date now = new Date();
         for (int i = -12; i <= 12; i++) {
             DateTimeZone fdtz = FixedDateTimeZone.forOffsetHours(i);
-            timezones.add(new TimeZoneBean(fdtz.getID(), fdtz.getShortName(now.getTime(), rc.getLocale())));
+            timezones.add(new TimeZoneBean(fdtz.getID(), fdtz.getShortName(
+                    now.getTime(), rc.getLocale())));
         }
-        Map result = new HashMap();
-        result.put("timezones", timezones);
-        return result;
+        return timezones;
     }
-    
-    public Logger getLogger() {
-        return logger;
-    }
-
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
 } // end of class
 

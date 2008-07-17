@@ -13,7 +13,7 @@
 // limitations under the License.
 package it.jugpadova.blo;
 
-import it.jugpadova.Daos;
+import it.jugpadova.Conf;
 import it.jugpadova.dao.JUGDao;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.List;
 
 import nu.xom.Builder;
@@ -38,39 +37,29 @@ import org.parancoe.plugins.world.Continent;
 import org.parancoe.plugins.world.ContinentDao;
 import org.parancoe.plugins.world.Country;
 import org.parancoe.plugins.world.CountryDao;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 
  * @author lucio
  */
+@Component
 public class JugBo {
 
     private static final Logger logger = Logger.getLogger(JugBo.class);
     private static final String EARTH_NAMESPACE =
             "http://earth.google.com/kml/2.1";
-    private Daos daos;
-    private String defaultKmlUrl;
+    @Autowired
+    private ContinentDao continentDao;
+    @Autowired
+    private CountryDao countryDao;
+    @Autowired
+    private JUGDao jugDao;
+    @Autowired
     private ServicesBo servicesBo;
-
-    public JugBo() {
-    }
-
-    public Daos getDaos() {
-        return daos;
-    }
-
-    public void setDaos(Daos daos) {
-        this.daos = daos;
-    }
-
-    public String getDefaultKmlUrl() {
-        return defaultKmlUrl;
-    }
-
-    public void setDefaultKmlUrl(String defaultKmlUrl) {
-        this.defaultKmlUrl = defaultKmlUrl;
-    }
+    @Autowired
+    private Conf conf;
 
     /**
      * Update the list of JUGs taking data from a KML file.
@@ -79,17 +68,13 @@ public class JugBo {
      *            The URL of the KML file. If null, it's used the defaultKmlUrl.
      * @return Log messages
      */
-    @Transactional
     public void updateJugList(String kmlUrl) throws Exception {
         logger.info("Update JUG List started...");
         logger.info("kmlUrl = " + kmlUrl);
         if (kmlUrl == null) {
-            kmlUrl = this.defaultKmlUrl;
-            logger.info("Using defaultKmlUrl: " + this.defaultKmlUrl);
+            kmlUrl = conf.getDefaultKmlUrl();
+            logger.info("Using defaultKmlUrl: " + conf.getDefaultKmlUrl());
         }
-        ContinentDao continentDao = getDaos().getContinentDao();
-        CountryDao countryDao = getDaos().getCountryDao();
-        JUGDao jugDao = getDaos().getJUGDao();
         Builder parser = new Builder();
         Document doc = parser.build(kmlUrl);
         Element kml = doc.getRootElement();
@@ -133,7 +118,8 @@ public class JugBo {
                             String jugName =
                                     placemark.getFirstChildElement("name",
                                     EARTH_NAMESPACE).getValue();
-                            String description = placemark.getFirstChildElement("description",
+                            String description = placemark.getFirstChildElement(
+                                    "description",
                                     EARTH_NAMESPACE).getValue();
                             Element point =
                                     placemark.getFirstChildElement("Point",
@@ -149,7 +135,8 @@ public class JugBo {
                             JUG jug = jugDao.findByName(jugName);
                             if (jug != null && jug.isModifiedKmlData() != null &&
                                     jug.isModifiedKmlData().booleanValue()) {
-                                logger.info("Skipping updating of " + jugName +
+                                logger.info(
+                                        "Skipping updating of " + jugName +
                                         " kml data, because yet modified through JUG Events.");
                             } else {
                                 if (jug == null) {
@@ -164,11 +151,12 @@ public class JugBo {
                                 jug.setLatitude(latitude);
                                 jug.setInfos(description);
                                 jug.setModifiedKmlData(Boolean.FALSE);
-                                jugDao.createOrUpdate(jug);
+                                jugDao.store(jug);
                             }
                         }
                     } else {
-                        logger.warn("Country " + countryName +
+                        logger.warn(
+                                "Country " + countryName +
                                 " not found in the database. Not loading its JUGs.");
                     }
                 }
@@ -180,7 +168,6 @@ public class JugBo {
         logger.info("Update JUG List completed...");
     }
 
-    @Transactional
     public Document buildKml() {
         Element kml = new Element("kml", EARTH_NAMESPACE);
         Element document = new Element("Document", EARTH_NAMESPACE);
@@ -189,7 +176,8 @@ public class JugBo {
         documentName.appendChild("Java User Group International");
         Element documentDescription = new Element("description",
                 EARTH_NAMESPACE);
-        documentDescription.appendChild("\nGeographic location, leaders and web site information for JUGs from\n" +
+        documentDescription.appendChild(
+                "\nGeographic location, leaders and web site information for JUGs from\n" +
                 "around the world. For convenience, they are grouped by continent." +
                 "Instructions for submitting new JUG entries can be found" +
                 "<a href=\"http://wiki.java.net/bin/view/JUGs/JUG-MAP\">here</a>." +
@@ -197,13 +185,13 @@ public class JugBo {
         document.appendChild(documentName);
         document.appendChild(documentDescription);
         List<Continent> continents =
-                getDaos().getContinentDao().findByPartialName("%");
+                continentDao.findByPartialName("%");
         for (Continent continent : continents) {
             Element continentFolder = null;
             List<Country> countries = continent.getCountries();
             for (Country country : countries) {
                 Element countryFolder = null;
-                List<JUG> jugs = daos.getJUGDao().findByPartialJugNameAndCountry("%",
+                List<JUG> jugs = jugDao.findByPartialJugNameAndCountry("%",
                         country.getEnglishName());
                 for (JUG jug : jugs) {
                     if (jug.getLongitude() != null && jug.getLatitude() != null) {
@@ -246,11 +234,8 @@ public class JugBo {
         return new Document(kml);
     }
 
-    @Transactional
     public JUG saveJUG(Jugger jugger) throws IOException {
         JUG newJUG = jugger.getJug();
-        JUGDao jugDao = daos.getJUGDao();
-        CountryDao countryDao = daos.getCountryDao();
         // create or find JUG
         JUG jug = jugDao.findByName(newJUG.getName());
         if (jug == null) {
@@ -291,11 +276,10 @@ public class JugBo {
         jug.setInfos(newJUG.getInfos());
         Long id = jug.getId();
         if (id == null) {
-            id = jugDao.create(jug);
-            jug.setId(id);
+            jugDao.store(jug);
             logger.info("JUG with name " + jug.getName() + " has been created");
         } else {
-            jugDao.update(jug);
+            jugDao.store(jug);
             logger.info("JUG with name " + jug.getName() + " has been updated");
         }
         if (modifiedKmlData) {
@@ -306,9 +290,8 @@ public class JugBo {
         return jug;
     }
 
-    @Transactional(readOnly = true)
     public byte[] retrieveJugLogo(Long jugId) {
-        JUG jug = daos.getJUGDao().read(jugId);
+        JUG jug = jugDao.read(jugId);
         return jug.getLogo();
     }
 
@@ -318,10 +301,9 @@ public class JugBo {
      * @param jugId The ID of the JUG
      * @return The personalized certificate template for the JUG. null if the JUG don't have a personalized certificate template.
      */
-    @Transactional(readOnly = true)
     public InputStream retrieveJugCertificateTemplate(Long jugId) {
         InputStream result = null;
-        JUG jug = daos.getJUGDao().read(jugId);
+        JUG jug = jugDao.read(jugId);
         byte[] certificateTemplate = jug.getCertificateTemplate();
         if (certificateTemplate != null && certificateTemplate.length > 0) {
             result = new ByteArrayInputStream(certificateTemplate);
@@ -335,11 +317,10 @@ public class JugBo {
      * @param jugId The ID of the JUG
      * @return The plate for the JUG. null if the JUG don't have a personalized certificate template.
      */
-    @Transactional(readOnly = true)
     public JUG retrieveJug(Long jugId) {
-        return daos.getJUGDao().read(jugId);
+        return jugDao.read(jugId);
     }
-    
+
     private Element buildKmlPlacemark(JUG jug) {
         Element placemark = new Element("Placemark", EARTH_NAMESPACE);
         Element jugName = new Element("name", EARTH_NAMESPACE);
@@ -392,16 +373,20 @@ public class JugBo {
         final String EOL = "\n";
         StringBuilder sb = new StringBuilder();
         sb.append("<Placemark>").append(EOL);
-        sb.append(SPACER).append("<name>").append(StringEscapeUtils.escapeXml(jug.getName())).
+        sb.append(SPACER).append("<name>").append(StringEscapeUtils.escapeXml(
+                jug.getName())).
                 append("</name>").append(EOL);
         sb.append(SPACER).append("<description>").append(EOL);
         sb.append(SPACER).append(" <![CDATA[").append(EOL);
-        sb.append(SPACER).append(SPACER).append(StringEscapeUtils.escapeXml(jug.getInfos())).
+        sb.append(SPACER).append(SPACER).append(StringEscapeUtils.escapeXml(
+                jug.getInfos())).
                 append("<br/>").append(EOL);
         if (StringUtils.isNotBlank(leaderName) &&
                 StringUtils.isNotBlank(leaderEmail)) {
-            sb.append(SPACER).append(SPACER).append("<b>Leader:</b> ").append("<a href=\"mailto:").
-                    append(leaderEmail).append("\">").append(StringEscapeUtils.escapeXml(leaderName)).
+            sb.append(SPACER).append(SPACER).append("<b>Leader:</b> ").append(
+                    "<a href=\"mailto:").
+                    append(leaderEmail).append("\">").append(StringEscapeUtils.escapeXml(
+                    leaderName)).
                     append("</a>").append("<br/>").append(EOL);
         }
         if (StringUtils.isNotBlank(jug.getWebSite())) {
@@ -411,8 +396,10 @@ public class JugBo {
         sb.append(SPACER).append(" ]]>").append(EOL);
         sb.append(SPACER).append("</description>").append(EOL);
         sb.append(SPACER).append("<Point>").append(EOL);
-        sb.append(SPACER).append(SPACER).append("<coordinates>").append(jug.getLongitude()).
-                append(",").append(jug.getLatitude()).append(",0").append("</coordinates>").
+        sb.append(SPACER).append(SPACER).append("<coordinates>").append(
+                jug.getLongitude()).
+                append(",").append(jug.getLatitude()).append(",0").append(
+                "</coordinates>").
                 append(EOL);
         sb.append(SPACER).append("</Point>").append(EOL);
         sb.append(SPACER).append("<styleUrl>#jugStyle</styleUrl>").append(EOL);
@@ -422,7 +409,8 @@ public class JugBo {
 
     Boolean evaluateModifiedKmlData(JUG newJUG, JUG oldJUG) {
         return ((newJUG.getLongitude() != null && newJUG.getLatitude() != null &&
-                StringUtils.isNotBlank(newJUG.getInfos()) && StringUtils.isNotBlank(newJUG.getWebSite())) &&
+                StringUtils.isNotBlank(newJUG.getInfos()) &&
+                StringUtils.isNotBlank(newJUG.getWebSite())) &&
                 (!newJUG.getLongitude().equals(oldJUG.getLongitude()) ||
                 !newJUG.getLatitude().equals(oldJUG.getLatitude()) ||
                 !newJUG.getInfos().equals(oldJUG.getInfos()) ||

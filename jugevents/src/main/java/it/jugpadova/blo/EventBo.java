@@ -13,7 +13,7 @@
 // limitations under the License.
 package it.jugpadova.blo;
 
-import it.jugpadova.Daos;
+import it.jugpadova.Conf;
 import it.jugpadova.bean.EventSearch;
 import it.jugpadova.bean.NewsMessage;
 import it.jugpadova.dao.EventDao;
@@ -36,7 +36,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +50,8 @@ import org.apache.velocity.app.VelocityEngine;
 import org.directwebremoting.ScriptSession;
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
+import org.directwebremoting.annotations.RemoteMethod;
+import org.directwebremoting.annotations.RemoteProxy;
 import org.directwebremoting.proxy.dwr.Util;
 import org.directwebremoting.proxy.scriptaculous.Effect;
 import org.hibernate.CacheMode;
@@ -66,130 +67,74 @@ import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 /**
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 77d8c4e6a021 $
+ * @version $Revision: dfa2455c3721 $
  */
+@Component
+@RemoteProxy(name="eventBo")
 public class EventBo {
 
     private static final Logger logger = Logger.getLogger(EventBo.class);
-    private Daos daos;
+    @Autowired
+    private ParticipantDao participantDao;
+    @Autowired
+    private EventDao eventDao;
+    @Autowired
     private ServicesBo servicesBo;
+    @Autowired
     private JavaMailSender mailSender;
+    @Autowired
     private VelocityEngine velocityEngine;
-    private String confirmationSenderEmailAddress;
-    private int upcomingEventDays = 7;
-    private int newEventDays = 7;
+    @Autowired
     private MessageSource messageSource;
+    @Autowired
+    private Conf conf;
 
-    public MessageSource getMessageSource() {
-        return messageSource;
-    }
-
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
-
-    public Daos getDaos() {
-        return daos;
-    }
-
-    @Transactional(readOnly = true)
     public List<Participant> searchConfirmedParticipantsByEventId(Long id) {
-        return daos.getParticipantDao().findConfirmedParticipantsByEventId(id);
+        return participantDao.findConfirmedParticipantsByEventId(id);
     }
 
-    @Transactional(readOnly = true)
     public List<Participant> searchNonwinningParticipantsByEventId(Long id) {
-        return daos.getParticipantDao().findNonwinningParticipantsByEventId(id);
+        return participantDao.findNonwinningParticipantsByEventId(id);
     }
 
-    @Transactional(readOnly = true)
     public List<Participant> searchNotConfirmedParticipantsByEventId(Long id) {
-        return daos.getParticipantDao().findNotConfirmedParticipantsByEventId(id);
+        return participantDao.findNotConfirmedParticipantsByEventId(id);
     }
 
-    @Transactional(readOnly = true)
     public Participant searchParticipantById(Long participantId) {
-        return daos.getParticipantDao().read(participantId);
+        return participantDao.read(participantId);
     }
 
-    @Transactional(readOnly = true)
     public List<Participant> searchWinningParticipantsByEventId(Long id) {
-        return daos.getParticipantDao().findWinningParticipantsByEventId(id);
+        return participantDao.findWinningParticipantsByEventId(id);
     }
 
-    @Transactional(readOnly = true)
     public List<Participant> searchParticipantByEmailAndEventId(String email,
             Long id) {
-        return daos.getParticipantDao().findParticipantByEmailAndEventId(email,
+        return participantDao.findParticipantByEmailAndEventId(email,
                 id);
     }
 
-    public void setDaos(Daos daos) {
-        this.daos = daos;
-    }
-
-    public JavaMailSender getMailSender() {
-        return mailSender;
-    }
-
-    public void setMailSender(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
-
-    public VelocityEngine getVelocityEngine() {
-        return velocityEngine;
-    }
-
-    public void setVelocityEngine(VelocityEngine velocityEngine) {
-        this.velocityEngine = velocityEngine;
-    }
-
-    public String getConfirmationSenderEmailAddress() {
-        return confirmationSenderEmailAddress;
-    }
-
-    public void setConfirmationSenderEmailAddress(
-            String confirmationSenderEmailAddress) {
-        this.confirmationSenderEmailAddress = confirmationSenderEmailAddress;
-    }
-
-    public int getUpcomingEventDays() {
-        return upcomingEventDays;
-    }
-
-    public void setUpcomingEventDays(int upcomingEventDays) {
-        this.upcomingEventDays = upcomingEventDays;
-    }
-
-    public int getNewEventDays() {
-        return newEventDays;
-    }
-
-    public void setNewEventDays(int newEventDays) {
-        this.newEventDays = newEventDays;
-    }
-
-    @Transactional(readOnly = true)
     public List<Event> retrieveEvents() {
-        List<Event> events = getDaos().getEventDao().findCurrentEvents();
+        List<Event> events = eventDao.findCurrentEvents();
         for (Event event : events) {
             event.getParticipants().size();
         }
         return events;
     }
 
-    @Transactional(readOnly = true)
     public List<Event> search(EventSearch eventSearch) {
         List<Event> events = new LinkedList<Event>();
         try {
@@ -234,9 +179,9 @@ public class EventBo {
                 eventCriteria.addOrder(Order.asc("creationDate"));
             }
             if (eventSearch.getMaxResults() == null) {
-                events = daos.getEventDao().searchByCriteria(eventCriteria);
+                events = eventDao.searchByCriteria(eventCriteria);
             } else {
-                events = daos.getEventDao().searchByCriteria(eventCriteria, 0,
+                events = eventDao.searchByCriteria(eventCriteria, 0,
                         eventSearch.getMaxResults().intValue());
             }
             for (Event event : events) {
@@ -256,13 +201,11 @@ public class EventBo {
      * @param maxResults The max number of results. No limit if maxResults <= 0.
      * @return The list of events matching the query
      */
-    @Transactional(readOnly = true)
     public List<Event> search(String searchQuery, boolean pastEvents,
             int maxResults) throws ParseException {
         List<Event> result = null;
         Session session =
-                this.daos.getEventDao().
-                getHibernateTemplate().
+                this.eventDao.getHibernateTemplate().
                 getSessionFactory().getCurrentSession();
         FullTextSession fullTextSession = Search.createFullTextSession(session);
         MultiFieldQueryParser parser = new MultiFieldQueryParser(new String[]{
@@ -289,7 +232,7 @@ public class EventBo {
      * @param searchQuery The text to search
      * @param maxResults The max number of results. No limit if maxResults <= 0.
      */
-    @Transactional(readOnly = true)
+    @RemoteMethod
     public void fullTextSearch(String searchQuery, boolean pastEvents,
             String locale, int maxResults) {
         if (StringUtils.isNotBlank(searchQuery)) {
@@ -336,7 +279,6 @@ public class EventBo {
         }
     }
 
-    @Transactional
     public void save(Event event) {
         boolean isNew = false;
         if (event.getId() == null) {
@@ -355,8 +297,7 @@ public class EventBo {
         if (isNew) {
             event.setCreationDate(new Date());
         }
-        EventDao eventDao = getDaos().getEventDao();
-        eventDao.createOrUpdate(event);
+        eventDao.store(event);
         if (isNew) {
             logger.info(loggedUser + " created a new event with id=" +
                     event.getId());
@@ -366,38 +307,33 @@ public class EventBo {
         }
     }
 
-    @Transactional
     public void register(Event event, Participant participant, String baseUrl) {
-        EventDao eventDao = getDaos().getEventDao();
         event = eventDao.read(event.getId());
         participant.setConfirmed(Boolean.FALSE);
         participant.setConfirmationCode(generateConfirmationCode(event,
                 participant));
         participant.setEvent(event);
         participant.setCreationDate(new Date());
-        getDaos().getParticipantDao().createOrUpdate(participant);
+        participantDao.store(participant);
         event.addParticipant(participant);
-        eventDao.createOrUpdate(event);
+        eventDao.store(event);
         sendConfirmationEmail(event, participant, baseUrl);
         logger.info(participant.getEmail() + " (" + participant.getId() +
                 ") registered to the event with id=" + event.getId());
     }
 
-    @Transactional
     public void addParticipant(Event event, Participant participant) {
-        EventDao eventDao = getDaos().getEventDao();
         event = eventDao.read(event.getId());
         participant.setConfirmed(Boolean.TRUE);
         participant.setEvent(event);
         participant.setCreationDate(new Date());
-        getDaos().getParticipantDao().createOrUpdate(participant);
+        participantDao.store(participant);
         event.addParticipant(participant);
-        eventDao.createOrUpdate(event);
+        eventDao.store(event);
         logger.info(participant.getEmail() + " (" + participant.getId() +
                 ") added to the event with id=" + event.getId());
     }
 
-    @Transactional
     public void refreshRegistration(Event event, Participant participant,
             String baseUrl) {
         participant.setConfirmed(Boolean.FALSE);
@@ -405,7 +341,7 @@ public class EventBo {
                 participant));
         participant.setEvent(event);
         participant.setCreationDate(new Date());
-        getDaos().getParticipantDao().createOrUpdate(participant);
+        participantDao.store(participant);
         sendConfirmationEmail(event, participant, baseUrl);
     }
 
@@ -425,7 +361,7 @@ public class EventBo {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(participant.getEmail());
-                message.setFrom(confirmationSenderEmailAddress);
+                message.setFrom(conf.getConfirmationSenderEmailAddress());
                 message.setSubject("Please confirm event registration");
                 Map model = new HashMap();
                 model.put("participant", participant);
@@ -445,9 +381,8 @@ public class EventBo {
         this.mailSender.send(preparator);
     }
 
-    @Transactional(readOnly = true)
     public Event retrieveEvent(Long id) {
-        Event event = getDaos().getEventDao().read(id);
+        Event event = eventDao.read(id);
         if (event != null) {
             event.getParticipants().size();
             event.getEventResources().size();
@@ -455,15 +390,14 @@ public class EventBo {
         return event;
     }
 
-    @Transactional(readOnly = true)
+    @RemoteMethod
     public List findPartialLocation(String partialLocation, String username) {
         List<String> result = new ArrayList<String>();
         if (!StringUtils.isBlank(partialLocation) &&
                 !StringUtils.isBlank(username)) {
             try {
                 Map<String, Event> yetAdded = new HashMap<String, Event>();
-                List<Event> events = getDaos().getEventDao().
-                        findEventByPartialLocationAndOwner(
+                List<Event> events = eventDao.findEventByPartialLocationAndOwner(
                         "%" + partialLocation + "%", username);
                 Iterator<Event> itEvents = events.iterator();
                 while (itEvents.hasNext()) {
@@ -487,12 +421,12 @@ public class EventBo {
         return result;
     }
 
-    @Transactional(readOnly = true)
+    @RemoteMethod
     public void copyDirectionsFromEvent(long eventId) {
         WebContext wctx = WebContextFactory.get();
         ScriptSession session = wctx.getScriptSession();
         Util util = new Util(session);
-        Event event = daos.getEventDao().read(Long.valueOf(eventId));
+        Event event = eventDao.read(Long.valueOf(eventId));
         if (event != null) {
             util.setValue("location", event.getLocation());
             util.setValue("directions", event.getDirections());
@@ -514,11 +448,9 @@ public class EventBo {
      * @return The confirmed participant, if all went well
      * @throws it.jugpadova.exception.RegistrationNotOpenException When the participant can't be confirmed because the registration is yet closed
      */
-    @Transactional
     public Participant confirmParticipant(String email, String confirmationCode)
             throws RegistrationNotOpenException {
-        ParticipantDao dao = daos.getParticipantDao();
-        List<Participant> participants = dao.findByEmailAndConfirmationCodeAndConfirmed(email,
+        List<Participant> participants = participantDao.findByEmailAndConfirmationCodeAndConfirmed(email,
                 confirmationCode, Boolean.FALSE);
         if (participants != null && participants.size() > 0) {
             Participant p = participants.get(0);
@@ -533,7 +465,7 @@ public class EventBo {
         return null;
     }
 
-    @Transactional(readOnly = true)
+    @RemoteMethod
     public void updateBadgePanel(String continent, String country,
             String jugName, String pastEvents, String orderByDate,
             String jebShowJUGName, String jebShowCountry,
@@ -791,7 +723,6 @@ public class EventBo {
         return result.toString();
     }
 
-    @Transactional(readOnly = true)
     public void checkUserAuthorization(Event event)
             throws ParancoeAccessDeniedException {
         if (!servicesBo.canCurrentUserManageEvent(event)) {
@@ -800,18 +731,17 @@ public class EventBo {
         }
     }
 
-    @Transactional(readOnly = true)
     public List<NewsMessage> buildNewsMessages(String baseUrl) {
         List<NewsMessage> messages = new ArrayList<NewsMessage>();
         DateTime dt = new DateTime();
-        List<Event> upcomings = getDaos().getEventDao().findUpcomingEvents(
-                dt.plusDays(this.upcomingEventDays).toDate());
+        List<Event> upcomings = eventDao.findUpcomingEvents(
+                dt.plusDays(conf.getUpcomingEventDays()).toDate());
         for (Event event : upcomings) {
             messages.add(new NewsMessage(NewsMessage.TYPE_UPCOMING_EVENT,
                     event.getStartDate(), event, baseUrl));
         }
-        List<Event> newEvents = getDaos().getEventDao().findNewEvents(
-                dt.minusDays(this.newEventDays).toDate());
+        List<Event> newEvents = eventDao.findNewEvents(
+                dt.minusDays(conf.getNewEventDays()).toDate());
         for (Event event : newEvents) {
             if (!upcomings.contains(event)) {
                 messages.add(new NewsMessage(NewsMessage.TYPE_NEW_EVENT,
@@ -821,11 +751,9 @@ public class EventBo {
         return messages;
     }
 
-    @Transactional
     public void regenerateLuceneIndexes() {
         Session session =
-                this.daos.getEventDao().
-                getHibernateTemplate().
+                this.eventDao.getHibernateTemplate().
                 getSessionFactory().getCurrentSession();
         FullTextSession fullTextSession = Search.createFullTextSession(session);
         fullTextSession.setFlushMode(FlushMode.MANUAL);

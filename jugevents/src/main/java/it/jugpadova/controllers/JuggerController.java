@@ -13,48 +13,41 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
+import it.jugpadova.blo.JuggerBo;
 import it.jugpadova.po.Jugger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseMultiActionController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Admin
  *
  */
-public abstract class JuggerController extends BaseMultiActionController {
+@Controller
+@RequestMapping("/jugger/*.html")
+public class JuggerController {
 
     private static Logger logger =
             Logger.getLogger(JuggerController.class);
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.parancoe.web.BaseMultiActionController#getLogger()
-     */
-    @Override
-    public Logger getLogger() {
-        // TODO Auto-generated method stub
-        return logger;
-    }
-
+    @Autowired
+    private JuggerBo juggerBo;
+    
+    @RequestMapping
     public ModelAndView confirmUpdateJugger(HttpServletRequest req,
             HttpServletResponse res) {
         Long id = new Long(req.getParameter("id"));
-        Jugger jugger = blo().getJuggerBO().retrieveJugger(id);
+        Jugger jugger = juggerBo.retrieveJugger(id);
         ModelAndView mv =
                 new ModelAndView("jugger/confirmUpdateJugger");
         mv.addObject("jugger", jugger);
         return mv;
     }
 
-    protected abstract Daos dao();
-
-    protected abstract Blos blo();
 }
