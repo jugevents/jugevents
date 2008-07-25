@@ -1,11 +1,9 @@
-<script src="${cp}/javascripts/prototype.js" type="text/javascript"></script>
-<script src="${cp}/javascripts/scriptaculous.js?load=effects,controls" type="text/javascript"></script>
-<script src="${cp}/javascripts/parancoe.js" type="text/javascript"></script>
-<script src="${cp}/javascripts/autocompletedwr.js" type="text/javascript"></script>
-<script src="${cp}/javascripts/calendar.js" type="text/javascript"></script>
-<script src="${cp}/javascripts/calendar-lang/calendar-${requestScope.lang}.js" type="text/javascript"></script>
-<script src="${cp}/javascripts/calendar-setup.js" type="text/javascript"></script>
-<script src="${cp}/javascripts/nifty.js" type="text/javascript"></script>
-<script src="${cp}/javascripts/prototip.js" type="text/javascript"></script>
-<script src="${cp}/dwr/engine.js" type="text/javascript"></script>
-<script src="${cp}/dwr/util.js" type="text/javascript"></script>
+<%@ taglib uri="http://jawr.net/tags" prefix="jwr" %>
+<jwr:script src="/javascripts/lib/prototype.js" />
+<jwr:script src="/javascripts/lib/scriptaculous.js?load=effects,controls" />
+<jwr:script src="/javascripts/lib/parancoe.js" />
+<jwr:script src="/javascripts/lib/autocompletedwr.js" />
+<jwr:script src="/javascripts/lib/calendar.js" />
+<jwr:script src="/javascripts/lib/calendar-setup.js" />
+<jwr:script src="/javascripts/lib/prototip.js" />
+<jwr:script src="/javascripts/calendar-lang/calendar-${requestScope.lang}.js" />
