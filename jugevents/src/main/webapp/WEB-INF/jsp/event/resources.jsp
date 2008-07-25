@@ -1,7 +1,7 @@
 <%@ include file="../common.jspf" %>
-<script src="${cp}/javascripts/builder.js" type="text/javascript"></script>
+<jwr:script src="/javascripts/builder.js" />
 <script src="${cp}/dwr/interface/AjaxMethodsJS.js" type="text/javascript"></script>
-<script src="${cp}/javascripts/jugevents/eventResources.js" type="text/javascript"></script>
+<jwr:script src="/javascripts/jugevents/eventResources.js" />
 <h1><spring:message code='event.resources'/></h1>
 <div class="secondaryMenu">
     <a href="${cp}/event/show.html?id=${event.id}"><spring:message code="BackToTheEvent"/></a>
