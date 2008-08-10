@@ -16,6 +16,8 @@ package it.jugpadova.controllers;
 import it.jugpadova.blo.JuggerBo;
 import it.jugpadova.blo.ServicesBo;
 import it.jugpadova.po.Jugger;
+import it.jugpadova.po.ReliabilityRequest;
+import it.jugpadova.util.RRStatus;
 import it.jugpadova.util.Utilities;
 
 
@@ -63,6 +65,11 @@ public class ReliabilityEditController {
     protected Jugger formBackingObject(
             @RequestParam("jugger.user.username") String username) {
         Jugger jugger = juggerBo.searchByUsername(username);
+        if (jugger != null & jugger.getReliabilityRequest() == null) {
+            ReliabilityRequest reliabilityRequest = new ReliabilityRequest();
+            reliabilityRequest.setStatus(RRStatus.NOT_REQUIRED.value);
+            jugger.setReliabilityRequest(reliabilityRequest);
+        }
         return jugger;
     }
 }
