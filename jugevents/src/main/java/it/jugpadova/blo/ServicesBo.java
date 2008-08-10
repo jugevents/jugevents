@@ -103,7 +103,7 @@ public class ServicesBo {
      * @param jug
      */
     // Metodo da chiamare all' interno di un contesto transazionale
-    void requireReliability( Jugger jugger, String motivation, String baseURL) {
+    void requireReliability(Jugger jugger, String motivation, String baseURL) {
 
         ReliabilityRequest rr = jugger.getReliabilityRequest();
         if (rr != null) {
@@ -127,7 +127,6 @@ public class ServicesBo {
                 " has completed with success request of reliability");
     }
 
-    
     public String requireReliabilityOnExistingJugger(String emailJugger,
             String motivation, String baseURL) {
         Jugger jugger = juggerDao.findByEmail(emailJugger);
@@ -143,24 +142,14 @@ public class ServicesBo {
         }
     }
 
-    
     public void updateReliability(Jugger jugger, String baseUrl) {
-        Jugger ej = juggerDao.read(jugger.getId());
-        ej.setReliability(jugger.getReliability());
-        ej.getReliabilityRequest().setAdminResponse(
-                jugger.getReliabilityRequest().getAdminResponse());
-        ej.getReliabilityRequest().setDateAdminResponse(new Date(
-                System.currentTimeMillis()));
-        ej.getReliabilityRequest().setStatus(
-                jugger.getReliabilityRequest().getStatus());
-        reliabilityRequestDao.store(ej.getReliabilityRequest());
-        juggerDao.store(ej);
-        sendAdminEmail(jugger, baseUrl,
-                "Response to the Request for Reliability",
-                "it/jugpadova/response-ReliabilityAdmin.vm",
-                conf.getConfirmationSenderEmailAddress(), jugger.getEmail());
-
-        logger.info("Request for reliability for the jugger " +
+        if (jugger.getReliabilityRequest() != null) {
+            sendAdminEmail(jugger, baseUrl,
+                    "Response to the Request for Reliability",
+                    "it/jugpadova/response-ReliabilityAdmin.vm",
+                    conf.getConfirmationSenderEmailAddress(), jugger.getEmail());
+        }
+        logger.info("Update of the reliability for the jugger " +
                 jugger.getUser().getUsername() +
                 " has been processed with success");
     }
@@ -310,7 +299,6 @@ public class ServicesBo {
      *  </ol>
      * @param username
      */
-    
     public boolean checkAuthorization(String username) {
         String name = authenticatedUsername();
         if (name != null) {

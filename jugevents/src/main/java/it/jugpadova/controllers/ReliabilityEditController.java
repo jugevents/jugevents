@@ -16,14 +16,12 @@ package it.jugpadova.controllers;
 import it.jugpadova.blo.JuggerBo;
 import it.jugpadova.blo.ServicesBo;
 import it.jugpadova.po.Jugger;
-import it.jugpadova.po.ReliabilityRequest;
-import it.jugpadova.util.RRStatus;
 import it.jugpadova.util.Utilities;
-
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -31,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springmodules.validation.bean.BeanValidator;
 
 /**
  * Controller for managing reliability of the jugger. 
@@ -47,13 +46,19 @@ public class ReliabilityEditController {
     private JuggerBo juggerBo;
     @Autowired
     private ServicesBo servicesBo;
+    @Autowired
+    @Qualifier("validator")
+    private BeanValidator validator;
 
     @RequestMapping(method = RequestMethod.POST)
     protected String update(HttpServletRequest request,
             @ModelAttribute("jugger") Jugger jugger, BindingResult result) {
+        validator.validate(jugger, result);
+        if (result.hasErrors()) {
+            return FORM_VIEW;
+        }
         servicesBo.updateReliability(jugger, Utilities.getBaseUrl(request));
         return "redirect:/adminjugger/juggersearch.form";
-
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -65,11 +70,6 @@ public class ReliabilityEditController {
     protected Jugger formBackingObject(
             @RequestParam("jugger.user.username") String username) {
         Jugger jugger = juggerBo.searchByUsername(username);
-        if (jugger != null & jugger.getReliabilityRequest() == null) {
-            ReliabilityRequest reliabilityRequest = new ReliabilityRequest();
-            reliabilityRequest.setStatus(RRStatus.NOT_REQUIRED.value);
-            jugger.setReliabilityRequest(reliabilityRequest);
-        }
         return jugger;
     }
 }
