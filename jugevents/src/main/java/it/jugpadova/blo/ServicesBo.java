@@ -143,6 +143,7 @@ public class ServicesBo {
     }
 
     public void updateReliability(Jugger jugger, String baseUrl) {
+        juggerDao.store(jugger);
         if (jugger.getReliabilityRequest() != null) {
             sendAdminEmail(jugger, baseUrl,
                     "Response to the Request for Reliability",

@@ -15,10 +15,11 @@
     <!-- Authomatic DAO definition from persistent classes -->
     <parancoe:define-daos basePackage="it.jugpadova"/>
 
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    <bean class="org.parancoe.web.annotation.ParancoeAnnotationMethodHandlerAdapter">
         <property name="webBindingInitializer">
             <bean class="it.jugpadova.controllers.BasicWebAppBindingInitializer"/>
         </property>
+        <property name="validator" ref="validator"/>
     </bean>
 
     <bean id="daos" parent="abstractDaoProvider">
