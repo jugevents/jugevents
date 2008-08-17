@@ -15,7 +15,7 @@
     <!-- Authomatic DAO definition from persistent classes -->
     <parancoe:define-daos basePackage="it.jugpadova"/>
 
-    <bean class="org.parancoe.web.annotation.ParancoeAnnotationMethodHandlerAdapter">
+    <bean id="methodHandler" class="org.parancoe.web.annotation.ParancoeAnnotationMethodHandlerAdapter">
         <property name="webBindingInitializer">
             <bean class="it.jugpadova.controllers.BasicWebAppBindingInitializer"/>
         </property>

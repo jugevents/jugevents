@@ -11,14 +11,20 @@ import org.parancoe.plugins.security.User;
 import org.parancoe.plugins.security.UserAuthority;
 import org.parancoe.plugins.world.Continent;
 import org.parancoe.plugins.world.Country;
-import org.parancoe.web.test.BaseTest;
+import org.parancoe.web.test.ControllerTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.servlet.HandlerAdapter;
 
 /**
- * Base test class for test of JUG Events.
+ * Base test class for test of JUG Events controllers.
  *
  * @author lucio
  */
-public abstract class JugEventsBaseTest extends BaseTest {
+public abstract class JugEventsControllerTest extends ControllerTest {
+    @Autowired
+    @Qualifier("methodHandler")
+    protected HandlerAdapter handler;
 
     @Override
     public Class[] getFixtureClasses() {
