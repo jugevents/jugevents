@@ -1,4 +1,4 @@
-// Copyright 2006-2008 The Parancoe Team
+// Copyright 2006-2008 The JUG Events Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@ import it.jugpadova.po.Jugger;
 import it.jugpadova.util.Utilities;
 
 import org.apache.log4j.Logger;
+import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springmodules.validation.bean.BeanValidator;
 
 @Controller
 @RequestMapping("/jugger/enable.form")
@@ -47,20 +47,14 @@ public class JuggerEnableController {
     public static final String ENABLE_JUGGER_ATTRIBUTE = "enablejugger";
     @Autowired
     private JuggerBo juggerBo;
-    @Autowired
-    @Qualifier("validator")
-    private BeanValidator validator;
 
     @RequestMapping(method = RequestMethod.POST)
+    @Validation(view=FORM_VIEW, attributes={ENABLE_JUGGER_ATTRIBUTE})
     protected ModelAndView send(@ModelAttribute(JUGGER_ATTRIBUTE) Jugger jugger,
             @ModelAttribute(ENABLE_JUGGER_ATTRIBUTE) EnableJugger enableJugger,
             BindingResult result, SessionStatus status) {
 
         try {
-            validator.validate(enableJugger, result);
-            if (result.hasErrors()) {
-                return new ModelAndView(FORM_VIEW);
-            }
             status.setComplete();
             juggerBo.enableJugger(jugger, enableJugger.getPassword());
         } catch (UserAlreadyEnabledException uaee) {
@@ -77,19 +71,8 @@ public class JuggerEnableController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String form(@ModelAttribute(JUGGER_ATTRIBUTE) Jugger jugger,
-            @ModelAttribute(ENABLE_JUGGER_ATTRIBUTE) EnableJugger enableJugger) {
-        return FORM_VIEW;
-    }
-
-    @ModelAttribute(ENABLE_JUGGER_ATTRIBUTE)
-    public EnableJugger createEnableJugger() {
-        return new EnableJugger();
-    }
-
-    @ModelAttribute(JUGGER_ATTRIBUTE)
-    public Jugger retrieveJugger(@RequestParam("username") String username,
-            @RequestParam("code") String confirmationCode) throws Exception {
+    public String form(@RequestParam("username") String username,
+            @RequestParam("code") String confirmationCode, Model model) throws Exception {
         Jugger jugger =
                 juggerBo.searchByUsernameAndConfirmationCode(username,
                 confirmationCode);
@@ -101,6 +84,8 @@ public class JuggerEnableController {
                     " user doesn't exist, or the confirmation code (" +
                     confirmationCode + ") doesn't correspond");
         }
-        return jugger;
+        model.addAttribute(JUGGER_ATTRIBUTE, jugger);
+        model.addAttribute(ENABLE_JUGGER_ATTRIBUTE, new EnableJugger());
+        return FORM_VIEW;
     }
 }

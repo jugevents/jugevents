@@ -1,4 +1,4 @@
-// Copyright 2006-2008 The Parancoe Team
+// Copyright 2006-2008 The JUG Events Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,9 +33,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.octo.captcha.service.CaptchaService;
 import it.jugpadova.blo.JuggerBo;
+import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -45,7 +46,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
-import org.springmodules.validation.bean.BeanValidator;
 
 /**
  * 
@@ -65,9 +65,6 @@ public class JuggerRegistrationController {
     private JuggerBo juggerBo;
     @Autowired
     private CaptchaService captchaService;
-    @Autowired
-    @Qualifier("validator")
-    private BeanValidator validator;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) throws Exception {
@@ -77,22 +74,12 @@ public class JuggerRegistrationController {
                 new ByteArrayMultipartFileEditor());
     }
 
-//    @Override
-//    protected void onBind(HttpServletRequest request, Object command)
-//            throws Exception {
-//        NewJugger jc = (NewJugger) command;
-//        jc.getJugger().getUser().setPassword("xxx");
-//    }
-
     @RequestMapping(method = RequestMethod.POST)
+    @Validation(view = FORM_VIEW)
     protected ModelAndView save(HttpServletRequest req,
             @ModelAttribute(JUGGER_ATTRIBUTE) NewJugger jc,
             BindingResult result, SessionStatus status) throws IOException {
         try {
-            validator.validate(jc, result);
-            if (result.hasErrors()) {
-                return new ModelAndView(FORM_VIEW);
-            }
             juggerBo.newJugger(jc.getJugger(),
                     Utilities.getBaseUrl(req),
                     jc.getRequireReliability().isRequireReliability(),
@@ -112,23 +99,21 @@ public class JuggerRegistrationController {
                 jc.getJugger().getJug().setCountry(new Country());
             }
         }
-        ModelAndView mv = new ModelAndView("redirect:/home/message.html?messageCode=jugger.registration.sentMail");
+        ModelAndView mv =
+                new ModelAndView(
+                "redirect:/home/message.html?messageCode=jugger.registration.sentMail");
         Utilities.addMessageArguments(mv, jc.getJugger().getEmail());
         status.setComplete();
         return mv;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String form(@ModelAttribute(JUGGER_ATTRIBUTE) NewJugger jugger) {
-        return FORM_VIEW;
-    }
-
-    @ModelAttribute(JUGGER_ATTRIBUTE)
-    public NewJugger formBackingObject(WebRequest req) {
+    public String form(WebRequest req, Model model) {
         NewJugger jc = Utilities.newJuggerCaptcha();
         jc.setCaptchaId(req.getSessionId());
         jc.setCaptchaService(captchaService);
         jc.setRequireReliability(new RequireReliability());
-        return jc;
+        model.addAttribute(JUGGER_ATTRIBUTE, jc);
+        return FORM_VIEW;
     }
 }

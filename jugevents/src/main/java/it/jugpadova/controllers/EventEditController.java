@@ -1,4 +1,4 @@
-// Copyright 2006-2008 The Parancoe Team
+// Copyright 2006-2008 The JUG Events Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,10 +21,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -34,21 +35,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springmodules.validation.bean.BeanValidator;
 
 @Controller
 @RequestMapping("/event/edit.form")
 @SessionAttributes("event")
 public class EventEditController {
-    public static final String FORM_VIEW = "event/edit";
 
+    public static final String FORM_VIEW = "event/edit";
     private static final Logger logger =
             Logger.getLogger(EventEditController.class);
     @Autowired
     private EventBo eventBo;
-    @Autowired
-    @Qualifier("validator")
-    private BeanValidator validator;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) throws Exception {
@@ -63,45 +60,32 @@ public class EventEditController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+    @Validation(view = FORM_VIEW)
     public String save(@ModelAttribute("event") Event event,
             BindingResult result, SessionStatus status) {
-        try {
-            validator.validate(event, result);
-            if (result.hasErrors()) {
-                return FORM_VIEW;
-            }
-            eventBo.save(event);
-            status.setComplete();
-            return "redirect:show.html?id="+event.getId();
-        } catch (Exception e) {
-            result.reject("error.generic");
-            logger.error("Error saving the event " + event, e);
-            return FORM_VIEW;
-        }
+        eventBo.save(event);
+        status.setComplete();
+        return "redirect:show.html?id=" + event.getId();
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String form(@ModelAttribute("event") Event event) {
-        return FORM_VIEW;
-    }
-
-    @ModelAttribute("event")
-    protected Event formBackingObject(@RequestParam(value = "id", required =
-            false) Long id) {
-        Event result = null;
+    public String form(@RequestParam(value = "id", required =
+            false) Long id, Model model) {
+        Event event = null;
         if (id != null) {
-            result = eventBo.retrieveEvent(id);
-            if (result.getRegistration() == null) {
-                result.setRegistration(new Registration());
+            event = eventBo.retrieveEvent(id);
+            if (event.getRegistration() == null) {
+                event.setRegistration(new Registration());
             }
-            eventBo.checkUserAuthorization(result);
+            eventBo.checkUserAuthorization(event);
         } else {
-            result = new Event();
+            event = new Event();
             Registration registration = new Registration();
             registration.setStartRegistration(new Date());
             registration.setEndRegistration(registration.getStartRegistration());
-            result.setRegistration(registration);
+            event.setRegistration(registration);
         }
-        return result;
+        model.addAttribute("event", event);
+        return FORM_VIEW;
     }
 }

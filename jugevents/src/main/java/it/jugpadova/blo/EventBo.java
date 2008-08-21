@@ -79,7 +79,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: dfa2455c3721 $
+ * @version $Revision: 635387ba4911 $
  */
 @Component
 @RemoteProxy(name="eventBo")
@@ -308,13 +308,10 @@ public class EventBo {
     }
 
     public void register(Event event, Participant participant, String baseUrl) {
-        event = eventDao.read(event.getId());
         participant.setConfirmed(Boolean.FALSE);
         participant.setConfirmationCode(generateConfirmationCode(event,
                 participant));
-        participant.setEvent(event);
         participant.setCreationDate(new Date());
-        participantDao.store(participant);
         event.addParticipant(participant);
         eventDao.store(event);
         sendConfirmationEmail(event, participant, baseUrl);

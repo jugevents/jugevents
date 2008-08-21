@@ -1,4 +1,4 @@
-// Copyright 2006-2008 The Parancoe Team
+// Copyright 2006-2008 The JUG Events Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,15 +21,17 @@ import it.jugpadova.util.Utilities;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springmodules.validation.bean.BeanValidator;
 
 /**
  * Controller for password recovery.
@@ -39,6 +41,7 @@ import org.springmodules.validation.bean.BeanValidator;
  */
 @Controller
 @RequestMapping("/passwordRecovery.form")
+@SessionAttributes(PasswordRecoveryController.PASSWORD_RECOVERY_ATTRIBUTE)
 public class PasswordRecoveryController {
 
     private static final Logger logger =
@@ -47,19 +50,12 @@ public class PasswordRecoveryController {
     public static final String PASSWORD_RECOVERY_ATTRIBUTE = "passwordRecovery";
     @Autowired
     private JuggerBo juggerBo;
-    @Autowired
-    @Qualifier("validator")
-    private BeanValidator validator;
 
     @RequestMapping(method = RequestMethod.POST)
+    @Validation(view = FORM_VIEW)
     protected ModelAndView send(
             @ModelAttribute(PASSWORD_RECOVERY_ATTRIBUTE) PasswordRecovery passwordRecovery,
-            BindingResult result, HttpServletRequest req) throws Exception {
-
-        validator.validate(passwordRecovery, result);
-        if (result.hasErrors()) {
-            return new ModelAndView(FORM_VIEW);
-        }
+            BindingResult result, HttpServletRequest req, SessionStatus status) throws Exception {
 
         String email = passwordRecovery.getEmail();
         logger.debug("email: " + email);
@@ -77,19 +73,16 @@ public class PasswordRecoveryController {
                 new ModelAndView(
                 "redirect:/home/message.html?messageCode=jugger.pwdchng.sentMail");
         Utilities.addMessageArguments(mv, jugger.getEmail());
+        status.setComplete();
         return mv;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String form(
-            @ModelAttribute(PASSWORD_RECOVERY_ATTRIBUTE) PasswordRecovery passwordRecovery) {
-        return FORM_VIEW;
-    }
-
     @ModelAttribute(PASSWORD_RECOVERY_ATTRIBUTE)
-    protected PasswordRecovery formBackingObject(HttpServletRequest req) throws
+    @RequestMapping(method = RequestMethod.GET)
+    protected String form(Model model) throws
             Exception {
-        return new PasswordRecovery();
+        model.addAttribute(PASSWORD_RECOVERY_ATTRIBUTE, new PasswordRecovery());
+        return FORM_VIEW;
     }
 }
 

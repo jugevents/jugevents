@@ -57,9 +57,10 @@
         </property>
     </bean>
     
+    <bean id="servicesBo" class="it.jugpadova.mock.MockServicesBo"/>
     
     <!-- start mail section (test porpouse)-->
-    <bean id="mailSender" class="it.jugpadova.mock.ParancoeMockMailSender"></bean>
+    <bean id="mailSender" class="it.jugpadova.mock.ParancoeMockMailSender"/>
     
     <bean id="footprintSettings" class="net.java.dev.footprint.model.generated.FootprintProperties">
         <property name="title" value="JUG Event Certificate"/>

@@ -1,4 +1,4 @@
-// Copyright 2006-2008 The Parancoe Team
+// Copyright 2006-2008 The JUG Events Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,32 +18,27 @@ import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
 import it.jugpadova.util.Utilities;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.octo.captcha.service.CaptchaService;
 import it.jugpadova.blo.EventBo;
 import it.jugpadova.exception.RegistrationNotOpenException;
+import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springmodules.validation.bean.BeanValidator;
 
 @Controller
 @RequestMapping("/event/registration.form")
@@ -58,64 +53,47 @@ public class ParticipantRegistrationController {
     private CaptchaService captchaService;
     @Autowired
     private EventBo eventBo;
-    @Autowired
-    @Qualifier("validator")
-    private BeanValidator validator;
-
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) throws Exception {
-        binder.registerCustomEditor(Date.class,
-                new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true));
-    }
 
     @RequestMapping(method = RequestMethod.POST)
+    @Validation(view = FORM_VIEW)
     protected ModelAndView onSubmit(HttpServletRequest req,
             @ModelAttribute(REGISTRATION_ATTRIBUTE) Registration registration,
             BindingResult result, SessionStatus status) throws Exception {
-        validator.validate(registration, result);
-        if (result.hasErrors()) {
-            return new ModelAndView(FORM_VIEW);
-        }
+        ModelAndView mv = null;
         String baseUrl = Utilities.getBaseUrl(req);
         List<Participant> prevParticipant = eventBo.searchParticipantByEmailAndEventId(registration.getParticipant().
                 getEmail(), registration.getEvent().getId());
-        status.setComplete();
         if (prevParticipant.size() == 0) {
             eventBo.register(registration.getEvent(),
                     registration.getParticipant(), baseUrl);
-            ModelAndView mv =
+            mv =
                     new ModelAndView(
                     "redirect:/home/message.html?messageCode=participant.registration.sentMail");
             Utilities.addMessageArguments(mv, registration.getEvent().getTitle(),
                     registration.getParticipant().getEmail());
-            return mv;
         } else {
             Participant p = prevParticipant.get(0);
             if (p.getConfirmed().booleanValue()) {
-                return Utilities.getMessageView(
+                status.setComplete();
+                mv = Utilities.getMessageView(
                         "participant.registration.yetRegistered");
             } else {
                 eventBo.refreshRegistration(registration.getEvent(), p, baseUrl);
-                ModelAndView mv =
+                mv =
                         new ModelAndView(
                         "redirect:/home/message.html?messageCode=participant.registration.sentMail");
                 Utilities.addMessageArguments(mv,
                         registration.getEvent().getTitle(),
                         registration.getParticipant().getEmail());
-                return mv;
             }
         }
+        status.setComplete();
+        return mv;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String form(
-            @ModelAttribute(REGISTRATION_ATTRIBUTE) Registration registration) {
-        return FORM_VIEW;
-    }
-
-    @ModelAttribute("registration")
-    protected Registration formBackingObject(@RequestParam("event.id") Long id,
-            HttpServletRequest req) {
+    protected String form(@RequestParam("event.id") Long id,
+            HttpServletRequest req, Model model) {
         Registration result = new Registration();
         result.setParticipant(new Participant());
         Event event = eventBo.retrieveEvent(id);
@@ -133,6 +111,7 @@ public class ParticipantRegistrationController {
         }
         result.setCaptchaId(req.getSession().getId());
         result.setCaptchaService(captchaService);
-        return result;
+        model.addAttribute(REGISTRATION_ATTRIBUTE, result);
+        return FORM_VIEW;
     }
 }

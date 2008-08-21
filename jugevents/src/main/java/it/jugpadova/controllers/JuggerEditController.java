@@ -1,4 +1,4 @@
-// Copyright 2006-2007 The Parancoe Team
+// Copyright 2006-2008 The JUG Events Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,11 +38,12 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.tz.FixedDateTimeZone;
 import org.parancoe.plugins.security.User;
 import org.parancoe.plugins.world.Country;
+import org.parancoe.web.validation.Validation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -55,7 +56,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContext;
-import org.springmodules.validation.bean.BeanValidator;
 
 /**
  * Controller for editing Jugger informations.
@@ -76,9 +76,6 @@ public class JuggerEditController {
     private JuggerBo juggerBo;
     @Autowired
     private ServicesBo servicesBo;
-    @Autowired
-    @Qualifier("validator")
-    private BeanValidator validator;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) throws Exception {
@@ -89,14 +86,11 @@ public class JuggerEditController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+    @Validation(view=FORM_VIEW)
     protected ModelAndView save(HttpServletRequest req,
             @ModelAttribute(JUGGER_ATTRIBUTE) EditJugger ej,
             BindingResult result, SessionStatus status) throws IOException {
 
-        validator.validate(ej, result);
-        if (result.hasErrors()) {
-            return new ModelAndView(FORM_VIEW);
-        }
         if (StringUtils.isNotBlank(ej.getPassword())) {
             ej.getJugger().getUser().setPassword(SecurityUtilities.encodePassword(
                     ej.getPassword(), ej.getJugger().getUser().getUsername()));
@@ -113,13 +107,7 @@ public class JuggerEditController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String form(@ModelAttribute(JUGGER_ATTRIBUTE) EditJugger jugger) {
-        return FORM_VIEW;
-    }
-
-    @ModelAttribute("jugger")
-    protected EditJugger formBackingObject(
-            @RequestParam("jugger.user.username") String username) {
+    protected String form(@RequestParam("jugger.user.username") String username, Model model) {
         if (!servicesBo.checkAuthorization(username)) {
             throw new ParancoeAccessDeniedException("Forbidden access to user identified by " +
                     username);
@@ -144,7 +132,8 @@ public class JuggerEditController {
         ej.setRequireReliability(new RequireReliability());
         ej.setReliable(servicesBo.isJuggerReliable(
                 jugger.getReliability()));
-        return ej;
+        model.addAttribute(JUGGER_ATTRIBUTE, ej);
+        return FORM_VIEW;
     }
 
     @ModelAttribute("timezones")
@@ -161,4 +150,3 @@ public class JuggerEditController {
         return timezones;
     }
 } // end of class
-

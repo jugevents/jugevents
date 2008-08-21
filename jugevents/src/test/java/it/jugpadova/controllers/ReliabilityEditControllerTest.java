@@ -11,6 +11,11 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 public class ReliabilityEditControllerTest extends JugEventsControllerTest {
+    public static final String DONE_VIEW =
+            "redirect:/adminjugger/juggersearch.form";
+    public static final String FORM_REQUEST_URI = "/adminjugger/reliability.form";
+    public static final String FORM_VIEW = "jugger/admin/reliability";
+    public static final String MODEL_ATTRIBUTE = "jugger";
     @Autowired
     private ReliabilityEditController controller;
     @Autowired
@@ -24,27 +29,27 @@ public class ReliabilityEditControllerTest extends JugEventsControllerTest {
         callForm("fabrizio");        
         resetRequestAndResponse();
         req.setMethod("POST");
-        req.setRequestURI("/adminjugger/reliability.form");
+        req.setRequestURI(FORM_REQUEST_URI);
         req.setParameter("reliability", "1.0");
         ModelAndView mv = handler.handle(req, res, controller);
-        assertEquals("redirect:/adminjugger/juggersearch.form", mv.getViewName());
-        Object oJugger = mv.getModel().get("jugger");
-        assertNotNull(oJugger);
-        assertEquals(1.0, ((Jugger)oJugger).getReliability());
-        Object sJugger = req.getSession().getAttribute("jugger");
-        assertNull("The jugger attribute should have been removed from the session", sJugger);
+        assertEquals(DONE_VIEW, mv.getViewName());
+        Object reqModel = mv.getModel().get(MODEL_ATTRIBUTE);
+        assertNotNull(reqModel);
+        assertEquals(1.0, ((Jugger)reqModel).getReliability());
+        Object sesModel = req.getSession().getAttribute(MODEL_ATTRIBUTE);
+        assertNull("The jugger attribute should have been removed from the session", sesModel);
     }
 
     public void testUpdateFailedForValidation() throws Exception {
         callForm("fabrizio");        
         resetRequestAndResponse();
         req.setMethod("POST");
-        req.setRequestURI("/adminjugger/reliability.form");
+        req.setRequestURI(FORM_REQUEST_URI);
         req.setParameter("reliability", "1.1");
         ModelAndView mv = handler.handle(req, res, controller);
-        assertEquals("jugger/admin/reliability", mv.getViewName());
-        Object sJugger = req.getSession().getAttribute("jugger");
-        assertNotNull("The jugger attribute shouldn't have been removed from the session", sJugger);
+        assertEquals(FORM_VIEW, mv.getViewName());
+        Object sesModel = req.getSession().getAttribute(MODEL_ATTRIBUTE);
+        assertNotNull("The jugger attribute shouldn't have been removed from the session", sesModel);
         this.endTransaction();
         this.startNewTransaction();
         Jugger jugger = juggerDao.searchByUsername("fabrizio");
@@ -53,20 +58,20 @@ public class ReliabilityEditControllerTest extends JugEventsControllerTest {
     
     public void testForm() throws Exception {
         ModelAndView mv = callForm("enrico");
-        Object oJugger = mv.getModel().get("jugger");
-        assertNotNull(oJugger);
-        assertTrue("The object is not of type Jugger", oJugger instanceof Jugger);
-        Object sJugger = req.getSession().getAttribute("jugger");
-        assertNotNull(sJugger);
-        assertTrue("The object is not of type Jugger", sJugger instanceof Jugger);
-        assertSame(oJugger, sJugger);
-        assertEquals("enrico", ((Jugger)oJugger).getUser().getUsername());
-        assertEquals("jugger/admin/reliability", mv.getViewName());
+        Object reqModel = mv.getModel().get(MODEL_ATTRIBUTE);
+        assertNotNull(reqModel);
+        assertTrue("The object is not of type Jugger", reqModel instanceof Jugger);
+        Object sesModel = req.getSession().getAttribute(MODEL_ATTRIBUTE);
+        assertNotNull(sesModel);
+        assertTrue("The object is not of type Jugger", sesModel instanceof Jugger);
+        assertSame(reqModel, sesModel);
+        assertEquals("enrico", ((Jugger)reqModel).getUser().getUsername());
+        assertEquals(FORM_VIEW, mv.getViewName());
     }
     
     private ModelAndView callForm(String username) throws Exception {
         req.setMethod("GET");
-        req.setRequestURI("/adminjugger/reliability.form");
+        req.setRequestURI(FORM_REQUEST_URI);
         req.setParameter("jugger.user.username", username);
         ModelAndView mv =  handler.handle(req, res, controller);
         this.endTransaction();

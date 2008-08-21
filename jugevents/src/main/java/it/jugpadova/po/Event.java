@@ -199,6 +199,7 @@ public class Event extends EntityBase {
                     new LinkedList<Participant>();
         }
         this.participants.add(participant);
+        participant.setEvent(this);
     }
 
     @Temporal(value = TemporalType.TIMESTAMP)

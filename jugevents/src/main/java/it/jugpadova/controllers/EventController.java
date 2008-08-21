@@ -13,8 +13,6 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-import it.jugpadova.Blos;
-import it.jugpadova.Daos;
 import it.jugpadova.bean.EventSearch;
 import it.jugpadova.bean.Registration;
 import it.jugpadova.blo.EventBo;
