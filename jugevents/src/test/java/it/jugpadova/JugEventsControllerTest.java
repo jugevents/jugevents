@@ -1,5 +1,6 @@
 package it.jugpadova;
 
+import it.jugpadova.mock.MockServicesBo;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.EventLink;
 import it.jugpadova.po.JUG;
@@ -25,7 +26,15 @@ public abstract class JugEventsControllerTest extends ControllerTest {
     @Autowired
     @Qualifier("methodHandler")
     protected HandlerAdapter handler;
+    @Autowired
+    protected MockServicesBo servicesBo;
 
+    @Override
+    public void onSetUpBeforeTransaction() throws Exception {
+        super.onSetUpBeforeTransaction();
+        servicesBo.setAuthenticatedUsername(null);
+    }
+    
     @Override
     public Class[] getFixtureClasses() {
         return new Class[]{Continent.class, Country.class, User.class, Authority.class, UserAuthority.class, JUG.class, ReliabilityRequest.class, Jugger.class, Event.class, EventLink.class, Participant.class};

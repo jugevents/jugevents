@@ -2,7 +2,6 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.JugEventsControllerTest;
 import it.jugpadova.dao.EventDao;
-import it.jugpadova.mock.MockServicesBo;
 import it.jugpadova.po.Event;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +25,6 @@ public class EventEditControllerTest extends JugEventsControllerTest {
     private EventEditController controller;
     @Autowired
     private EventDao eventDao;
-    @Autowired
-    private MockServicesBo servicesBo;
 
     public void testConfiguration() {
         assertNotNull(controller);
