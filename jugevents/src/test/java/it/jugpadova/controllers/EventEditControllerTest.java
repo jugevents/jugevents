@@ -39,10 +39,11 @@ public class EventEditControllerTest extends JugEventsControllerTest {
         req.setRequestURI(FORM_REQUEST_URI);
         req.setParameter("startDate", "20/08/2008");
         ModelAndView mv = handler.handle(req, res, controller);
-        assertEquals(DONE_VIEW+testEvent.getId(), mv.getViewName());
+        assertEquals(DONE_VIEW + testEvent.getId(), mv.getViewName());
         Object reqModel = mv.getModel().get(MODEL_ATTRIBUTE);
         assertNotNull(reqModel);
-        assertEquals(1219183200000L, ((Event) reqModel).getStartDate().getTime());
+        assertEquals(getExpectedTime(2008, 07, 20),
+                ((Event) reqModel).getStartDate().getTime());
         Object sesModel = req.getSession().getAttribute(MODEL_ATTRIBUTE);
         assertNull("The " + MODEL_ATTRIBUTE +
                 " attribute should have been removed from the session", sesModel);
@@ -59,12 +60,13 @@ public class EventEditControllerTest extends JugEventsControllerTest {
         assertEquals(FORM_VIEW, mv.getViewName());
         Object sesModel = req.getSession().getAttribute(MODEL_ATTRIBUTE);
         assertNotNull(
-                "The "+MODEL_ATTRIBUTE+" jugger attribute shouldn't have been removed from the session",
+                "The " + MODEL_ATTRIBUTE +
+                " jugger attribute shouldn't have been removed from the session",
                 sesModel);
         this.endTransaction();
         this.startNewTransaction();
         Event event = eventDao.get(testEvent.getId());
-        assertEquals(1195858800000L, event.getStartDate().getTime());
+        assertEquals(getExpectedTime(2007, 10, 24), event.getStartDate().getTime());
     }
 
     public void testForm() throws Exception {
@@ -91,7 +93,15 @@ public class EventEditControllerTest extends JugEventsControllerTest {
         this.startNewTransaction();
         return mv;
     }
-    
+
+    private long getExpectedTime(int year, int month, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(year, month, day);
+        long expectedTime = cal.getTimeInMillis();
+        return expectedTime;
+    }
+
     private Event getTestEvent() {
         List<Event> events =
                 eventDao.searchByCriteria(DetachedCriteria.forClass(Event.class).add(Restrictions.eq("title",
