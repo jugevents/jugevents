@@ -3,6 +3,7 @@ package it.jugpadova.controllers;
 import it.jugpadova.JugEventsControllerTest;
 import it.jugpadova.dao.EventDao;
 import it.jugpadova.po.Event;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
@@ -41,8 +42,7 @@ public class EventEditControllerTest extends JugEventsControllerTest {
         assertEquals(DONE_VIEW+testEvent.getId(), mv.getViewName());
         Object reqModel = mv.getModel().get(MODEL_ATTRIBUTE);
         assertNotNull(reqModel);
-        System.out.println(((Event) reqModel).getStartDate().getTime());
-        assertEquals(new Date(1219183200000L), ((Event) reqModel).getStartDate());
+        assertEquals(1219183200000L, ((Event) reqModel).getStartDate().getTime());
         Object sesModel = req.getSession().getAttribute(MODEL_ATTRIBUTE);
         assertNull("The " + MODEL_ATTRIBUTE +
                 " attribute should have been removed from the session", sesModel);
@@ -64,7 +64,7 @@ public class EventEditControllerTest extends JugEventsControllerTest {
         this.endTransaction();
         this.startNewTransaction();
         Event event = eventDao.get(testEvent.getId());
-        assertEquals(new Date(1195858800000L), event.getStartDate());
+        assertEquals(1195858800000L, event.getStartDate().getTime());
     }
 
     public void testForm() throws Exception {
