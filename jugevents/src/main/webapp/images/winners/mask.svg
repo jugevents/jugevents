@@ -18,11 +18,17 @@
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs4">
-    <pattern
-       inkscape:collect="always"
-       xlink:href="#pattern5972"
-       id="pattern5984"
-       patternTransform="matrix(0.7930403,-4.3113364,4.3113364,0.7930403,616.55753,277.98713)" />
+    <linearGradient
+       id="linearGradient5995">
+      <stop
+         style="stop-color:#60a8fa;stop-opacity:1;"
+         offset="0"
+         id="stop5997" />
+      <stop
+         style="stop-color:#0e7ece;stop-opacity:1;"
+         offset="1"
+         id="stop5999" />
+    </linearGradient>
     <pattern
        inkscape:collect="always"
        xlink:href="#pattern5761"
@@ -192,7 +198,7 @@
        patternUnits="userSpaceOnUse"
        width="29.366301"
        height="28.040062"
-       patternTransform="translate(612.09888,213.21069)"
+       patternTransform="matrix(-3.5250765,-5.480688,5.480688,-3.5250765,612.09888,213.21069)"
        id="pattern5758">
       <rect
          id="rect5715"
@@ -433,6 +439,15 @@
        y1="22.204718"
        x2="13.470417"
        y2="12.072944" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5995"
+       id="linearGradient6001"
+       x1="141.86052"
+       y1="526.18111"
+       x2="602.23396"
+       y2="526.18111"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -467,7 +482,18 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="opacity:1;fill:url(#pattern5984);fill-opacity:1;fill-rule:nonzero;stroke:url(#radialGradient3900);stroke-width:6.62654686;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/lucio/MyWorks/jugevents/jugevents/src/main/webapp/images/winners/mask.png"
+       ry="20.249876"
+       y="354.49438"
+       x="141.86052"
+       height="343.37344"
+       width="460.37344"
+       id="rect5993"
+       style="opacity:1;fill:url(#linearGradient6001);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:6.62654686000000037;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       style="opacity:1;fill:url(#pattern5758);fill-opacity:1;fill-rule:nonzero;stroke:url(#radialGradient3900);stroke-width:6.62654686;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect3877"
        width="460.37344"
        height="343.37344"
@@ -477,13 +503,6 @@
        inkscape:export-filename="/home/lucio/MyWorks/jugevents/jugevents/src/main/webapp/images/winners/mask.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <rect
-       style="fill:url(#pattern5663);stroke:none"
-       width="57.34716"
-       height="55.676857"
-       x="345.82922"
-       y="182.42583"
-       id="rect5650" />
     <rect
        style="fill:none;stroke:none"
        width="29.366301"
@@ -508,35 +527,5 @@
        x="518.4447"
        y="227.7346"
        id="rect5833" />
-    <rect
-       style="fill:#7abefa;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect5869"
-       width="34"
-       height="34"
-       x="133.61349"
-       y="215.25752" />
-    <g
-       id="g5861"
-       inkscape:label="Calque 1"
-       transform="matrix(1.0215792,0,0,1.0698978,135.27309,216.221)">
-      <rect
-         ry="0"
-         y="12.5"
-         x="16"
-         height="0"
-         width="6"
-         id="rect5863"
-         style="fill:#427bc3;fill-opacity:1;stroke:none" />
-      <path
-         id="path5865"
-         d="M 16.4375,1.6875 C 16.026964,1.7197225 15.672893,1.9883275 15.53125,2.375 L 12.40625,10.78125 L 3.75,12.96875 C 3.3610339,13.064737 3.0602494,13.373158 2.9740419,13.764408 C 2.8878343,14.155657 3.0311442,14.561929 3.34375,14.8125 L 10.375,20.375 L 9.75,29.3125 C 9.7203881,29.718354 9.927305,30.104937 10.281441,30.305391 C 10.635578,30.505846 11.073522,30.484279 11.40625,30.25 L 18.875,25.3125 L 27.15625,28.625 C 27.526105,28.772057 27.947273,28.697982 28.244755,28.433553 C 28.542238,28.169124 28.665181,27.759546 28.5625,27.375 L 26.15625,18.78125 L 31.90625,11.875 C 32.179476,11.565773 32.246878,11.125443 32.078664,10.748643 C 31.91045,10.371844 31.537631,10.128041 31.125,10.125 L 22.1875,9.78125 L 17.4375,2.1875 C 17.227499,1.843001 16.8391,1.6488018 16.4375,1.6875 L 16.4375,1.6875 z"
-         style="fill:#f57900;fill-opacity:1;stroke:none"
-         transform="matrix(0.994842,0.1014361,-0.1014361,0.994842,-1.1763045,-2.3770578)" />
-      <path
-         id="path5867"
-         d="M 16.59375,3.5 L 13.53125,11.8125 C 13.503478,11.891796 13.447988,11.958385 13.375,12 C 13.355267,12.012485 13.334328,12.022954 13.3125,12.03125 L 4.78125,14.15625 L 11.6875,19.625 C 11.780055,19.700797 11.827249,19.818781 11.8125,19.9375 L 11.21875,28.71875 L 18.5625,23.84375 C 18.655798,23.784312 18.771779,23.772714 18.875,23.8125 L 27.03125,27.09375 L 24.65625,18.59375 C 24.625429,18.485601 24.648704,18.369226 24.71875,18.28125 L 30.375,11.5 L 21.59375,11.15625 C 21.480125,11.153164 21.375148,11.094844 21.3125,11 L 16.59375,3.5 z"
-         style="fill:url(#linearGradient5986);fill-opacity:1;stroke:none"
-         transform="matrix(0.994842,0.1014361,-0.1014361,0.994842,-1.1763045,-2.3770578)" />
-    </g>
   </g>
 </svg>
