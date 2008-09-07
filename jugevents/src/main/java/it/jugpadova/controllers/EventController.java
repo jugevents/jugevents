@@ -43,10 +43,12 @@ import com.sun.syndication.feed.rss.Item;
 import com.sun.syndication.io.WireFeedOutput;
 import it.jugpadova.blo.ServicesBo;
 import it.jugpadova.dao.EventDao;
+import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.util.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/event/*.html")
@@ -54,14 +56,15 @@ public class EventController extends BaseMultiActionController {
 
     private static Logger logger =
             Logger.getLogger(EventController.class);
-
     @Autowired
     private EventDao eventDao;
+    @Autowired
+    private ParticipantDao participantDao;
     @Autowired
     private EventBo eventBo;
     @Autowired
     private ServicesBo servicesBo;
-    
+
     @RequestMapping
     public ModelAndView list(HttpServletRequest req,
             HttpServletResponse res) {
@@ -104,8 +107,8 @@ public class EventController extends BaseMultiActionController {
                 throw new IllegalArgumentException("No event with id " + id);
             }
             mv.addObject("event", event);
-            mv.addObject("canCurrentUserManageEvent", servicesBo.
-                    canCurrentUserManageEvent(event));
+            mv.addObject("canCurrentUserManageEvent",
+                    servicesBo.canCurrentUserManageEvent(event));
         } catch (Exception e) {
             return genericError(e);
         }
@@ -124,10 +127,11 @@ public class EventController extends BaseMultiActionController {
                 throw new IllegalArgumentException("No event with id " + id);
             }
             eventBo.checkUserAuthorization(event);
-            List<Participant> participants = eventBo.
-                    searchConfirmedParticipantsByEventId(event.getId());
-            List<Participant> participantsNotConfirmed = eventBo.
-                    searchNotConfirmedParticipantsByEventId(event.getId());
+            List<Participant> participants =
+                    eventBo.searchConfirmedParticipantsByEventId(event.getId());
+            List<Participant> participantsNotConfirmed =
+                    eventBo.searchNotConfirmedParticipantsByEventId(
+                    event.getId());
             mv.addObject("event", event);
             mv.addObject("participants", participants);
             mv.addObject("participantsNotConfirmed", participantsNotConfirmed);
@@ -143,6 +147,29 @@ public class EventController extends BaseMultiActionController {
         return mv;
     }
 
+    /**
+     * Delete a participant
+     * 
+     * @param id The id of the particpant to delete.
+     * @return With success, back to the list of participants.
+     */
+    @RequestMapping
+    public String deleteParticipant(@RequestParam("id") Long id) {
+        Participant participant = participantDao.read(id);
+        if (participant == null) {
+            throw new IllegalArgumentException("No participant with id " + id);
+        }
+        final Event event = participant.getEvent();
+        eventBo.checkUserAuthorization(event);
+        participantDao.delete(participant);
+        logger.info("Deleted participant " + participant.getFirstName() + " " +
+                participant.getLastName() + " (" + participant.getEmail() + ", " + (participant.getConfirmed()
+                ? "confirmed" : "not confirmed") + ") from the event " +
+                event.getId());
+        return "redirect:/event/participants.html?id=" +
+                event.getId();
+    }
+
     @RequestMapping
     public ModelAndView winners(HttpServletRequest req,
             HttpServletResponse res) {
@@ -156,11 +183,11 @@ public class EventController extends BaseMultiActionController {
             }
             eventBo.checkUserAuthorization(event);
             mv.addObject("event", event);
-            List<Participant> nonWinningParticipants = eventBo.
-                    searchNonwinningParticipantsByEventId(id);
+            List<Participant> nonWinningParticipants =
+                    eventBo.searchNonwinningParticipantsByEventId(id);
             mv.addObject("nonWinningParticipants", nonWinningParticipants);
-            List<Participant> winningParticipants = eventBo.
-                    searchWinningParticipantsByEventId(id);
+            List<Participant> winningParticipants =
+                    eventBo.searchWinningParticipantsByEventId(id);
             mv.addObject("winningParticipants", winningParticipants);
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;
@@ -178,7 +205,8 @@ public class EventController extends BaseMultiActionController {
             eventSearch.setContinent(req.getParameter("continent"));
             eventSearch.setCountry(req.getParameter("country"));
             eventSearch.setJugName(req.getParameter("jugName"));
-            eventSearch.setPastEvents(Boolean.parseBoolean(req.getParameter("pastEvents")));
+            eventSearch.setPastEvents(Boolean.parseBoolean(req.getParameter(
+                    "pastEvents")));
             eventSearch.setOrderByDate(req.getParameter("order"));
             List<Event> events = eventBo.search(eventSearch);
             Channel channel = new Channel("rss_2.0");
@@ -246,7 +274,8 @@ public class EventController extends BaseMultiActionController {
                 locale = "en";
             }
             java.text.DateFormat dateFormat =
-                    java.text.DateFormat.getDateInstance(java.text.DateFormat.DEFAULT,
+                    java.text.DateFormat.getDateInstance(
+                    java.text.DateFormat.DEFAULT,
                     new Locale(locale));
             java.lang.String baseUrl =
                     "http://" + req.getServerName() + ":" + req.getServerPort() +
@@ -256,7 +285,8 @@ public class EventController extends BaseMultiActionController {
             eventSearch.setContinent(req.getParameter("continent"));
             eventSearch.setCountry(req.getParameter("country"));
             eventSearch.setJugName(req.getParameter("jugName"));
-            eventSearch.setPastEvents(java.lang.Boolean.parseBoolean(req.getParameter("pastEvents")));
+            eventSearch.setPastEvents(java.lang.Boolean.parseBoolean(req.getParameter(
+                    "pastEvents")));
             eventSearch.setOrderByDate(req.getParameter("order"));
             String maxResults = req.getParameter("maxResults");
             if (StringUtils.isNotBlank(maxResults)) {
@@ -269,13 +299,17 @@ public class EventController extends BaseMultiActionController {
             java.util.List<it.jugpadova.po.Event> events =
                     eventBo.search(eventSearch);
             boolean showJUGName =
-                    java.lang.Boolean.parseBoolean(req.getParameter("jeb_showJUGName"));
+                    java.lang.Boolean.parseBoolean(req.getParameter(
+                    "jeb_showJUGName"));
             boolean showCountry =
-                    java.lang.Boolean.parseBoolean(req.getParameter("jeb_showCountry"));
+                    java.lang.Boolean.parseBoolean(req.getParameter(
+                    "jeb_showCountry"));
             boolean showDescription =
-                    java.lang.Boolean.parseBoolean(req.getParameter("jeb_showDescription"));
+                    java.lang.Boolean.parseBoolean(req.getParameter(
+                    "jeb_showDescription"));
             boolean showParticipants =
-                    java.lang.Boolean.parseBoolean(req.getParameter("jeb_showParticipants"));
+                    java.lang.Boolean.parseBoolean(req.getParameter(
+                    "jeb_showParticipants"));
             String badgeStyle = req.getParameter("jeb_style");
             String result =
                     eventBo.getBadgeCode(eventBo.getBadgeHtmlCode(events,
@@ -319,9 +353,8 @@ public class EventController extends BaseMultiActionController {
         }
         return mv;
     }
-    
+
     public Logger getLogger() {
         return logger;
     }
-
 }

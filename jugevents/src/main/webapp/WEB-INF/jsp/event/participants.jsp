@@ -33,6 +33,7 @@
         </fieldset>
     </form:form>
 </div></div>
+<spring:message code='confirmDeleteParticipant' var="confirmDeleteParticipantMessage" text="Are you sure?"/>
 <div class="displaytag">
     <display:table name="participants" id="participantList" sort="list" pagesize="20" defaultsort="6" defaultorder="ascending" requestURI="participants.html" export="true">
         <display:column title="#">${participantList_rowNum}</display:column>
@@ -65,45 +66,49 @@
                    <input onclick="AjaxMethodsJS.setWinner(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.winner}">checked="checked"</c:if> />
                </display:column>
                <display:column media="csv xml excel pdf" property="attended" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;" />
-               <display:column media="html" titleKey="Certificate" sortable="false" style="text-align: center;">
+               <display:column media="html" title="" sortable="false" style="text-align: center;">
                    <a href="#" onclick="AjaxMethodsJS.sendCertificateToParticipant(${participantList.id}, '${conf.jugeventsBaseUrl}'); return false"><spring:message code="SendCertificate"/></a>
             <div id="certificateMsg${participantList.id}"><fmt:formatDate value="${participantList.lastCertificateSentDate}" type="date" dateStyle="short" /></div>
-            <a href="${cp}/bin/participantCertificate.bin?id=${participantList.id}"><spring:message code="DownloadCertificate" text="?DownloadCertificate?"/></a>
+            <a href="${cp}/bin/participantCertificate.bin?id=${participantList.id}"><spring:message code="DownloadCertificate" text="?DownloadCertificate?"/></a><br/>
+            <a href="${cp}/event/deleteParticipant.html?id=${participantList.id}" onclick="return confirm('${confirmDeleteParticipantMessage}')"><spring:message code="delete" text="?delete?"/></a>
         </display:column>
         <display:column media="csv xml excel pdf" property="lastCertificateSentDate" titleKey="Certificate" sortable="false" style="text-align: center;" />
     </display:table>
 </div>
 <h2><spring:message code='NotConfirmedParticipantList'/></h2>
 <div class="displaytag">
-<display:table name="participantsNotConfirmed" id="participantNotConfirmedList" sort="list" pagesize="20" defaultsort="6" defaultorder="ascending" requestURI="participants.html" export="true">
-    <display:column title="#">${participantNotConfirmedList_rowNum}</display:column>
-    <display:column media="html" sortProperty="firstName" titleKey="first_name" sortable="true" headerClass="sortable">
-        <span id="firstName_v_${participantNotConfirmedList.id}" onclick="$('firstName_e_${participantNotConfirmedList.id}').toggle(); $('firstName_v_${participantNotConfirmedList.id}').toggle();$('firstName_f_${participantNotConfirmedList.id}').focus()">${participantNotConfirmedList.firstName}&nbsp;<img src="${cp}/images/editableMarker.gif" alt="<spring:message code='InlineEdit'/>"/></span>
-        <span id="firstName_e_${participantNotConfirmedList.id}" style="display: none;"><input type="text" onchange="AjaxMethodsJS.updateParticipantFieldValue(${participantNotConfirmedList.id}, 'firstName', this.value)" id="firstName_f_${participantNotConfirmedList.id}" size="15" onblur="$('firstName_e_${participantNotConfirmedList.id}').toggle(); $('firstName_v_${participantNotConfirmedList.id}').toggle()" value="${participantNotConfirmedList.firstName}"/></span>
-    </display:column>
-    <display:column media="csv xml excel pdf" property="firstName" titleKey="first_name" sortable="true" headerClass="sortable"/>
-    <display:column media="html" sortProperty="lastName" titleKey="last_name" sortable="true" headerClass="sortable">
-        <span id="lastName_v_${participantNotConfirmedList.id}" onclick="$('lastName_e_${participantNotConfirmedList.id}').toggle(); $('lastName_v_${participantNotConfirmedList.id}').toggle();$('lastName_f_${participantNotConfirmedList.id}').focus()">${participantNotConfirmedList.lastName}&nbsp;<img src="${cp}/images/editableMarker.gif" alt="<spring:message code='InlineEdit'/>"/></span>
-        <span id="lastName_e_${participantNotConfirmedList.id}" style="display: none;"><input type="text" onchange="AjaxMethodsJS.updateParticipantFieldValue(${participantNotConfirmedList.id}, 'lastName', this.value)" id="lastName_f_${participantNotConfirmedList.id}" size="15" onblur="$('lastName_e_${participantNotConfirmedList.id}').toggle(); $('lastName_v_${participantNotConfirmedList.id}').toggle()" value="${participantNotConfirmedList.lastName}"/></span>
-    </display:column>
-    <display:column media="csv xml excel pdf" property="lastName" titleKey="last_name" sortable="true" headerClass="sortable"/>
-    <display:column media="html" sortProperty="email" titleKey="Email" sortable="true" headerClass="sortable">
-        <span id="email_v_${participantNotConfirmedList.id}" onclick="$('email_e_${participantNotConfirmedList.id}').toggle(); $('email_v_${participantNotConfirmedList.id}').toggle();$('email_f_${participantNotConfirmedList.id}').focus()">${participantNotConfirmedList.email}&nbsp;<img src="${cp}/images/editableMarker.gif" alt="<spring:message code='InlineEdit'/>"/></span>
-        <span id="email_e_${participantNotConfirmedList.id}" style="display: none;"><input type="text" onchange="AjaxMethodsJS.updateParticipantFieldValue(${participantNotConfirmedList.id}, 'email', this.value)" id="email_f_${participantNotConfirmedList.id}" size="15" onblur="$('email_e_${participantNotConfirmedList.id}').toggle(); $('email_v_${participantNotConfirmedList.id}').toggle()" value="${participantNotConfirmedList.email}"/></span>
-    </display:column>
-    <display:column media="csv xml excel pdf" property="email" titleKey="Email" sortable="true" headerClass="sortable"/>
-    <display:column media="html" sortProperty="note" titleKey="Note" sortable="true" headerClass="sortable">
-        <span id="note_v_${participantNotConfirmedList.id}" onclick="$('note_e_${participantNotConfirmedList.id}').toggle(); $('note_v_${participantNotConfirmedList.id}').toggle();$('note_f_${participantNotConfirmedList.id}').focus()">${participantNotConfirmedList.note}&nbsp;<img src="${cp}/images/editableMarker.gif" alt="<spring:message code='InlineEdit'/>"/></span>
-        <span id="note_e_${participantNotConfirmedList.id}" style="display: none;"><textarea onchange="AjaxMethodsJS.updateParticipantFieldValue(${participantNotConfirmedList.id}, 'note', this.value)" id="note_f_${participantNotConfirmedList.id}" rows="3" cols="10" onblur="$('note_e_${participantNotConfirmedList.id}').toggle(); $('note_v_${participantNotConfirmedList.id}').toggle()">${participantNotConfirmedList.note}</textarea></span>
-    </display:column>
-    <display:column media="csv xml excel pdf" property="note" titleKey="Note" sortable="true" headerClass="sortable"/>
-    <display:column property="creationDate" titleKey="JoinedAt" sortable="true" headerClass="sortable"/>
-    <display:column media="html" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;">
-        <input onclick="AjaxMethodsJS.confirmParticipantOnAttendance(${participantNotConfirmedList.id}, this.checked)" type="checkbox" <c:if test="${participantNotConfirmedList.attended}">checked="checked"</c:if> />
-           </display:column>
-           <display:column media="html" titleKey="Winner" sortable="true" headerClass="sortable" style="text-align: center;">
-               <input onclick="AjaxMethodsJS.setWinner(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.winner}">checked="checked"</c:if> />
-           </display:column>
-           <display:column media="csv xml excel pdf" property="attended" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;" />
-       </display:table>
-       </div>
+    <display:table name="participantsNotConfirmed" id="participantNotConfirmedList" sort="list" pagesize="20" defaultsort="6" defaultorder="ascending" requestURI="participants.html" export="true">
+        <display:column title="#">${participantNotConfirmedList_rowNum}</display:column>
+        <display:column media="html" sortProperty="firstName" titleKey="first_name" sortable="true" headerClass="sortable">
+            <span id="firstName_v_${participantNotConfirmedList.id}" onclick="$('firstName_e_${participantNotConfirmedList.id}').toggle(); $('firstName_v_${participantNotConfirmedList.id}').toggle();$('firstName_f_${participantNotConfirmedList.id}').focus()">${participantNotConfirmedList.firstName}&nbsp;<img src="${cp}/images/editableMarker.gif" alt="<spring:message code='InlineEdit'/>"/></span>
+            <span id="firstName_e_${participantNotConfirmedList.id}" style="display: none;"><input type="text" onchange="AjaxMethodsJS.updateParticipantFieldValue(${participantNotConfirmedList.id}, 'firstName', this.value)" id="firstName_f_${participantNotConfirmedList.id}" size="15" onblur="$('firstName_e_${participantNotConfirmedList.id}').toggle(); $('firstName_v_${participantNotConfirmedList.id}').toggle()" value="${participantNotConfirmedList.firstName}"/></span>
+        </display:column>
+        <display:column media="csv xml excel pdf" property="firstName" titleKey="first_name" sortable="true" headerClass="sortable"/>
+        <display:column media="html" sortProperty="lastName" titleKey="last_name" sortable="true" headerClass="sortable">
+            <span id="lastName_v_${participantNotConfirmedList.id}" onclick="$('lastName_e_${participantNotConfirmedList.id}').toggle(); $('lastName_v_${participantNotConfirmedList.id}').toggle();$('lastName_f_${participantNotConfirmedList.id}').focus()">${participantNotConfirmedList.lastName}&nbsp;<img src="${cp}/images/editableMarker.gif" alt="<spring:message code='InlineEdit'/>"/></span>
+            <span id="lastName_e_${participantNotConfirmedList.id}" style="display: none;"><input type="text" onchange="AjaxMethodsJS.updateParticipantFieldValue(${participantNotConfirmedList.id}, 'lastName', this.value)" id="lastName_f_${participantNotConfirmedList.id}" size="15" onblur="$('lastName_e_${participantNotConfirmedList.id}').toggle(); $('lastName_v_${participantNotConfirmedList.id}').toggle()" value="${participantNotConfirmedList.lastName}"/></span>
+        </display:column>
+        <display:column media="csv xml excel pdf" property="lastName" titleKey="last_name" sortable="true" headerClass="sortable"/>
+        <display:column media="html" sortProperty="email" titleKey="Email" sortable="true" headerClass="sortable">
+            <span id="email_v_${participantNotConfirmedList.id}" onclick="$('email_e_${participantNotConfirmedList.id}').toggle(); $('email_v_${participantNotConfirmedList.id}').toggle();$('email_f_${participantNotConfirmedList.id}').focus()">${participantNotConfirmedList.email}&nbsp;<img src="${cp}/images/editableMarker.gif" alt="<spring:message code='InlineEdit'/>"/></span>
+            <span id="email_e_${participantNotConfirmedList.id}" style="display: none;"><input type="text" onchange="AjaxMethodsJS.updateParticipantFieldValue(${participantNotConfirmedList.id}, 'email', this.value)" id="email_f_${participantNotConfirmedList.id}" size="15" onblur="$('email_e_${participantNotConfirmedList.id}').toggle(); $('email_v_${participantNotConfirmedList.id}').toggle()" value="${participantNotConfirmedList.email}"/></span>
+        </display:column>
+        <display:column media="csv xml excel pdf" property="email" titleKey="Email" sortable="true" headerClass="sortable"/>
+        <display:column media="html" sortProperty="note" titleKey="Note" sortable="true" headerClass="sortable">
+            <span id="note_v_${participantNotConfirmedList.id}" onclick="$('note_e_${participantNotConfirmedList.id}').toggle(); $('note_v_${participantNotConfirmedList.id}').toggle();$('note_f_${participantNotConfirmedList.id}').focus()">${participantNotConfirmedList.note}&nbsp;<img src="${cp}/images/editableMarker.gif" alt="<spring:message code='InlineEdit'/>"/></span>
+            <span id="note_e_${participantNotConfirmedList.id}" style="display: none;"><textarea onchange="AjaxMethodsJS.updateParticipantFieldValue(${participantNotConfirmedList.id}, 'note', this.value)" id="note_f_${participantNotConfirmedList.id}" rows="3" cols="10" onblur="$('note_e_${participantNotConfirmedList.id}').toggle(); $('note_v_${participantNotConfirmedList.id}').toggle()">${participantNotConfirmedList.note}</textarea></span>
+        </display:column>
+        <display:column media="csv xml excel pdf" property="note" titleKey="Note" sortable="true" headerClass="sortable"/>
+        <display:column property="creationDate" titleKey="JoinedAt" sortable="true" headerClass="sortable"/>
+        <display:column media="html" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;">
+            <input onclick="AjaxMethodsJS.confirmParticipantOnAttendance(${participantNotConfirmedList.id}, this.checked)" type="checkbox" <c:if test="${participantNotConfirmedList.attended}">checked="checked"</c:if> />
+               </display:column>
+               <display:column media="html" titleKey="Winner" sortable="true" headerClass="sortable" style="text-align: center;">
+                   <input onclick="AjaxMethodsJS.setWinner(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.winner}">checked="checked"</c:if> />
+               </display:column>
+               <display:column media="csv xml excel pdf" property="attended" titleKey="Attended" sortable="true" headerClass="sortable" style="text-align: center;" />
+               <display:column media="html" title="" sortable="false" style="text-align: center;">
+            <a href="${cp}/event/deleteParticipant.html?id=${participantNotConfirmedList.id}" onclick="return confirm('${confirmDeleteParticipantMessage}')"><spring:message code="delete" text="?delete?"/></a>
+        </display:column>           
+    </display:table>
+</div>
