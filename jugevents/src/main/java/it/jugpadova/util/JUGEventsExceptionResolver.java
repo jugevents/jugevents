@@ -14,7 +14,6 @@
  *  limitations under the License.
  *  under the License.
  */
-
 package it.jugpadova.util;
 
 import it.jugpadova.exception.ParancoeAccessDeniedException;
@@ -27,6 +26,7 @@ import org.apache.log4j.Logger;
 import org.parancoe.web.ExceptionResolver;
 import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,9 +37,9 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 public class JUGEventsExceptionResolver extends ExceptionResolver {
+
     private static final Logger logger =
             Logger.getLogger(JUGEventsExceptionResolver.class);
-
     private CommonsMultipartResolver multipartResolver;
 
     public CommonsMultipartResolver getMultipartResolver() {
@@ -51,17 +51,20 @@ public class JUGEventsExceptionResolver extends ExceptionResolver {
     }
 
     @Override
-    public ModelAndView resolveException(HttpServletRequest req, HttpServletResponse res, Object object, Exception e) {
+    public ModelAndView resolveException(HttpServletRequest req,
+            HttpServletResponse res, Object object, Exception e) {
         if (e instanceof ParancoeAccessDeniedException) {
             return new ModelAndView("accessDenied", null);
         }
         if (e instanceof MaxUploadSizeExceededException) {
-            return Utilities.getMessageView("upload.maximumSizeExceeded", Long.toString(multipartResolver.getFileUpload().getSizeMax()));
+            return Utilities.getMessageView("upload.maximumSizeExceeded",
+                    Long.toString(multipartResolver.getFileUpload().getSizeMax()));
         }
         if (e instanceof RegistrationNotOpenException) {
-            return Utilities.getMessageView("participant.registration.notOpen", ((RegistrationNotOpenException)e).getEvent().getTitle());
+            return Utilities.getMessageView("participant.registration.notOpen",
+                    ((RegistrationNotOpenException) e).getEvent().getTitle());
         }
-        if (!interceptedWithMinimalLogging(e)) {        
+        if (!interceptedWithMinimalLogging(e)) {
             logger.error("Unexpected exception", e);
         }
         return super.resolveException(req, res, object, e);
@@ -71,15 +74,16 @@ public class JUGEventsExceptionResolver extends ExceptionResolver {
         boolean intercepted = false;
         // Discarding too generic exception, with unuseful stacktrace...so minimal log output.
         // Maybe some could be moved to the base class.
-        if (e instanceof HttpSessionRequiredException) {
+        if ((e instanceof HttpSessionRequiredException) ||
+                (e instanceof MultipartException)) {
             if (logger.isDebugEnabled()) {
                 logger.debug(e.getLocalizedMessage(), e);
             } else {
-                logger.error("["+e.getClass().getName()+"] "+e.getLocalizedMessage());
+                logger.error("[" + e.getClass().getName() + "] " +
+                        e.getLocalizedMessage());
             }
             intercepted = true;
         }
         return intercepted;
     }
-    
 }
