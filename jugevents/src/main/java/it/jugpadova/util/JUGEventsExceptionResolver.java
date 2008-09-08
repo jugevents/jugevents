@@ -75,7 +75,7 @@ public class JUGEventsExceptionResolver extends ExceptionResolver {
             if (logger.isDebugEnabled()) {
                 logger.debug(e.getLocalizedMessage(), e);
             } else {
-                logger.error(e.getLocalizedMessage());
+                logger.error("["+e.getClass().getName()+"] "+e.getLocalizedMessage());
             }
             intercepted = true;
         }
