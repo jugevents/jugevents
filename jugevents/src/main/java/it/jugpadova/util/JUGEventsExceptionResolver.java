@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.parancoe.web.ExceptionResolver;
+import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -60,7 +61,25 @@ public class JUGEventsExceptionResolver extends ExceptionResolver {
         if (e instanceof RegistrationNotOpenException) {
             return Utilities.getMessageView("participant.registration.notOpen", ((RegistrationNotOpenException)e).getEvent().getTitle());
         }
-        logger.error("Unexpected exception", e);
+        if (!interceptedWithMinimalLogging(e)) {        
+            logger.error("Unexpected exception", e);
+        }
         return super.resolveException(req, res, object, e);
     }
+
+    private boolean interceptedWithMinimalLogging(Exception e) {
+        boolean intercepted = false;
+        // Discarding too generic exception, with unuseful stacktrace...so minimal log output.
+        // Maybe some could be moved to the base class.
+        if (e instanceof HttpSessionRequiredException) {
+            if (logger.isDebugEnabled()) {
+                logger.debug(e.getLocalizedMessage(), e);
+            } else {
+                logger.error(e.getLocalizedMessage());
+            }
+            intercepted = true;
+        }
+        return intercepted;
+    }
+    
 }
