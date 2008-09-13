@@ -22,6 +22,7 @@ import it.jugpadova.exception.RegistrationNotOpenException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.servlet.http.HttpUtils;
 import org.apache.log4j.Logger;
 import org.parancoe.web.ExceptionResolver;
 import org.springframework.web.HttpSessionRequiredException;
@@ -67,6 +68,8 @@ public class JUGEventsExceptionResolver extends ExceptionResolver {
         if (!interceptedWithMinimalLogging(e)) {
             logger.error("Unexpected exception", e);
         }
+        logger.info("Exception requesting URL: "+req.getRequestURL().toString());
+        logger.info("  request from "+req.getRemoteHost()+ "("+req.getRemoteAddr()+")");
         return super.resolveException(req, res, object, e);
     }
 
