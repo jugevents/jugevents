@@ -332,7 +332,7 @@
         <dependency>
             <groupId>com.benfante</groupId>
             <artifactId>JSlideShare</artifactId>
-            <version>0.5</version>
+            <version>0.6</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
