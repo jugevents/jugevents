@@ -1,4 +1,4 @@
-package it.jugpadova.blo;
+package it.jugpadova.blol;
 
 import it.jugpadova.Conf;
 import it.jugpadova.dao.JuggerDao;
@@ -21,8 +21,8 @@ import org.acegisecurity.Authentication;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
+import org.parancoe.plugins.security.Authority;
 import org.parancoe.plugins.security.User;
-import org.parancoe.plugins.security.UserAuthority;
 import org.parancoe.plugins.security.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -38,7 +38,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * @author Enrico Giurin
  *
  */
-@Component
+@Component("servicesBo")
 public class ServicesBo {
 
     /**
@@ -103,7 +103,7 @@ public class ServicesBo {
      * @param jug
      */
     // Metodo da chiamare all' interno di un contesto transazionale
-    void requireReliability(Jugger jugger, String motivation, String baseURL) {
+    public void requireReliability(Jugger jugger, String motivation, String baseURL) {
 
         ReliabilityRequest rr = jugger.getReliabilityRequest();
         if (rr != null) {
@@ -162,7 +162,7 @@ public class ServicesBo {
      * @param jug The updated JUG
      * @param isNewJug True if it's a new JUG
      */
-    void sendUpdatedKmlDataEmail(final Jugger jugger, final JUG jug,
+    public void sendUpdatedKmlDataEmail(final Jugger jugger, final JUG jug,
             final boolean isNewJug, final String kmlPlacemark) {
         MimeMessagePreparator preparator = new MimeMessagePreparator() {
 
@@ -256,7 +256,7 @@ public class ServicesBo {
      * Retrieves the current authenticated user.
      * @return
      */
-    User getCurrentUser() {
+    public User getCurrentUser() {
         User result = null;
         String name = authenticatedUsername();
         if (name != null) {
@@ -279,7 +279,7 @@ public class ServicesBo {
      * the autherized user.
      * @return
      */
-    Jugger getCurrentJugger() {
+    public Jugger getCurrentJugger() {
         User currenUser = getCurrentUser();
         Jugger result = null;
         String username = currenUser.getUsername();
@@ -314,7 +314,7 @@ public class ServicesBo {
 
     } // end of method
 
-    boolean isCurrentUserAuthorized(User user) {
+    public boolean isCurrentUserAuthorized(User user) {
         return checkAuthorization(user.getUsername());
     }
 
@@ -324,9 +324,9 @@ public class ServicesBo {
      * @return
      */
     private boolean isAdmin(User user) {
-        List<UserAuthority> userAuthorities = user.getUserAuthority();
-        for (UserAuthority userAuthority : userAuthorities) {
-            if ("ROLE_ADMIN".equals(userAuthority.getAuthority().getRole())) {
+        List<Authority> userAuthorities = user.getAuthorities();
+        for (Authority userAuthority : userAuthorities) {
+            if ("ROLE_ADMIN".equals(userAuthority.getRole())) {
                 return true;
             }
         }

@@ -45,6 +45,7 @@
                             <!-- this is relative to the pom.xml directory -->
                             <directory>${basedir}/src/main/webapp/WEB-INF</directory>
                             <includes>
+                                <include>applicationContext.xml</include>
                                 <include>parancoe-servlet.xml</include>
                                 <include>database.xml</include>
                             </includes>

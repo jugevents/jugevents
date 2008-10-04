@@ -33,7 +33,7 @@
     </filter-mapping>
     <servlet>
         <servlet-name>parancoe</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <servlet-class>org.parancoe.web.ParancoeDispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>

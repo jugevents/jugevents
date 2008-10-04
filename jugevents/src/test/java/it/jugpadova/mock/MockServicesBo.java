@@ -17,7 +17,7 @@
 
 package it.jugpadova.mock;
 
-import it.jugpadova.blo.ServicesBo;
+import it.jugpadova.blol.ServicesBo;
 
 /**
  * A mock for the ServicesBo class. For example, for simulating login.

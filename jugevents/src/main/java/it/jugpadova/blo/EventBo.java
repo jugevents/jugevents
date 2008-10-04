@@ -13,6 +13,7 @@
 // limitations under the License.
 package it.jugpadova.blo;
 
+import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.Conf;
 import it.jugpadova.bean.EventSearch;
 import it.jugpadova.bean.NewsMessage;
@@ -79,7 +80,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 635387ba4911 $
+ * @version $Revision: 313db3d6d06e $
  */
 @Component
 @RemoteProxy(name="eventBo")

@@ -38,31 +38,31 @@ public class SanityTest extends BaseTest {
                 participantDao instanceof ParticipantDao);
     }
 
-    public void testBlos() {
-        Object blos = getApplicationContext().getBean("blos");
-        assertNotNull("Can't retrieve blos bean", blos);
-        assertTrue("Wrong class for the blos bean (" + blos.getClass().getName() +
-                ")", blos instanceof Blos);
-
-        Object eventBo = getApplicationContext().getBean("eventBo");
-        assertNotNull("Can't retrieve eventBo bean", eventBo);
-        assertTrue("Wrong class for the eventBo bean (" +
-                eventBo.getClass().getName() + ")",
-                eventBo instanceof EventBo);
-
-        Object juggerBo = getApplicationContext().getBean("juggerBo");
-        assertNotNull("Can't retrieve juggerBo bean", juggerBo);
-        assertTrue("Wrong class for the juggerBlo bean (" +
-                juggerBo.getClass().getName() + ")",
-                juggerBo instanceof JuggerBo);
-
-        Object filterBo = getApplicationContext().getBean("filterBo");
-        assertNotNull("Can't retrieve filterBO bean", filterBo);
-        assertTrue("Wrong class for the filterOo bean (" +
-                filterBo.getClass().getName() + ")",
-                filterBo instanceof FilterBo);
-        checkSpringBean("eventResourceBo");
-    }
+//    public void testBlos() {
+//        Object blos = getApplicationContext().getBean("blos");
+//        assertNotNull("Can't retrieve blos bean", blos);
+//        assertTrue("Wrong class for the blos bean (" + blos.getClass().getName() +
+//                ")", blos instanceof Blos);
+//
+//        Object eventBo = getApplicationContext().getBean("eventBo");
+//        assertNotNull("Can't retrieve eventBo bean", eventBo);
+//        assertTrue("Wrong class for the eventBo bean (" +
+//                eventBo.getClass().getName() + ")",
+//                eventBo instanceof EventBo);
+//
+//        Object juggerBo = getApplicationContext().getBean("juggerBo");
+//        assertNotNull("Can't retrieve juggerBo bean", juggerBo);
+//        assertTrue("Wrong class for the juggerBlo bean (" +
+//                juggerBo.getClass().getName() + ")",
+//                juggerBo instanceof JuggerBo);
+//
+//        Object filterBo = getApplicationContext().getBean("filterBo");
+//        assertNotNull("Can't retrieve filterBO bean", filterBo);
+//        assertTrue("Wrong class for the filterOo bean (" +
+//                filterBo.getClass().getName() + ")",
+//                filterBo instanceof FilterBo);
+//        checkSpringBean("eventResourceBo");
+//    }
 
     public void testDaosThroughDaos() {
         Object odaos = getApplicationContext().getBean("daos");
@@ -75,17 +75,17 @@ public class SanityTest extends BaseTest {
         assertNotNull(daos.getParticipantDao());
     }
 
-    public void testBlosThroughBlos() {
-        Object oblos = getApplicationContext().getBean("blos");
-        assertNotNull("Can't retrieve blos bean", oblos);
-        assertTrue("Wrong class for the blos bean (" + oblos.getClass().
-                getName() + ")", oblos instanceof Blos);
-        Blos blos = (Blos) oblos;
-        assertNotNull(blos.getEventBo());
-        assertNotNull(blos.getJuggerBO());
-        assertNotNull(blos.getJuggerBO());
-        assertNotNull(blos.getFilterBo());
-    }
+//    public void testBlosThroughBlos() {
+//        Object oblos = getApplicationContext().getBean("blos");
+//        assertNotNull("Can't retrieve blos bean", oblos);
+//        assertTrue("Wrong class for the blos bean (" + oblos.getClass().
+//                getName() + ")", oblos instanceof Blos);
+//        Blos blos = (Blos) oblos;
+//        assertNotNull(blos.getEventBo());
+//        assertNotNull(blos.getJuggerBO());
+//        assertNotNull(blos.getJuggerBO());
+//        assertNotNull(blos.getFilterBo());
+//    }
 
     public void testControllers() {
         checkSpringBean("addParticipantController");

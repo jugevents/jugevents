@@ -24,6 +24,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -48,15 +49,16 @@ public class AddParticipantController {
     private EventBo eventBo;
     @Autowired
     private ParticipantDao participantDao;
-    @Autowired
-    @Qualifier("validator")
-    private BeanValidator validator;
+//    @Autowired
+//    @Qualifier("validator")
+//    private BeanValidator validator;
 
     @RequestMapping(method = RequestMethod.POST)
+    @Validation(view = FORM_VIEW, continueOnErrors=true)
     protected ModelAndView onSubmit(HttpServletRequest req,
             @ModelAttribute(REGISTRATION_ATTRIBUTE) Registration registration,
             BindingResult result, SessionStatus status) throws Exception {
-        validator.validate(registration, result);
+//        validator.validate(registration, result);
         if (result.hasErrors()) {
             req.setAttribute(REGISTRATION_ATTRIBUTE, registration);
             req.setAttribute("event", registration.getEvent());

@@ -14,7 +14,7 @@
 package it.jugpadova.controllers;
 
 import it.jugpadova.blo.JuggerBo;
-import it.jugpadova.blo.ServicesBo;
+import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.util.Utilities;
 

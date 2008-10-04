@@ -13,6 +13,7 @@
 // limitations under the License.
 package it.jugpadova.blo;
 
+import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.Conf;
 import it.jugpadova.dao.JUGDao;
 import it.jugpadova.po.JUG;

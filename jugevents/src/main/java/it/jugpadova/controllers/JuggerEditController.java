@@ -17,7 +17,7 @@ import it.jugpadova.bean.EditJugger;
 import it.jugpadova.bean.RequireReliability;
 import it.jugpadova.bean.TimeZoneBean;
 import it.jugpadova.blo.JuggerBo;
-import it.jugpadova.blo.ServicesBo;
+import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;

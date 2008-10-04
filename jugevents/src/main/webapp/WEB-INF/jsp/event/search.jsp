@@ -59,7 +59,7 @@
                 <display:column media="html" title="" sortable="false" headerClass="actionColumn" class="actionColumn">
                     <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
                         <%
-            if (blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
+            if (servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
                         %>
                         <a href="edit.form?id=${event.id}"><spring:message code="edit"/></a>
                         <%            }
@@ -67,7 +67,7 @@
                     </authz:authorize>
                     <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
                         <%
-            if (blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
+            if (servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
                         %>
                         <spring:message code='confirmDeleteEvent' var="confirmDeleteEventMessage"/>
                         <a href="delete.html?id=${event.id}" onclick="return confirm('${confirmDeleteEventMessage}')"><spring:message code="delete"/></a>
@@ -79,7 +79,7 @@
                     </c:if>
                     <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
                         <%
-            if (blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
+            if (servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
                         %>
                         <a href="participants.html?id=${event.id}"><spring:message code="participants"/></a>
                         <%            }

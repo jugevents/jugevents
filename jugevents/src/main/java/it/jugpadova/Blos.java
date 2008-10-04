@@ -20,7 +20,7 @@ import it.jugpadova.blo.JugBo;
 import it.jugpadova.blo.JuggerBo;
 import it.jugpadova.blo.ParticipantBo;
 
-import it.jugpadova.blo.ServicesBo;
+import it.jugpadova.blol.ServicesBo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

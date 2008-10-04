@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.parancoe.web.BaseMultiActionController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sun.syndication.feed.rss.Channel;
@@ -41,7 +40,7 @@ import com.sun.syndication.feed.rss.Description;
 import com.sun.syndication.feed.rss.Guid;
 import com.sun.syndication.feed.rss.Item;
 import com.sun.syndication.io.WireFeedOutput;
-import it.jugpadova.blo.ServicesBo;
+import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.dao.EventDao;
 import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.util.Utilities;
@@ -52,7 +51,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/event/*.html")
-public class EventController extends BaseMultiActionController {
+public class EventController {
 
     private static Logger logger =
             Logger.getLogger(EventController.class);
@@ -89,8 +88,6 @@ public class EventController extends BaseMultiActionController {
                     " deleted event with id=" + id);
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;
-        } catch (Exception e) {
-            return genericError(e);
         }
         return new ModelAndView("redirect:search.form");
     }
@@ -100,18 +97,14 @@ public class EventController extends BaseMultiActionController {
             HttpServletResponse res) {
         ModelAndView mv =
                 new ModelAndView("event/show");
-        try {
-            Long id = Long.parseLong(req.getParameter("id"));
-            Event event = eventBo.retrieveEvent(id);
-            if (event == null) {
-                throw new IllegalArgumentException("No event with id " + id);
-            }
-            mv.addObject("event", event);
-            mv.addObject("canCurrentUserManageEvent",
-                    servicesBo.canCurrentUserManageEvent(event));
-        } catch (Exception e) {
-            return genericError(e);
+        Long id = Long.parseLong(req.getParameter("id"));
+        Event event = eventBo.retrieveEvent(id);
+        if (event == null) {
+            throw new IllegalArgumentException("No event with id " + id);
         }
+        mv.addObject("event", event);
+        mv.addObject("canCurrentUserManageEvent",
+                servicesBo.canCurrentUserManageEvent(event));
         return mv;
     }
 
@@ -141,8 +134,6 @@ public class EventController extends BaseMultiActionController {
             mv.addObject("registration", registration);
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;
-        } catch (Exception e) {
-            return genericError(e);
         }
         return mv;
     }
@@ -191,8 +182,6 @@ public class EventController extends BaseMultiActionController {
             mv.addObject("winningParticipants", winningParticipants);
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;
-        } catch (Exception e) {
-            return genericError(e);
         }
         return mv;
     }
@@ -348,8 +337,6 @@ public class EventController extends BaseMultiActionController {
             mv.addObject("event", event);
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;
-        } catch (Exception e) {
-            return genericError(e);
         }
         return mv;
     }

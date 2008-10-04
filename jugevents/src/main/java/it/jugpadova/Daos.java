@@ -26,7 +26,6 @@ import it.jugpadova.dao.SlideShareResourceDao;
 import it.jugpadova.dao.YouTubeResourceDao;
 import org.parancoe.persistence.dao.DaoProvider;
 import org.parancoe.plugins.security.AuthorityDao;
-import org.parancoe.plugins.security.UserAuthorityDao;
 import org.parancoe.plugins.security.UserDao;
 import org.parancoe.plugins.world.ContinentDao;
 import org.parancoe.plugins.world.CountryDao;
@@ -50,8 +49,6 @@ public interface Daos extends DaoProvider {
     public CountryDao getCountryDao();
 
     public ContinentDao getContinentDao();
-
-    public UserAuthorityDao getUserAuthorityDao();
 
     public JUGDao getJUGDao();
 

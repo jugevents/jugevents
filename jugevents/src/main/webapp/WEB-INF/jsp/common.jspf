@@ -3,7 +3,7 @@
 <%@ page import="org.parancoe.util.BaseConf" %>
 <%@ page import="org.acegisecurity.context.SecurityContextHolder" %>
 <%@ page import="org.acegisecurity.Authentication" %>
-<%@ page import="it.jugpadova.Blos" %>
+<%@ page import="it.jugpadova.blol.ServicesBo" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
@@ -17,17 +17,17 @@
 <% String cp = request.getContextPath();
     pageContext.setAttribute("cp", cp);
 
-    ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());
+    ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());    
 
     BaseConf conf = (BaseConf) ctx.getBean("conf");
     pageContext.setAttribute("conf", conf);  
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     pageContext.setAttribute("authentication", authentication);
-
-    Blos blos = (Blos)ctx.getBean("blos");
-    pageContext.setAttribute("blos", blos);
-    
+                 
+    ServicesBo servicesBo = (ServicesBo)ctx.getBean("servicesBo");
+    pageContext.setAttribute("servicesBo", servicesBo);
+        
 %>
 
 

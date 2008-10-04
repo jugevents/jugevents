@@ -2,8 +2,10 @@ package it.jugpadova.blo.ajax;
 
 import java.util.List;
 
-import it.jugpadova.Blos;
 import it.jugpadova.bean.ParticipantBean;
+import it.jugpadova.blo.EventResourceBo;
+import it.jugpadova.blo.ParticipantBo;
+import it.jugpadova.blol.ServicesBo;
 import org.directwebremoting.annotations.RemoteMethod;
 import org.directwebremoting.annotations.RemoteProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,78 +19,83 @@ import org.springframework.stereotype.Component;
 @Component("ajaxMethods")
 @RemoteProxy(name="AjaxMethodsJS")
 public class SecuredAjaxBo implements AjaxMethods {
-
+    
     @Autowired
-    private Blos blos;
+    private ServicesBo servicesBo;
+    @Autowired
+    private ParticipantBo participantBo;
+    @Autowired
+    private EventResourceBo eventResourceBo;
+
     
     @RemoteMethod
     public String requireReliabilityOnExistingJugger(String emailJugger,
             String motivation, String baseURL) {
-        return blos.getServicesBo().requireReliabilityOnExistingJugger(
+        return servicesBo.requireReliabilityOnExistingJugger(
                 emailJugger, motivation, baseURL);
     }
 
     @RemoteMethod
     public List<ParticipantBean> chooseWinnerForEvent(long eventId) {
-        return blos.getParticipantBo().chooseWinnerForEvent(eventId);
+        return participantBo.chooseWinnerForEvent(eventId);
     }
 
     @RemoteMethod
     public void confirmParticipantOnAttendance(long participantId, boolean value) {
-        blos.getParticipantBo().confirmParticipantOnAttendance(participantId,
+        participantBo.confirmParticipantOnAttendance(participantId,
                 value);
 
     }
 
     @RemoteMethod
     public List<ParticipantBean> findAllWinnersForEvent(long eventId) {
-        return blos.getParticipantBo().findAllWinnersForEvent(eventId);
+        return participantBo.findAllWinnersForEvent(eventId);
     }
 
     @RemoteMethod
     public void sendCertificateToAllParticipants(long eventId, String baseUrl) {
-        blos.getParticipantBo().sendCertificateToAllParticipants(eventId,
+        participantBo.sendCertificateToAllParticipants(eventId,
                 baseUrl);
 
     }
 
     @RemoteMethod
     public void sendCertificateToParticipant(long participantId, String baseUrl) {
-        blos.getParticipantBo().sendCertificateToParticipant(participantId,
+        participantBo.sendCertificateToParticipant(participantId,
                 baseUrl);
 
     }
 
     @RemoteMethod
     public void setAttended(long participantId, boolean value) {
-        blos.getParticipantBo().setAttended(participantId, value);
+        participantBo.setAttended(participantId, value);
 
     }
 
     @RemoteMethod
     public void setWinner(long participantId, boolean value) {
-        blos.getParticipantBo().setWinner(participantId, value);
+        participantBo.setWinner(participantId, value);
 
     }
 
     @RemoteMethod
     public void updateParticipantFieldValue(Long participantId, String field,
             String value) {
-        blos.getParticipantBo().updateParticipantFieldValue(participantId, field,
+        participantBo.updateParticipantFieldValue(participantId, field,
                 value);
 
     }
 
     @RemoteMethod
     public boolean deleteEventResource(long eventResource) {
-        return blos.getEventResourceBo().deleteResource(eventResource);
+        return eventResourceBo.deleteResource(eventResource);
     }
 
     @RemoteMethod
     public String manageEventLinkResource(Long eventResourceId, Long eventId,
             String url,
             String description, boolean canUserManageTheEvent) {
-        return blos.getEventResourceBo().manageEventLinkResource(eventResourceId,
+        return eventResourceBo.manageEventLinkResource(eventResourceId,
                 eventId, url, description, canUserManageTheEvent);
     }
 
@@ -96,7 +103,7 @@ public class SecuredAjaxBo implements AjaxMethods {
     public String manageEventFlickrResource(Long eventResourceId, Long eventId,
             String flickrTag,
             String description, boolean canUserManageTheEvent) {
-        return blos.getEventResourceBo().manageEventFlickrResource(
+        return eventResourceBo.manageEventFlickrResource(
                 eventResourceId,
                 eventId, flickrTag, description, canUserManageTheEvent);
     }
@@ -106,7 +113,7 @@ public class SecuredAjaxBo implements AjaxMethods {
             Long eventId,
             String slideshareId,
             String description, boolean canUserManageTheEvent) {
-        return blos.getEventResourceBo().manageEventSlideShareResource(
+        return eventResourceBo.manageEventSlideShareResource(
                 eventResourceId,
                 eventId, slideshareId, description, canUserManageTheEvent);
     }
@@ -116,7 +123,7 @@ public class SecuredAjaxBo implements AjaxMethods {
             Long eventId, String archiveFlashVideoUrl, String archiveDetailsUrl,
             String description,
             boolean canUserManageTheEvent) {
-        return blos.getEventResourceBo().manageEventArchiveVideoResource(
+        return eventResourceBo.manageEventArchiveVideoResource(
                 eventResourceId,
                 eventId, archiveFlashVideoUrl, archiveDetailsUrl, description,
                 canUserManageTheEvent);
@@ -126,13 +133,13 @@ public class SecuredAjaxBo implements AjaxMethods {
     public String manageEventYouTubeResource(Long eventResourceId, Long eventId,
             String youtubeVideoId, String description,
             boolean canUserManageTheEvent) {
-        return blos.getEventResourceBo().manageEventYouTubeResource(
+        return eventResourceBo.manageEventYouTubeResource(
                 eventResourceId,
                 eventId, youtubeVideoId, description, canUserManageTheEvent);
     }
 
     @RemoteMethod
     public void fillEventResourceForm(Long eventResourceId) {
-        blos.getEventResourceBo().fillEventResourceForm(eventResourceId);
+        eventResourceBo.fillEventResourceForm(eventResourceId);
     }
 }

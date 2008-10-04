@@ -13,6 +13,7 @@
 // limitations under the License.
 package it.jugpadova.blo;
 
+import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.Conf;
 import it.jugpadova.bean.JuggerSearch;
 import it.jugpadova.dao.JUGDao;
@@ -55,8 +56,6 @@ import org.parancoe.plugins.security.Authority;
 import org.parancoe.plugins.security.AuthorityDao;
 import org.parancoe.plugins.security.SecureUtility;
 import org.parancoe.plugins.security.User;
-import org.parancoe.plugins.security.UserAuthority;
-import org.parancoe.plugins.security.UserAuthorityDao;
 import org.parancoe.plugins.security.UserDao;
 import org.parancoe.plugins.world.Continent;
 import org.parancoe.plugins.world.ContinentDao;
@@ -92,8 +91,6 @@ public class JuggerBo {
     private UserDao userDao;
     @Autowired
     private AuthorityDao authorityDao;
-    @Autowired
-    private UserAuthorityDao userAuthorityDao;
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
@@ -490,7 +487,6 @@ public class JuggerBo {
     public User newUser(String username) throws UserAlreadyPresentsException {
         Authority authority = authorityDao.findByRole("ROLE_JUGGER");
         User userToValidate = null;
-        UserAuthority ua = new UserAuthority();
 
         // check if username is already presents
         if (userDao.findByUsername(username).size() > 0) {
@@ -501,11 +497,9 @@ public class JuggerBo {
 
         // set authority to jugger
         userToValidate = SecureUtility.newUserToValidate(username);
+        userToValidate.getAuthorities().add(authority);
         // create the user
         userDao.store(userToValidate);
-        ua.setAuthority(authority);
-        ua.setUser(userToValidate);
-        userAuthorityDao.store(ua);
 
         return userToValidate;
     }
@@ -532,11 +526,6 @@ public class JuggerBo {
                     username);
         }
         User user = jugger.getUser();
-        // remove user and all user authority
-        List<UserAuthority> list = user.getUserAuthority();
-        for (UserAuthority ua : list) {
-            userAuthorityDao.delete(ua);
-        }
         userDao.delete(user);
         juggerDao.delete(jugger);
         // verify if jugger has been deleted

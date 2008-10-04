@@ -16,7 +16,7 @@
                 <jsp:param name="url" value="${resource.url}"/>
                 <jsp:param name="abbreviatedUrl" value="${resource.abbreviatedUrl}"/>
                 <jsp:param name="description" value="${resource.description}"/>
-                <jsp:param name="canUserManageTheEvent" value='<%= blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
+                <jsp:param name="canUserManageTheEvent" value='<%= servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
                 <jsp:param name="display" value="block"/>
             </jsp:include>
         </c:if>
@@ -25,7 +25,7 @@
                 <jsp:param name="id" value="${resource.id}"/>
                 <jsp:param name="tag" value="${resource.tag}"/>
                 <jsp:param name="description" value="${resource.description}"/>
-                <jsp:param name="canUserManageTheEvent" value='<%= blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
+                <jsp:param name="canUserManageTheEvent" value='<%= servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
                 <jsp:param name="display" value="block"/>
             </jsp:include>
         </c:if>
@@ -36,7 +36,7 @@
                 <jsp:param name="url" value="${resource.url}"/>
                 <jsp:param name="abbreviatedUrl" value="${resource.abbreviatedUrl}"/>
                 <jsp:param name="description" value="${resource.description}"/>
-                <jsp:param name="canUserManageTheEvent" value='<%= blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
+                <jsp:param name="canUserManageTheEvent" value='<%= servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
                 <jsp:param name="display" value="block"/>
             </jsp:include>
         </c:if>
@@ -46,7 +46,7 @@
                 <jsp:param name="flashVideoUrl" value="${resource.flashVideoUrl}"/>
                 <jsp:param name="detailsUrl" value="${resource.detailsUrl}"/>
                 <jsp:param name="description" value="${resource.description}"/>
-                <jsp:param name="canUserManageTheEvent" value='<%= blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
+                <jsp:param name="canUserManageTheEvent" value='<%= servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
                 <jsp:param name="display" value="block"/>
             </jsp:include>
         </c:if>
@@ -55,7 +55,7 @@
                 <jsp:param name="id" value="${resource.id}"/>
                 <jsp:param name="videoId" value="${resource.videoId}"/>
                 <jsp:param name="description" value="${resource.description}"/>
-                <jsp:param name="canUserManageTheEvent" value='<%= blos.getServicesBo().canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
+                <jsp:param name="canUserManageTheEvent" value='<%= servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) request.getAttribute("event")) %>'/>
                 <jsp:param name="display" value="block"/>
             </jsp:include>
         </c:if>
