@@ -55,10 +55,16 @@ public class ParticipantRegistrationController {
     private EventBo eventBo;
 
     @RequestMapping(method = RequestMethod.POST)
-    @Validation(view = FORM_VIEW)
+    @Validation(view = FORM_VIEW, continueOnErrors = true)
     protected ModelAndView onSubmit(HttpServletRequest req,
             @ModelAttribute(REGISTRATION_ATTRIBUTE) Registration registration,
             BindingResult result, SessionStatus status) throws Exception {
+        if (result.hasErrors()) {
+            registration.setCaptchaResponse("");
+            req.setAttribute("event", registration.getEvent());
+            req.getSession().setAttribute(REGISTRATION_ATTRIBUTE, registration);
+            return new ModelAndView(FORM_VIEW);
+        }
         ModelAndView mv = null;
         String baseUrl = Utilities.getBaseUrl(req);
         List<Participant> prevParticipant = eventBo.searchParticipantByEmailAndEventId(registration.getParticipant().

@@ -14,7 +14,8 @@ import com.octo.captcha.service.CaptchaServiceException;
  */
 public class JCaptchaValidator implements Validator {
 
-    private static final Logger logger = Logger.getLogger(JCaptchaValidator.class);
+    private static final Logger logger = Logger.getLogger(
+            JCaptchaValidator.class);
     private boolean yetValidated = false;
 
     public JCaptchaValidator() {
@@ -33,13 +34,17 @@ public class JCaptchaValidator implements Validator {
         boolean isResponseCorrect = false;
         try {
             if (response != null) {
-                isResponseCorrect = captchaService.validateResponseForID(captchaId, response);
+                isResponseCorrect = captchaService.validateResponseForID(
+                        captchaId, response);
                 if (!isResponseCorrect) {
-                    errors.rejectValue("captchaResponse", "captchaerror", "Wrong control text!");
+                    errors.rejectValue("captchaResponse", "captchaerror",
+                            "Wrong control text!");
                 }
             }
         } catch (CaptchaServiceException e) {
-             logger.debug("Error validating captcha field", e);
+            logger.debug("Error validating captcha field", e);
+            errors.rejectValue("captchaResponse", "captchaerror",
+                    "Wrong control text!");
         }
     }
 }

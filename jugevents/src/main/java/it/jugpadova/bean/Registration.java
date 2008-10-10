@@ -22,7 +22,6 @@ public class Registration implements JCaptchaValidable {
     @CascadeValidation
     private Participant participant;
     private CaptchaService captchaService;
-    @NotBlank
     private String captchaResponse;
     private String captchaId;
 
