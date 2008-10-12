@@ -16,7 +16,6 @@ public class JCaptchaValidator implements Validator {
 
     private static final Logger logger = Logger.getLogger(
             JCaptchaValidator.class);
-    private boolean yetValidated = false;
 
     public JCaptchaValidator() {
     }

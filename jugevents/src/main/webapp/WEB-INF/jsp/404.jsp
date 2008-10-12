@@ -7,12 +7,12 @@
     <body>
         <div id="nonFooter">    
             <jsp:include page="header.jsp"/>
-            <h2>Attenzione</h2>
+            <h2><spring:message code="attention" text="?attention?"/></h2>
             
             <div class="error">
                 <h3>HTTP: 404</h3>
-                <p>La pagina cercata non esiste. <br>
-                <a href="${cp}">torna alla home page </a></p>
+                <p><spring:message code="message.404" text="?message.404?"/><br>
+                <a href="${cp}"><spring:message code="back_to_home" text="?back_to_home?"/></a></p>
             </div>
         </div>
         <jsp:include page="footer.jsp"/>
