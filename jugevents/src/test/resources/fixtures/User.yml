@@ -2,15 +2,24 @@
   username: admin
   password: ceb4f32325eda6142bd65215f4c0f371
   enabled: true
+  authorities: 
+    - *Authority-admin
 - &User-lucio
   username: lucio
   password: 362cbb563f8587377f3e9bfc3832b2f3
   enabled: true
+  authorities: 
+    - *Authority-jugger
 - &User-fabrizio
   username: fabrizio
   password: 2e5664873121b0e336e3b969dbe98a3
   enabled: true
+  authorities: 
+    - *Authority-jugger
 - &User-enrico
   username: enrico
   password: 6a284f80d6934f5af4addf7689b7e4f5
   enabled: true
+  authorities: 
+    - *Authority-jugger
+    - *Authority-admin
