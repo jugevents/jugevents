@@ -6,7 +6,6 @@ import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.Participant;
 import it.jugpadova.po.ReliabilityRequest;
-import it.jugpadova.po.Speaker;
 
 import org.parancoe.plugins.security.Authority;
 import org.parancoe.plugins.security.User;
