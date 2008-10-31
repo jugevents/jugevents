@@ -1,0 +1,12 @@
+- &SpeakerCoreAttributes-EnricoGiurin
+  firstName: Enrico
+  lastName: Giurin
+  email: enricogiurin@gmail.com
+  url: http://enricogi.blogspot.com/ 
+  
+- &SpeakerCoreAttributes-LucioBenfante
+  firstName: Lucio
+  lastName: Benfante
+  email: lucio.benfante@jugpadova.it
+  url: http://benfante.blogspot.com/  
+
