@@ -50,6 +50,7 @@ public class SpeakerDaoTest extends JugEventsBaseTest {
     	assertTrue(speakers.contains(speakerEnrico)); 
     	assertEquals("enricogiurin@gmail.com", speakerEnrico.getSpeakerCoreAttributes().getEmail());
     	assertEquals("http://benfante.blogspot.com/", speakerLucio.getSpeakerCoreAttributes().getUrl());
+    	assertEquals("benfante", speakerLucio.getSpeakerCoreAttributes().getSkypeId());
     }
 
 }

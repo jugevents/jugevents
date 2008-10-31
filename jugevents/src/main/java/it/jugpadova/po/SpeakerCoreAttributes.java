@@ -40,6 +40,13 @@ public class SpeakerCoreAttributes extends EntityBase {
 	@Email
 	private String email;
 	private String url;
+	private String skypeId;
+	public String getSkypeId() {
+		return skypeId;
+	}
+	public void setSkypeId(String skypeId) {
+		this.skypeId = skypeId;
+	}
 	public String getFirstName() {
 		return firstName;
 	}
