@@ -16,6 +16,7 @@ package it.jugpadova.dao;
 import it.jugpadova.JugEventsBaseTest;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Speaker;
+import it.jugpadova.po.SpeakerCoreAttributes;
 
 import java.util.List;
 
@@ -28,6 +29,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class SpeakerDaoTest extends JugEventsBaseTest {
     @Autowired
     private SpeakerDao speakerDao;
+    @Autowired
+    private SpeakerCoreAttributesDao speakerCoreAttributesDao;
     
     public void testFindAll() {
         List<Speaker> speakers = speakerDao.findAll();
@@ -52,5 +55,18 @@ public class SpeakerDaoTest extends JugEventsBaseTest {
     	assertEquals("http://benfante.blogspot.com/", speakerLucio.getSpeakerCoreAttributes().getUrl());
     	assertEquals("benfante", speakerLucio.getSpeakerCoreAttributes().getSkypeId());
     }
+    
+    public void testInsertDuplicateKey()
+    {
+    	SpeakerCoreAttributes duplicateSpeaker = new SpeakerCoreAttributes("enrico", "giurin", "aaa@bbb.com");    	
+    	//I was expecting this method would throw an exception, not only logging the error
+    	speakerCoreAttributesDao.store(duplicateSpeaker);
+    	//TODO I cannot check any results as I have an hibernate exception
+    	//assertEquals(1, speakerCoreAttributesDao.findByFirstNameAndLastName("enrico", "giurin").size());
+    	//TODO check why the method findAll returns null...
+    	//assertEquals(2, speakerCoreAttributesDao.findAll().size());
+    }
+			
+		
 
 }

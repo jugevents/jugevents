@@ -1,13 +1,13 @@
 - &SpeakerCoreAttributes-EnricoGiurin
-  firstName: Enrico
-  lastName: Giurin
+  firstName: enrico
+  lastName: giurin
   email: enricogiurin@gmail.com
   url: http://enricogi.blogspot.com/ 
   skypeId: enricogiurin
   
 - &SpeakerCoreAttributes-LucioBenfante
-  firstName: Lucio
-  lastName: Benfante
+  firstName: lucio
+  lastName: benfante
   email: lucio.benfante@jugpadova.it
   url: http://benfante.blogspot.com/ 
   skypeId: benfante 

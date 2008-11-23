@@ -27,8 +27,24 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  *
  */
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }), 
+		@UniqueConstraint(columnNames = { "firstName", "lastName" })})
+
 public class SpeakerCoreAttributes extends EntityBase {
+	
+	
+
+	public SpeakerCoreAttributes(String firstName, String lastName, String email) {
+		super();
+		setEmail(email);
+		setFirstName(firstName);
+		setLastName(lastName);
+	}
+	public SpeakerCoreAttributes() {
+		super();
+	}
+
+
 	/**
 	 * 
 	 */
@@ -37,6 +53,8 @@ public class SpeakerCoreAttributes extends EntityBase {
 	private String firstName;
 	@NotBlank
 	private String lastName;
+	
+	
 	@Email
 	private String email;
 	private String url;
@@ -50,15 +68,11 @@ public class SpeakerCoreAttributes extends EntityBase {
 	public String getFirstName() {
 		return firstName;
 	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+	
 	public String getLastName() {
 		return lastName;
 	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+	
 	public String getEmail() {
 		return email;
 	}
@@ -71,11 +85,29 @@ public class SpeakerCoreAttributes extends EntityBase {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	/**
+	 * Converts firstName to lowercase before inserting.
+	 * @param firstName
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName.toLowerCase();
+	}
+    /**
+     * Converts lastName to lowercase before inserting.
+     * @param lastName
+     */
+	public void setLastName(String lastName) {
+		this.lastName = lastName.toLowerCase();
+	}
+	
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "firstName: "+firstName+" - lastName: "+lastName+" - email: "+email;
 	}
+
 	
 	
 

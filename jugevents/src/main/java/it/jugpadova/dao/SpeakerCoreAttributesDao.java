@@ -13,6 +13,8 @@
 // limitations under the License.
 package it.jugpadova.dao;
 
+import java.util.List;
+
 import it.jugpadova.po.SpeakerCoreAttributes;
 
 import org.parancoe.persistence.dao.generic.Dao;
@@ -25,5 +27,6 @@ import org.parancoe.persistence.dao.generic.GenericDao;
  */
 @Dao(entity=SpeakerCoreAttributes.class)
 public interface SpeakerCoreAttributesDao extends GenericDao<SpeakerCoreAttributes, Long> {
+	List<SpeakerCoreAttributes> findByFirstNameAndLastName(String firstName, String lastName);
 
 }
