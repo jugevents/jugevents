@@ -24,9 +24,27 @@
             </c:choose>        
         </dd>
     </c:if>
+
     <dt><spring:message code="event.description"/>:</dt>
     <dd><div class="preview">${event.filteredDescription}</div>&nbsp;</dd>
 </dl>
+  <authz:authorize ifAnyGranted="ROLE_ADMIN">    
+ <c:if test="${!empty event.speakers}">
+      <fieldset>
+        <legend><spring:message code="Speakers"/></legend>
+         <c:forEach items="${event.speakers}" var="speaker">
+			<dl>
+				<dt><spring:message code="Speaker"/>: </dt>
+				<dd>${speaker.speakerCoreAttributes.firstName}
+				${speaker.speakerCoreAttributes.lastName}&nbsp;(<a href="mailto:${speaker.speakerCoreAttributes.email}">${speaker.speakerCoreAttributes.email}</a>)</dd>
+				<dt><spring:message code="resume"/>: </dt>
+				<dd><textarea rows="3" cols="40" readonly="true">${speaker.resume}</textarea></dd>
+			</dl>
+			<hr/>
+		</c:forEach>
+       </fieldset>        
+    </c:if>  
+</authz:authorize>
 <c:if test="${!empty event.eventResources}">
     <spring:message code="event.resources" text="?event.resources?"/>:
     <div id="resources">

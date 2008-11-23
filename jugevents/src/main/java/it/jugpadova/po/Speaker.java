@@ -71,5 +71,10 @@ public class Speaker extends EntityBase {
 	public Event getEvent() {
 		return event;
 	}
+	@Override
+	public String toString() {
+		
+		return speakerCoreAttributes.toString() + "\n	resume: "+resume;
+	}
 
 }

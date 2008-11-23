@@ -18,6 +18,8 @@ import it.jugpadova.po.Event;
 import java.util.Date;
 import java.util.List;
 
+import org.parancoe.persistence.dao.generic.Compare;
+import org.parancoe.persistence.dao.generic.CompareType;
 import org.parancoe.persistence.dao.generic.Dao;
 import org.parancoe.persistence.dao.generic.GenericDao;
 
@@ -37,4 +39,11 @@ public interface EventDao extends GenericDao<Event, Long> {
     List<Event> findUpcomingEvents(Date notAfter);
 
     List<Event> findNewEvents(Date notBefore);
+    
+    /**
+     * Retrieves all events by partial title.
+     * @param partialTitle
+     * @return
+     */
+    List<Event> findByTitle(@Compare(CompareType.ILIKE) String partialTitle);
 }

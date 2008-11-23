@@ -80,7 +80,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 720323d91fde $
+ * @version $Revision: 80bff6178319 $
  */
 @Component
 @RemoteProxy(name="eventBo")
@@ -384,6 +384,8 @@ public class EventBo {
         if (event != null) {
             event.getParticipants().size();
             event.getEventResources().size();
+            event.getSpeakers().size();
+            logger.debug("Found "+event.getSpeakers().size()+" speakers for event id: "+id);
         }
         return event;
     }

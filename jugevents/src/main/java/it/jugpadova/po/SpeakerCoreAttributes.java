@@ -71,6 +71,11 @@ public class SpeakerCoreAttributes extends EntityBase {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "firstName: "+firstName+" - lastName: "+lastName+" - email: "+email;
+	}
 	
 	
 
