@@ -348,9 +348,8 @@
         </dependency>
         <dependency>
             <groupId>com.yahoo.platform.yui</groupId>
-            <artifactId>yui</artifactId>
-            <version>2.5.0</version>
-            <type>zip</type>
+            <artifactId>yuicompressor</artifactId>
+            <version>2.3.6</version>
         </dependency>
     </dependencies>
     <scm>
