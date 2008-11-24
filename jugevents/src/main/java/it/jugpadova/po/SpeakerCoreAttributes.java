@@ -14,8 +14,6 @@
 package it.jugpadova.po;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
@@ -27,9 +25,6 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  *
  */
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }), 
-		@UniqueConstraint(columnNames = { "firstName", "lastName" })})
-
 public class SpeakerCoreAttributes extends EntityBase {
 	
 	
