@@ -19,10 +19,10 @@ String queryString = "?" + StringUtils.join(paramKeyValuesList.iterator(), "&amp
         <a href="<%=queryString%>&amp;language=${supportedLanguage}" title="${supportedLanguage}">
             <c:choose>
                 <c:when test="${requestScope.requestContext.locale eq supportedLanguage}">
-                    <b><spring:message code="${supportedLanguage}"/></b>                
+                    <b><spring:message code="${supportedLanguage}" text="?${supportedLanguage}?"/></b>                
                 </c:when>
                 <c:otherwise>
-                    <spring:message code="${supportedLanguage}"/>                
+                    <spring:message code="${supportedLanguage}" text="?${supportedLanguage}?"/>                
                 </c:otherwise>
             </c:choose>
         </a>

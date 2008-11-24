@@ -31,7 +31,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 2b73446ebfe8 $
+ * @version $Revision: c4a4b30378fd $
  */
 @Entity
 @NamedQueries({
@@ -146,6 +146,7 @@ public class Participant extends EntityBase {
         this.lastCertificateSentDate = lastCertificateSentDate;
     }
 
+    @Temporal(value = TemporalType.TIMESTAMP)
     public Date getConfirmationDate() {
         return confirmationDate;
     }

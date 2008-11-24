@@ -22,7 +22,6 @@ import it.jugpadova.exception.RegistrationNotOpenException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.servlet.http.HttpUtils;
 import org.apache.log4j.Logger;
 import org.parancoe.web.ExceptionResolver;
 import org.springframework.web.HttpSessionRequiredException;

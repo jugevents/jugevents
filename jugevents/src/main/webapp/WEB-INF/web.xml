@@ -1,15 +1,12 @@
-
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-         version="2.4">
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <listener>
         <listener-class>org.parancoe.web.ContextListener</listener-class>
     </listener>
     <listener>
         <listener-class>org.parancoe.web.PopulateInitialDataContextListener</listener-class>
     </listener>
-    
+
     <!-- set requests encoding to UTF8 (needs to be the firs filter) -->
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
@@ -38,7 +35,7 @@
     </servlet>
     <servlet>
         <servlet-name>JavascriptServlet</servlet-name>
-        <servlet-class>net.jawr.web.servlet.JawrServlet</servlet-class>                
+        <servlet-class>net.jawr.web.servlet.JawrServlet</servlet-class>
                 <!-- Location in classpath of the config file -->
         <init-param>
             <param-name>configLocation</param-name>
@@ -49,7 +46,7 @@
     <servlet>
         <servlet-name>CSSServlet</servlet-name>
         <servlet-class>net.jawr.web.servlet.JawrServlet</servlet-class>
-                
+
                 <!-- Location in classpath of the config file -->
         <init-param>
             <param-name>configLocation</param-name>
@@ -108,6 +105,9 @@
         <error-code>500</error-code>
         <location>/WEB-INF/jsp/500.jsp</location>
     </error-page>
+    <session-config>
+        <session-timeout>240</session-timeout>
+    </session-config>
     <mime-mapping>
         <extension>css</extension>
         <mime-type>text/css</mime-type>
