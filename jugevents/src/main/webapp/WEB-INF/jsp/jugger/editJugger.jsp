@@ -1,7 +1,7 @@
 <%@ include file="../common.jspf" %>
 <%@page import="it.jugpadova.util.Utilities"%>
-<script src="${cp}/dwr/interface/juggerBo.js" type="text/javascript"></script>
-<script src="${cp}/dwr/interface/AjaxMethodsJS.js" type="text/javascript"></script>
+<jwr:script src="${cp}/dwr/interface/juggerBo.js" />
+<jwr:script src="${cp}/dwr/interface/AjaxMethodsJS.js" />
 <jwr:script src="/javascripts/modal.js" />
 <style type="text/css">
     

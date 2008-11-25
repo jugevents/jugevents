@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
-<script src="${cp}/dwr/interface/eventBo.js" type="text/javascript"></script>
+<%@ taglib uri="http://jawr.net/tags" prefix="jwr" %>
+<jwr:script src="${cp}/dwr/interface/eventBo.js" />
 <form id="fullTextSearch" action="" method="get">
     <div id="content_textSearch">
         <p class="boxTitle"><spring:message code="Search" text="?Search?"/>&nbsp;<span class="smallText"><a href="${cp}/event/search.form"><spring:message code="AdvancedSearch" text="?Advanced Search?"/></a></span></p>

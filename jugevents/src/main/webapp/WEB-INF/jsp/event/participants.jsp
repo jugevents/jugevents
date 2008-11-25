@@ -1,5 +1,5 @@
 <%@ include file="../common.jspf" %>
-<script src="${cp}/dwr/interface/AjaxMethodsJS.js" type="text/javascript"></script>
+<jwr:script src="${cp}/dwr/interface/AjaxMethodsJS.js" />
 <h1><spring:message code='Participants'/></h1>
 <div class="secondaryMenu">
     <a href="${cp}/event/show.html?id=${event.id}"><spring:message code="BackToTheEvent"/></a>

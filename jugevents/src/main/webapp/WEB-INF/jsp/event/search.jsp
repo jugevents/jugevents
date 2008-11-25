@@ -1,6 +1,6 @@
 <%@ include file="../common.jspf" %>
-<script src="${cp}/dwr/interface/juggerBo.js" type="text/javascript"></script>
-<script src="${cp}/dwr/interface/eventBo.js" type="text/javascript"></script>
+<jwr:script src="${cp}/dwr/interface/juggerBo.js" />
+<jwr:script src="${cp}/dwr/interface/eventBo.js" />
 <h1>
     <spring:message code="SearchEvents"/>
     <a href="${cp}/event/rss.html?continent=${eventSearch.continent}&amp;country=${eventSearch.country}&amp;jugName=${eventSearch.jugName}&amp;pastEvents=${eventSearch.pastEvents}&amp;order=${eventSearch.orderByDate}">

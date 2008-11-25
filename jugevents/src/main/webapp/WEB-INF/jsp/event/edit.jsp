@@ -1,6 +1,6 @@
 <%@ include file="../common.jspf" %>
-<script src="${cp}/dwr/interface/eventBo.js" type="text/javascript"></script>
-<script src="${cp}/dwr/interface/filterBo.js" type="text/javascript"></script>
+<jwr:script src="${cp}/dwr/interface/eventBo.js" />
+<jwr:script src="${cp}/dwr/interface/filterBo.js" />
 <c:choose>
     <c:when test="${empty event.id}">
         <h1><spring:message code="NewEvent"/></h1>

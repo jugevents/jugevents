@@ -1,6 +1,6 @@
 <%@ include file="../common.jspf" %>
-<jwr:script src="/javascripts/builder.js" />
-<script src="${cp}/dwr/interface/AjaxMethodsJS.js" type="text/javascript"></script>
+<jwr:script src="${cp}/dwr/interface/AjaxMethodsJS.js" />
+<jwr:script src="/javascripts/lib/builder.js" />
 <jwr:script src="/javascripts/jugevents/eventResources.js" />
 <h1><spring:message code='event.resources'/></h1>
 <div class="secondaryMenu">

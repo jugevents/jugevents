@@ -50,7 +50,7 @@
         }
         
     </style>
-    <script src="${cp}/dwr/interface/AjaxMethodsJS.js" type="text/javascript"></script>
+    <jwr:script src="${cp}/dwr/interface/AjaxMethodsJS.js" />
     <script type="text/javascript" charset="utf-8">
         var eventId = ${event.id};
         var people = new Array();

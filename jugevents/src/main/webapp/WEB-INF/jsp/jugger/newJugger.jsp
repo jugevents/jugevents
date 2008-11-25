@@ -1,5 +1,5 @@
 <%@ include file="../common.jspf" %>
-<script src="${cp}/dwr/interface/juggerBo.js" type="text/javascript"></script>
+<jwr:script src="${cp}/dwr/interface/juggerBo.js" />
 <script type="text/javascript">        
     function require()
     {     

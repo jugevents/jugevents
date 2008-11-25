@@ -1,7 +1,7 @@
 <%@ include file="../../common.jspf"%>
 <%@page import="java.util.EnumSet"%>
 <%@page import="it.jugpadova.util.RRStatus"%>
-<script src="${cp}/dwr/interface/juggerBo.js" type="text/javascript"></script>        
+<jwr:script src="${cp}/dwr/interface/juggerBo.js" />
 <h1><spring:message code="JuggerList"/></h1>
 
 <form:form commandName="juggerSearch" method="POST" action="${cp}/adminjugger/juggersearch.form">
