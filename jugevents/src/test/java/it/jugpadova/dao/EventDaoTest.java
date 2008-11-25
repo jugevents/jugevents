@@ -25,11 +25,7 @@ public class EventDaoTest extends JugEventsBaseTest {
 		assertEquals(1, events.size());
 		Event eventSF = events.get(0);
 		List<Speaker> speakers = eventSF.getSpeakers();
-		assertEquals(2, speakers.size());
-		for (Speaker speaker : speakers) {
-			System.out.println(speaker);
-		}
-		
+		assertEquals(2, speakers.size());		
 	}
 
 }
