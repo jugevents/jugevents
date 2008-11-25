@@ -1,4 +1,5 @@
 <%@ include file="../common.jspf" %>
+<%@ taglib uri="http://jawr.net/tags" prefix="jwr" %>
 <jwr:script src="${cp}/dwr/interface/juggerBo.js" />
 <jwr:script src="${cp}/dwr/interface/eventBo.js" />
 <h1>
