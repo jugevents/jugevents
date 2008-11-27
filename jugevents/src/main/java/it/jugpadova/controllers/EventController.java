@@ -93,11 +93,9 @@ public class EventController {
     }
 
     @RequestMapping
-    public ModelAndView show(HttpServletRequest req,
-            HttpServletResponse res) {
+    public ModelAndView show(@RequestParam(value="id", required=true) Long id) {
         ModelAndView mv =
                 new ModelAndView("event/show");
-        Long id = Long.parseLong(req.getParameter("id"));
         Event event = eventBo.retrieveEvent(id);
         if (event == null) {
             throw new IllegalArgumentException("No event with id " + id);
