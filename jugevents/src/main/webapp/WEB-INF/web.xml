@@ -41,7 +41,7 @@
             <param-name>configLocation</param-name>
             <param-value>/jawr.properties</param-value>
         </init-param>
-        <load-on-startup>1</load-on-startup>
+        <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet>
         <servlet-name>CSSServlet</servlet-name>
@@ -56,7 +56,7 @@
             <param-name>type</param-name>
             <param-value>css</param-value>
         </init-param>
-        <load-on-startup>1</load-on-startup>
+        <load-on-startup>3</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>parancoe</servlet-name>
