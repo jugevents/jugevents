@@ -13,7 +13,6 @@
 // limitations under the License.
 package it.jugpadova.controllers;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,42 +28,52 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/home/*.html")
 public class HomeController {
 
-	private static final Logger logger = Logger.getLogger(HomeController.class);
+    private static final Logger logger = Logger.getLogger(HomeController.class);
 
-        @RequestMapping
-	public ModelAndView welcome(HttpServletRequest req, HttpServletResponse res) {
-		Map params = new HashMap();
-		params.put("something", new Object());
-		return new ModelAndView("welcome", params);
-	}
+    @RequestMapping
+    public ModelAndView welcome(HttpServletRequest req, HttpServletResponse res) {
+        Map params = new HashMap();
+        params.put("something", new Object());
+        return new ModelAndView("welcome", params);
+    }
 
-	/**
-	 * Login action
-	 */
-        @RequestMapping
-	public ModelAndView acegilogin(HttpServletRequest req,
-			HttpServletResponse res) {
-		Map params = new HashMap();
-		return new ModelAndView("acegilogin", params);
-	}
+    /**
+     * Login action
+     */
+    @RequestMapping
+    public ModelAndView acegilogin(HttpServletRequest req,
+            HttpServletResponse res) {
+        Map params = new HashMap();
+        return new ModelAndView("acegilogin", params);
+    }
 
-	/**
-	 * Access denied
-	 */
-        @RequestMapping
-	public ModelAndView accessDenied(HttpServletRequest req,
-			HttpServletResponse res) {
-		Map params = new HashMap();
-		return new ModelAndView("accessDenied", params);
-	}
+    /**
+     * Access denied
+     */
+    @RequestMapping
+    public ModelAndView accessDenied(HttpServletRequest req,
+            HttpServletResponse res) {
+        Map params = new HashMap();
+        return new ModelAndView("accessDenied", params);
+    }
 
-        @RequestMapping
-	public ModelAndView message(HttpServletRequest req,
-			HttpServletResponse res) {
-            ModelAndView mv = new ModelAndView("message");
-            mv.addObject("messageCode", req.getParameter("messageCode"));
-            mv.addObject("messageArguments", req.getParameter("messageArguments"));
-            return mv;
-        }
-        
+    @RequestMapping
+    public ModelAndView message(HttpServletRequest req,
+            HttpServletResponse res) {
+        ModelAndView mv = new ModelAndView("message");
+        mv.addObject("messageCode", req.getParameter("messageCode"));
+        mv.addObject("messageArguments", req.getParameter("messageArguments"));
+        return mv;
+    }
+    
+    @RequestMapping
+    public String page404() {
+        return "404";
+    }
+
+    @RequestMapping
+    public String page500() {
+        return "500";
+    }
+
 }

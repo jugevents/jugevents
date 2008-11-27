@@ -99,11 +99,11 @@
     </welcome-file-list>
     <error-page>
         <error-code>404</error-code>
-        <location>/WEB-INF/jsp/404.jsp</location>
+        <location>/home/page404.html</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
-        <location>/WEB-INF/jsp/500.jsp</location>
+        <location>/home/page500.html</location>
     </error-page>
     <session-config>
         <session-timeout>240</session-timeout>
