@@ -86,6 +86,7 @@
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
                 <configuration>
+                    <wait>false</wait>
                     <container>
                         <containerId>tomcat6x</containerId>
                         <type>remote</type>
