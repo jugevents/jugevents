@@ -112,3 +112,27 @@
         <p style="text-align: center;"><a href="http://tinyurl.com/ynktb2">View java.net JUGs Map</a></p>
     </c:otherwise>
 </c:choose>
+<!-- Google Sites widget -->
+<c:choose>
+    <c:when test="${requestScope.lang eq 'it'}">
+        <h2>Widget per Google Sites</h2>
+        <p>Se il tuo JUG usa <a href="http://sites.google.com/">Google Sites</a> per ospitare il proprio sito Web, puoi usare
+        questo widget per integrare il modulo di iscrizione agli eventi di JUG Events nella pagina di descrizione
+        del tuo evento:</p>
+
+        <p><a href="http://loof.free.fr/jugevents-widget.xml">http://loof.free.fr/jugevents-widget.xml</a>
+
+        <p>I ringraziamenti per questo utile widget vanno a <a href="http://sites.google.com/a/breizhjug.org/home/speakers">Nicolas De Loof</a>
+        del <a href="http://www.breizhjug.org/">BreizhJug</a>.</p>
+    </c:when>
+    <c:otherwise>
+        <h2>Google Sites widget</h2>
+        <p>If your JUG uses <a href="http://sites.google.com/">Google Sites</a> to host its Web site, you can use this widget to integrate
+        the JUG Events registration form in your event description page:</p>
+
+        <p><a href="http://loof.free.fr/jugevents-widget.xml">http://loof.free.fr/jugevents-widget.xml</a>
+
+        <p>Many thanks to <a href="http://sites.google.com/a/breizhjug.org/home/speakers">Nicolas De Loof</a> from the <a href="http://www.breizhjug.org/">BreizhJug</a> for this
+        useful widget.</p>
+    </c:otherwise>
+</c:choose>
