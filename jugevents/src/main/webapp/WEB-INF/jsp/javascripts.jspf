@@ -1,9 +1,9 @@
 <%@ taglib uri="http://jawr.net/tags" prefix="jwr" %>
+<jwr:script src="/javascripts/calendar.js" />
+<jwr:script src="/javascripts/calendar-setup.js" />
+<jwr:script src="/javascripts/calendar-lang/calendar-${requestScope.lang}.js" />
 <jwr:script src="/javascripts/lib/prototype.js" />
 <jwr:script src="/javascripts/lib/scriptaculous.js?load=effects,controls" />
 <jwr:script src="/javascripts/lib/parancoe.js" />
 <jwr:script src="/javascripts/lib/autocompletedwr.js" />
-<jwr:script src="/javascripts/lib/calendar.js" />
-<jwr:script src="/javascripts/lib/calendar-setup.js" />
 <jwr:script src="/javascripts/lib/prototip.js" />
-<jwr:script src="/javascripts/calendar-lang/calendar-${requestScope.lang}.js" />
