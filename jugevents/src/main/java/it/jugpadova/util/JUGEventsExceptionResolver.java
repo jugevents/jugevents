@@ -53,23 +53,28 @@ public class JUGEventsExceptionResolver extends ExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest req,
             HttpServletResponse res, Object object, Exception e) {
-        if (e instanceof ParancoeAccessDeniedException) {
-            return new ModelAndView("accessDenied", null);
+        try {
+            if (e instanceof ParancoeAccessDeniedException) {
+                return new ModelAndView("accessDenied", null);
+            }
+            if (e instanceof MaxUploadSizeExceededException) {
+                return Utilities.getMessageView("upload.maximumSizeExceeded",
+                        Long.toString(multipartResolver.getFileUpload().getSizeMax()));
+            }
+            if (e instanceof RegistrationNotOpenException) {
+                return Utilities.getMessageView("participant.registration.notOpen",
+                        ((RegistrationNotOpenException) e).getEvent().getTitle());
+            }
+            if (!interceptedWithMinimalLogging(e)) {
+                logger.error("Unexpected exception", e);
+            }
+            logger.info("Exception requesting URL: " + req.getRequestURL().toString());
+            logger.info("  request from " + req.getRemoteHost() + "(" + req.getRemoteAddr() + ")");
+            return super.resolveException(req, res, object, e);
+        } catch (Exception ex) {
+            logger.error("Error resolving exception", ex);
         }
-        if (e instanceof MaxUploadSizeExceededException) {
-            return Utilities.getMessageView("upload.maximumSizeExceeded",
-                    Long.toString(multipartResolver.getFileUpload().getSizeMax()));
-        }
-        if (e instanceof RegistrationNotOpenException) {
-            return Utilities.getMessageView("participant.registration.notOpen",
-                    ((RegistrationNotOpenException) e).getEvent().getTitle());
-        }
-        if (!interceptedWithMinimalLogging(e)) {
-            logger.error("Unexpected exception", e);
-        }
-        logger.info("Exception requesting URL: "+req.getRequestURL().toString());
-        logger.info("  request from "+req.getRemoteHost()+ "("+req.getRemoteAddr()+")");
-        return super.resolveException(req, res, object, e);
+        return new ModelAndView("redirect:/home/500page.html");
     }
 
     private boolean interceptedWithMinimalLogging(Exception e) {

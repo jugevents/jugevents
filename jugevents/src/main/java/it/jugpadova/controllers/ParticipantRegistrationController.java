@@ -98,16 +98,14 @@ public class ParticipantRegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    protected String form(@RequestParam("event.id") Long id,
+    protected ModelAndView form(@RequestParam("event.id") Long id,
             HttpServletRequest req, Model model) {
         Registration result = new Registration();
         result.setParticipant(new Participant());
         Event event = eventBo.retrieveEvent(id);
         if (event != null) {
             if (!event.getRegistrationOpen()) {
-                throw new RegistrationNotOpenException(
-                        "The registration isn't open, you can't register to the event",
-                        event);
+                return Utilities.getMessageView("participant.registration.notOpen", event.getTitle());
             }
             result.setEvent(event);
             // for event showing fragment
@@ -118,6 +116,6 @@ public class ParticipantRegistrationController {
         result.setCaptchaId(req.getSession().getId());
         result.setCaptchaService(captchaService);
         model.addAttribute(REGISTRATION_ATTRIBUTE, result);
-        return FORM_VIEW;
+        return new ModelAndView(FORM_VIEW);
     }
 }
