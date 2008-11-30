@@ -202,7 +202,13 @@ attachCalendar('startDate.calendar', 'startDate', false);
 attachCalendar('endDate.calendar', 'endDate', false);            
 attachCalendar('registration.startRegistration.calendar', 'registration.startRegistration', true);
 attachCalendar('registration.endRegistration.calendar', 'registration.endRegistration', true);
-            
+
+new Form.Element.Observer('startDate', 1,
+function(el, value) {
+    $('endDate').value = $('startDate').value;
+    $('registration.endRegistration').value = $('startDate').value+' 12:00';
+});
+
 function enableRegistrationRulesFields(enabled) {
     if (enabled) {
         $('registration.startRegistration').enable();

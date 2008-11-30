@@ -80,10 +80,10 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 80bff6178319 $
+ * @version $Revision: 799bf23f56b3 $
  */
 @Component
-@RemoteProxy(name="eventBo")
+@RemoteProxy(name = "eventBo")
 public class EventBo {
 
     private static final Logger logger = Logger.getLogger(EventBo.class);
@@ -385,7 +385,7 @@ public class EventBo {
             event.getParticipants().size();
             event.getEventResources().size();
             event.getSpeakers().size();
-            logger.debug("Found "+event.getSpeakers().size()+" speakers for event id: "+id);
+            logger.debug("Found " + event.getSpeakers().size() + " speakers for event id: " + id);
         }
         return event;
     }
@@ -770,6 +770,21 @@ public class EventBo {
 
             }
         }
+    }
+
+    public Event buildEventFromTemplate(Event templateEvent, String lang) {
+        Event result = new Event();
+
+        result.setTitle("(" + messageSource.getMessage("copy", null,
+                "?copy?", StringUtils.isNotBlank(lang) ? new Locale(lang)
+                : Locale.ENGLISH) + ") " + templateEvent.getTitle());
+        result.setFilter(templateEvent.getFilter());
+        result.setDescription(templateEvent.getDescription());
+        result.setDirections(templateEvent.getDirections());
+        result.setLocation(templateEvent.getLocation());
+        result.setStartTime(templateEvent.getStartTime());
+        result.setEndTime(templateEvent.getEndTime());
+        return result;
     }
 
     public ServicesBo getServicesBo() {

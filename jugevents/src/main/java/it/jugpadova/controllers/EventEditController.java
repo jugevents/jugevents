@@ -20,6 +20,7 @@ import it.jugpadova.po.Registration;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class EventEditController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String form(@RequestParam(value = "id", required =
-            false) Long id, Model model) {
+            false) Long id, @RequestParam(value = "copyId", required = false) Long copyId, Model model, HttpServletRequest req) {
         Event event = null;
         if (id != null) {
             event = eventBo.retrieveEvent(id);
@@ -78,6 +79,13 @@ public class EventEditController {
                 event.setRegistration(new Registration());
             }
             eventBo.checkUserAuthorization(event);
+        } else if (copyId != null) {
+            Event sourceEvent = eventBo.retrieveEvent(copyId);
+            event = eventBo.buildEventFromTemplate(sourceEvent, (String)req.getAttribute("lang"));
+            Registration registration = new Registration();
+            registration.setStartRegistration(new Date());
+            registration.setEndRegistration(registration.getStartRegistration());
+            event.setRegistration(registration);
         } else {
             event = new Event();
             Registration registration = new Registration();
