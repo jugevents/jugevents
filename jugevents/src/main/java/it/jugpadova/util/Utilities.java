@@ -6,6 +6,9 @@ package it.jugpadova.util;
 import it.jugpadova.bean.NewJugger;
 import it.jugpadova.po.JUG;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
@@ -128,4 +131,29 @@ public class Utilities {
         }
         return sb;
     }
+    /**
+     * Reads a resource as stream and converts it into an array of bytes
+     * @param path path of the resource.
+     * @return
+     * @throws IOException
+     */
+    public static byte[] resourceToBytes(String path) throws IOException {
+    	InputStream is = null;
+    	ByteArrayOutputStream out = null;
+    	byte[] buffer = new byte[1024];
+    	int len;
+    	try {
+    		is = Utilities.class.getResourceAsStream(path);        	
+        	out = new ByteArrayOutputStream(buffer.length);   
+        	while((len = is.read(buffer)) >= 0) {
+        		out.write(buffer, 0, len);
+        	}
+        	return out.toByteArray();
+            	
+		}
+		finally {
+			is.close();
+	    	out.close();
+		}    	
+    	} 
 }

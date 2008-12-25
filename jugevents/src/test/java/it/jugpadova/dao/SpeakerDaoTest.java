@@ -17,7 +17,9 @@ import it.jugpadova.JugEventsBaseTest;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Speaker;
 import it.jugpadova.po.SpeakerCoreAttributes;
+import it.jugpadova.util.Utilities;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,15 @@ public class SpeakerDaoTest extends JugEventsBaseTest {
     	//assertEquals(1, speakerCoreAttributesDao.findByFirstNameAndLastName("enrico", "giurin").size());
     	//TODO check why the method findAll returns null...
     	//assertEquals(2, speakerCoreAttributesDao.findAll().size());
+    }
+    
+    public void testInsertImage() throws Exception {
+    	byte[] image = Utilities.resourceToBytes("/images/enrico.jpg");
+    	assertEquals(2402, image.length);
+    	Speaker speakerEnrico = speakerDao.findByResume("%electronic engineer%").get(0);
+    	speakerEnrico.setPicture(image);
+    	speakerDao.store(speakerEnrico);
+    	
     }
 			
 		
