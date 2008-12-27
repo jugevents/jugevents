@@ -16,7 +16,10 @@
  */
 package it.jugpadova.po;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -51,6 +54,8 @@ public class Speaker extends EntityBase {
 	public void setSpeakerCoreAttributes(SpeakerCoreAttributes speakerCoreAttributes) {
 		this.speakerCoreAttributes = speakerCoreAttributes;
 	}
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
 	public byte[] getPicture() {
 		return picture;
 	}

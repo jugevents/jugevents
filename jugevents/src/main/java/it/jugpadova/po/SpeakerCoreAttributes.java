@@ -60,13 +60,7 @@ public class SpeakerCoreAttributes extends EntityBase {
 	public void setSkypeId(String skypeId) {
 		this.skypeId = skypeId;
 	}
-	public String getFirstName() {
-		return firstName;
-	}
 	
-	public String getLastName() {
-		return lastName;
-	}
 	
 	public String getEmail() {
 		return email;
@@ -81,27 +75,26 @@ public class SpeakerCoreAttributes extends EntityBase {
 		this.url = url;
 	}
 	
-	/**
-	 * Converts firstName to lowercase before inserting.
-	 * @param firstName
-	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName.toLowerCase();
-	}
-    /**
-     * Converts lastName to lowercase before inserting.
-     * @param lastName
-     */
-	public void setLastName(String lastName) {
-		this.lastName = lastName.toLowerCase();
-	}
 	
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "firstName: "+firstName+" - lastName: "+lastName+" - email: "+email;
 	}
+	
 
 	
 	

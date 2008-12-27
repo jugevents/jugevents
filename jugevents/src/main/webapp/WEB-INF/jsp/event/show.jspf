@@ -27,24 +27,31 @@
 
     <dt><spring:message code="event.description"/>:</dt>
     <dd><div class="preview">${event.filteredDescription}</div>&nbsp;</dd>
-</dl>
-  <authz:authorize ifAnyGranted="ROLE_ADMIN">    
- <c:if test="${!empty event.speakers}">
-      <fieldset>
-        <legend><spring:message code="Speakers"/></legend>
-         <c:forEach items="${event.speakers}" var="speaker">
-			<dl>
-				<dt><spring:message code="Speaker"/>: </dt>
-				<dd>${speaker.speakerCoreAttributes.firstName}
-				${speaker.speakerCoreAttributes.lastName}&nbsp;(<a href="mailto:${speaker.speakerCoreAttributes.email}">${speaker.speakerCoreAttributes.email}</a>)</dd>
-				<dt><spring:message code="resume"/>: </dt>
-				<dd><textarea rows="3" cols="40" readonly="true">${speaker.resume}</textarea></dd>
-			</dl>
-			<hr/>
-		</c:forEach>
-       </fieldset>        
+	<authz:authorize ifAnyGranted="ROLE_ADMIN"> 
+    <c:if test="${!empty event.speakers}"> 
+    <dt><spring:message code="Speakers"/></dt>
+    <dd> <div id="speakers"> 
+        <br/>
+        <c:forEach items="${event.speakers}" var="speaker" varStatus="iRow">                
+            ${speaker.speakerCoreAttributes.firstName}  
+            ${speaker.speakerCoreAttributes.lastName}&nbsp;                           
+            <a href="javascript:showDiv('speaker_${iRow.index}', 'block');"><spring:message code="showDetails"/></a><br/>
+            <div id="speaker_${iRow.index}" class="speaker "style="display: none;">
+                <img  src="${cp}/bin/pictureSpeaker.bin?id=${speaker.id}" alt="Speaker Image" width="100"/>             
+                <spring:message code="Email"/>: <a href="mailto:${speaker.speakerCoreAttributes.email}">${speaker.speakerCoreAttributes.email}</a><br/>           
+                <spring:message code="website"/>: <a href="${speaker.speakerCoreAttributes.url}">${speaker.speakerCoreAttributes.url}</a><br/>
+                <spring:message code="resume"/>: ${speaker.resume}<br/>          
+                <a href="javascript:showDiv('speaker_${iRow.index}', 'none');"><spring:message code="hideDetails"/></a></a><br/>           
+            </div> 
+                    <br/>
+                    <br/>
+        </c:forEach> 
+        </div>
+    </dd>       
     </c:if>  
-</authz:authorize>
+    </authz:authorize>
+</dl>
+  
 <c:if test="${!empty event.eventResources}">
     <spring:message code="event.resources" text="?event.resources?"/>:
     <div id="resources">
@@ -102,3 +109,10 @@
     </div>
     <br style="clear: both;"/>
 </c:if>
+
+<script type="text/javascript">
+		function showDiv(a,b) {
+		    hza = document.getElementById(a);			
+			hza.style.display = b;
+		} 
+</script>

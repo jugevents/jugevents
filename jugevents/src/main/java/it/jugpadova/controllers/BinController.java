@@ -16,6 +16,7 @@ package it.jugpadova.controllers;
 import it.jugpadova.blo.EventBo;
 import it.jugpadova.blo.JugBo;
 import it.jugpadova.blo.ParticipantBo;
+import it.jugpadova.dao.SpeakerDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Participant;
@@ -39,7 +40,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Controlle for managing binary contents
+ * Controller for managing binary contents
  *
  * @author Lucio Benfante
  *
@@ -56,36 +57,63 @@ public class BinController {
     private EventBo eventBo;
     @Autowired
     private ParticipantBo participantBo;
+    @Autowired
+    private SpeakerDao speakerDao;
 
     /**
      * Produce the JUG Logo from the database, or the default no logo image.
      */
     @RequestMapping
-    public ModelAndView jugLogo(HttpServletRequest req,
+    public void jugLogo(HttpServletRequest req,
             HttpServletResponse res) throws IOException {
         Long id = new Long(req.getParameter("id"));
         byte[] jugLogo = jugBo.retrieveJugLogo(id);
-        if (jugLogo != null && jugLogo.length > 0) {
-            String contentType = MimeUtil.getMimeType(jugLogo);
+        flushResponse(jugLogo, "JugLogo", "noJugLogo", res);       
+    }
+    
+    
+    /**
+     * Produce the speaker image from the database, or the default no logo image.
+     */
+    @RequestMapping
+    public void pictureSpeaker(HttpServletRequest req,
+            HttpServletResponse res) throws IOException {
+        Long id = new Long(req.getParameter("id"));
+        byte[] pictureSpeaker = speakerDao.get(id).getPicture();
+        flushResponse(pictureSpeaker, "pictureSpeaker", "noJugLogo", res);        
+    }
+    
+    /**
+     * This methods comes after refactoring of existing two methods: jugLogo and pictureSpeaker
+     * Flushes the response
+     * @param image image in byte[]
+     * @param fileName name of file Content-Disposition header parameter
+     * @param noFileName name of file in images folder in case of rendering alternate image
+     * @param res
+     * @throws IOException
+     */
+    private void flushResponse(byte[] image, String fileName, String noFileName, HttpServletResponse res) throws IOException {
+    	if (image != null && image.length > 0) {
+            String contentType = MimeUtil.getMimeType(image);
             if (contentType == null) {
                 contentType = "image/jpeg";
             }
             String fileExtension = MimeUtil.getMinorComponent(contentType);
             res.setContentType(contentType);
-            res.setContentLength(jugLogo.length);
-            res.setHeader("Content-Disposition", "filename=JugLogo." +
+            res.setContentLength(image.length);
+            res.setHeader("Content-Disposition", "filename="+fileName+"." +
                     fileExtension);
             OutputStream out = new BufferedOutputStream(res.getOutputStream());
-            out.write(jugLogo);
+            out.write(image);
             out.flush();
             out.close();
         } else {
             // no logo image
             InputStream in =
                     new BufferedInputStream(this.getClass().getClassLoader().
-                    getResourceAsStream("images/noJugLogo.jpg"));
+                    getResourceAsStream("images/"+noFileName+".jpg"));
             res.setContentType("image/jpeg");
-            res.setHeader("Content-Disposition", "filename=noJugLogo.jpg");
+            res.setHeader("Content-Disposition", "filename="+noFileName+".jpg");
             OutputStream out = new BufferedOutputStream(res.getOutputStream());
             int b = 0;
             while ((b = in.read()) != -1) {
@@ -95,8 +123,14 @@ public class BinController {
             out.flush();
             out.close();
         }
-        return null;
     }
+    
+    
+    
+    
+    
+    
+    
 
     /**
      * Produce a preview of the current certificate for a JUG.

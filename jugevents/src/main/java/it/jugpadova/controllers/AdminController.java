@@ -15,6 +15,10 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.blo.EventBo;
 import it.jugpadova.blo.JugBo;
+import it.jugpadova.dao.SpeakerDao;
+import it.jugpadova.po.Speaker;
+import it.jugpadova.util.Utilities;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +39,8 @@ public class AdminController {
 
     @Autowired
     private JugBo jugBo;
+    @Autowired
+    private SpeakerDao speakerDao;
     @Autowired
     private EventBo eventBo;
     private static final Logger logger =
@@ -113,5 +119,23 @@ public class AdminController {
         eventBo.regenerateLuceneIndexes();
         logger.info("Regenerated the Lucene indexes");
         return new ModelAndView("redirect:/admin/logs.html");
+    }
+    
+    /**
+     * This a temporary method just to allow to insert an image (the enrico.jpg image) into db to 
+     * see how the event page looks like. After completed the insert speaker functionalities
+     * this method will be removed.
+     * @param req
+     * @param res
+     * @throws Exception
+     */
+    @RequestMapping
+    public void insertImage(HttpServletRequest req,
+            HttpServletResponse res) throws Exception {
+    	byte[] image = Utilities.resourceToBytes("/images/enrico.jpg");
+    	
+    	Speaker speakerEnrico = speakerDao.findByResume("%electronic engineer%").get(0);
+    	speakerEnrico.setPicture(image);
+    	speakerDao.store(speakerEnrico);
     }
 }

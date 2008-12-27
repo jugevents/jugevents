@@ -519,6 +519,11 @@ div.jugLogoBox {
     margin: 2px;
 }
 
+div.speaker img {    
+	float:left; 
+	margin:10px 10px 10px 10px;
+}
+
 div.jugLogoBox img {
     border: 0px;
 }
