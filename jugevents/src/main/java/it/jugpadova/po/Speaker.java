@@ -17,6 +17,7 @@
 package it.jugpadova.po;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
@@ -54,8 +55,11 @@ public class Speaker extends EntityBase {
 	public void setSpeakerCoreAttributes(SpeakerCoreAttributes speakerCoreAttributes) {
 		this.speakerCoreAttributes = speakerCoreAttributes;
 	}
+	//set size to 1MB because BLOB of MySQL is not enough to store
+	//binary data bigger than 64k
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
+	@Column(length=1048576)    
 	public byte[] getPicture() {
 		return picture;
 	}
