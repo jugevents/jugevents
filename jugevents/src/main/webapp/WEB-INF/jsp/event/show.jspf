@@ -32,16 +32,16 @@
     <dt><spring:message code="Speakers"/></dt>
     <dd> <div id="speakers"> 
         <br/>
-        <c:forEach items="${event.speakers}" var="speaker" varStatus="iRow">                
+         <c:forEach items="${event.speakers}" var="speaker" varStatus="iRow">                
             ${speaker.speakerCoreAttributes.firstName}  
-            ${speaker.speakerCoreAttributes.lastName}&nbsp;                           
-            <a href="javascript:showDiv('speaker_${iRow.index}', 'block');"><spring:message code="showDetails"/></a><br/>
-            <div id="speaker_${iRow.index}" class="speaker "style="display: none;">
+            ${speaker.speakerCoreAttributes.lastName}&nbsp;&nbsp;<a id="speakerLinkAnchor_${iRow.index}" href="javascript:showDiv('${iRow.index}');"><spring:message code="showDetails"/></a><br/>         
+            
+            <div id="speaker_${iRow.index}" class="speaker" style="display: none;">
                 <img  src="${cp}/bin/pictureSpeaker.bin?id=${speaker.id}" alt="Speaker Image" width="100"/>             
                 <spring:message code="Email"/>: <a href="mailto:${speaker.speakerCoreAttributes.email}">${speaker.speakerCoreAttributes.email}</a><br/>           
                 <spring:message code="website"/>: <a href="${speaker.speakerCoreAttributes.url}">${speaker.speakerCoreAttributes.url}</a><br/>
                 <spring:message code="resume"/>: ${speaker.resume}<br/>          
-                <a href="javascript:showDiv('speaker_${iRow.index}', 'none');"><spring:message code="hideDetails"/></a></a><br/>           
+                <br/>           
             </div> 
                     <br/>
                     <br/>
@@ -111,8 +111,18 @@
 </c:if>
 
 <script type="text/javascript">
-		function showDiv(a,b) {
-		    hza = document.getElementById(a);			
-			hza.style.display = b;
-		} 
+        function showDiv(a) {                  
+            elementSpeaker = document.getElementById('speaker_'+a);          
+            elementSpeakerLinkAnchor = document.getElementById('speakerLinkAnchor_'+a);              
+            if(elementSpeaker.style.display == 'block')
+            {   
+                elementSpeaker.style.display='none';
+                elementSpeakerLinkAnchor.innerHTML='<spring:message code="showDetails"/>';          
+                                
+            }else
+            {               
+                elementSpeaker.style.display='block';
+                elementSpeakerLinkAnchor.innerHTML='<spring:message code="hideDetails"/>';                                      
+            }           
+        } 
 </script>

@@ -122,7 +122,7 @@ public class AdminController {
     }
     
     /**
-     * This a temporary method just to allow to insert an image (the enrico.jpg image) into db to 
+     * This a temporary method just to allow to insert images (the enrico.jpg, lucio.jpg) into db to 
      * see how the event page looks like. After completed the insert speaker functionalities
      * this method will be removed.
      * @param req
@@ -132,10 +132,14 @@ public class AdminController {
     @RequestMapping
     public void insertImage(HttpServletRequest req,
             HttpServletResponse res) throws Exception {
-    	byte[] image = Utilities.resourceToBytes("/images/enrico.jpg");
+    	byte[] image = Utilities.resourceToBytes("/images/enrico.jpg");    	
+    	Speaker speaker = speakerDao.findByResume("%electronic engineer%").get(0);    	   	
+    	speaker.setPicture(image);
+    	speakerDao.store(speaker);
     	
-    	Speaker speakerEnrico = speakerDao.findByResume("%electronic engineer%").get(0);
-    	speakerEnrico.setPicture(image);
-    	speakerDao.store(speakerEnrico);
+    	image = Utilities.resourceToBytes("/images/lucio.jpg");
+    	speaker = speakerDao.findByResume("%is the president%").get(0); 
+    	speaker.setPicture(image);
+    	speakerDao.store(speaker);
     }
 }
