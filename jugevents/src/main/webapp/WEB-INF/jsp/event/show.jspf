@@ -29,18 +29,18 @@
     <dd><div class="preview">${event.filteredDescription}</div>&nbsp;</dd>
 	<authz:authorize ifAnyGranted="ROLE_ADMIN"> 
     <c:if test="${!empty event.speakers}"> 
-    <dt><spring:message code="Speakers"/></dt>
+    <dt><spring:message code="speakers" text="?speakers?"/></dt>
     <dd> <div id="speakers"> 
         <br/>
          <c:forEach items="${event.speakers}" var="speaker" varStatus="iRow">                
             ${speaker.speakerCoreAttributes.firstName}  
-            ${speaker.speakerCoreAttributes.lastName}&nbsp;&nbsp;<a id="speakerLinkAnchor_${iRow.index}" href="javascript:showDiv('${iRow.index}');"><spring:message code="showDetails"/></a><br/>         
+            ${speaker.speakerCoreAttributes.lastName}&nbsp;&nbsp;<a id="speakerLinkAnchor_${iRow.index}" href="javascript:showDiv('${iRow.index}');"><spring:message code="showDetails" text="?showDetails?"/></a><br/>         
             
             <div id="speaker_${iRow.index}" class="speaker" style="display: none;">
                 <img  src="${cp}/bin/pictureSpeaker.bin?id=${speaker.id}" alt="Speaker Image" width="100"/>             
-                <spring:message code="Email"/>: <a href="mailto:${speaker.speakerCoreAttributes.email}">${speaker.speakerCoreAttributes.email}</a><br/>           
-                <spring:message code="website"/>: <a href="${speaker.speakerCoreAttributes.url}">${speaker.speakerCoreAttributes.url}</a><br/>
-                <spring:message code="resume"/>: ${speaker.resume}<br/>          
+                <spring:message code="Email" text="?Email?"/>: <a href="mailto:${speaker.speakerCoreAttributes.email}">${speaker.speakerCoreAttributes.email}</a><br/>           
+                <spring:message code="WebSite"  text="?WebSite?"/>: <a href="${speaker.speakerCoreAttributes.url}">${speaker.speakerCoreAttributes.url}</a><br/>
+                <spring:message code="speaker.resume"  text="?speaker.resume?"/>: ${speaker.resume}<br/>          
                 <br/>           
             </div> 
                     <br/>

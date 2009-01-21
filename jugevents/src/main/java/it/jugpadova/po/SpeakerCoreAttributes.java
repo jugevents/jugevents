@@ -16,8 +16,6 @@ package it.jugpadova.po;
 import javax.persistence.Entity;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
-import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
-import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 
 /**
  * Represents core attributes of the speaker, not bound to a particular event.
@@ -29,12 +27,7 @@ public class SpeakerCoreAttributes extends EntityBase {
 	
 	
 
-	public SpeakerCoreAttributes(String firstName, String lastName, String email) {
-		super();
-		setEmail(email);
-		setFirstName(firstName);
-		setLastName(lastName);
-	}
+	
 	public SpeakerCoreAttributes() {
 		super();
 	}
@@ -44,13 +37,13 @@ public class SpeakerCoreAttributes extends EntityBase {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@NotBlank
+	
 	private String firstName;
-	@NotBlank
+	
 	private String lastName;
 	
 	
-	@Email
+	
 	private String email;
 	private String url;
 	private String skypeId;

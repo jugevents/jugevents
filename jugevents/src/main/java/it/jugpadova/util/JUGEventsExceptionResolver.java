@@ -16,6 +16,7 @@
  */
 package it.jugpadova.util;
 
+import it.jugpadova.exception.ConversationException;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
 
 import it.jugpadova.exception.RegistrationNotOpenException;
@@ -64,6 +65,9 @@ public class JUGEventsExceptionResolver extends ExceptionResolver {
             if (e instanceof RegistrationNotOpenException) {
                 return Utilities.getMessageView("participant.registration.notOpen",
                         ((RegistrationNotOpenException) e).getEvent().getTitle());
+            }
+            if (e instanceof ConversationException) {
+            	return new ModelAndView("conversationException", null);
             }
             if (!interceptedWithMinimalLogging(e)) {
                 logger.error("Unexpected exception", e);

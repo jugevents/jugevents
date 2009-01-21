@@ -14,13 +14,17 @@
 package it.jugpadova.controllers;
 
 import it.jugpadova.blo.EventBo;
+import it.jugpadova.blo.SpeakerBo;
 import it.jugpadova.po.Event;
-
 import it.jugpadova.po.Registration;
+import it.jugpadova.po.Speaker;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +43,18 @@ import org.springframework.web.bind.support.SessionStatus;
 
 @Controller
 @RequestMapping("/event/edit.form")
-@SessionAttributes("event")
+@SessionAttributes({EventEditController.EVENT_ATTRIBUTE})
 public class EventEditController {
 
     public static final String FORM_VIEW = "event/edit";
     private static final Logger logger =
             Logger.getLogger(EventEditController.class);
+    
+    public static final String EVENT_ATTRIBUTE = "event";
     @Autowired
     private EventBo eventBo;
+    @Autowired
+    private SpeakerBo speakerBo;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) throws Exception {
@@ -63,11 +71,28 @@ public class EventEditController {
     @RequestMapping(method = RequestMethod.POST)
     @Validation(view = FORM_VIEW)
     public String save(@ModelAttribute("event") Event event,
-            BindingResult result, SessionStatus status) {
+            BindingResult result, SessionStatus status, HttpServletRequest req) {
         eventBo.save(event);
+        saveSpeakers(req);
+        req.getSession().removeAttribute(SpeakerEditController.SPEAKER_LIST_ATTRIBUTE);
         status.setComplete();
         return "redirect:show.html?id=" + event.getId();
     }
+    
+    private void saveSpeakers(HttpServletRequest req) 
+    {
+    	ArrayList<Speaker> speakerList = SpeakerEditController.speakerList(req);
+    	if(speakerList == null)
+    	{
+    		logger.debug("Attribute "+SpeakerEditController.SPEAKER_LIST_ATTRIBUTE+" not found in session");
+    		return;
+    	}
+    	for(Speaker s: speakerList)
+    	{
+    		speakerBo.save(s);
+    	}
+    }
+    
 
     @RequestMapping(method = RequestMethod.GET)
     public String form(@RequestParam(value = "id", required =
@@ -93,7 +118,7 @@ public class EventEditController {
             registration.setEndRegistration(registration.getStartRegistration());
             event.setRegistration(registration);
         }
-        model.addAttribute("event", event);
+        model.addAttribute(EVENT_ATTRIBUTE, event);        
         return FORM_VIEW;
     }
 }

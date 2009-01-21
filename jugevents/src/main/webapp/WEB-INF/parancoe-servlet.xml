@@ -39,12 +39,13 @@
                 PATTERN_TYPE_APACHE_ANT
                 /adminjugger/**=ROLE_ADMIN
                 /people/**=ROLE_ADMIN, ROLE_PARANCOE
+                /event/speaker/*=ROLE_ADMIN
                 /event/edit*=ROLE_ADMIN, ROLE_JUGGER
                 /event/delete*=ROLE_ADMIN, ROLE_JUGGER
                 /event/participants*=ROLE_ADMIN, ROLE_JUGGER
                 /event/winners*=ROLE_ADMIN, ROLE_JUGGER
                 /event/addparticipant*=ROLE_ADMIN, ROLE_JUGGER
-                /event/resources*=ROLE_ADMIN, ROLE_JUGGER
+                /event/resources*=ROLE_ADMIN, ROLE_JUGGER                
                 /jugger/edit*=ROLE_ADMIN, ROLE_JUGGER
                 /admin/**=ROLE_ADMIN
                 /**=IS_AUTHENTICATED_ANONYMOUSLY

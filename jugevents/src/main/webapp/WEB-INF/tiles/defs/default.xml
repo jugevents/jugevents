@@ -36,6 +36,12 @@
     <definition name="event/edit" extends="template.central">
         <put-attribute name="main" value="/WEB-INF/jsp/event/edit.jsp"/>
     </definition>
+    
+    <definition name="event/speaker/edit" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/event/speaker/edit.jsp"/>
+    </definition>
+    
+    
 
     <definition name="event/participants" extends="template.central">
         <put-attribute name="main" value="/WEB-INF/jsp/event/participants.jsp"/>
@@ -52,6 +58,9 @@
     <definition name="event/resources" extends="template.central">
         <put-attribute name="main" value="/WEB-INF/jsp/event/resources.jsp"/>
     </definition>
+    
+    
+    
 
     <definition name="service/services" extends="template.central">
         <put-attribute name="main" value="/WEB-INF/jsp/service/services.jsp"/>
@@ -107,6 +116,10 @@
 
     <definition name="accessDenied" extends="template.central">
         <put-attribute name="main" value="/WEB-INF/jsp/accessDenied.jsp"/>
+    </definition>
+    
+     <definition name="conversationException" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/conversationException.jsp"/>
     </definition>
 
     <definition name="welcome" extends="template.central">
