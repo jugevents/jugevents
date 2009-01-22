@@ -15,19 +15,19 @@
         <form:hidden path="id"/>
         <dl>
             <dt><form:label path="speakerCoreAttributes.firstName"><spring:message code="first_name" text="?first_name?"/></form:label></dt>
-            <dd><form:input path="speakerCoreAttributes.firstName"/></dd>
+            <dd><form:input path="speakerCoreAttributes.firstName" size="35"/></dd>
             <dt><form:label path="speakerCoreAttributes.lastName"><spring:message code="last_name" text="?last_name?"/></form:label></dt>
-            <dd><form:input path="speakerCoreAttributes.lastName"/></dd>
+            <dd><form:input path="speakerCoreAttributes.lastName" size="35"/></dd>
             <dt><form:label path="speakerCoreAttributes.email"><spring:message code="Email" text="?Email?"/></form:label></dt>
-            <dd><form:input path="speakerCoreAttributes.email"/></dd>
+            <dd><form:input path="speakerCoreAttributes.email" size="35"/></dd>
             <dt><form:label path="speakerCoreAttributes.url"><spring:message code="WebSite" text="?WebSite?"/></form:label></dt>
-            <dd><form:input path="speakerCoreAttributes.url"/></dd>
+            <dd><form:input path="speakerCoreAttributes.url" size="35"/></dd>
             <dt><form:label path="speakerCoreAttributes.skypeId"><spring:message code="SkypeId" text="?SkypeId?"/></form:label></dt>
-            <dd><form:input path="speakerCoreAttributes.skypeId"/></dd>
+            <dd><form:input path="speakerCoreAttributes.skypeId" size="35"/></dd>
             <dt><form:label path="picture"><spring:message code="speaker.picture" text="?speaker.picture?"/></form:label></dt>
             <dd><input type="file" name="picture"></dd>
             <dt><form:label path="resume"><spring:message code="speaker.resume" text="?speaker.resume?"/></form:label></dt>
-            <dd><form:input path="resume"/></dd>  
+            <dd><form:textarea path="resume" cols="40" rows="8"/></dd>  
 
 
         </dl>       

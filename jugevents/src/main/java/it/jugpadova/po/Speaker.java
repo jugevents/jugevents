@@ -29,6 +29,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.CascadeValidation;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 
 /**
  * Represents information about the speaker of the event.
@@ -47,9 +49,11 @@ public class Speaker extends EntityBase {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@CascadeValidation
 	private SpeakerCoreAttributes speakerCoreAttributes;
 	private Event event;
 	private byte[] picture;
+	@NotBlank
 	private String resume;
 	private EditStatus status;
 	
@@ -78,6 +82,7 @@ public class Speaker extends EntityBase {
 	public void setPicture(byte[] picture) {
 		this.picture = picture;
 	}
+	@Column(length = 4096)
 	public String getResume() {
 		return resume;
 	}
