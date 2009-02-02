@@ -88,7 +88,7 @@ public class NewsMessage {
     }
 
     private String getEventUrl(String baseUrl, Event event) {
-        return baseUrl + "/event/show.html?id=" + event.getId();
+        return baseUrl + "/event/"+event.getId();
     }
 
     public String getEventTitle() {

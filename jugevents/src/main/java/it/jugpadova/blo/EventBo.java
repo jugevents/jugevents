@@ -80,7 +80,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 799bf23f56b3 $
+ * @version $Revision: 6083d2047717 $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -268,7 +268,7 @@ public class EventBo {
                                 getName()).append("</a></div>");
                     }
                     sb.append("<div class=\"eventContent\"><a href=\"").
-                            append(baseUrl).append("/event/show.html?id=").
+                            append(baseUrl).append("/event/").
                             append(event.getId()).append("\">").
                             append(event.getTitle()).append("</a></div>");
                     sb.append("</div>\n");
@@ -678,7 +678,7 @@ public class EventBo {
                     "</span></div>");
             result.append(
                     "<div class=\"jeb_title\"><span class=\"jeb_text\"><a href=\"").
-                    append(baseUrl).append("/event/show.html?id=").append(
+                    append(baseUrl).append("/event/").append(
                     event.getId()).append("\">").append(
                     event.getTitle()).append("</a></span></div>");
             if (showJUGName) {

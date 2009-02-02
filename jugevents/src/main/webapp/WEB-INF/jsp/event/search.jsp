@@ -50,7 +50,7 @@
                 </display:column>
                 <display:column media="csv xml excel pdf" property="hostingOrganizationName" title="JUG" sortable="true" headerClass="sortable"/>
                 <display:column media="html" sortProperty="title" titleKey="Event" sortable="true" headerClass="sortable">
-                    <a href="${cp}/event/show.html?id=${event.id}">${event.title}</a>
+                    <a href="${cp}/event/${event.id}">${event.title}</a>
                 </display:column>
                 <display:column media="csv xml excel pdf" property="title" titleKey="Event" sortable="true" headerClass="sortable"/>
                 <display:column sortProperty="startDate" titleKey="Date" sortable="true" headerClass="sortable">

@@ -360,6 +360,11 @@
             <artifactId>yuicompressor</artifactId>
             <version>2.3.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.tuckey</groupId>
+            <artifactId>urlrewritefilter</artifactId>
+            <version>3.1.0</version>
+        </dependency>
     </dependencies>
     <scm>
         <connection>scm:svn:http://jugevents.googlecode.com/svn/trunk</connection>
