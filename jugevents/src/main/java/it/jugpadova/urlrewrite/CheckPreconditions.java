@@ -56,11 +56,11 @@ public class CheckPreconditions extends RewriteRule {
     }
 
     private boolean checkLongParameter(HttpServletRequest request, String parameter) {
-        String id = request.getParameter(parameter);
+        String[] parameterValues = request.getParameterValues(parameter);
         boolean satisfied = false;
-        if (id != null) {
+        if (parameterValues != null && parameterValues.length == 1) {
             try {
-                Long.parseLong(id);
+                Long.parseLong(parameterValues[0]);
                 satisfied = true;
             } catch (NumberFormatException numberFormatException) {
             }
