@@ -51,11 +51,19 @@ public class CheckPreconditions extends RewriteRule {
                         "Unsatisfied precondition for /event/show.html");
                 return new ErrorMatch(HttpServletResponse.SC_PRECONDITION_FAILED);
             }
+        } else if (request.getRequestURI().matches(".*/event/([0-9]+)$")) {
+            boolean satisfied = checkNoParameter(request, "id");
+            if (!satisfied) {
+                logger.debug(
+                        "Unsatisfied precondition for /event/([0-9]+)$");
+                return new ErrorMatch(HttpServletResponse.SC_PRECONDITION_FAILED);
+            }
         }
         return null;
     }
 
-    private boolean checkLongParameter(HttpServletRequest request, String parameter) {
+    private boolean checkLongParameter(HttpServletRequest request,
+            String parameter) {
         String[] parameterValues = request.getParameterValues(parameter);
         boolean satisfied = false;
         if (parameterValues != null && parameterValues.length == 1) {
@@ -68,4 +76,13 @@ public class CheckPreconditions extends RewriteRule {
         return satisfied;
     }
 
+    private boolean checkNoParameter(HttpServletRequest request,
+            String parameter) {
+        String[] parameterValues = request.getParameterValues(parameter);
+        boolean satisfied = false;
+        if (parameterValues == null && parameterValues.length == 0) {
+            satisfied = true;
+        }
+        return satisfied;
+    }
 }
