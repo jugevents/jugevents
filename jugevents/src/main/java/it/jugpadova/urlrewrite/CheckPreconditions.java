@@ -80,7 +80,7 @@ public class CheckPreconditions extends RewriteRule {
             String parameter) {
         String[] parameterValues = request.getParameterValues(parameter);
         boolean satisfied = false;
-        if (parameterValues == null && parameterValues.length == 0) {
+        if (parameterValues == null || parameterValues.length == 0) {
             satisfied = true;
         }
         return satisfied;
