@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profilesXml>
+    <profiles>
+        <profile>
+            <id>jugevents</id>
+            <properties>
+                <mail.host>localhost</mail.host>
+                <mail.username>myusername</mail.username>
+                <mail.password>mypassword</mail.password>
+                <mail.smtp.auth>false</mail.smtp.auth>
+                <mail.smtp.starttls.enable>false</mail.smtp.starttls.enable>
+                <email.admin>admin@yourdomain.org</email.admin>
+                <email.internal>internal@yourdomain.org</email.internal>
+                <email.noreply>jugevents-noreply@yourdomain.org</email.noreply>
+                <email.kmlUpdateFrom>kmlUdateFrom@yourdomain.org</email.kmlUpdateFrom>
+                <email.kmlUpdateTo>kmlUdateTo@yourdomain.orgl</email.kmlUpdateTo>
+                <email.kmlUpdateReply>kmlUdateReply@yourdomain.org</email.kmlUpdateReply>
+                <tomcat.remote.manager.url>http://localhost:8080/manager</tomcat.remote.manager.url>
+                <tomcat.remote.username>admin</tomcat.remote.username>
+                <tomcat.remote.password>adminPassword</tomcat.remote.password>
+                <footprint.keystore.filename>certificates/jugevents.pfx</footprint.keystore.filename>
+                <footprint.keystore.password>jugevents</footprint.keystore.password>
+                <footprint.keystore.pk.password>jugevents</footprint.keystore.pk.password>
+                <footprint.signature.contact.mail>info@jugevents.org</footprint.signature.contact.mail>
+                <lucene.indexes.root.path>/var/opt/lucene/indexes</lucene.indexes.root.path>
+                <slideshare.apiKey>slideshareApiKey</slideshare.apiKey>
+                <slideshare.sharedSecret>slideshareSharedSecret</slideshare.sharedSecret>
+            </properties>
+        </profile>        
+    </profiles>
+</profilesXml>
