@@ -5,19 +5,24 @@ package it.jugpadova.util;
 
 import it.jugpadova.bean.NewJugger;
 import it.jugpadova.po.JUG;
+import it.jugpadova.po.Speaker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.regex.Matcher;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ListIterator;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.parancoe.plugins.security.User;
 import org.parancoe.plugins.world.Country;
 import org.springframework.web.servlet.ModelAndView;
+
+
 
 /**
  * Defines useful functions.
@@ -156,4 +161,27 @@ public class Utilities {
 	    	out.close();
 		}    	
     	} 
+    
+    /**
+	 * Retrieves the Entity in the list identified by the id.	 * 
+	 * @param id
+	 * @param list
+	 * @return null if the list doesn't contain the entity.
+	 */
+	public static Speaker getSpeaker(Long id, List<Speaker> list)
+    {
+    	if((id==null)||(list==null))
+			{
+				throw new IllegalArgumentException("Parameters of the method shouldn't be null");
+			}
+    	ListIterator<Speaker> iterator = list.listIterator();    	
+    	Speaker entity = null;
+    	while(iterator.hasNext())
+    	{
+    		entity = iterator.next();
+    		if(entity.getId().equals(id))
+    			return entity;
+    	}
+    	return null;
+    }
 }

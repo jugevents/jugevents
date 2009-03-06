@@ -14,16 +14,20 @@
 package it.jugpadova.controllers;
 
 import it.jugpadova.blo.EventBo;
-import it.jugpadova.blo.SpeakerBo;
+import it.jugpadova.dao.SpeakerDao;
+import it.jugpadova.exception.ConversationException;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Registration;
 import it.jugpadova.po.Speaker;
+import it.jugpadova.po.SpeakerCoreAttributes;
+import it.jugpadova.util.Utilities;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.parancoe.web.validation.Validation;
@@ -40,21 +44,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/event/edit.form")
-@SessionAttributes({EventEditController.EVENT_ATTRIBUTE})
+@RequestMapping("/event/*.form")
+@SessionAttributes({"event", "speaker"})
+
 public class EventEditController {
 
     public static final String FORM_VIEW = "event/edit";
+    public static final String SPEAKER_FORM_VIEW = "event/speaker/edit";
+    public static final String SESSION_EVENT = "event";
+    public static final String SESSION_SPEAKER = "speaker";
+
     private static final Logger logger =
             Logger.getLogger(EventEditController.class);
-    
-    public static final String EVENT_ATTRIBUTE = "event";
     @Autowired
     private EventBo eventBo;
     @Autowired
-    private SpeakerBo speakerBo;
+    private SpeakerDao speakerDao; 
 
     @InitBinder
     public void initBinder(WebDataBinder binder) throws Exception {
@@ -68,33 +76,18 @@ public class EventEditController {
                 true));
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value="/event/edit.form", method = RequestMethod.POST)
     @Validation(view = FORM_VIEW)
     public String save(@ModelAttribute("event") Event event,
-            BindingResult result, SessionStatus status, HttpServletRequest req) {
+            BindingResult result, SessionStatus status) {
         eventBo.save(event);
-        saveSpeakers(req);
-        req.getSession().removeAttribute(SpeakerEditController.SPEAKER_LIST_ATTRIBUTE);
         status.setComplete();
         return "redirect:show.html?id=" + event.getId();
     }
     
-    private void saveSpeakers(HttpServletRequest req) 
-    {
-    	ArrayList<Speaker> speakerList = SpeakerEditController.speakerList(req);
-    	if(speakerList == null)
-    	{
-    		logger.debug("Attribute "+SpeakerEditController.SPEAKER_LIST_ATTRIBUTE+" not found in session");
-    		return;
-    	}
-    	for(Speaker s: speakerList)
-    	{
-    		speakerBo.save(s);
-    	}
-    }
     
-
-    @RequestMapping(method = RequestMethod.GET)
+    
+    @RequestMapping(value="/event/edit.form", method = RequestMethod.GET)
     public String form(@RequestParam(value = "id", required =
             false) Long id, @RequestParam(value = "copyId", required = false) Long copyId, Model model, HttpServletRequest req) {
         Event event = null;
@@ -118,7 +111,76 @@ public class EventEditController {
             registration.setEndRegistration(registration.getStartRegistration());
             event.setRegistration(registration);
         }
-        model.addAttribute(EVENT_ATTRIBUTE, event);        
+        //TODO just to retrieve speakers from hibernate...maybe this call happens in the jsp, evaluate to remove it
+        event.getSpeakers();
+        model.addAttribute("event", event);
         return FORM_VIEW;
     }
+  
+    
+    
+    @RequestMapping(value="/event/speakerToEvent.form", method = RequestMethod.POST)
+    @Validation(view = SPEAKER_FORM_VIEW)
+    public ModelAndView speakerToEvent(@ModelAttribute(SESSION_SPEAKER) Speaker speaker, BindingResult result, SessionStatus status, HttpServletRequest req) {
+        //inserting element into session   
+    	Event event = getEventFromSession(req, speaker.getEvent().getId());    	
+    	speaker.setEvent(event);
+    	List<Speaker> speakers = event.getSpeakers();
+    	if(speakers.contains(speaker)) {
+    		//remove the existing speaker in the list, not the new one
+    		speakers.remove(speaker);
+    	}
+    	speakers.add(speaker);   	
+    	//TODO remove speaker from session
+    	//status.setComplete();
+    	ModelAndView mv = new ModelAndView(FORM_VIEW);
+    	mv.addObject("id", event.getId());
+        return mv;
+    }
+    
+    @RequestMapping(value="/event/eventToSpeaker.form", method = RequestMethod.POST)
+    public ModelAndView eventToSpeaker(@ModelAttribute("event")Event event, @RequestParam(value = "speakerId", required=false)Long speakerId) {
+        
+    	Speaker speaker = null;
+		if (speakerId != null) {
+			speaker = Utilities.getSpeaker(speakerId, event.getSpeakers());
+		} else {
+			speaker = new Speaker();			
+			speaker.setSpeakerCoreAttributes(new SpeakerCoreAttributes());
+		}
+		ModelAndView mv = new ModelAndView(SPEAKER_FORM_VIEW);
+		mv.addObject(SESSION_SPEAKER, speaker);
+		return mv;
+    }
+    
+    @RequestMapping(value = "/event/removeSpeaker.form", method = RequestMethod.GET)
+	public String removeSpeakerFromSession(
+			@RequestParam(value = "speakerId", required = true) Long speakerId,
+			@ModelAttribute(SESSION_EVENT) Event event) {
+		List<Speaker> speakers = event.getSpeakers();
+		Speaker speakerToRemove = Utilities.getSpeaker(speakerId, speakers);
+		if (speakerToRemove == null) {
+			// TODO javascript error message or error message
+		} else {
+			int index = speakers.indexOf(speakerToRemove);
+			speakers.remove(index);
+		}
+		return FORM_VIEW;
+	}
+
+    
+    private Event getEventFromSession(HttpServletRequest req, Long eventId)
+    {
+    	HttpSession session = req.getSession(false);
+    	Event event = (Event)session.getAttribute(SESSION_EVENT);
+    	if(event.getId()!=eventId)
+    		throw new ConversationException("The event stored in the session has id = "+event.getId()+" which is different from id= "+eventId);
+    	return event;
+    }
+    
+    
+    
+    
+    
+    
 }

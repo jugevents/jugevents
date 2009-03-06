@@ -3,6 +3,8 @@ package it.jugpadova.controllers;
 import it.jugpadova.JugEventsControllerTest;
 import it.jugpadova.dao.EventDao;
 import it.jugpadova.po.Event;
+import it.jugpadova.po.Speaker;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +22,7 @@ public class EventEditControllerTest extends JugEventsControllerTest {
 
     public static final String DONE_VIEW = "redirect:show.html?id=";
     public static final String FORM_REQUEST_URI = "/event/edit.form";
+    public static final String REQUEST_REMOVE_SPEAKER_URI = "/event/removeSpeaker.form";
     public static final String FORM_VIEW = "event/edit";
     public static final String MODEL_ATTRIBUTE = "event";
     @Autowired
@@ -82,7 +85,30 @@ public class EventEditControllerTest extends JugEventsControllerTest {
         assertEquals(testEvent.getId(), ((Event) reqModel).getId());
         assertEquals(FORM_VIEW, mv.getViewName());
     }
-
+    
+    
+    public void testRemoveSpeakerFromSession() throws Exception
+    {
+    	 Event testEvent = getTestEvent();
+    	 callForm(testEvent.getId().toString());
+    	 Event event = (Event)req.getSession().getAttribute(MODEL_ATTRIBUTE);
+    	 List<Speaker> speakers = event.getSpeakers();
+    	 assertEquals(1, speakers.size());
+    	 Speaker speaker = event.getSpeakers().get(0);
+    	 assertEquals("Lucio", speaker.getSpeakerCoreAttributes().getFirstName());
+    	 resetRequestAndResponse();
+         req.setMethod("GET");
+         req.setRequestURI(REQUEST_REMOVE_SPEAKER_URI);
+         req.setParameter("speakerId", speaker.getId().toString());
+         ModelAndView mv = handler.handle(req, res, controller);
+         assertEquals(FORM_VIEW, mv.getViewName());
+         event = (Event)req.getSession().getAttribute(MODEL_ATTRIBUTE);
+         assertEquals(0, event.getSpeakers().size());
+         
+    }
+/**
+  *********************  Utilities methods  *****************************
+ */
     private ModelAndView callForm(String eventId) throws Exception {
         servicesBo.setAuthenticatedUsername("lucio");
         req.setMethod("GET");

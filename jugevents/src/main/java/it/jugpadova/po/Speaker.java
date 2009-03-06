@@ -16,8 +16,6 @@
  */
 package it.jugpadova.po;
 
-import it.jugpadova.util.EditStatus;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +24,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Transient;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.CascadeValidation;
@@ -55,15 +52,7 @@ public class Speaker extends EntityBase {
 	private byte[] picture;
 	@NotBlank
 	private String resume;
-	private EditStatus status;
 	
-	@Transient
-	public EditStatus getStatus() {
-		return status;
-	}
-	public void setStatus(EditStatus status) {
-		this.status = status;
-	}
 	@ManyToOne
 	public SpeakerCoreAttributes getSpeakerCoreAttributes() {
 		return speakerCoreAttributes;
