@@ -33,13 +33,16 @@
                 
     <!--  begin security section -->
     <bean name="pluginSecurityFilterDefinitions" class="java.lang.String">
+        <!--  DO NOT USE CAMEL CASE FOR URL PATTERN TYPE!!! -->
         <constructor-arg>
             <value>
                 CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
                 PATTERN_TYPE_APACHE_ANT
                 /adminjugger/**=ROLE_ADMIN
                 /people/**=ROLE_ADMIN, ROLE_PARANCOE
-                /event/speaker/*=ROLE_ADMIN
+                /event/eventspeaker.form=ROLE_ADMIN
+                /event/speakerevent.form=ROLE_ADMIN
+                /event/removespeaker.form=ROLE_ADMIN
                 /event/edit*=ROLE_ADMIN, ROLE_JUGGER
                 /event/delete*=ROLE_ADMIN, ROLE_JUGGER
                 /event/participants*=ROLE_ADMIN, ROLE_JUGGER

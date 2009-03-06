@@ -119,7 +119,7 @@ public class EventEditController {
   
     
     
-    @RequestMapping(value="/event/speakerToEvent.form", method = RequestMethod.POST)
+    @RequestMapping(value="/event/speakerevent.form", method = RequestMethod.POST)
     @Validation(view = SPEAKER_FORM_VIEW)
     public ModelAndView speakerToEvent(@ModelAttribute(SESSION_SPEAKER) Speaker speaker, BindingResult result, SessionStatus status, HttpServletRequest req) {
         //inserting element into session   
@@ -138,7 +138,7 @@ public class EventEditController {
         return mv;
     }
     
-    @RequestMapping(value="/event/eventToSpeaker.form", method = RequestMethod.POST)
+    @RequestMapping(value="/event/eventspeaker.form", method = RequestMethod.POST)
     public ModelAndView eventToSpeaker(@ModelAttribute("event")Event event, @RequestParam(value = "speakerId", required=false)Long speakerId) {
         
     	Speaker speaker = null;
@@ -153,7 +153,7 @@ public class EventEditController {
 		return mv;
     }
     
-    @RequestMapping(value = "/event/removeSpeaker.form", method = RequestMethod.GET)
+    @RequestMapping(value = "/event/removespeaker.form", method = RequestMethod.GET)
 	public String removeSpeakerFromSession(
 			@RequestParam(value = "speakerId", required = true) Long speakerId,
 			@ModelAttribute(SESSION_EVENT) Event event) {

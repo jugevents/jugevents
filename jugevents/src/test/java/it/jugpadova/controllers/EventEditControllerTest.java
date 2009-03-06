@@ -22,7 +22,7 @@ public class EventEditControllerTest extends JugEventsControllerTest {
 
     public static final String DONE_VIEW = "redirect:show.html?id=";
     public static final String FORM_REQUEST_URI = "/event/edit.form";
-    public static final String REQUEST_REMOVE_SPEAKER_URI = "/event/removeSpeaker.form";
+    public static final String REQUEST_REMOVE_SPEAKER_URI = "/event/removespeaker.form";
     public static final String FORM_VIEW = "event/edit";
     public static final String MODEL_ATTRIBUTE = "event";
     @Autowired
@@ -110,7 +110,7 @@ public class EventEditControllerTest extends JugEventsControllerTest {
   *********************  Utilities methods  *****************************
  */
     private ModelAndView callForm(String eventId) throws Exception {
-        servicesBo.setAuthenticatedUsername("lucio");
+        servicesBo.setAuthenticatedUsername("admin");
         req.setMethod("GET");
         req.setRequestURI(FORM_REQUEST_URI);
         req.setParameter("id", eventId);
