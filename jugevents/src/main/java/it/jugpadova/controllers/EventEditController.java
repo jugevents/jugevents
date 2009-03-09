@@ -91,6 +91,7 @@ public class EventEditController {
     public String form(@RequestParam(value = "id", required =
             false) Long id, @RequestParam(value = "copyId", required = false) Long copyId, Model model, HttpServletRequest req) {
         Event event = null;
+       
         if (id != null) {
             event = eventBo.retrieveEvent(id);
             if (event.getRegistration() == null) {
@@ -111,8 +112,9 @@ public class EventEditController {
             registration.setEndRegistration(registration.getStartRegistration());
             event.setRegistration(registration);
         }
+        
         //TODO just to retrieve speakers from hibernate...maybe this call happens in the jsp, evaluate to remove it
-        event.getSpeakers();
+        //event.getSpeakers();
         model.addAttribute("event", event);
         return FORM_VIEW;
     }
@@ -121,9 +123,9 @@ public class EventEditController {
     
     @RequestMapping(value="/event/speakerevent.form", method = RequestMethod.POST)
     @Validation(view = SPEAKER_FORM_VIEW)
-    public ModelAndView speakerToEvent(@ModelAttribute(SESSION_SPEAKER) Speaker speaker, BindingResult result, SessionStatus status, HttpServletRequest req) {
+    public ModelAndView speakerToEvent(@ModelAttribute(SESSION_SPEAKER) Speaker speaker,  BindingResult result, SessionStatus status, HttpServletRequest req) {
         //inserting element into session   
-    	Event event = getEventFromSession(req, speaker.getEvent().getId());    	
+    	Event event = (Event)req.getSession().getAttribute("event");
     	speaker.setEvent(event);
     	List<Speaker> speakers = event.getSpeakers();
     	if(speakers.contains(speaker)) {
@@ -132,10 +134,12 @@ public class EventEditController {
     	}
     	speakers.add(speaker);   	
     	//TODO remove speaker from session
-    	//status.setComplete();
+    	//find a better way to remove the attribute speaker from the session
+    	req.getSession().setAttribute("speaker", null);
     	ModelAndView mv = new ModelAndView(FORM_VIEW);
-    	mv.addObject("id", event.getId());
-        return mv;
+    	mv.addObject("event", event);
+    	return mv;
+    	
     }
     
     @RequestMapping(value="/event/eventspeaker.form", method = RequestMethod.POST)
@@ -169,14 +173,7 @@ public class EventEditController {
 	}
 
     
-    private Event getEventFromSession(HttpServletRequest req, Long eventId)
-    {
-    	HttpSession session = req.getSession(false);
-    	Event event = (Event)session.getAttribute(SESSION_EVENT);
-    	if(event.getId()!=eventId)
-    		throw new ConversationException("The event stored in the session has id = "+event.getId()+" which is different from id= "+eventId);
-    	return event;
-    }
+   
     
     
     

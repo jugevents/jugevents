@@ -42,7 +42,7 @@ public class SpeakerCoreAttributes extends EntityBase {
 	@NotBlank
 	@Email
 	private String email;
-	@RegExp(value="[A-Za-z0-9]*")
+	@RegExp(value="[A-Za-z0-9:/.-]*")
 	private String url;
 	//@RegExp(value="[A-Za-z0-9]*")
 	private String skypeId;

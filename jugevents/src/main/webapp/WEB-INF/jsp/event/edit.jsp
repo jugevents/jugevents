@@ -1,6 +1,7 @@
 <%@ include file="../common.jspf" %>
 <jwr:script src="${cp}/dwr/interface/eventBo.js" />
 <jwr:script src="${cp}/dwr/interface/filterBo.js" />
+
 <c:choose>
     <c:when test="${empty event.id}">
         <h1><spring:message code="NewEvent"/></h1>
@@ -168,6 +169,38 @@
         </dl>
     </div>
 </form:form>
+<!-- to remove - begin -->
+    <authz:authorize ifAnyGranted="ROLE_ADMIN"> 
+    <c:if test="${!empty event.speakers}"> 
+    
+    
+    <div class="displaytag">
+    <display:table  id="speaker"  name="event.speakers"   sort="list" pagesize="20" defaultsort="5" defaultorder="ascending">
+        <!--  name="sessionScope.juggers" -->
+        <display:column   sortable="true">
+           ${speaker.speakerCoreAttributes.firstName}			
+        </display:column>   
+         <display:column  sortable="true">
+           ${speaker.speakerCoreAttributes.lastName}			
+         </display:column>  
+         <display:column  sortable="true">
+           ${speaker.speakerCoreAttributes.email}			
+         </display:column>   
+         <display:column>
+         	<a href="javascript:editSpeaker(${speaker.id})"><spring:message code="edit"/></a>
+      	 </display:column>     
+    </display:table>
+     
+</div>
+
+
+
+    </c:if>  
+    </authz:authorize>
+
+<!--  to remove end --> 
+
+
 <script type="text/javascript">
     dwr.util.setEscapeHtml(false);
             
@@ -176,11 +209,18 @@
     function updateLocationList(autocompleter, token) {
         eventBo.findPartialLocation(token, '<authz:authentication operation="username"/>', function(data) {
         autocompleter.setChoices(data)
-    });
+    });    
 }
 
 function populateDirections(selectedElement) {
     eventBo.copyDirectionsFromEvent(selectedElement.childNodes[3].childNodes[0].nodeValue);
+}
+
+function editSpeaker(speakerId)
+{	
+	url = 'eventspeaker.form?speakerId='+speakerId;	
+	$('event').action = url;
+	$('event').submit();
 }
 
 new Form.Element.Observer('description', 2,
@@ -230,5 +270,20 @@ $('registration.manualActivation1').checked = true;
 } else {
 enableRegistrationRulesFields(false);
 }
+
+function removeSpeaker(a) {                  
+    elementSpeaker = document.getElementById('speaker_'+a);          
+    elementSpeakerLinkAnchor = document.getElementById('speakerLinkAnchor_'+a);              
+    if(elementSpeaker.style.display == 'block')
+    {   
+        elementSpeaker.style.display='none';
+        elementSpeakerLinkAnchor.innerHTML='<spring:message code="showDetails"/>';          
+                        
+    }else
+    {               
+        elementSpeaker.style.display='block';
+        elementSpeakerLinkAnchor.innerHTML='<spring:message code="hideDetails"/>';                                      
+    }           
+} 
 
 </script>

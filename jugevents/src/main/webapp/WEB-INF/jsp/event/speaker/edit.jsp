@@ -9,7 +9,7 @@
         <h1><spring:message code="speaker.editspeaker" text="?speaker.editspeaker?"/></h1>                            
     </c:otherwise>
 </c:choose>
-<form:form commandName="speaker" method="post" action="${cp}/event/speaker/edit.form">
+<form:form commandName="speaker" method="post" action="${cp}/event/speakerevent.form">
     <div>
         <form:errors path="*" cssClass="errorBox"/>
         <form:hidden path="id"/>
