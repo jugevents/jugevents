@@ -163,17 +163,9 @@
                 </dl>
             </fieldset>
         </div>
-        <dl>
-            <dt>&nbsp;</dt>
-            <dd><input type="submit" value="<spring:message code='Submit'/>"/><br/><br/></dd>
-        </dl>
-    </div>
-</form:form>
-<!-- to remove - begin -->
+        <!-- to remove - begin -->
     <authz:authorize ifAnyGranted="ROLE_ADMIN"> 
-    <c:if test="${!empty event.speakers}"> 
-    
-    
+    <c:if test="${!empty event.speakers}">     
     <div class="displaytag">
     <display:table  id="speaker"  name="event.speakers"   sort="list" pagesize="20" defaultsort="5" defaultorder="ascending">
         <!--  name="sessionScope.juggers" -->
@@ -187,18 +179,20 @@
            ${speaker.speakerCoreAttributes.email}			
          </display:column>   
          <display:column>
-         	<a href="javascript:editSpeaker(${speaker.id})"><spring:message code="edit"/></a>
+         	<a href="javascript:editSpeaker(${speaker.id});"><spring:message code="edit"/></a>
+         	<a href="javascript:editSpeaker(0);">new</a>
       	 </display:column>     
-    </display:table>
-     
-</div>
-
-
-
+    </display:table>     
+	</div>
     </c:if>  
     </authz:authorize>
-
 <!--  to remove end --> 
+        <dl>
+            <dt>&nbsp;</dt>
+            <dd><input type="submit" value="<spring:message code='Submit'/>"/><br/><br/></dd>
+        </dl>
+    </div>
+</form:form>
 
 
 <script type="text/javascript">
@@ -217,8 +211,8 @@ function populateDirections(selectedElement) {
 }
 
 function editSpeaker(speakerId)
-{	
-	url = 'eventspeaker.form?speakerId='+speakerId;	
+{	if(speakerId==0) {url = 'eventspeaker.form';} 
+	else {url = 'eventspeaker.form?speakerId='+speakerId;}	
 	$('event').action = url;
 	$('event').submit();
 }
