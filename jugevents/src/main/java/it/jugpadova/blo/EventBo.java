@@ -80,7 +80,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 6083d2047717 $
+ * @version $Revision: 9ca69dcd1ac4 $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -93,6 +93,8 @@ public class EventBo {
     private EventDao eventDao;
     @Autowired
     private ServicesBo servicesBo;
+    @Autowired
+    private SpeakerBo speakerBo;
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
@@ -299,6 +301,7 @@ public class EventBo {
             event.setCreationDate(new Date());
         }
         eventDao.store(event);
+        speakerBo.save(event.getSpeakers());
         if (isNew) {
             logger.info(loggedUser + " created a new event with id=" +
                     event.getId());

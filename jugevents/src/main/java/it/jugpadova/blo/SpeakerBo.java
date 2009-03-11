@@ -3,6 +3,8 @@
  */
 package it.jugpadova.blo;
 
+import java.util.List;
+
 import it.jugpadova.dao.SpeakerCoreAttributesDao;
 import it.jugpadova.dao.SpeakerDao;
 import it.jugpadova.po.Speaker;
@@ -24,13 +26,19 @@ public class SpeakerBo {
 	
 	
 	public void save(Speaker speaker) {
-        boolean isNew = false;
-        if (speaker.getId() == null) {
-            isNew = true;
-        }
+       
         speakerCoreAttributesDao.store(speaker.getSpeakerCoreAttributes());
         speakerDao.store(speaker);
     }
+	
+	public void save(List<Speaker> speakerList)
+	{
+		if(speakerList == null)
+			return;
+		for (Speaker speaker : speakerList) {
+			save(speaker);
+		}
+	}
 
 
 }
