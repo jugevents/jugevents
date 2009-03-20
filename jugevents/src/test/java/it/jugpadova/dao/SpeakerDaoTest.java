@@ -16,7 +16,7 @@ package it.jugpadova.dao;
 import it.jugpadova.JugEventsBaseTest;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Speaker;
-import it.jugpadova.po.SpeakerCoreAttributes;
+
 import it.jugpadova.util.Utilities;
 
 import java.io.InputStream;
@@ -31,8 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class SpeakerDaoTest extends JugEventsBaseTest {
     @Autowired
     private SpeakerDao speakerDao;
-    @Autowired
-    private SpeakerCoreAttributesDao speakerCoreAttributesDao;
+   
     
     public void testFindAll() {
         List<Speaker> speakers = speakerDao.findAll();
@@ -53,9 +52,9 @@ public class SpeakerDaoTest extends JugEventsBaseTest {
     	Speaker speakerEnrico = speakerDao.findByResume("%electronic engineer%").get(0);
     	assertTrue(speakers.contains(speakerLucio)); 
     	assertTrue(speakers.contains(speakerEnrico)); 
-    	assertEquals("enricogiurin@gmail.com", speakerEnrico.getSpeakerCoreAttributes().getEmail());
-    	assertEquals("http://benfante.blogspot.com/", speakerLucio.getSpeakerCoreAttributes().getUrl());
-    	assertEquals("benfante", speakerLucio.getSpeakerCoreAttributes().getSkypeId());
+    	assertEquals("enricogiurin@gmail.com", speakerEnrico.getEmail());
+    	assertEquals("http://benfante.blogspot.com/", speakerLucio.getUrl());
+    	assertEquals("benfante", speakerLucio.getSkypeId());
     }
     
     public void testInsertDuplicateKey()

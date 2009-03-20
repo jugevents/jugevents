@@ -15,19 +15,15 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.blo.EventBo;
 import it.jugpadova.dao.SpeakerDao;
-import it.jugpadova.exception.ConversationException;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Registration;
 import it.jugpadova.po.Speaker;
-import it.jugpadova.po.SpeakerCoreAttributes;
-import it.jugpadova.util.Utilities;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.parancoe.web.validation.Validation;
@@ -44,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -74,6 +71,8 @@ public class EventEditController {
         binder.registerCustomEditor(Date.class, "registration.endRegistration",
                 new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy HH:mm"),
                 true));
+        binder.registerCustomEditor(byte[].class,
+                new ByteArrayMultipartFileEditor());
     }
 
     @RequestMapping(value="/event/edit.form", method = RequestMethod.POST)
@@ -88,7 +87,7 @@ public class EventEditController {
     
     
     @RequestMapping(value="/event/edit.form", method = RequestMethod.GET)
-    public String form(@RequestParam(value = "id", required =
+    public ModelAndView form(@RequestParam(value = "id", required =
             false) Long id, @RequestParam(value = "copyId", required = false) Long copyId, Model model, HttpServletRequest req) {
         Event event = null;
        
@@ -113,65 +112,73 @@ public class EventEditController {
             event.setRegistration(registration);
         }
         
-        //TODO just to retrieve speakers from hibernate...maybe this call happens in the jsp, evaluate to remove it
-        //event.getSpeakers();
-        model.addAttribute("event", event);
-        return FORM_VIEW;
+        return mvEvent(event);
     }
   
     
     
     @RequestMapping(value="/event/speakerevent.form", method = RequestMethod.POST)
     @Validation(view = SPEAKER_FORM_VIEW)
-    public ModelAndView speakerToEvent(@ModelAttribute(SESSION_SPEAKER) Speaker speaker,  BindingResult result, SessionStatus status, HttpServletRequest req) {
+    public ModelAndView speakerToEvent(@ModelAttribute(SESSION_SPEAKER) Speaker speaker, BindingResult result, 
+    								   @RequestParam(value = "speakerId", required=false)Long speakerId, HttpServletRequest req) {
         //inserting element into session   
     	Event event = (Event)req.getSession().getAttribute("event");
+    	System.out.println(req.getParameter("speakerId"));
     	speaker.setEvent(event);
     	List<Speaker> speakers = event.getSpeakers();
-    	if(speakers.contains(speaker)) {
-    		//remove the existing speaker in the list, not the new one
-    		speakers.remove(speaker);
-    	}
+    	if(speakerId != null)
+    	{
+    		speakers.remove(index(speakerId));
+    	}    	
     	speakers.add(speaker);   	
     	//TODO remove speaker from session
     	//find a better way to remove the attribute speaker from the session
     	req.getSession().setAttribute("speaker", null);
-    	ModelAndView mv = new ModelAndView(FORM_VIEW);
-    	mv.addObject("event", event);
-    	return mv;
-    	
+    	return mvEvent(event);
     }
     
+    
+    
     @RequestMapping(value="/event/eventspeaker.form", method = RequestMethod.POST)
-    public ModelAndView eventToSpeaker(@ModelAttribute("event")Event event, @RequestParam(value = "speakerId", required=false)Long speakerId) {
+    public ModelAndView eventToSpeaker(@ModelAttribute(SESSION_EVENT)Event event, @RequestParam(value = "speakerId", required=false)Long speakerId) {
         
     	Speaker speaker = null;
 		if (speakerId != null) {
-			speaker = Utilities.getSpeaker(speakerId, event.getSpeakers());
+			speaker = event.getSpeakers().get(index(speakerId));
 		} else {
-			speaker = new Speaker();			
-			speaker.setSpeakerCoreAttributes(new SpeakerCoreAttributes());
+			speaker = new Speaker();						
 		}
 		ModelAndView mv = new ModelAndView(SPEAKER_FORM_VIEW);
 		mv.addObject(SESSION_SPEAKER, speaker);
+		mv.addObject("speakerId", speakerId);
 		return mv;
     }
     
-    @RequestMapping(value = "/event/removespeaker.form", method = RequestMethod.GET)
+    @RequestMapping(value = "/event/removespeaker.form", method = RequestMethod.POST)
 	public String removeSpeakerFromSession(
 			@RequestParam(value = "speakerId", required = true) Long speakerId,
 			@ModelAttribute(SESSION_EVENT) Event event) {
 		List<Speaker> speakers = event.getSpeakers();
-		Speaker speakerToRemove = Utilities.getSpeaker(speakerId, speakers);
-		if (speakerToRemove == null) {
-			// TODO javascript error message or error message
-		} else {
-			int index = speakers.indexOf(speakerToRemove);
-			speakers.remove(index);
-		}
+		logger.debug("Number of speakers in session: "+speakers.size());		
+		speakers.remove(index(speakerId));				
 		return FORM_VIEW;
 	}
-
+    @RequestMapping(value = "/event/backtoevent.form", method = RequestMethod.GET)
+    public ModelAndView backToEvent(@ModelAttribute(SESSION_EVENT)Event event) {    	 	
+    	return mvEvent(event);
+    }
+    
+    private  ModelAndView mvEvent(Event event)
+    {
+    	ModelAndView mv = new ModelAndView(FORM_VIEW);
+    	mv.addObject("event", event);
+    	return mv; 
+    }
+    
+    private int index(Long speakerId)
+    {
+    	return speakerId.intValue() - 1;
+    }
     
    
     

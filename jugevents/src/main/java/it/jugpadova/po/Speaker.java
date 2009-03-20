@@ -26,8 +26,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
-import org.springmodules.validation.bean.conf.loader.annotation.handler.CascadeValidation;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
+import org.springmodules.validation.bean.conf.loader.annotation.handler.RegExp;
 
 /**
  * Represents information about the speaker of the event.
@@ -36,9 +37,9 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  */
 @Entity
 @NamedQueries(value = {@NamedQuery(name = "Speaker.findEventsByPartialSpeakerEmail", query =
-"select e from Event e, Speaker s, SpeakerCoreAttributes sca where s.event=e and s.speakerCoreAttributes=sca and upper(sca.email) like upper(?)"),
+"select e from Event e, Speaker s  where s.event=e and upper(s.email) like upper(?)"),
 @NamedQuery(name = "Speaker.findSpeakersByPartialEventTitle", query =
-"select s from Event e, Speaker s, SpeakerCoreAttributes sca where s.event=e and s.speakerCoreAttributes=sca and upper(e.title) like upper(?)")})
+"select s from Event e, Speaker s where s.event=e  and upper(e.title) like upper(?)")})
 
 public class Speaker extends EntityBase {
 
@@ -46,20 +47,24 @@ public class Speaker extends EntityBase {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@CascadeValidation
-	private SpeakerCoreAttributes speakerCoreAttributes;
-	private Event event;
+	@NotBlank
+	private String firstName;
+	@NotBlank
+	private String lastName;		
+	@NotBlank
+	@Email
+	private String email;
+	@RegExp(value="[A-Za-z0-9:/.-]*")
+	private String url;
+	//@RegExp(value="[A-Za-z0-9]*")
+	private String skypeId;	
 	private byte[] picture;
 	@NotBlank
 	private String resume;
 	
-	@ManyToOne
-	public SpeakerCoreAttributes getSpeakerCoreAttributes() {
-		return speakerCoreAttributes;
-	}
-	public void setSpeakerCoreAttributes(SpeakerCoreAttributes speakerCoreAttributes) {
-		this.speakerCoreAttributes = speakerCoreAttributes;
-	}
+	private Event event;
+	
+	
 	//set size to 1MB because BLOB of MySQL is not enough to store
 	//binary data bigger than 64k
 	@Lob
@@ -86,10 +91,48 @@ public class Speaker extends EntityBase {
 	public Event getEvent() {
 		return event;
 	}
+	
+	
+	
+	public String getSkypeId() {
+		return skypeId;
+	}
+	public void setSkypeId(String skypeId) {
+		this.skypeId = skypeId;
+	}
+	
+	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 	@Override
 	public String toString() {
-		
-		return speakerCoreAttributes.toString() + "\n	resume: "+resume;
+		// TODO Auto-generated method stub
+		return "firstName: "+firstName+" - lastName: "+lastName+" - email: "+email;
 	}
 
 }

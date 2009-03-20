@@ -6,8 +6,8 @@ import it.jugpadova.po.Event;
 import it.jugpadova.po.Speaker;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,17 +89,18 @@ public class EventEditControllerTest extends JugEventsControllerTest {
     
     public void testRemoveSpeakerFromSession() throws Exception
     {
+    	 //TODO check better this test
     	 Event testEvent = getTestEvent();
     	 callForm(testEvent.getId().toString());
     	 Event event = (Event)req.getSession().getAttribute(MODEL_ATTRIBUTE);
     	 List<Speaker> speakers = event.getSpeakers();
     	 assertEquals(1, speakers.size());
     	 Speaker speaker = event.getSpeakers().get(0);
-    	 assertEquals("Lucio", speaker.getSpeakerCoreAttributes().getFirstName());
+    	 assertEquals("Lucio", speaker.getFirstName());
     	 resetRequestAndResponse();
-         req.setMethod("GET");
+         req.setMethod("POST");
          req.setRequestURI(REQUEST_REMOVE_SPEAKER_URI);
-         req.setParameter("speakerId", speaker.getId().toString());
+         req.setParameter("speakerId", new Long(1).toString());
          ModelAndView mv = handler.handle(req, res, controller);
          assertEquals(FORM_VIEW, mv.getViewName());
          event = (Event)req.getSession().getAttribute(MODEL_ATTRIBUTE);

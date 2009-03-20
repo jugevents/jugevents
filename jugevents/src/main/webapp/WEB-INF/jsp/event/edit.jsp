@@ -165,26 +165,33 @@
         </div>
         <!-- to remove - begin -->
     <authz:authorize ifAnyGranted="ROLE_ADMIN"> 
-    <c:if test="${!empty event.speakers}">     
+    <a href="javascript:editSpeaker(0);"><spring:message code="addNewSpeaker" text="?addNewSpeaker?"/></a>
+       
+    <fieldset>
+    <legend><spring:message code="speakers" text="?speakers?"/></legend>
     <div class="displaytag">
-    <display:table  id="speaker"  name="event.speakers"   sort="list" pagesize="20" defaultsort="5" defaultorder="ascending">
+    
+    
+    <display:table  id="speaker"  name="event.speakers" requestURI="backtoevent.form"   sort="list" pagesize="20" defaultsort="5" defaultorder="ascending"  >
         <!--  name="sessionScope.juggers" -->
-        <display:column   sortable="true">
-           ${speaker.speakerCoreAttributes.firstName}			
+        <display:column   title="firstName" sortable="true">
+           ${speaker.firstName}			
         </display:column>   
-         <display:column  sortable="true">
-           ${speaker.speakerCoreAttributes.lastName}			
+         <display:column  title="lastName" sortable="true">
+           ${speaker.lastName}			
          </display:column>  
-         <display:column  sortable="true">
-           ${speaker.speakerCoreAttributes.email}			
+         <display:column  title="email" sortable="true">
+           ${speaker.email}			
          </display:column>   
          <display:column>
-         	<a href="javascript:editSpeaker(${speaker.id});"><spring:message code="edit"/></a>
-         	<a href="javascript:editSpeaker(0);">new</a>
+         	<a href="javascript:editSpeaker(${speaker_rowNum});"><spring:message code="edit"/></a>
+         	<a href="javascript:removeSpeaker(${speaker_rowNum});">remove</a>
+         	
       	 </display:column>     
     </display:table>     
 	</div>
-    </c:if>  
+	</fieldset>
+    
     </authz:authorize>
 <!--  to remove end --> 
         <dl>
@@ -211,8 +218,16 @@ function populateDirections(selectedElement) {
 }
 
 function editSpeaker(speakerId)
-{	if(speakerId==0) {url = 'eventspeaker.form';} 
+{	
+	if(speakerId==0) {url = 'eventspeaker.form';} 
 	else {url = 'eventspeaker.form?speakerId='+speakerId;}	
+	$('event').action = url;
+	$('event').submit();
+}
+
+function removeSpeaker(speakerId)
+{	
+	url = 'removespeaker.form?speakerId='+speakerId;
 	$('event').action = url;
 	$('event').submit();
 }
@@ -265,19 +280,5 @@ $('registration.manualActivation1').checked = true;
 enableRegistrationRulesFields(false);
 }
 
-function removeSpeaker(a) {                  
-    elementSpeaker = document.getElementById('speaker_'+a);          
-    elementSpeakerLinkAnchor = document.getElementById('speakerLinkAnchor_'+a);              
-    if(elementSpeaker.style.display == 'block')
-    {   
-        elementSpeaker.style.display='none';
-        elementSpeakerLinkAnchor.innerHTML='<spring:message code="showDetails"/>';          
-                        
-    }else
-    {               
-        elementSpeaker.style.display='block';
-        elementSpeakerLinkAnchor.innerHTML='<spring:message code="hideDetails"/>';                                      
-    }           
-} 
 
 </script>

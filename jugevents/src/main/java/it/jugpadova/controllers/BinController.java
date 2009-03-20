@@ -20,6 +20,7 @@ import it.jugpadova.dao.SpeakerDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Participant;
+import it.jugpadova.po.Speaker;
 import it.jugpadova.util.mime.MimeUtil;
 
 import java.io.BufferedInputStream;
@@ -29,6 +30,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -80,7 +83,21 @@ public class BinController {
             HttpServletResponse res) throws IOException {
         Long id = new Long(req.getParameter("id"));
         byte[] pictureSpeaker = speakerDao.get(id).getPicture();
-        flushResponse(pictureSpeaker, "pictureSpeaker", "noJugLogo", res);        
+        flushResponse(pictureSpeaker, "pictureSpeaker", "noSpeakerImage", res);        
+    }
+    
+    /**
+     * Produce the speaker image from the database, or the default no logo image.
+     */
+    @RequestMapping
+    public void pictureSpeakerInSession(HttpServletRequest req,
+            HttpServletResponse res) throws IOException {
+    	String s = req.getParameter("speakerId");
+    	if(s==null) return;
+        Long id = new Long(s);      
+        List<Speaker> speakers = ((Event)req.getSession().getAttribute("event")).getSpeakers();
+        byte[] pictureSpeaker = speakers.get(id.intValue()-1).getPicture();
+        flushResponse(pictureSpeaker, "pictureSpeaker", "noSpeakerImage", res);        
     }
     
     /**

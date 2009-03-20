@@ -1,14 +1,26 @@
 - &Speaker-EnricoGiurinSpringframework
   resume: Enrico Giurin is an electronic engineer working as software engineer since 1999
-  speakerCoreAttributes: *SpeakerCoreAttributes-EnricoGiurin
+  firstName: Enrico
+  lastName: Giurin
+  email: enricogiurin@gmail.com
+  url: http://enricogi.blogspot.com/ 
+  skypeId: enricogiurin
   event: *Event-springframework
   
 - &Speaker-LucioBenfanteSpringframework
   resume: Lucio Benfante is the president of the JUG Padova
-  speakerCoreAttributes: *SpeakerCoreAttributes-LucioBenfante
+  firstName: Lucio
+  lastName: Benfante
+  email: lucio.benfante@jugpadova.it
+  url: http://benfante.blogspot.com/ 
+  skypeId: benfante 
   event: *Event-springframework
   
 - &Speaker-LucioBenfanteJugpdnov
   resume: Lucio Benfante &egrave; il presidente del JUG Padova e responsabile di jugevents.
-  speakerCoreAttributes: *SpeakerCoreAttributes-LucioBenfante
+  firstName: Lucio
+  lastName: Benfante
+  email: lucio.benfante@jugpadova.it
+  url: http://benfante.blogspot.com/ 
+  skypeId: benfante 
   event: *Event-jugpdnov
