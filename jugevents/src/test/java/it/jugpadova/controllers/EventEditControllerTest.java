@@ -2,6 +2,7 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.JugEventsControllerTest;
 import it.jugpadova.dao.EventDao;
+import it.jugpadova.dao.SpeakerDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Speaker;
 
@@ -29,6 +30,9 @@ public class EventEditControllerTest extends JugEventsControllerTest {
     private EventEditController controller;
     @Autowired
     private EventDao eventDao;
+    @Autowired
+    private SpeakerDao speakerDao;
+    
 
     public void testConfiguration() {
         assertNotNull(controller);
@@ -117,12 +121,9 @@ public class EventEditControllerTest extends JugEventsControllerTest {
         
         Event event = eventDao.findByTitle("test-title").get(0);
         assertEquals(event.getLocation(), "test-location");
-        List<Speaker>	speakers = event.getSpeakers();
-        //TODO investigate why it fails!!!
-        /*assertEquals(1, speakers.size());
-        assertEquals(speakers.get(0).getFirstName(), "Enrico");*/
-        
-        
+        List<Speaker> speakers = speakerDao.allByEvent(event.getId());
+        assertEquals(1, speakers.size());
+        assertEquals(speakers.get(0).getFirstName(), "Enrico");        
     }   
     
     
@@ -143,8 +144,7 @@ public class EventEditControllerTest extends JugEventsControllerTest {
          ModelAndView mv = handler.handle(req, res, controller);
          assertEquals(FORM_VIEW, mv.getViewName());
          event = (Event)req.getSession().getAttribute(MODEL_ATTRIBUTE);
-         assertEquals(0, event.getSpeakers().size());
-         
+         assertEquals(0, event.getSpeakers().size());         
     }
 /**
   *********************  Utilities methods  *****************************
