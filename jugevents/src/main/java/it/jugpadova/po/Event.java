@@ -3,6 +3,8 @@ package it.jugpadova.po;
 import it.jugpadova.blo.FilterBo;
 
 import it.jugpadova.util.NotPassedEventsFilterFactory;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -75,7 +77,7 @@ public class Event extends EntityBase {
     @CascadeValidation
     private Registration registration;
     private List<EventResource> eventResources;
-    private List<Speaker> speakers;
+    private List<Speaker> speakers = new ArrayList<Speaker>();
 
     
 
@@ -233,6 +235,10 @@ public class Event extends EntityBase {
     }
     @OneToMany(mappedBy = "event")
     public List<Speaker> getSpeakers() {
+    	if(this.speakers == null)
+    	{
+    		this.speakers = new ArrayList<Speaker>();
+    	}
 		return speakers;
 	}
 

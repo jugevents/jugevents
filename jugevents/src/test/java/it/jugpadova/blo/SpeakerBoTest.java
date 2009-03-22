@@ -24,7 +24,7 @@ public class SpeakerBoTest extends JugEventsBaseTest {
 		speakers.remove(0);
 		speakers.remove(0);
 		assertEquals(0, speakers.size());
-		speakerBo.saveSpeakers(springEvent);
+		speakerBo.saveSpeakers(springEvent.getId(), springEvent.getSpeakers());
 		springEvent = getTestEvent();
 		assertEquals(0, springEvent.getSpeakers().size());		
 	}

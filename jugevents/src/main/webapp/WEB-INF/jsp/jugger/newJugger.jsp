@@ -1,18 +1,6 @@
 <%@ include file="../common.jspf" %>
 <jwr:script src="${cp}/dwr/interface/juggerBo.js" />
-<script type="text/javascript">        
-    function require()
-    {     
-        if($('requireReliability.requireReliability1').checked)
-        {
-            $('hcomment').show(); return false;
-        }
-        else
-        {
-            $('hcomment').hide(); return false;
-        }   
-    }  
-</script>
+
 
 <h2><spring:message code="juggerRegistrationTitle"/></h2>
 
@@ -137,5 +125,17 @@
     function singleValueSelector(tag) {
         return tag;
     }
+
+    function require()
+    {     
+        if($('requireReliability.requireReliability1').checked)
+        {
+            $('hcomment').show(); return false;
+        }
+        else
+        {
+            $('hcomment').hide(); return false;
+        }   
+    }  
 
 </script>

@@ -24,6 +24,7 @@ import it.jugpadova.exception.RegistrationNotOpenException;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.Participant;
+import it.jugpadova.po.Speaker;
 
 import it.jugpadova.util.Utilities;
 import java.io.UnsupportedEncodingException;
@@ -80,7 +81,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 8817448c0245 $
+ * @version $Revision: 6bdf6ad855db $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -300,8 +301,15 @@ public class EventBo {
         if (isNew) {
             event.setCreationDate(new Date());
         }
-        speakerBo.saveSpeakers(event);
+        //this is the trick to prevent failing of eventDao.store(event)..
+        //we need to find a more elegant solution
+        List<Speaker> speakers = event.getSpeakers();
+        event.setSpeakers(null);
         eventDao.store(event);
+        speakerBo.saveSpeakers(event.getId(), speakers);
+        
+       
+       
        
         if (isNew) {
             logger.info(loggedUser + " created a new event with id=" +

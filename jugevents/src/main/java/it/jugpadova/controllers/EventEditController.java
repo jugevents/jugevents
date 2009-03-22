@@ -120,19 +120,13 @@ public class EventEditController {
     @RequestMapping(value="/event/speakerevent.form", method = RequestMethod.POST)
     @Validation(view = SPEAKER_FORM_VIEW)
     public ModelAndView speakerToEvent(@ModelAttribute(SESSION_SPEAKER) Speaker speaker, BindingResult result, 
-    								   @RequestParam(value = "speakerId", required=false)Long speakerId, HttpServletRequest req) {
+    								   @RequestParam(value = "indexSpeaker", required=false)Long indexSpeaker, HttpServletRequest req) {
         //inserting element into session   
     	Event event = (Event)req.getSession().getAttribute("event");
-    	System.out.println(req.getParameter("speakerId"));
-    	speaker.setEvent(event);
-    	List<Speaker> speakers = event.getSpeakers();
-    	if(speakerId != null)
+    	if(indexSpeaker==null)    		
     	{
-    		speakers.remove(index(speakerId));
-    	}    	
-    	speakers.add(speaker);   	
-    	//TODO remove speaker from session
-    	//find a better way to remove the attribute speaker from the session
+    		event.getSpeakers().add(speaker);    	
+    	}
     	req.getSession().setAttribute("speaker", null);
     	return mvEvent(event);
     }
@@ -140,27 +134,27 @@ public class EventEditController {
     
     
     @RequestMapping(value="/event/eventspeaker.form", method = RequestMethod.POST)
-    public ModelAndView eventToSpeaker(@ModelAttribute(SESSION_EVENT)Event event, @RequestParam(value = "speakerId", required=false)Long speakerId) {
+    public ModelAndView eventToSpeaker(@ModelAttribute(SESSION_EVENT)Event event, @RequestParam(value = "indexSpeaker", required=false)Long indexSpeaker) {
         
     	Speaker speaker = null;
-		if (speakerId != null) {
-			speaker = event.getSpeakers().get(index(speakerId));
+		if (indexSpeaker != null) {
+			speaker = event.getSpeakers().get(index(indexSpeaker));
 		} else {
 			speaker = new Speaker();						
 		}
 		ModelAndView mv = new ModelAndView(SPEAKER_FORM_VIEW);
 		mv.addObject(SESSION_SPEAKER, speaker);
-		mv.addObject("speakerId", speakerId);
+		mv.addObject("indexSpeaker", indexSpeaker);
 		return mv;
     }
     
     @RequestMapping(value = "/event/removespeaker.form", method = RequestMethod.POST)
 	public String removeSpeakerFromSession(
-			@RequestParam(value = "speakerId", required = true) Long speakerId,
+			@RequestParam(value = "indexSpeaker", required = true) Long indexSpeaker,
 			@ModelAttribute(SESSION_EVENT) Event event) {
 		List<Speaker> speakers = event.getSpeakers();
 		logger.debug("Number of speakers in session: "+speakers.size());		
-		speakers.remove(index(speakerId));				
+		speakers.remove(index(indexSpeaker));				
 		return FORM_VIEW;
 	}
     @RequestMapping(value = "/event/backtoevent.form", method = RequestMethod.GET)
@@ -175,9 +169,9 @@ public class EventEditController {
     	return mv; 
     }
     
-    private int index(Long speakerId)
+    private int index(Long indexSpeaker)
     {
-    	return speakerId.intValue() - 1;
+    	return indexSpeaker.intValue() - 1;
     }
     
    

@@ -16,6 +16,8 @@
  */
 package it.jugpadova.po;
 
+import it.jugpadova.controllers.BinController;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +27,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.apache.log4j.Logger;
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
@@ -38,8 +41,12 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.RegExp;
 @Entity
 @NamedQueries(value = {@NamedQuery(name = "Speaker.findEventsByPartialSpeakerEmail", query =
 "select e from Event e, Speaker s  where s.event=e and upper(s.email) like upper(?)"),
+@NamedQuery(name = "Speaker.allByEvent", query =
+"select s from Event e, Speaker s where s.event=e and e.id=?"),
 @NamedQuery(name = "Speaker.findSpeakersByPartialEventTitle", query =
 "select s from Event e, Speaker s where s.event=e  and upper(e.title) like upper(?)")})
+
+
 
 public class Speaker extends EntityBase {
 
@@ -47,6 +54,8 @@ public class Speaker extends EntityBase {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	  private static final Logger logger =
+          Logger.getLogger(Speaker.class);
 	@NotBlank
 	private String firstName;
 	@NotBlank
@@ -74,6 +83,12 @@ public class Speaker extends EntityBase {
 		return picture;
 	}
 	public void setPicture(byte[] picture) {
+		if((picture==null)||(picture.length==0))
+		{
+			//TODO manage in a clean way when picture is null
+			logger.debug("Trying to set null picture has failed");
+			return;
+		}
 		this.picture = picture;
 	}
 	@Column(length = 4096)

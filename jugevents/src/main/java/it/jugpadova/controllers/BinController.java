@@ -81,8 +81,11 @@ public class BinController {
     @RequestMapping
     public void pictureSpeaker(HttpServletRequest req,
             HttpServletResponse res) throws IOException {
-        Long id = new Long(req.getParameter("id"));
+    	String s = req.getParameter("id");
+    	if(StringUtils.isEmpty(s)) return;
+        Long id = new Long(s);      
         byte[] pictureSpeaker = speakerDao.get(id).getPicture();
+        if((pictureSpeaker==null)||(pictureSpeaker.length==0)) return;
         flushResponse(pictureSpeaker, "pictureSpeaker", "noSpeakerImage", res);        
     }
     
@@ -92,11 +95,12 @@ public class BinController {
     @RequestMapping
     public void pictureSpeakerInSession(HttpServletRequest req,
             HttpServletResponse res) throws IOException {
-    	String s = req.getParameter("speakerId");
-    	if(s==null) return;
+    	String s = req.getParameter("indexSpeaker");
+    	if(StringUtils.isEmpty(s)) return;
         Long id = new Long(s);      
         List<Speaker> speakers = ((Event)req.getSession().getAttribute("event")).getSpeakers();
         byte[] pictureSpeaker = speakers.get(id.intValue()-1).getPicture();
+        if((pictureSpeaker==null)||(pictureSpeaker.length==0)) return;
         flushResponse(pictureSpeaker, "pictureSpeaker", "noSpeakerImage", res);        
     }
     

@@ -2,7 +2,7 @@
 <jwr:script src="${cp}/dwr/interface/eventBo.js" />
 <jwr:script src="${cp}/dwr/interface/filterBo.js" />
 <c:choose>
-    <c:when test="${empty speakerId}">
+    <c:when test="${empty indexSpeaker}">
         <h1><spring:message code="speaker.newspeaker" text="?speaker.newspeaker?"/></h1>
     </c:when>
     <c:otherwise>
@@ -11,9 +11,9 @@
 </c:choose>
 
  
-<img  src="${cp}/bin/pictureSpeakerInSession.bin?speakerId=${speakerId}" alt="Speaker Image" width="100" align="right"/>  
+<img  src="${cp}/bin/pictureSpeakerInSession.bin?indexSpeaker=${indexSpeaker}" alt="Speaker Image" width="100" align="right"/>  
 
-<form:form commandName="speaker" method="post" action="${cp}/event/speakerevent.form?speakerId=${speakerId}" enctype="multipart/form-data">
+<form:form commandName="speaker" method="post" action="${cp}/event/speakerevent.form?indexSpeaker=${indexSpeaker}" enctype="multipart/form-data">
     <div>
         <form:errors path="*" cssClass="errorBox"/>
       

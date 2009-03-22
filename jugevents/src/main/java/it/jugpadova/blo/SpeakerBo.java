@@ -28,25 +28,23 @@ public class SpeakerBo {
     private EventDao eventDao;
 	
 	
-	private void save(Speaker speaker) {
-       
-      
+	private void save(Speaker speaker) {      
         speakerDao.store(speaker);
     }
 	
-	public void saveSpeakers(Event event)
+	public void saveSpeakers(Long  eventId, List<Speaker> speakers)
 	{
-		//remove all the stored speakers
-		Event storedEvent = eventDao.get(event.getId());
-		List<Speaker> storedSpeakers = storedEvent.getSpeakers();
+		//remove all the stored speakers		
+		List<Speaker> storedSpeakers = speakerDao.allByEvent(eventId);
 		for (Speaker speaker : storedSpeakers) {
 			speakerDao.delete(speaker);
 		}
-		//update the new speakers
-		List<Speaker> speakers = event.getSpeakers();
+		//update the new speakers		
 		if(speakers == null)
 			return;
+		Event event = eventDao.get(eventId);
 		for (Speaker speaker : speakers) {
+			speaker.setEvent(event);
 			save(speaker);
 		}
 	}

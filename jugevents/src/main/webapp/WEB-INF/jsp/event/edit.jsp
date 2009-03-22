@@ -182,11 +182,13 @@
          </display:column>  
          <display:column  title="email" sortable="true">
            ${speaker.email}			
-         </display:column>   
+         </display:column>  
+         <display:column  title="picture" sortable="false">
+           <img  src="${cp}/bin/pictureSpeakerInSession.bin?indexSpeaker=${speaker_rowNum}" alt="Speaker Image" width="50%" />  			
+         </display:column>            
          <display:column>
-         	<a href="javascript:editSpeaker(${speaker_rowNum});"><spring:message code="edit"/></a>
-         	<a href="javascript:removeSpeaker(${speaker_rowNum});">remove</a>
-         	
+         	<a href="javascript:editSpeaker(${speaker_rowNum});"><spring:message code="edit" text="?edit?"/></a>
+         	<a href="javascript:removeSpeaker(${speaker_rowNum});"><spring:message code="remove"  text="?remove?"/></a>         	
       	 </display:column>     
     </display:table>     
 	</div>
@@ -217,17 +219,17 @@ function populateDirections(selectedElement) {
     eventBo.copyDirectionsFromEvent(selectedElement.childNodes[3].childNodes[0].nodeValue);
 }
 
-function editSpeaker(speakerId)
+function editSpeaker(indexSpeaker)
 {	
-	if(speakerId==0) {url = 'eventspeaker.form';} 
-	else {url = 'eventspeaker.form?speakerId='+speakerId;}	
+	if(indexSpeaker==0) {url = 'eventspeaker.form';} 
+	else {url = 'eventspeaker.form?indexSpeaker='+indexSpeaker;}	
 	$('event').action = url;
 	$('event').submit();
 }
 
-function removeSpeaker(speakerId)
+function removeSpeaker(indexSpeaker)
 {	
-	url = 'removespeaker.form?speakerId='+speakerId;
+	url = 'removespeaker.form?indexSpeaker='+indexSpeaker;
 	$('event').action = url;
 	$('event').submit();
 }

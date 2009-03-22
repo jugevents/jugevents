@@ -53,5 +53,7 @@ public interface SpeakerDao extends GenericDao<Speaker, Long> {
 	 * @return
 	 */
 	List<Speaker> findByResume(@Compare(CompareType.ILIKE) String resume);
+	
+	List<Speaker> allByEvent(Long id);
 
 }
