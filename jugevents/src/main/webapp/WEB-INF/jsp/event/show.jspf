@@ -1,3 +1,5 @@
+
+
 <dl>
     <dt><spring:message code="event.location"/>:</dt>
     <dd>${event.location}&nbsp;</dd>
@@ -26,33 +28,44 @@
     </c:if>
 
     <dt><spring:message code="event.description"/>:</dt>
-    <dd><div class="preview">${event.filteredDescription}</div>&nbsp;</dd>
-	<authz:authorize ifAnyGranted="ROLE_ADMIN"> 
-    <c:if test="${!empty event.speakers}"> 
-    <dt><spring:message code="speakers" text="?speakers?"/></dt>
-    <dd> <div id="speakers"> 
-    <fieldset>    
-        <br/>
-         <c:forEach items="${event.speakers}" var="speaker" varStatus="iRow">                
-            ${speaker.firstName}  
-            ${speaker.lastName}&nbsp;&nbsp;<a id="speakerLinkAnchor_${iRow.index}" href="javascript:showDiv('${iRow.index}');"><spring:message code="showDetails" text="?showDetails?"/></a><br/>         
+    <dd><div class="preview">${event.filteredDescription}</div>&nbsp;</dd>	
+</dl>
+
+<authz:authorize ifAnyGranted="ROLE_ADMIN">    
+    <div id="speakers"> 
+    <fieldset>
+       <legend><spring:message code="speakers" text="?speakers?"/></legend>
+     
+         <c:forEach items="${event.speakers}" var="speaker" varStatus="iRow">  
+            <img  src="${cp}/bin/pictureSpeaker.bin?id=${speaker.id}" alt="Speaker Image" width="100"/>              
+            ${speaker.firstName}&nbsp;${speaker.lastName}&nbsp;&nbsp;
             
-            <div id="speaker_${iRow.index}" class="speaker" style="display: none;">
-                <img  src="${cp}/bin/pictureSpeaker.bin?id=${speaker.id}" alt="Speaker Image" width="100"/>             
-                <spring:message code="Email" text="?Email?"/>: <a href="mailto:${speaker.email}">${speaker.email}</a><br/>           
-                <spring:message code="WebSite"  text="?WebSite?"/>: <a href="${speaker.url}">${speaker.url}</a><br/>
-                <spring:message code="speaker.resume"  text="?speaker.resume?"/>: ${speaker.resume}<br/>          
-                <br/>           
-            </div> 
-                    <br/>
-                    <br/>
+            <a id="speakerLinkAnchor_${iRow.index}"   href="javascript:showDiv('${iRow.index}');"><spring:message code="showDetails" text="?showDetails?"/></a><br/>         
+            
+            <div id="speaker_${iRow.index}" class="speaker" style="display: none;">         
+               <table width="60%">
+	              
+	               <tr>
+	               	<td><a href="mailto:${speaker.email}">${speaker.email}</a></td>
+	               	<td rowspan="3"><spring:message code="speaker.resume"  text="?speaker.resume?"/>: ${speaker.resume}</td>
+	               </tr>
+	               <c:if test="${!empty speaker.skypeId}">
+	               <tr>	               	
+	               	<td><a href="skype:${speaker.skypeId}?call"><img src="http://mystatus.skype.com/balloon/${speaker.skypeId}" style="border: none;" width="80" alt="My status" /></a></td>
+	               </tr>	
+		           </c:if>
+		           <c:if test="${!empty speaker.url}">
+	               <tr>	               
+	               	<td><a href="${speaker.url}">${speaker.url}</a></td>
+	               </tr>	
+		           </c:if>		                
+                </table>      
+            </div>    
+            <HR>                
         </c:forEach> 
         </fieldset>
-        </div>
-    </dd>       
-    </c:if>  
+        </div>    
     </authz:authorize>
-</dl>
   
 <c:if test="${!empty event.eventResources}">
     <spring:message code="event.resources" text="?event.resources?"/>:
@@ -111,6 +124,8 @@
     </div>
     <br style="clear: both;"/>
 </c:if>
+
+
 
 <script type="text/javascript">
         function showDiv(a) {                  

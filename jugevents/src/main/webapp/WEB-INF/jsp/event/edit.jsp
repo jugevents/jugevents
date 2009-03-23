@@ -188,7 +188,7 @@
          </display:column>            
          <display:column>
          	<a href="javascript:editSpeaker(${speaker_rowNum});"><spring:message code="edit" text="?edit?"/></a>
-         	<a href="javascript:removeSpeaker(${speaker_rowNum});"><spring:message code="remove"  text="?remove?"/></a>         	
+         	<a href="${cp}/event/removespeaker.form?indexSpeaker=${speaker_rowNum}"><spring:message code="delete"  text="?delete?"/></a>         	
       	 </display:column>     
     </display:table>     
 	</div>
@@ -223,13 +223,6 @@ function editSpeaker(indexSpeaker)
 {	
 	if(indexSpeaker==0) {url = 'eventspeaker.form';} 
 	else {url = 'eventspeaker.form?indexSpeaker='+indexSpeaker;}	
-	$('event').action = url;
-	$('event').submit();
-}
-
-function removeSpeaker(indexSpeaker)
-{	
-	url = 'removespeaker.form?indexSpeaker='+indexSpeaker;
 	$('event').action = url;
 	$('event').submit();
 }

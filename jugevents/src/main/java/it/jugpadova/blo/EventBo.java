@@ -13,10 +13,10 @@
 // limitations under the License.
 package it.jugpadova.blo;
 
-import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.Conf;
 import it.jugpadova.bean.EventSearch;
 import it.jugpadova.bean.NewsMessage;
+import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.dao.EventDao;
 import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
@@ -24,9 +24,8 @@ import it.jugpadova.exception.RegistrationNotOpenException;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Jugger;
 import it.jugpadova.po.Participant;
-import it.jugpadova.po.Speaker;
-
 import it.jugpadova.util.Utilities;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -81,7 +80,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 6bdf6ad855db $
+ * @version $Revision: 5ca5f04562a8 $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -94,8 +93,7 @@ public class EventBo {
     private EventDao eventDao;
     @Autowired
     private ServicesBo servicesBo;
-    @Autowired
-    private SpeakerBo speakerBo;
+    
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
@@ -301,16 +299,8 @@ public class EventBo {
         if (isNew) {
             event.setCreationDate(new Date());
         }
-        //this is the trick to prevent failing of eventDao.store(event)..
-        //we need to find a more elegant solution
-        List<Speaker> speakers = event.getSpeakers();
-        event.setSpeakers(null);
+        //easy thanks to Lucio :)
         eventDao.store(event);
-        speakerBo.saveSpeakers(event.getId(), speakers);
-        
-       
-       
-       
         if (isNew) {
             logger.info(loggedUser + " created a new event with id=" +
                     event.getId());

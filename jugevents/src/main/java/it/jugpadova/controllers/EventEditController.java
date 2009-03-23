@@ -127,6 +127,7 @@ public class EventEditController {
     	{
     		event.getSpeakers().add(speaker);    	
     	}
+    	speaker.setEvent(event);
     	req.getSession().setAttribute("speaker", null);
     	return mvEvent(event);
     }
@@ -148,7 +149,7 @@ public class EventEditController {
 		return mv;
     }
     
-    @RequestMapping(value = "/event/removespeaker.form", method = RequestMethod.POST)
+    @RequestMapping(value = "/event/removespeaker.form", method = RequestMethod.GET)
 	public String removeSpeakerFromSession(
 			@RequestParam(value = "indexSpeaker", required = true) Long indexSpeaker,
 			@ModelAttribute(SESSION_EVENT) Event event) {

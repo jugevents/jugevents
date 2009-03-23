@@ -103,7 +103,7 @@ public class EventEditControllerTest extends JugEventsControllerTest {
         req.setParameter("location", "test-location");
         req.setParameter("startDate", "20/08/2010");
         req.setParameter("endDate", "20/08/2010");        
-        ModelAndView mv = handler.handle(req, res, controller);
+        handler.handle(req, res, controller);
         
         resetRequestAndResponse();
         req.setMethod("POST");
@@ -127,25 +127,44 @@ public class EventEditControllerTest extends JugEventsControllerTest {
     }   
     
     
-    public void testRemoveSpeakerFromSession() throws Exception
+    public void testDeleteSpeakersFromExistingEvent() throws Exception
     {
-    	 //TODO check better this test
-    	 Event testEvent = getTestEvent();
-    	 callForm(testEvent.getId().toString());
-    	 Event event = (Event)req.getSession().getAttribute(MODEL_ATTRIBUTE);
-    	 List<Speaker> speakers = event.getSpeakers();
-    	 assertEquals(1, speakers.size());
-    	 Speaker speaker = event.getSpeakers().get(0);
-    	 assertEquals("Lucio", speaker.getFirstName());
-    	 resetRequestAndResponse();
-         req.setMethod("POST");
-         req.setRequestURI(REQUEST_REMOVE_SPEAKER_URI);
-         req.setParameter("indexSpeaker", new Long(1).toString());
-         ModelAndView mv = handler.handle(req, res, controller);
-         assertEquals(FORM_VIEW, mv.getViewName());
-         event = (Event)req.getSession().getAttribute(MODEL_ATTRIBUTE);
-         assertEquals(0, event.getSpeakers().size());         
-    }
+    	Event testEvent = getSpringFrameworkTestEvent();
+    	List<Speaker> oldSpeakers = testEvent.getSpeakers();
+    	assertEquals(2, oldSpeakers.size());
+    	callForm(testEvent.getId().toString());
+    	
+        
+        //remove all  speakers
+        for(int j=0;j<2;j++)
+        {
+        	 resetRequestAndResponse();
+        	 req.setMethod("GET");
+             req.setRequestURI(REQUEST_REMOVE_SPEAKER_URI);
+             req.setParameter("indexSpeaker", new Long(1).toString());
+             handler.handle(req, res, controller);
+        }       
+        //save the event
+        resetRequestAndResponse();
+        req.setMethod("POST");
+        req.setRequestURI(FORM_REQUEST_URI);
+        handler.handle(req, res, controller);   
+        
+        //check data
+        Event event = getSpringFrameworkTestEvent();
+        List<Speaker> speakers = speakerDao.allByEvent(event.getId());
+        //no speakers bound to this event
+        assertEquals(0, speakers.size());
+        List<Speaker> allSpeakers = speakerDao.findAll();    
+        //only 1 speaker still alive
+        assertEquals(1, allSpeakers.size());
+        assertEquals("Lucio Benfante &egrave; il presidente del JUG Padova e responsabile di jugevents.", allSpeakers.get(0).getResume());
+       
+        
+    }   
+    
+    
+   
 /**
   *********************  Utilities methods  *****************************
  */
@@ -172,6 +191,13 @@ public class EventEditControllerTest extends JugEventsControllerTest {
         List<Event> events =
                 eventDao.searchByCriteria(DetachedCriteria.forClass(Event.class).add(Restrictions.eq("title",
                 "JUG Padova Meeting #38")));
+        return events.get(0);
+    }
+    
+    private Event getSpringFrameworkTestEvent() {
+        List<Event> events =
+                eventDao.searchByCriteria(DetachedCriteria.forClass(Event.class).add(Restrictions.eq("title",
+                "Springframework Meeting 2007")));
         return events.get(0);
     }
 }

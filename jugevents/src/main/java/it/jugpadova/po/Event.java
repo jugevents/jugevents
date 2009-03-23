@@ -233,7 +233,7 @@ public class Event extends EntityBase {
     public void setEventResources(List<EventResource> eventResources) {
         this.eventResources = eventResources;
     }
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event")  @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
     public List<Speaker> getSpeakers() {
     	if(this.speakers == null)
     	{
