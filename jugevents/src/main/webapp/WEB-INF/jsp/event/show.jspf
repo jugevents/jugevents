@@ -35,7 +35,7 @@
 	&nbsp;</dd>
 </dl>
 
-<authz:authorize ifAnyGranted="ROLE_ADMIN">
+
 	<div id="speakers">
 	<fieldset><legend><spring:message code="speakers"
 		text="?speakers?" /></legend> <c:forEach items="${event.speakers}"
@@ -86,7 +86,7 @@
 		<HR>
 	</c:forEach></fieldset>
 	</div>
-</authz:authorize>
+
 
 <c:if test="${!empty event.eventResources}">
 	<spring:message code="event.resources" text="?event.resources?" />:

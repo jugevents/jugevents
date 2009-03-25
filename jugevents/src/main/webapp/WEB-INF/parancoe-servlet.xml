@@ -53,10 +53,7 @@
                 PATTERN_TYPE_APACHE_ANT
                 /adminjugger/**=ROLE_ADMIN
                 /people/**=ROLE_ADMIN, ROLE_PARANCOE
-                /event/eventspeaker.form=ROLE_ADMIN
-                /event/speakerevent.form=ROLE_ADMIN
-                /event/removespeaker.form=ROLE_ADMIN
-                /event/edit*=ROLE_ADMIN, ROLE_JUGGER
+                /event/*.form=ROLE_ADMIN, ROLE_JUGGER               
                 /event/delete*=ROLE_ADMIN, ROLE_JUGGER
                 /event/participants*=ROLE_ADMIN, ROLE_JUGGER
                 /event/winners*=ROLE_ADMIN, ROLE_JUGGER

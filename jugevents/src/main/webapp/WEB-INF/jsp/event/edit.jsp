@@ -163,8 +163,7 @@
                 </dl>
             </fieldset>
         </div>
-        <!-- to remove - begin -->
-    <authz:authorize ifAnyGranted="ROLE_ADMIN"> 
+   
     <a href="javascript:editSpeaker(0);"><spring:message code="addNewSpeaker" text="?addNewSpeaker?"/></a>
        
     <fieldset>
@@ -193,9 +192,7 @@
     </display:table>     
 	</div>
 	</fieldset>
-    
-    </authz:authorize>
-<!--  to remove end --> 
+
         <dl>
             <dt>&nbsp;</dt>
             <dd><input type="submit" value="<spring:message code='Submit'/>"/><br/><br/></dd>
