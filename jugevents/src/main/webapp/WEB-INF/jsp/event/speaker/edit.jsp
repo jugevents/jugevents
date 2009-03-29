@@ -9,6 +9,10 @@
         <h1><spring:message code="speaker.editspeaker" text="?speaker.editspeaker?"/></h1>                            
     </c:otherwise>
 </c:choose>
+<fieldset>
+<legend><spring:message code="speaker" text="?speaker?"/>
+
+</legend>
 
  
 <img  src="${cp}/bin/pictureSpeakerInSession.bin?indexSpeaker=${indexSpeaker}" alt="Speaker Image" width="100" align="right"/>  
@@ -44,30 +48,32 @@
         </dl>
 </div>
 </form:form>
-
+</fieldset>
 
 <c:if test="${!empty indexSpeaker}">
-<form name="internal">
-<input type="checkbox" name="search"  onclick="javascript:showDiv(this);"/>
-<spring:message code='SearchExistingSpeaker'  text='?SearchExistingSpeaker?'/>
-
-
+<div id="linkSearchSpeaker">
+	<a href="javascript:showSearchSpeaker();"><spring:message code='SearchExistingSpeaker'  text='?SearchExistingSpeaker?'/></a>
+</div>
 <div id="searchSpeaker" style="margin-bottom: 1em; display: none;">
             <fieldset>
                 <legend><spring:message code="SearchSpeaker" text="?SearchSpeaker?"/></legend>
+                <a href="javascript:hideSearchSpeaker();"><spring:message code='CloseSearchSpeaker'  text='?CloseSearchSpeaker?'/></a>
                <!-- add the mask here -->
             </fieldset>
         </div>
-</form>
+
 </c:if>
 <script type="text/javascript">
-function showDiv(box)
+function showSearchSpeaker()
 {
-	if(box.checked)
-	{$('searchSpeaker').show();}
-	else
-	{$('searchSpeaker').hide();}	
 	
+	$('searchSpeaker').show();	
+	$('linkSearchSpeaker').hide();		
+}
+function hideSearchSpeaker()
+{
+	$('searchSpeaker').hide();	
+	$('linkSearchSpeaker').show();				
 }
 </script>
 
