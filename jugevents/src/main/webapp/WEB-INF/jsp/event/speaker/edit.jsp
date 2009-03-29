@@ -44,8 +44,32 @@
         </dl>
 </div>
 </form:form>
-<script type="text/javascript">
 
+
+<c:if test="${!empty indexSpeaker}">
+<form name="internal">
+<input type="checkbox" name="search"  onclick="javascript:showDiv(this);"/>
+<spring:message code='SearchExistingSpeaker'  text='?SearchExistingSpeaker?'/>
+
+
+<div id="searchSpeaker" style="margin-bottom: 1em; display: none;">
+            <fieldset>
+                <legend><spring:message code="SearchSpeaker" text="?SearchSpeaker?"/></legend>
+               <!-- add the mask here -->
+            </fieldset>
+        </div>
+</form>
+</c:if>
+<script type="text/javascript">
+function showDiv(box)
+{
+	if(box.checked)
+	{$('searchSpeaker').show();}
+	else
+	{$('searchSpeaker').hide();}	
+	
+}
 </script>
+
 
 
