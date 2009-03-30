@@ -22,12 +22,20 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.apache.log4j.Logger;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
@@ -39,6 +47,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.RegExp;
  *
  */
 @Entity
+@Indexed
 @NamedQueries(value = {@NamedQuery(name = "Speaker.findEventsByPartialSpeakerEmail", query =
 "select e from Event e, Speaker s  where s.event=e and upper(s.email) like upper(?)"),
 @NamedQuery(name = "Speaker.allByEvent", query =
@@ -49,6 +58,8 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.RegExp;
 
 
 public class Speaker extends EntityBase {
+	
+	
 
 	/**
 	 * 
@@ -73,6 +84,19 @@ public class Speaker extends EntityBase {
 	
 	private Event event;
 	
+	/**
+     * Get the entity id.
+     * 
+     * @return the entity id.
+     */
+    @Id
+    @DocumentId
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Override
+    public Long getId() {
+        return this.id;
+    }
+	
 	
 	//set size to 1MB because BLOB of MySQL is not enough to store
 	//binary data bigger than 64k
@@ -92,6 +116,7 @@ public class Speaker extends EntityBase {
 		this.picture = picture;
 	}
 	@Column(length = 4096)
+	@Field(index = Index.TOKENIZED, store = Store.NO)    
 	public String getResume() {
 		return resume;
 	}
@@ -130,13 +155,14 @@ public class Speaker extends EntityBase {
 		this.url = url;
 	}
 	
-	
+	@Field(index = Index.TOKENIZED, store = Store.NO)    
 	public String getFirstName() {
 		return firstName;
 	}
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+	@Field(index = Index.TOKENIZED, store = Store.NO)    
 	public String getLastName() {
 		return lastName;
 	}

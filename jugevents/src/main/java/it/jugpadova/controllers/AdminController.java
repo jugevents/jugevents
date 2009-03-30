@@ -15,6 +15,7 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.blo.EventBo;
 import it.jugpadova.blo.JugBo;
+import it.jugpadova.blo.SpeakerBo;
 import it.jugpadova.dao.SpeakerDao;
 import it.jugpadova.po.Speaker;
 import it.jugpadova.util.Utilities;
@@ -43,6 +44,8 @@ public class AdminController {
     private SpeakerDao speakerDao;
     @Autowired
     private EventBo eventBo;
+    @Autowired
+    private SpeakerBo speakerBo;
     private static final Logger logger =
             Logger.getLogger(AdminController.class);
 
@@ -117,6 +120,7 @@ public class AdminController {
     public ModelAndView regenerateLuceneIndexes(HttpServletRequest req,
             HttpServletResponse res) throws Exception {
         eventBo.regenerateLuceneIndexes();
+        speakerBo.regenerateLuceneIndexes();
         logger.info("Regenerated the Lucene indexes");
         return new ModelAndView("redirect:/admin/logs.html");
     }

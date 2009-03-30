@@ -80,7 +80,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 5ca5f04562a8 $
+ * @version $Revision: 20f2bd4e92e8 $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -218,6 +218,7 @@ public class EventBo {
         org.apache.lucene.search.Query query = parser.parse(searchQuery);
         FullTextQuery hibQuery =
                 fullTextSession.createFullTextQuery(query, Event.class);
+      //  hibQuery.setSort(arg0)
         if (!pastEvents) {
             hibQuery.enableFullTextFilter("notPassedEvents");
         }
@@ -762,6 +763,7 @@ public class EventBo {
         fullTextSession.setCacheMode(CacheMode.IGNORE);
         ScrollableResults results = fullTextSession.createCriteria(Event.class).
                 scroll(ScrollMode.FORWARD_ONLY);
+        
         int index = 0;
         while (results.next()) {
             index++;
