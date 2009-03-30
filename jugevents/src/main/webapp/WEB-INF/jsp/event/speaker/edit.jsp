@@ -50,7 +50,7 @@
 </form:form>
 </fieldset>
 
-<c:if test="${!empty indexSpeaker}">
+<c:if test="${empty indexSpeaker}">
 <div id="linkSearchSpeaker">
 	<a href="javascript:showSearchSpeaker();"><spring:message code='SearchExistingSpeaker'  text='?SearchExistingSpeaker?'/></a>
 </div>
