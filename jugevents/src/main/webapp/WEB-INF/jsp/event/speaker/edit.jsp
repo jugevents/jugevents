@@ -1,6 +1,6 @@
 <%@ include file="../../common.jspf" %>
-<jwr:script src="${cp}/dwr/interface/eventBo.js" />
-<jwr:script src="${cp}/dwr/interface/filterBo.js" />
+<%@ taglib uri="http://jawr.net/tags" prefix="jwr" %>
+<jwr:script src="${cp}/dwr/interface/speakerBo.js" />
 <c:choose>
     <c:when test="${empty indexSpeaker}">
         <h1><spring:message code="speaker.newspeaker" text="?speaker.newspeaker?"/></h1>
@@ -15,7 +15,7 @@
 </legend>
 
  
-<img  src="${cp}/bin/pictureSpeakerInSession.bin?indexSpeaker=${indexSpeaker}" alt="Speaker Image" width="100" align="right"/>  
+<span id="speakerImage"><img  src="${cp}/bin/pictureSpeakerInSession.bin?indexSpeaker=${indexSpeaker}" alt="Speaker Image" width="100" align="right"/></span>
 
 <form:form commandName="speaker" method="post" action="${cp}/event/speakerevent.form?indexSpeaker=${indexSpeaker}" enctype="multipart/form-data">
     <div>
@@ -36,8 +36,6 @@
             <dd><input type="file" name="picture"></dd>
             <dt><form:label path="resume"><spring:message code="speaker.resume" text="?speaker.resume?"/></form:label></dt>
             <dd><form:textarea path="resume" cols="40" rows="8"/></dd>  
-
-
         </dl>       
         <dl>
             <dt>&nbsp;</dt>
@@ -54,27 +52,50 @@
 <div id="linkSearchSpeaker">
 	<a href="javascript:showSearchSpeaker();"><spring:message code='SearchExistingSpeaker'  text='?SearchExistingSpeaker?'/></a>
 </div>
-<div id="searchSpeaker" style="margin-bottom: 1em; display: none;">
-            <fieldset>
-                <legend><spring:message code="SearchSpeaker" text="?SearchSpeaker?"/></legend>
-                <a href="javascript:hideSearchSpeaker();"><spring:message code='CloseSearchSpeaker'  text='?CloseSearchSpeaker?'/></a>
-               <!-- add the mask here -->
-            </fieldset>
-        </div>
-
+	<div id="searchSpeaker" style="margin-bottom: 1em; display: none;">
+		<fieldset><legend><spring:message
+			code="SearchSpeaker" text="?SearchSpeaker?" /></legend> <a
+			href="javascript:hideSearchSpeaker();"><spring:message
+			code='CloseSearchSpeaker' text='?CloseSearchSpeaker?' /></a>
+				<form id="fullTextSearch" action="" method="get">
+				<div id="content_textSearch">
+				<p class="boxTitle"><spring:message code="Search" text="?Search?" />&nbsp;<span
+					class="smallText"></span></p>
+				<input id="fullTextQuery" name="fullTextQuery" type="text"
+					value="${param['fullTextQuery']}" /><br />
+				<div id="content_textSearch_result"></div>
+				</div>
+				</form>
+		</fieldset>		
+	</div>
 </c:if>
+
+
+
+
+
 <script type="text/javascript">
-function showSearchSpeaker()
-{
-	
-	$('searchSpeaker').show();	
-	$('linkSearchSpeaker').hide();		
-}
-function hideSearchSpeaker()
-{
-	$('searchSpeaker').hide();	
-	$('linkSearchSpeaker').show();				
-}
+	function showSearchSpeaker() {
+
+		$('searchSpeaker').show();
+		$('linkSearchSpeaker').hide();
+	}
+	function hideSearchSpeaker() {
+		$('searchSpeaker').hide();
+		$('linkSearchSpeaker').show();
+	}
+
+	dwr.util.setEscapeHtml(false);
+	speakerBo.fullTextSearch($F('fullTextQuery'), 10);
+
+	new Form.Observer('fullTextSearch', 1, function(el, value) {
+		formValues = value.parseQuery();
+		speakerBo.fullTextSearch(formValues.fullTextQuery, 10);
+	});
+
+	function populateSpeakerFields(id) {
+		speakerBo.populateSpeakerFields(id);
+	}
 </script>
 
 

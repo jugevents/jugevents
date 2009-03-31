@@ -5,14 +5,26 @@ package it.jugpadova.blo;
 
 import it.jugpadova.dao.SpeakerDao;
 import it.jugpadova.po.Event;
+import it.jugpadova.po.JUG;
 import it.jugpadova.po.Speaker;
 
 import java.util.List;
+import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
+import org.directwebremoting.ScriptSession;
+import org.directwebremoting.WebContext;
+import org.directwebremoting.WebContextFactory;
+import org.directwebremoting.annotations.RemoteMethod;
 import org.directwebremoting.annotations.RemoteProxy;
+import org.directwebremoting.proxy.dwr.Util;
+import org.directwebremoting.proxy.scriptaculous.Effect;
 import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 import org.hibernate.ScrollMode;
@@ -21,6 +33,7 @@ import org.hibernate.Session;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
+import org.parancoe.plugins.world.Country;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +44,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RemoteProxy(name = "speakerBo")
 public class SpeakerBo {
+	private static final Logger logger = Logger.getLogger(SpeakerBo.class);
+    
 	@Autowired
 	private SpeakerDao speakerDao;
 	
@@ -84,6 +99,85 @@ public class SpeakerBo {
             }
         }
     }
+	
+	 @RemoteMethod
+	    public void fullTextSearch(String searchQuery, int maxResults) {
+	        if (StringUtils.isNotBlank(searchQuery)) {
+	            WebContext wctx = WebContextFactory.get();
+	            HttpServletRequest req = wctx.getHttpServletRequest();
+	            ScriptSession session = wctx.getScriptSession();
+	            Util util = new Util(session);
+	            java.lang.String baseUrl =
+	                    "http://" + req.getServerName() + ":" + req.getServerPort() +
+	                    req.getContextPath();
+	            List<Speaker> speakers = null;
+	            try {
+	            	speakers = this.search(searchQuery, maxResults);
+	            } catch (ParseException pex) {
+	                logger.info("Error parsing query: " + searchQuery);
+	            } catch (Exception ex) {
+	                logger.error("Error searching speakers", ex);
+	            }
+	            if (speakers != null && speakers.size() > 0) {
+	                StringBuilder sb = new StringBuilder();
+	                for (Speaker speaker : speakers) {
+	                    sb.append("<div>\n");
+	                    sb.append(speaker.getFirstName()).append(" ").append(speaker.getLastName()).
+	                    append("&nbsp;"). append(speaker.getEvent().getOwner().getJug().getName()).	                    
+	                    append("&nbsp;<a href=\"javascript:populateSpeakerFields(\'").append(speaker.getId()).append("\');\">Select this speaker</a>");
+	                    /*
+	                    sb.append("<div class=\"eventDate\">").append(dateFormat.format(
+	                            event.getStartDate()))..
+	                            append("</div>");
+	                    if (event.getOwner() != null) {
+	                        sb.append("<div class=\"eventSignature\"><a href=\"").
+	                                append(event.getOwner().getJug().getWebSiteUrl()).
+	                                append("\">").append(event.getOwner().getJug().
+	                                getName()).append("</a></div>");
+	                    }
+	                    sb.append("<div class=\"eventContent\"><a href=\"").
+	                            append(baseUrl).append("/event/").
+	                            append(event.getId()).append("\">").
+	                            append(event.getTitle()).append("</a></div>");
+	                            */
+	                    sb.append("</div>\n");
+	                }
+	                util.setValue("content_textSearch_result", sb.toString(), false);
+	            } else {
+	                util.setValue("content_textSearch_result", "", false);
+	            }
+	        }
+	    }
+	 
+	 
+	 @RemoteMethod
+	    public void populateSpeakerFields(String speakerId) {
+	        Speaker speaker = speakerDao.get(new Long(speakerId));
+	        if (speaker != null) {
+	           
+	            WebContext wctx = WebContextFactory.get();
+	            ScriptSession session = wctx.getScriptSession();
+	            Util util = new Util(session);
+
+	            Effect effect = new Effect(session);
+
+	            String cp = wctx.getHttpServletRequest().getContextPath();
+	            util.setValue("firstName", speaker.getFirstName());
+	            util.setValue("lastName", speaker.getLastName());
+	            util.setValue("email", speaker.getEmail());
+	            util.setValue("resume", speaker.getResume());
+	            util.setValue("url", speaker.getUrl());
+
+	            util.setValue("speakerImage",
+	                    "<img style=\"float: right;\" src=\"" + cp +
+	                    "/bin/pictureSpeaker.bin?id=" + speaker.getId() +
+	                    "\" alt=\"Speaker Image\" width=\"100\"/>");
+
+
+	        // fixJugFields(false);
+	        }
+
+	    }
 
 
 
