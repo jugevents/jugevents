@@ -41,7 +41,7 @@
 		text="?speakers?" /></legend> <c:forEach items="${event.speakers}"
 		var="speaker" varStatus="iRow">
 
-		<table width="40%">
+		<table width="80%">
 			<tr>
 				<td rowspan="2"><img
 					src="${cp}/bin/pictureSpeaker.bin?id=${speaker.id}"
@@ -58,9 +58,9 @@
 
 		<div id="speaker_${iRow.index}" class="speaker" style="display: none;">
 
-		<table>
+		<table width="90%">
 			<tr>
-				<td width="40%">
+				<td width="35%">
 				<table>
 					<tr>
 						<td><a href="mailto:${speaker.email}">${speaker.email}</a></td>
