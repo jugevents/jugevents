@@ -16,6 +16,7 @@
  */
 package it.jugpadova.po;
 
+import it.jugpadova.blo.FilterBo;
 import it.jugpadova.controllers.BinController;
 
 import javax.persistence.Basic;
@@ -29,6 +30,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Transient;
 
 import org.apache.log4j.Logger;
 import org.hibernate.search.annotations.DocumentId;
@@ -59,11 +61,6 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.RegExp;
 
 public class Speaker extends EntityBase {
 	
-	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	  private static final Logger logger =
           Logger.getLogger(Speaker.class);
@@ -80,10 +77,33 @@ public class Speaker extends EntityBase {
 	private String skypeId;	
 	private byte[] picture;
 	@NotBlank
-	private String resume;
-	
+	private String resume;	
 	private Event event;
+	private String filter = "Textile";
+	private Long indexSpeaker;
 	
+	@Transient
+	public Long getIndexSpeaker() {
+		return indexSpeaker;
+	}
+
+
+	public void setIndexSpeaker(Long indexSpeaker) {
+		this.indexSpeaker = indexSpeaker;
+	}
+
+
+	@Transient
+	public String getFilter() {
+		return filter;
+	}
+
+
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
+
+
 	/**
      * Get the entity id.
      * 
@@ -175,5 +195,16 @@ public class Speaker extends EntityBase {
 		// TODO Auto-generated method stub
 		return "firstName: "+firstName+" - lastName: "+lastName+" - email: "+email;
 	}
+	
+	@Transient
+    public String getFilteredPreview() {
+        String filteredPreview =
+                FilterBo.filterText(this.getResume(), this.getFilter(),
+                false);
+        return filteredPreview;
+    }
+
+
+	
 
 }

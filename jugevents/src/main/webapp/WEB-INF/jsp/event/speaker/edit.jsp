@@ -1,8 +1,9 @@
 <%@ include file="../../common.jspf" %>
 <%@ taglib uri="http://jawr.net/tags" prefix="jwr" %>
 <jwr:script src="${cp}/dwr/interface/speakerBo.js" />
+<jwr:script src="${cp}/dwr/interface/filterBo.js" />
 <c:choose>
-    <c:when test="${empty indexSpeaker}">
+    <c:when test="${empty speaker.indexSpeaker}">
         <h1><spring:message code="speaker.newspeaker" text="?speaker.newspeaker?"/></h1>
     </c:when>
     <c:otherwise>
@@ -18,8 +19,10 @@
 <span id="speakerImage"><img  src="${cp}/bin/pictureSpeakerInSession.bin?indexSpeaker=${indexSpeaker}" alt="Speaker Image" width="100" align="right"/></span>
 
 <form:form commandName="speaker" method="post" action="${cp}/event/speakerevent.form?indexSpeaker=${indexSpeaker}" enctype="multipart/form-data">
+   
     <div>
         <form:errors path="*" cssClass="errorBox"/>
+	<form:hidden path="indexSpeaker"/>
       
         <dl>
             <dt><form:label path="firstName"><spring:message code="first_name" text="?first_name?"/></form:label></dt>
@@ -34,8 +37,12 @@
             <dd><form:input path="skypeId" size="35"/></dd>
             <dt><form:label path="picture"><spring:message code="speaker.picture" text="?speaker.picture?"/></form:label></dt>
             <dd><input type="file" name="picture"></dd>
-            <dt><form:label path="resume"><spring:message code="speaker.resume" text="?speaker.resume?"/></form:label></dt>
-            <dd><form:textarea path="resume" cols="40" rows="8"/></dd>  
+            <dt><form:label path="resume"><spring:message code="speaker.resume" text="?speaker.resume?"/></form:label><br/>
+            (<a href="http://hobix.com/textile/" rel="external">Textile</a>)
+            </dt>
+            <dd><form:textarea path="resume" cols="50" rows="10"/></dd>  
+             <dt>&nbsp;</dt>
+            <dd><div id="resumePreview" class="preview">${requestScope.speaker.filteredPreview}&nbsp;</div></dd> 
         </dl>       
         <dl>
             <dt>&nbsp;</dt>
@@ -84,6 +91,9 @@
 		$('searchSpeaker').hide();
 		$('linkSearchSpeaker').show();
 	}
+	function populateSpeakerFields(id) {
+		speakerBo.populateSpeakerFields(id);
+	}
 
 	dwr.util.setEscapeHtml(false);
 	speakerBo.fullTextSearch($F('fullTextQuery'), 10);
@@ -92,10 +102,12 @@
 		formValues = value.parseQuery();
 		speakerBo.fullTextSearch(formValues.fullTextQuery, 10);
 	});
+	
 
-	function populateSpeakerFields(id) {
-		speakerBo.populateSpeakerFields(id);
-	}
+	new Form.Element.Observer('resume', 2,
+			function(el, value) {
+			    filterBo.populatePreview(value, 'Textile', 'resumePreview');
+	});
 </script>
 
 

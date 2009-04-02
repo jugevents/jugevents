@@ -53,6 +53,7 @@ public class EventEditController {
     public static final String SPEAKER_FORM_VIEW = "event/speaker/edit";
     public static final String SESSION_EVENT = "event";
     public static final String SESSION_SPEAKER = "speaker";
+    public static final String ORIGINAL_SESSION_SPEAKER = "original_speaker";
 
     private static final Logger logger =
             Logger.getLogger(EventEditController.class);
@@ -137,17 +138,17 @@ public class EventEditController {
     
     
     @RequestMapping(value="/event/eventspeaker.form", method = RequestMethod.POST)
-    public ModelAndView eventToSpeaker(@ModelAttribute(SESSION_EVENT)Event event, @RequestParam(value = "indexSpeaker", required=false)Long indexSpeaker) {
+    public ModelAndView eventToSpeaker(@ModelAttribute(SESSION_EVENT)Event event, @RequestParam(value = "indexSpeaker", required=false)Long indexSpeaker, HttpServletRequest req) {
         
     	Speaker speaker = null;
 		if (indexSpeaker != null) {
 			speaker = event.getSpeakers().get(index(indexSpeaker));
+			speaker.setIndexSpeaker(indexSpeaker);
 		} else {
 			speaker = new Speaker();						
 		}
 		ModelAndView mv = new ModelAndView(SPEAKER_FORM_VIEW);
-		mv.addObject(SESSION_SPEAKER, speaker);
-		mv.addObject("indexSpeaker", indexSpeaker);
+		mv.addObject(SESSION_SPEAKER, speaker);			
 		return mv;
     }
     
@@ -161,7 +162,8 @@ public class EventEditController {
 		return FORM_VIEW;
 	}
     @RequestMapping(value = "/event/backtoevent.form", method = RequestMethod.GET)
-    public ModelAndView backToEvent(@ModelAttribute(SESSION_EVENT)Event event) {    	 	
+    public ModelAndView backToEvent(@ModelAttribute(SESSION_EVENT)Event event, HttpServletRequest req) {    
+    	req.getSession().setAttribute("speaker", null);
     	return mvEvent(event);
     }
     
