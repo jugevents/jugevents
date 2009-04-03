@@ -18,7 +18,7 @@
  
 <span id="speakerImage"><img  src="${cp}/bin/pictureSpeakerInSession.bin?indexSpeaker=${indexSpeaker}" alt="Speaker Image" width="100" align="right"/></span>
 
-<form:form commandName="speaker" method="post" action="${cp}/event/speakerevent.form?indexSpeaker=${indexSpeaker}" enctype="multipart/form-data">
+<form:form commandName="speaker" method="post" action="${cp}/event/speakerevent.form" enctype="multipart/form-data">
    
     <div>
         <form:errors path="*" cssClass="errorBox"/>
@@ -48,14 +48,14 @@
             <dt>&nbsp;</dt>
             <dd>
            		 <input type="submit" value="<spring:message code='Submit'  text='?Submit?'/>"/>
-                 <input value="<spring:message code='Cancel'  text='?Cancel?'/>" type="button" onclick="location.href='${cp}/event/backtoevent.form'"/><br/><br/>
+                 <input value="<spring:message code='Cancel'  text='?Cancel?'/>" type="button" onclick="location.href='${cp}/event/backtoevent.form?indexSpeaker=${speaker.indexSpeaker}'"/><br/><br/>
             </dd>
         </dl>
 </div>
 </form:form>
 </fieldset>
 
-<c:if test="${empty indexSpeaker}">
+<c:if test="${empty speaker.indexSpeaker}">
 <div id="linkSearchSpeaker">
 	<a href="javascript:showSearchSpeaker();"><spring:message code='SearchExistingSpeaker'  text='?SearchExistingSpeaker?'/></a>
 </div>

@@ -17,7 +17,6 @@
 package it.jugpadova.po;
 
 import it.jugpadova.blo.FilterBo;
-import it.jugpadova.controllers.BinController;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -32,6 +31,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
@@ -203,6 +203,16 @@ public class Speaker extends EntityBase {
                 false);
         return filteredPreview;
     }
+	
+	public Speaker copyOfInstance()
+	{
+		try {
+			return (Speaker)BeanUtils.cloneBean(this);
+		} catch (Exception e) {
+			logger.error("Failing to get a copy of Speaker instance: "+this.toString(),e);
+			return null;
+		}		
+	}
 
 
 	

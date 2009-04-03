@@ -14,7 +14,6 @@
 package it.jugpadova.controllers;
 
 import it.jugpadova.blo.EventBo;
-import it.jugpadova.dao.SpeakerDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Registration;
 import it.jugpadova.po.Speaker;
@@ -24,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.parancoe.web.validation.Validation;
@@ -59,8 +59,7 @@ public class EventEditController {
             Logger.getLogger(EventEditController.class);
     @Autowired
     private EventBo eventBo;
-    @Autowired
-    private SpeakerDao speakerDao; 
+   
 
     @InitBinder
     public void initBinder(WebDataBinder binder) throws Exception {
@@ -118,42 +117,42 @@ public class EventEditController {
         return mvEvent(event);
     }
   
-    
-    
-    @RequestMapping(value="/event/speakerevent.form", method = RequestMethod.POST)
-    @Validation(view = SPEAKER_FORM_VIEW)
-    public ModelAndView speakerToEvent(@ModelAttribute(SESSION_SPEAKER) Speaker speaker, BindingResult result, 
-    								   @RequestParam(value = "indexSpeaker", required=false)Long indexSpeaker, HttpServletRequest req) {
-        //inserting element into session   
-    	Event event = (Event)req.getSession().getAttribute("event");
-    	if(indexSpeaker==null)    		
-    	{
-    		event.getSpeakers().add(speaker);    	
-    	}
-    	speaker.setEvent(event);
-    	req.getSession().setAttribute("speaker", null);
-    	return mvEvent(event);
-    }
-    
-    
-    
+
     @RequestMapping(value="/event/eventspeaker.form", method = RequestMethod.POST)
-    public ModelAndView eventToSpeaker(@ModelAttribute(SESSION_EVENT)Event event, @RequestParam(value = "indexSpeaker", required=false)Long indexSpeaker, HttpServletRequest req) {
+    public ModelAndView eventToSpeaker(@ModelAttribute(SESSION_EVENT)Event event, @RequestParam(value = "indexSpeaker", required=false)Long indexSpeaker, HttpSession session) {
         
     	Speaker speaker = null;
 		if (indexSpeaker != null) {
 			speaker = event.getSpeakers().get(index(indexSpeaker));
 			speaker.setIndexSpeaker(indexSpeaker);
+			session.setAttribute(ORIGINAL_SESSION_SPEAKER, speaker.copyOfInstance());	
 		} else {
 			speaker = new Speaker();						
 		}
 		ModelAndView mv = new ModelAndView(SPEAKER_FORM_VIEW);
-		mv.addObject(SESSION_SPEAKER, speaker);			
+		mv.addObject(SESSION_SPEAKER, speaker);					
 		return mv;
     }
     
+    @RequestMapping(value="/event/speakerevent.form", method = RequestMethod.POST)
+    @Validation(view = SPEAKER_FORM_VIEW)
+    public ModelAndView speakerToEvent(@ModelAttribute(SESSION_SPEAKER) Speaker speaker, BindingResult result, HttpSession session) {
+        //inserting element into session   
+    	Event event = (Event)session.getAttribute(SESSION_EVENT);
+    	if(speaker.getIndexSpeaker()==null)    		
+    	{
+    		event.getSpeakers().add(speaker);    	
+    	}
+    	speaker.setEvent(event);
+    	speaker.setIndexSpeaker(null);
+    	clearSpeakerSession(session);
+    	return mvEvent(event);
+    }  
+    
+    
+    
     @RequestMapping(value = "/event/removespeaker.form", method = RequestMethod.GET)
-	public String removeSpeakerFromSession(
+	public String removeSpeaker(
 			@RequestParam(value = "indexSpeaker", required = true) Long indexSpeaker,
 			@ModelAttribute(SESSION_EVENT) Event event) {
 		List<Speaker> speakers = event.getSpeakers();
@@ -162,8 +161,17 @@ public class EventEditController {
 		return FORM_VIEW;
 	}
     @RequestMapping(value = "/event/backtoevent.form", method = RequestMethod.GET)
-    public ModelAndView backToEvent(@ModelAttribute(SESSION_EVENT)Event event, HttpServletRequest req) {    
-    	req.getSession().setAttribute("speaker", null);
+    public ModelAndView backToEvent(@ModelAttribute(SESSION_EVENT)Event event, HttpSession session, @RequestParam(value = "indexSpeaker", required =
+        false) Long indexSpeaker) {    
+    	
+    	if(indexSpeaker!=null)
+    	{
+    		Speaker originalSpeaker = (Speaker)session.getAttribute(ORIGINAL_SESSION_SPEAKER);
+    		event.getSpeakers().remove(index(indexSpeaker));    				
+    		event.getSpeakers().add(originalSpeaker);
+    		originalSpeaker.setIndexSpeaker(null);
+    	}    	    	
+    	clearSpeakerSession(session);
     	return mvEvent(event);
     }
     
@@ -177,6 +185,12 @@ public class EventEditController {
     private int index(Long indexSpeaker)
     {
     	return indexSpeaker.intValue() - 1;
+    }
+    
+    private void clearSpeakerSession(HttpSession session)
+    {
+    	session.setAttribute(SESSION_SPEAKER, null);
+    	session.setAttribute(ORIGINAL_SESSION_SPEAKER, null);
     }
     
    
