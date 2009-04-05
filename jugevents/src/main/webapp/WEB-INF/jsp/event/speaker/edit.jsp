@@ -20,7 +20,7 @@
 			code="SearchSpeaker" text="?SearchSpeaker?" /></legend> <a
 			href="javascript:hideSearchSpeaker();"><spring:message
 			code='CloseSearchSpeaker' text='?CloseSearchSpeaker?' /></a>
-				<form id="fullTextSearch" action="" method="get">
+				<form id="fullTextSearch" action="javascript:doNothing();" method="get">
 				<div id="content_textSearch">
 				<p class="boxTitle"><spring:message code="Search" text="?Search?" />&nbsp;<span
 					class="smallText"></span></p>
@@ -91,12 +91,11 @@ new Form.Element.Observer('resume', 2,
 
 <c:if test="${empty speaker.indexSpeaker}">
 	function showSearchSpeaker() {
-		Effect.toggle('searchSpeaker', 'appear'); 		
+		Effect.toggle('searchSpeaker', 'slide'); 		
 		//$('searchSpeaker').show();
 		$('linkSearchSpeaker').hide();
 	}
-	function hideSearchSpeaker() {
-		//Effect.toggle('searchSpeaker', 'appear'); 
+	function hideSearchSpeaker() {		 
 		$('searchSpeaker').hide();
 		$('linkSearchSpeaker').show();
 	}
@@ -109,6 +108,11 @@ new Form.Element.Observer('resume', 2,
 			formValues = value.parseQuery();
 			speakerBo.fullTextSearch(formValues.fullTextQuery, 10);
 		});	
+	function doNothing()
+	{
+		//do nothing
+		//alert('"<spring:message code='aaa'  text='?aaa?'/>"');
+	}
 </c:if>
 	
 </script>

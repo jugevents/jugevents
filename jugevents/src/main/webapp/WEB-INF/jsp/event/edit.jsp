@@ -170,6 +170,7 @@
     <legend><spring:message code="speakers" text="?speakers?"/></legend>
       <a href="javascript:editSpeaker(0);"><spring:message code="addNewSpeaker" text="?addNewSpeaker?"/></a><br/>
     <div class="displaytag">
+     <spring:message code='confirmDeleteSpeaker' var="confirmDeleteSpeakerMessage" text="?confirmDeleteSpeakerMessage?"/>
     
     
     <display:table  id="speaker"  name="event.speakers" requestURI="backtoevent.form"   sort="list" pagesize="20" defaultsort="5" defaultorder="ascending"  >
@@ -188,7 +189,7 @@
          </display:column>            
          <display:column>
          	<a href="javascript:editSpeaker(${speaker_rowNum});"><spring:message code="edit" text="?edit?"/></a>
-         	<a href="${cp}/event/removespeaker.form?indexSpeaker=${speaker_rowNum}"><spring:message code="delete"  text="?delete?"/></a>         	
+         	<a href="${cp}/event/removespeaker.form?indexSpeaker=${speaker_rowNum}"  onclick="javascript:return confirm('${confirmDeleteSpeakerMessage}')"><spring:message code="delete"  text="?delete?"/></a>         	
       	 </display:column>     
     </display:table>     
 	</div>
