@@ -105,8 +105,7 @@ public class SpeakerBo {
 	        if (StringUtils.isNotBlank(searchQuery)) {
 	            WebContext wctx = WebContextFactory.get();
 	            ScriptSession session = wctx.getScriptSession();
-	            Util util = new Util(session);
-	           
+	            Util util = new Util(session);	           
 	            List<Speaker> speakers = null;
 	            try {
 	            	speakers = this.search(searchQuery, maxResults);
@@ -118,26 +117,12 @@ public class SpeakerBo {
 	            if (speakers != null && speakers.size() > 0) {
 	                StringBuilder sb = new StringBuilder();
 	                for (Speaker speaker : speakers) {
+	                	Event event = speaker.getEvent();
 	                    sb.append("<div>\n");
-	                    sb.append(speaker.getFirstName()).append(" ").append(speaker.getLastName()).
-	                    append("&nbsp;"). append(speaker.getEvent().getOwner().getJug().getName()).	                    
-	                    append("&nbsp;<a href=\"javascript:populateSpeakerFields(\'").append(speaker.getId()).append("\');\">Select this speaker</a>");
-	                    /*
-	                    sb.append("<div class=\"eventDate\">").append(dateFormat.format(
-	                            event.getStartDate()))..
-	                            append("</div>");
-	                    if (event.getOwner() != null) {
-	                        sb.append("<div class=\"eventSignature\"><a href=\"").
-	                                append(event.getOwner().getJug().getWebSiteUrl()).
-	                                append("\">").append(event.getOwner().getJug().
-	                                getName()).append("</a></div>");
-	                    }
-	                    sb.append("<div class=\"eventContent\"><a href=\"").
-	                            append(baseUrl).append("/event/").
-	                            append(event.getId()).append("\">").
-	                            append(event.getTitle()).append("</a></div>");
-	                            */
-	                    sb.append("</div>\n");
+	                    sb.append(speaker.getFirstName()).append(" ").append(speaker.getLastName()).append("<br/>");
+	                    sb.append(event.getTitle()).append("&nbsp;(").append(event.getOwner().getJug().getName()).append(")<br/>");	                                    
+	                    sb.append("&nbsp;<a href=\"javascript:populateSpeakerFields(\'").append(speaker.getId()).append("\');\">Select this speaker</a>").append("<br/>");	                   
+	                    sb.append("</div>\n").append("<br/>");
 	                }
 	                util.setValue("content_textSearch_result", sb.toString(), false);
 	            } else {
