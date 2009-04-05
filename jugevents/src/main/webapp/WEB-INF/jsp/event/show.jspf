@@ -79,7 +79,7 @@
 					</c:if>
 				</table>
 				</td>
-				<td>${speaker.resume}</td>
+				<td>${speaker.filteredPreview}</td>
 			</tr>
 		</table>
 		</div>
