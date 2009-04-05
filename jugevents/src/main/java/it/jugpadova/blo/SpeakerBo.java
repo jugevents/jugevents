@@ -3,6 +3,7 @@
  */
 package it.jugpadova.blo;
 
+import it.jugpadova.controllers.EventEditController;
 import it.jugpadova.dao.SpeakerDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.JUG;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -138,6 +140,12 @@ public class SpeakerBo {
 	        if (speaker != null) {
 	           
 	            WebContext wctx = WebContextFactory.get();
+	            HttpSession httpSession = wctx.getSession();
+	            Speaker sessionSpeaker = (Speaker)httpSession.getAttribute(EventEditController.SESSION_SPEAKER);
+	            if(sessionSpeaker!=null)
+	            {
+	            	sessionSpeaker.setPicture(speaker.getPicture());
+	            }
 	            ScriptSession session = wctx.getScriptSession();
 	            Util util = new Util(session);
 
@@ -151,12 +159,12 @@ public class SpeakerBo {
 	            util.setValue("url", speaker.getUrl());
 	            util.setValue("skypeId", speaker.getSkypeId());
 	            //TODO to find a way to populate the picture
-                /*
+                
 	            util.setValue("speakerImage",
 	                    "<img style=\"float: right;\" src=\"" + cp +
 	                    "/bin/pictureSpeaker.bin?id=" + speaker.getId() +
 	                    "\" alt=\"Speaker Image\" width=\"100\"/>");
-	            */
+	           
 
 
 	        // fixJugFields(false);
