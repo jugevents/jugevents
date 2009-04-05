@@ -104,12 +104,9 @@ public class SpeakerBo {
 	    public void fullTextSearch(String searchQuery, int maxResults) {
 	        if (StringUtils.isNotBlank(searchQuery)) {
 	            WebContext wctx = WebContextFactory.get();
-	            HttpServletRequest req = wctx.getHttpServletRequest();
 	            ScriptSession session = wctx.getScriptSession();
 	            Util util = new Util(session);
-	            java.lang.String baseUrl =
-	                    "http://" + req.getServerName() + ":" + req.getServerPort() +
-	                    req.getContextPath();
+	           
 	            List<Speaker> speakers = null;
 	            try {
 	            	speakers = this.search(searchQuery, maxResults);
@@ -167,6 +164,7 @@ public class SpeakerBo {
 	            util.setValue("email", speaker.getEmail());
 	            util.setValue("resume", speaker.getResume());
 	            util.setValue("url", speaker.getUrl());
+	            util.setValue("skypeId", speaker.getSkypeId());
 
 	            util.setValue("speakerImage",
 	                    "<img style=\"float: right;\" src=\"" + cp +

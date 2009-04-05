@@ -10,13 +10,38 @@
         <h1><spring:message code="speaker.editspeaker" text="?speaker.editspeaker?"/></h1>                            
     </c:otherwise>
 </c:choose>
+
+<c:if test="${empty speaker.indexSpeaker}">
+<div id="linkSearchSpeaker">
+	<a href="javascript:showSearchSpeaker();"><spring:message code='SearchExistingSpeaker'  text='?SearchExistingSpeaker?'/></a>
+</div>
+	<div id="searchSpeaker" style="margin-bottom: 1em; display: none;">
+		<fieldset><legend><spring:message
+			code="SearchSpeaker" text="?SearchSpeaker?" /></legend> <a
+			href="javascript:hideSearchSpeaker();"><spring:message
+			code='CloseSearchSpeaker' text='?CloseSearchSpeaker?' /></a>
+				<form id="fullTextSearch" action="" method="get">
+				<div id="content_textSearch">
+				<p class="boxTitle"><spring:message code="Search" text="?Search?" />&nbsp;<span
+					class="smallText"></span></p>
+				<input id="fullTextQuery" name="fullTextQuery" type="text"
+					value="${param['fullTextQuery']}" /><br />
+				<div id="content_textSearch_result"></div>
+				</div>
+				</form>
+		</fieldset>		
+	</div>
+</c:if>
+
+
+
+
 <fieldset>
 <legend><spring:message code="speaker" text="?speaker?"/>
-
 </legend>
 
  
-<span id="speakerImage"><img  src="${cp}/bin/pictureSpeakerInSession.bin?indexSpeaker=${indexSpeaker}" alt="Speaker Image" width="100" align="right"/></span>
+<span id="speakerImage"><img  src="${cp}/bin/pictureSpeakerInSession.bin?indexSpeaker=${speaker.indexSpeaker}" alt="Speaker Image" width="100" align="right"/></span>
 
 <form:form commandName="speaker" method="post" action="${cp}/event/speakerevent.form" enctype="multipart/form-data">
    
@@ -55,35 +80,17 @@
 </form:form>
 </fieldset>
 
-<c:if test="${empty speaker.indexSpeaker}">
-<div id="linkSearchSpeaker">
-	<a href="javascript:showSearchSpeaker();"><spring:message code='SearchExistingSpeaker'  text='?SearchExistingSpeaker?'/></a>
-</div>
-	<div id="searchSpeaker" style="margin-bottom: 1em; display: none;">
-		<fieldset><legend><spring:message
-			code="SearchSpeaker" text="?SearchSpeaker?" /></legend> <a
-			href="javascript:hideSearchSpeaker();"><spring:message
-			code='CloseSearchSpeaker' text='?CloseSearchSpeaker?' /></a>
-				<form id="fullTextSearch" action="" method="get">
-				<div id="content_textSearch">
-				<p class="boxTitle"><spring:message code="Search" text="?Search?" />&nbsp;<span
-					class="smallText"></span></p>
-				<input id="fullTextQuery" name="fullTextQuery" type="text"
-					value="${param['fullTextQuery']}" /><br />
-				<div id="content_textSearch_result"></div>
-				</div>
-				</form>
-		</fieldset>		
-	</div>
-</c:if>
-
-
-
 
 
 <script type="text/javascript">
-	function showSearchSpeaker() {
+dwr.util.setEscapeHtml(false);
+new Form.Element.Observer('resume', 2,
+		function(el, value) {
+		    filterBo.populatePreview(value, 'Textile', 'resumePreview');
+});
 
+<c:if test="${empty speaker.indexSpeaker}">
+	function showSearchSpeaker() {
 		$('searchSpeaker').show();
 		$('linkSearchSpeaker').hide();
 	}
@@ -91,23 +98,17 @@
 		$('searchSpeaker').hide();
 		$('linkSearchSpeaker').show();
 	}
+	
 	function populateSpeakerFields(id) {
 		speakerBo.populateSpeakerFields(id);
 	}
-
-	dwr.util.setEscapeHtml(false);
-	speakerBo.fullTextSearch($F('fullTextQuery'), 10);
-
-	new Form.Observer('fullTextSearch', 1, function(el, value) {
-		formValues = value.parseQuery();
-		speakerBo.fullTextSearch(formValues.fullTextQuery, 10);
-	});
+		speakerBo.fullTextSearch($F('fullTextQuery'), 10);
+		new Form.Observer('fullTextSearch', 1, function(el, value) {
+			formValues = value.parseQuery();
+			speakerBo.fullTextSearch(formValues.fullTextQuery, 10);
+		});	
+</c:if>
 	
-
-	new Form.Element.Observer('resume', 2,
-			function(el, value) {
-			    filterBo.populatePreview(value, 'Textile', 'resumePreview');
-	});
 </script>
 
 

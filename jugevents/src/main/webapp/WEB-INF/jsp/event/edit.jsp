@@ -164,10 +164,11 @@
             </fieldset>
         </div>
    
-    <a href="javascript:editSpeaker(0);"><spring:message code="addNewSpeaker" text="?addNewSpeaker?"/></a>
+  
        
     <fieldset>
     <legend><spring:message code="speakers" text="?speakers?"/></legend>
+      <a href="javascript:editSpeaker(0);"><spring:message code="addNewSpeaker" text="?addNewSpeaker?"/></a><br/>
     <div class="displaytag">
     
     

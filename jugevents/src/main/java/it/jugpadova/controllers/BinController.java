@@ -90,7 +90,7 @@ public class BinController {
     }
     
     /**
-     * Produce the speaker image from the database, or the default no logo image.
+     * Produce the speaker image from the session, or the default no logo image.
      */
     @RequestMapping
     public void pictureSpeakerInSession(HttpServletRequest req,
