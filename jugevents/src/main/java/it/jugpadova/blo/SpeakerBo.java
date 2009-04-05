@@ -121,7 +121,7 @@ public class SpeakerBo {
 	                for (Speaker speaker : speakers) {
 	                	Event event = speaker.getEvent();
 	                    sb.append("<div>\n");
-	                    sb.append(speaker.getFirstName()).append(" ").append(speaker.getLastName()).append("<br/>");
+	                    sb.append("<div class=\"eventDate\">").append(speaker.getFirstName()).append(" ").append(speaker.getLastName()).append("</div>").append("<br/>");
 	                    sb.append(event.getTitle()).append("&nbsp;(").append(event.getOwner().getJug().getName()).append(")<br/>");	                                    
 	                    sb.append("&nbsp;<a href=\"javascript:populateSpeakerFields(\'").append(speaker.getId()).append("\');\">Select this speaker</a>").append("<br/>");	                   
 	                    sb.append("</div>\n").append("<br/>");
@@ -148,9 +148,6 @@ public class SpeakerBo {
 	            }
 	            ScriptSession session = wctx.getScriptSession();
 	            Util util = new Util(session);
-
-	            Effect effect = new Effect(session);
-
 	            String cp = wctx.getHttpServletRequest().getContextPath();
 	            util.setValue("firstName", speaker.getFirstName());
 	            util.setValue("lastName", speaker.getLastName());
@@ -158,16 +155,19 @@ public class SpeakerBo {
 	            util.setValue("resume", speaker.getResume());
 	            util.setValue("url", speaker.getUrl());
 	            util.setValue("skypeId", speaker.getSkypeId());
-	            //TODO to find a way to populate the picture
-                
 	            util.setValue("speakerImage",
 	                    "<img style=\"float: right;\" src=\"" + cp +
 	                    "/bin/pictureSpeaker.bin?id=" + speaker.getId() +
 	                    "\" alt=\"Speaker Image\" width=\"100\"/>");
-	           
-
-
-	        // fixJugFields(false);
+	            //some effects...
+	            Effect effect = new Effect(session);
+	            effect.highlight("firstName");
+	            effect.highlight("lastName");
+	            effect.highlight("email");
+	            effect.highlight("resume");
+	            effect.highlight("url");
+	            effect.highlight("skypeId");
+	     
 	        }
 
 	    }

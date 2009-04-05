@@ -91,10 +91,12 @@ new Form.Element.Observer('resume', 2,
 
 <c:if test="${empty speaker.indexSpeaker}">
 	function showSearchSpeaker() {
-		$('searchSpeaker').show();
+		Effect.toggle('searchSpeaker', 'appear'); 		
+		//$('searchSpeaker').show();
 		$('linkSearchSpeaker').hide();
 	}
 	function hideSearchSpeaker() {
+		//Effect.toggle('searchSpeaker', 'appear'); 
 		$('searchSpeaker').hide();
 		$('linkSearchSpeaker').show();
 	}
