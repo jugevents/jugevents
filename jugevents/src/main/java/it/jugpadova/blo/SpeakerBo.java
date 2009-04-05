@@ -150,11 +150,13 @@ public class SpeakerBo {
 	            util.setValue("resume", speaker.getResume());
 	            util.setValue("url", speaker.getUrl());
 	            util.setValue("skypeId", speaker.getSkypeId());
-
+	            //TODO to find a way to populate the picture
+                /*
 	            util.setValue("speakerImage",
 	                    "<img style=\"float: right;\" src=\"" + cp +
 	                    "/bin/pictureSpeaker.bin?id=" + speaker.getId() +
 	                    "\" alt=\"Speaker Image\" width=\"100\"/>");
+	            */
 
 
 	        // fixJugFields(false);
