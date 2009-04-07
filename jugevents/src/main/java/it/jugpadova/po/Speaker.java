@@ -17,6 +17,7 @@
 package it.jugpadova.po;
 
 import it.jugpadova.blo.FilterBo;
+import it.jugpadova.util.SpeakerFilterFactory;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -35,6 +36,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FullTextFilterDef;
+import org.hibernate.search.annotations.FullTextFilterDefs;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
@@ -58,6 +61,10 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.RegExp;
 "select s from Event e, Speaker s where s.event=e  and upper(e.title) like upper(?)")})
 
 
+@FullTextFilterDefs({
+    @FullTextFilterDef(name = "onlyMyJUG", impl =
+    	SpeakerFilterFactory.class)
+})
 
 public class Speaker extends EntityBase {
 	

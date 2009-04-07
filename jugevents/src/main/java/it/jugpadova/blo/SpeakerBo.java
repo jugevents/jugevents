@@ -75,6 +75,7 @@ public class SpeakerBo {
         if (maxResults > 0) {
             hibQuery.setMaxResults(maxResults);
         }
+       // hibQuery.enableFullTextFilter("onlyMyJUG");
         result = hibQuery.list();
         return result;
     }
