@@ -1,3 +1,6 @@
+// Original code from this presentation:
+// http://bram.jteam.nl/index.php/2006/06/19/springone-dwr-spring-presentation/
+
 Autocompleter.DWR = Class.create();
 Autocompleter.DWR.prototype = Object.extend(new Autocompleter.Base(), {
     initialize: function(element, update, populator, options) {
