@@ -80,7 +80,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 20f2bd4e92e8 $
+ * @version $Revision: de5ff450d3b1 $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -778,7 +778,7 @@ public class EventBo {
 
     public Event buildEventFromTemplate(Event templateEvent, String lang) {
         Event result = new Event();
-
+        result.setOwner(getServicesBo().getCurrentJugger());
         result.setTitle("(" + messageSource.getMessage("copy", null,
                 "?copy?", StringUtils.isNotBlank(lang) ? new Locale(lang)
                 : Locale.ENGLISH) + ") " + templateEvent.getTitle());
