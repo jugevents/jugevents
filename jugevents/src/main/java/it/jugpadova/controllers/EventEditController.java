@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.parancoe.plugins.security.SecurityBo;
+
 import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -60,8 +60,7 @@ public class EventEditController {
             Logger.getLogger(EventEditController.class);
     @Autowired
     private EventBo eventBo;
-    @Autowired
-    private SecurityBo securityBo;
+   
 
     @InitBinder
     public void initBinder(WebDataBinder binder) throws Exception {

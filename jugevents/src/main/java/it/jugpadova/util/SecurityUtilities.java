@@ -3,8 +3,8 @@
  */
 package it.jugpadova.util;
 
-import org.acegisecurity.Authentication;
-import org.acegisecurity.providers.encoding.Md5PasswordEncoder;
+import org.springframework.security.Authentication;
+import org.springframework.security.providers.encoding.Md5PasswordEncoder;
 
 /**
  * Defines methods for security porpouse
@@ -19,7 +19,7 @@ public class SecurityUtilities {
 	 * @return
 	 */
 	public static String getUserAuthentichated() {
-		Authentication authentication = org.acegisecurity.context.SecurityContextHolder
+		Authentication authentication = org.springframework.security.context.SecurityContextHolder
 				.getContext().getAuthentication();
 
 		if (authentication != null && authentication.isAuthenticated()) {

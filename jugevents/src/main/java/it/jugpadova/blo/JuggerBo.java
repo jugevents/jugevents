@@ -38,7 +38,7 @@ import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
-import org.acegisecurity.providers.encoding.MessageDigestPasswordEncoder;
+import org.springframework.security.providers.encoding .MessageDigestPasswordEncoder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
@@ -489,7 +489,7 @@ public class JuggerBo {
         User userToValidate = null;
 
         // check if username is already presents
-        if (userDao.findByUsername(username).size() > 0) {
+        if (userDao.findByUsername(username)!=null) {
 
             throw new UserAlreadyPresentsException("User with username: " +
                     username + " already presents in the database!");
@@ -505,7 +505,7 @@ public class JuggerBo {
     }
 
     public User updateUser(User newUser) {
-        User user = userDao.findByUsername(newUser.getUsername()).get(0);
+        User user = userDao.findByUsername(newUser.getUsername());
         if (user.getPassword().equals(newUser.getPassword())) {
             // we only
             // update the

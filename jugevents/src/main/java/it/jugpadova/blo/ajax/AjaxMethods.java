@@ -7,11 +7,11 @@ import it.jugpadova.bean.ParticipantBean;
 
 import java.util.List;
 
-import org.acegisecurity.annotation.Secured;
+//import org.springframework.security.annotation.Secured;
 
 /**
  * Defines all the methods available for accessing using ajax-dwr protocol.
- * The methods have been secured using acegi annotations.
+ * The methods have been secured using spring-security annotations.
  * @author Enrico Giurin
  *
  */

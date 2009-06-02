@@ -15,8 +15,8 @@
         <put-attribute name="footer" value="/WEB-INF/jsp/footer.jsp"/>
     </definition>
         
-    <definition name="acegilogin" extends="template.main">
-        <put-attribute name="main" value="/WEB-INF/jsp/acegilogin.jsp"/>
+    <definition name="login" extends="template.main">
+        <put-attribute name="main" value="/WEB-INF/jsp/login.jsp"/>
         <put-attribute name="sidebar" value="/WEB-INF/jsp/about_sidebar.jsp"/>
     </definition>
     

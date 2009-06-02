@@ -209,7 +209,7 @@
     new Autocompleter.DWR('location', 'locationList', updateLocationList, { partialChars: 0, fullSearch: true, updateElement: populateDirections });
 
     function updateLocationList(autocompleter, token) {
-        eventBo.findPartialLocation(token, '<authz:authentication operation="username"/>', function(data) {
+        eventBo.findPartialLocation(token, '<security:authentication property="principal.username"/>', function(data) {
         autocompleter.setChoices(data)
     });    
 }

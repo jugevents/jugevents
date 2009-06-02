@@ -58,15 +58,15 @@
                 </display:column>
                 <display:column property="numberOfParticipants" title="#" sortable="true" headerClass="sortable"/>
                 <display:column media="html" title="" sortable="false" headerClass="actionColumn" class="actionColumn">
-                    <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
+                    <security:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
                         <%
             if (servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
                         %>
                         <a href="edit.form?id=${event.id}"><spring:message code="edit"/></a>
                         <%            }
                         %>
-                    </authz:authorize>
-                    <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
+                    </security:authorize>
+                    <security:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
                         <%
             if (servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
                         %>
@@ -74,18 +74,18 @@
                         <a href="delete.html?id=${event.id}" onclick="return confirm('${confirmDeleteEventMessage}')"><spring:message code="delete"/></a>
                         <%            }
                         %>
-                    </authz:authorize>
+                    </security:authorize>
                     <c:if test="${event.registrationOpen}">
                         <a href="registration.form?event.id=${event.id}"><spring:message code="register"/></a>
                     </c:if>
-                    <authz:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
+                    <security:authorize ifAnyGranted="ROLE_ADMIN,ROLE_JUGGER">
                         <%
             if (servicesBo.canCurrentUserManageEvent((it.jugpadova.po.Event) pageContext.getAttribute("event"))) {
                         %>
                         <a href="participants.html?id=${event.id}"><spring:message code="participants"/></a>
                         <%            }
                         %>
-                    </authz:authorize>
+                    </security:authorize>
                 </display:column>
             </display:table>
         </div>

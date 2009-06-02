@@ -17,7 +17,7 @@ import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
-import org.acegisecurity.Authentication;
+import org.springframework.security.Authentication;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
@@ -260,13 +260,15 @@ public class ServicesBo {
         User result = null;
         String name = authenticatedUsername();
         if (name != null) {
-            List<User> users = userDao.findByUsername(name);
-            if (users.size() > 0) {
+        	result = userDao.findByUsername(name);
+            if (result!=null) {
+            	/*
                 result = users.get(0);
                 if (users.size() > 1) {
                     logger.warn("More than an user with the '" + name +
-                            "' username");
+                            "' username");                           
                 }
+                 */
             } else {
                 logger.error("No user with the '" + name + "' username");
             }
@@ -339,7 +341,7 @@ public class ServicesBo {
      */
     public String authenticatedUsername() {
         Authentication authentication =
-                org.acegisecurity.context.SecurityContextHolder.getContext().
+        	org.springframework.security.context.SecurityContextHolder.getContext().
                 getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             return authentication.getName();

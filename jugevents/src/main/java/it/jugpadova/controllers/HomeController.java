@@ -41,10 +41,10 @@ public class HomeController {
      * Login action
      */
     @RequestMapping
-    public ModelAndView acegilogin(HttpServletRequest req,
+    public ModelAndView login(HttpServletRequest req,
             HttpServletResponse res) {
         Map params = new HashMap();
-        return new ModelAndView("acegilogin", params);
+        return new ModelAndView("login", params);
     }
 
     /**

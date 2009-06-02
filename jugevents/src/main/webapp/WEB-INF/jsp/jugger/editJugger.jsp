@@ -88,7 +88,7 @@
     </fieldset>
     
     
-    <authz:authorize ifAnyGranted="ROLE_JUGGER">    
+    <security:authorize ifAnyGranted="ROLE_JUGGER">    
         <c:if test="${!jugger.reliable}">                            
             <fieldset>
                 <legend><spring:message  code="Reliability" /></legend>       
@@ -102,7 +102,7 @@
                 new Tip($('tip_reliability'), '<spring:message code="tip.reliability"/>', {title: '<spring:message code="tip.reliability.title"/>', effect: 'appear'});
             </script>                      
         </c:if>
-    </authz:authorize>
+    </security:authorize>
     
     
     
