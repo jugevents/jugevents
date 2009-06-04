@@ -1,0 +1,103 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF;
+    font-size: 14px;
+    font-family: Georgia,'Times New Roman',times,serif;
+    color: #000;
+    height: 100%;
+}
+
+img {
+    border: 0;
+}
+
+a {
+    color: #888888;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #F1AA1A;
+}
+
+h1 {
+    z-index: 1;
+    color: #e15900;
+    font-style: normal;
+    font-weight: bold;
+    margin: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    position: relative;
+    padding-right: 10px;
+    font-family: Georgia,'Times New Roman',times,serif;
+    font-size: 22px;
+}
+
+h2 {
+    font-family: Georgia,'Times New Roman',times,serif;
+    font-size: 18px;
+    color: #e15900;
+    font-weight: normal;
+    margin: 0.5em 0 0.5em 0;
+    position: relative;
+    padding-right: 10px;
+}
+
+h3 {
+    font: 1.8em "Georgia", "Times New Roman", serif;
+    color: #e15900;
+    font-weight: bold;
+    margin: 0;
+    margin-top:0.5em;
+    position: relative;
+}
+
+#container {
+    width: 715px;
+    margin: 0 auto;
+}
+
+div#logo {
+    width: 206px;
+    margin: 40px auto 20px auto;
+    text-align: center;
+}
+
+#message {
+    padding: 10px;
+}
+
+.signature {
+    left: 50px;
+    text-align: center;
+}
+
+.activity {
+    padding: 10px;
+}
+
+.activity .header {
+    background-color: #f5e350;
+    color: #e15900;
+    font-weight: bold;
+    margin-bottom: 4px;
+    padding: 5px;
+}
+
+.activity .content {
+    padding: 5px;
+}
+
+.inEvidence {
+    /* color: #f5e350; */
+    /* background-color: #e15900; */
+    color: white;
+    background-color: red;
+    padding: 10px;
+    margin: 10px;
+    font-size: 1.3em;
+    font-family: Arial,Helvetica,sans-serif;
+}
