@@ -14,6 +14,7 @@
 package it.jugpadova.controllers;
 
 import it.jugpadova.blo.EventBo;
+import it.jugpadova.exception.JUGEventsException;
 import it.jugpadova.exception.RegistrationNotOpenException;
 import it.jugpadova.po.Participant;
 
@@ -44,20 +45,42 @@ public class ConfirmController {
         ModelAndView result = null;
         try {
             Participant participant =
-                    eventBo.confirmParticipant(email, code);
-            if (participant != null) {
+                    eventBo.confirmParticipant(email, code);            
                 result = Utilities.getMessageView("participant.registration.ok",
                         participant.getFirstName(),
                         participant.getEvent().getTitle());
-            } else {
-                result = Utilities.getMessageView(
-                        "participant.registration.failed");
-            }
+           
         } catch (RegistrationNotOpenException registrationNotOpenException) {
             result = Utilities.getMessageView(
                     "participant.registration.cantConfirmRegistrationClosed",
                     registrationNotOpenException.getEvent().getTitle());
-        }
+        }catch (JUGEventsException e) {
+        	result = Utilities.getMessageView(
+            "participant.registration.failed");
+		}
         return result;
+    }
+    
+    
+    @RequestMapping
+    public ModelAndView cancellation(@RequestParam("email") String email,
+    		@RequestParam("code") String code) {
+    	ModelAndView result = null;
+    	try {
+    		Participant participant =
+    			eventBo.cancelParticipant(email, code);
+    		result = Utilities.getMessageView("participant.cancellation.ok",
+    				participant.getFirstName(),
+    				participant.getEvent().getTitle());          
+    	} catch (RegistrationNotOpenException registrationNotOpenException) {
+    		result = Utilities.getMessageView(
+    				"participant.registration.cantConfirmRegistrationClosed",
+    				registrationNotOpenException.getEvent().getTitle());
+    	}catch (JUGEventsException e) {
+    		result = Utilities.getMessageView(
+    				"participant.cancellation.failed");
+    	}
+
+    	return result;
     }
 }

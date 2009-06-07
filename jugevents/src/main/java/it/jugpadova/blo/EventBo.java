@@ -19,7 +19,9 @@ import it.jugpadova.bean.NewsMessage;
 import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.dao.EventDao;
 import it.jugpadova.dao.ParticipantDao;
+import it.jugpadova.exception.JUGEventsException;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
+
 import it.jugpadova.exception.RegistrationNotOpenException;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Jugger;
@@ -80,7 +82,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: d4da88c905ea $
+ * @version $Revision: ec7c0560752e $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -346,41 +348,7 @@ public class EventBo {
         participantDao.store(participant);
     }
 
-    private String generateConfirmationCode(Event event,
-            Participant participant) {
-        return new MessageDigestPasswordEncoder("MD5", true).encodePassword(
-                event.getTitle() + participant.getFirstName() +
-                participant.getLastName() + participant.getEmail(),
-                new Date());
-    }
-
-    private void sendConfirmationEmail(final Event event,
-            final Participant participant, final String baseUrl) {
-        MimeMessagePreparator preparator = new MimeMessagePreparator() {
-
-            @SuppressWarnings(value = "unchecked")
-            public void prepare(MimeMessage mimeMessage) throws Exception {
-                MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-                message.setTo(participant.getEmail());
-                message.setFrom(conf.getConfirmationSenderEmailAddress());
-                message.setSubject("Please confirm event registration");
-                Map model = new HashMap();
-                model.put("participant", participant);
-                model.put("event", event);
-                model.put("baseUrl", baseUrl);
-                model.put("confirmationCode",
-                        URLEncoder.encode(participant.getConfirmationCode(),
-                        "UTF-8"));
-                model.put("email", URLEncoder.encode(participant.getEmail(),
-                        "UTF-8"));
-                String text = VelocityEngineUtils.mergeTemplateIntoString(
-                        velocityEngine,
-                        "it/jugpadova/registration-confirmation.vm", model);
-                message.setText(text, true);
-            }
-        };
-        this.mailSender.send(preparator);
-    }
+   
 
     public Event retrieveEvent(Long id) {
         Event event = eventDao.read(id);
@@ -444,29 +412,52 @@ public class EventBo {
     }
 
     /**
-     * Confirm the registration of a participant to an event.
-     *
+     * Confirm the registration of a participant to an event.     *
      * @param email The email of the participant
      * @param confirmationCode The confirmation code of the registration
      * @return The confirmed participant, if all went well
-     * @throws it.jugpadova.exception.RegistrationNotOpenException When the participant can't be confirmed because the registration is yet closed
+     * @throws it.jugpadova.exception.RegistrationNotOpenException When the participant can't be confirmed because the registration is yet closed.
+     * @throws JUGEventsException when the participant can't be confirmed according to the policy rules.
      */
     public Participant confirmParticipant(String email, String confirmationCode)
             throws RegistrationNotOpenException {
-        List<Participant> participants = participantDao.findByEmailAndConfirmationCodeAndConfirmed(email,
-                confirmationCode, Boolean.FALSE);
-        if (participants != null && participants.size() > 0) {
-            Participant p = participants.get(0);
-            if (p.getEvent().getRegistrationOpen()) {
-                p.setConfirmed(Boolean.TRUE);
-                p.setConfirmationDate(new Date());
-            } else {
-                throw new RegistrationNotOpenException(p.getEvent());
-            }
-            return p;
-        }
-        return null;
+    	Participant p = getParticipant(email, confirmationCode);
+    	if((p == null)||(!p.canBeConfirmed()))
+    			throw new JUGEventsException();   
+    		if (p.getEvent().getRegistrationOpen()) {
+    			p.setConfirmed(Boolean.TRUE);
+    			p.setCancelled(Boolean.FALSE);
+    			p.setConfirmationDate(new Date());
+    		} else {
+    			throw new RegistrationNotOpenException(p.getEvent());
+    		}    	
+    		          
+    	return p;
     }
+          
+    /**
+     * Cancel the registration of a participant to an event.     *
+     * @param email The email of the participant
+     * @param confirmationCode The confirmation code of the registration
+     * @return The confirmed participant, if all went well
+     * @throws it.jugpadova.exception.RegistrationNotOpenException When the participant can't be cancelled because the registration is yet closed
+     * @throws JUGEventsException when the participant can't be cancelled according to the policy rules.
+     */
+    public Participant cancelParticipant(String email, String confirmationCode) 
+    throws RegistrationNotOpenException {
+    	Participant p = getParticipant(email, confirmationCode);
+    	if((p == null)||(!p.canBeCancelled()))
+    		throw new JUGEventsException();       	
+    	if (p.getEvent().getRegistrationOpen()) {
+    		p.setCancellationDate(new Date());
+    		p.setCancelled(true);
+    	} else {
+    		throw new RegistrationNotOpenException(p.getEvent());
+    	}    		
+    	return p;
+    }
+
+    
 
     @RemoteMethod
     public void updateBadgePanel(String continent, String country,
@@ -797,5 +788,55 @@ public class EventBo {
 
     public void setServicesBo(ServicesBo servicesBo) {
         this.servicesBo = servicesBo;
+    }
+    
+    /*
+     * ******************* Private Methods ****************************************************
+     */
+    
+  
+    
+    /**
+     * Retrieves participant identified by email and confirmationCode.
+     */
+    private Participant getParticipant(String email, String confirmationCode)
+    {
+    	 return participantDao.findByEmailAndConfirmationCode(email, confirmationCode);
+    }
+    
+    private String generateConfirmationCode(Event event,
+            Participant participant) {
+        return new MessageDigestPasswordEncoder("MD5", true).encodePassword(
+                event.getTitle() + participant.getFirstName() +
+                participant.getLastName() + participant.getEmail(),
+                new Date());
+    }
+
+    private void sendConfirmationEmail(final Event event,
+            final Participant participant, final String baseUrl) {
+        MimeMessagePreparator preparator = new MimeMessagePreparator() {
+
+            @SuppressWarnings(value = "unchecked")
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+                message.setTo(participant.getEmail());
+                message.setFrom(conf.getConfirmationSenderEmailAddress());
+                message.setSubject("Please confirm event registration");
+                Map model = new HashMap();
+                model.put("participant", participant);
+                model.put("event", event);
+                model.put("baseUrl", baseUrl);
+                model.put("confirmationCode",
+                        URLEncoder.encode(participant.getConfirmationCode(),
+                        "UTF-8"));
+                model.put("email", URLEncoder.encode(participant.getEmail(),
+                        "UTF-8"));
+                String text = VelocityEngineUtils.mergeTemplateIntoString(
+                        velocityEngine,
+                        "it/jugpadova/registration-confirmation.vm", model);
+                message.setText(text, true);
+            }
+        };
+        this.mailSender.send(preparator);
     }
 }

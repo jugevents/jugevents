@@ -24,10 +24,12 @@ import org.parancoe.persistence.dao.generic.GenericDao;
 @Dao(entity = Participant.class)
 public interface ParticipantDao extends GenericDao<Participant, Long> {
 
-    public List<Participant> findByEmailAndConfirmationCodeAndConfirmed(String email, String condirmationCode, Boolean confirmed);
+    public List<Participant> findByEmailAndConfirmationCodeAndConfirmed(String email, String confirmationCode, Boolean confirmed);
+    public Participant findByEmailAndConfirmationCode(String email, String confirmationCode);
 
     public List<Participant> findConfirmedParticipantsByEventId(Long id);
     public List<Participant> findNotConfirmedParticipantsByEventId(Long id);
+    public List<Participant> findCancelledParticipantsByEventId(Long id);
     public List<Participant> findParticipantByEmailAndEventId(String email, Long eventId);
 
     public List<Participant> findPresentParticipantsByEventId(Long eventId);

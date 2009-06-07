@@ -31,16 +31,18 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: c4a4b30378fd $
+ * @version $Revision: ec7c0560752e $
  */
 @Entity
 @NamedQueries({
     @NamedQuery(name="Participant.findParticipantByEmailAndEventId",
         query="from Participant p where p.email = ? and p.event.id = ?"),
     @NamedQuery(name="Participant.findConfirmedParticipantsByEventId",
-        query="from Participant p where p.event.id = ? and p.confirmed = true order by p.creationDate, p.id"),
+        query="from Participant p where p.event.id = ? and p.confirmed = true and p.cancelled != true order by p.creationDate, p.id"),
     @NamedQuery(name="Participant.findNotConfirmedParticipantsByEventId",
         query="from Participant p where p.event.id = ? and p.confirmed = false order by p.creationDate, p.id"),
+    @NamedQuery(name="Participant.findCancelledParticipantsByEventId",
+        query="from Participant p where p.event.id = ? and p.cancelled = true order by p.creationDate, p.id"),
     @NamedQuery(name="Participant.findPresentParticipantsByEventId",
         query="from Participant p where p.event.id = ? and p.attended = true"),
     @NamedQuery(name="Participant.findWinningParticipantsByEventId",
@@ -66,6 +68,9 @@ public class Participant extends EntityBase {
     private Boolean winner;
     @MaxLength(value=255)
     private String note;
+    private Boolean cancelled = Boolean.FALSE;
+    private Date cancellationDate;
+    
 
     /** Creates a new instance of Participant */
     public Participant() {
@@ -169,6 +174,44 @@ public class Participant extends EntityBase {
 
     public void setNote(String note) {
         this.note = note;
-    }        
+    }
+
+	public Boolean getCancelled() {
+		return cancelled;
+	}
+
+	public void setCancelled(Boolean cancelled) {
+		this.cancelled = cancelled;
+	}
+
+	public Date getCancellationDate() {
+		return cancellationDate;
+	}
+
+	public void setCancellationDate(Date cancellationDate) {
+		this.cancellationDate = cancellationDate;
+	}        
+	
+	/**
+	 * Evaluate the confirmation to the event.
+	 * @return
+	 */
+	public boolean canBeConfirmed()
+	{
+		return true;
+		/*
+		if((!cancelled&&!confirmed))
+			return true;
+		return false;
+		*/
+	}
+	/**
+	 * Evaluate the cancellation to the event.
+	 * @return
+	 */
+	public boolean canBeCancelled()
+	{
+		return confirmed;
+	}
 
 }
