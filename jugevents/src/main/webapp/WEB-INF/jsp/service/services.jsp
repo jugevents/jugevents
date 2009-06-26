@@ -43,6 +43,14 @@
             to ją <a href="mailto:info@jugevents.org">opisz</a>,
         a my spróbujemy ją zrealizować.</p>
     </c:when>                        
+    <c:when test="${requestScope.requestContext.locale eq 'es'}">
+        <p>JUG Events no sirve &uacute;nicamente para gestionar eventos.
+            El proyecto tambi&eacute;n provee servicios &uacute;tiles a tu JUG y a la comunidad
+        internacional de JUGs.</p>
+        <p>Si imaginas alg&uacute;n servicio que JUG Events deber&iacute;a
+           brindar, <a href="mailto:info@jugevents.org">env&iacute;a tu sugerencia</a>,
+           la analizaremos e intentaremos implementarla.</p>
+    </c:when>
     <c:otherwise>
         <p>JUG Events isn't just for event management. It can
             provide some useful services to your JUG and to the
@@ -101,6 +109,13 @@
             Orginalne dane zostały zaimportowane z
         <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Java User Groups International Map</a>.</p>
     </c:when>
+    <c:when test="${requestScope.requestContext.locale eq 'es'}">
+        <h2>KML para un mapa de JUG</h2>
+        <p>Cualquier JUG puede administrar su informaci&oacute;n por medio de JUG Events y actualizar su archivo KML.</p>
+        <p style="text-align: center;"><a href="${cp}/service/kml.html">Descargue el archivo KML</a></p>
+        <p>Este archivo KML es prodicido a partir del banco de datos de JUG Events. Los datos originalles fueron importados
+            de <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP">Mapa Internacional de Java User Groups</a>.</p>
+    </c:when>
     <c:otherwise>
         <h2>KML for a JUG map</h2>
         <p>Every JUG can manage its information in JUG Events which updates this KML file.</p>
@@ -124,6 +139,14 @@
 
         <p>I ringraziamenti per questo utile widget vanno a <a href="http://sites.google.com/a/breizhjug.org/home/speakers">Nicolas De Loof</a>
         del <a href="http://www.breizhjug.org/">BreizhJug</a>.</p>
+    </c:when>
+    <c:when test="${requestScope.lang eq 'es'}">
+        <h2>Google Sites widget</h2>
+        <p>Si tu JUG usa <a href="http://sites.google.com/">Google Sites</a> para hospedar su sitio Web, puedes usar este widget para integrar el formulario de registro de JUG Events en tu p&aacute;gina de eventos:</p>
+
+        <p><a href="http://loof.free.fr/jugevents-widget.xml">http://loof.free.fr/jugevents-widget.xml</a>
+
+        <p>Muchas gracias a <a href="http://sites.google.com/a/breizhjug.org/home/speakers">Nicolas De Loof</a> de <a href="http://www.breizhjug.org/">BreizhJug</a> por este widget tan &uacute;til.</p>
     </c:when>
     <c:otherwise>
         <h2>Google Sites widget</h2>

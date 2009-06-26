@@ -59,6 +59,17 @@
                 <p>JUGEvents został <a href="http://code.google.com/p/jugevents">stworzony</a> przez <a href="http://www.jugpadova.it">JUG Padova</a>.
                 Każdy może dołączyć.</p>
             </c:when>
+            <c:when test="${requestScope.requestContext.locale eq 'es'}">
+                <p>Por medio de JUGEvents puedes buscar eventos realizados por JUGs,
+                    y registrarte en ellos. Un representante del JUG puede
+                    <a href="${cp}/jugger/registration.form">obtener una cuenta de forma gratuita</a>
+                y comenzar a administrar los eventos de tu JUG.</p>
+                <p>JUGEvents es un proyecto en desarrollo. Si encuentras errores
+                    o quieres sugerir mejoras y nuevas funcionalidades, por favor escribe a
+                <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+                <p>JUGEvents es un <a href="http://code.google.com/p/jugevents">proyecto</a> libre desarrollado por <a href="http://www.jugpadova.it">JUG Padova</a>.
+               	Cualquier persona puede participar.</p>
+            </c:when>
             <c:otherwise>
                 <p>With JUGEvents You can search for events organized by JUGs,
                     and register to them. A JUG representative can
