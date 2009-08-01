@@ -16,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -179,7 +180,7 @@ public class Event extends EntityBase {
         this.location = location;
     }
 
-    @Column(length = 4096)
+    @Lob
     @Field(index = Index.TOKENIZED, store = Store.NO)
     public String getDescription() {
         return description;
