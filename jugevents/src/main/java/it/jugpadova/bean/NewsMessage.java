@@ -2,6 +2,7 @@ package it.jugpadova.bean;
 
 import it.jugpadova.po.Event;
 
+import it.jugpadova.po.LinkedEvent;
 import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 
@@ -16,11 +17,13 @@ public class NewsMessage {
     public static final String TYPE_NEWS = "NEWS";
     public static final String TYPE_NEW_EVENT = "NEW_EVENT";
     public static final String TYPE_UPCOMING_EVENT = "UPCOMING_EVENT";
+    public static final String TYPE_LINKED_EVENT = "LINKED_EVENT";
     private String type;
     private Date date;
     private String message;
     private Event event;
     private String baseUrl;
+    private LinkedEvent linkedEvent;
 
     public NewsMessage() {
     }
@@ -36,6 +39,13 @@ public class NewsMessage {
         this.type = type;
         this.date = date;
         this.event = event;
+        this.baseUrl = baseUrl;
+    }
+
+    public NewsMessage(String type, Date date, LinkedEvent linkedEvent, String baseUrl) {
+        this.type = type;
+        this.date = date;
+        this.linkedEvent = linkedEvent;
         this.baseUrl = baseUrl;
     }
 
@@ -104,6 +114,19 @@ public class NewsMessage {
     }
 
     public String getEventUrl() {
-        return getEventUrl(baseUrl, event);
+        if (TYPE_LINKED_EVENT.equals(this.type)) {
+            return getLinkedEvent().getUrl();
+        } else {
+            return getEventUrl(baseUrl, event);
+        }
     }
+
+    public LinkedEvent getLinkedEvent() {
+        return linkedEvent;
+    }
+
+    public void setLinkedEvent(LinkedEvent linkedEvent) {
+        this.linkedEvent = linkedEvent;
+    }
+
 }

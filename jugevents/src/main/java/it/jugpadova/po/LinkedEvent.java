@@ -19,6 +19,8 @@ package it.jugpadova.po;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Expression;
@@ -32,6 +34,10 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotNull;
  * @author Lucio Benfante
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "LinkedEvent.findExposedEvents", query =
+    "from LinkedEvent e where e.expositionStartDate <= current_date() and e.expositionEndDate >= current_date() order by e.startDate")
+})
 @Expressions({
     @Expression(errorCode = "startDateAfterEndDate",
     message = "?startDateAfterEndDate?",

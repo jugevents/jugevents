@@ -19,6 +19,28 @@
                     </div>
                 </div>
             </c:when>
+            <c:when test="${newsMessage.type eq 'LINKED_EVENT'}">
+                <c:choose>
+                    <c:when test="${empty newsMessage.linkedEvent.background}">
+                        <div class="postit postitWhite">
+                            <div class="postitText">
+                                <div class="postitDate"><fmt:formatDate value="${newsMessage.date}" type="date" dateStyle="short"/></div>
+                                <div class="postitContent">&quot;<a href="${newsMessage.eventUrl}" onClick="javascript: pageTracker._trackPageview('/outgoing/linkedEvent/${newsMessage.linkedEvent.id}');">${newsMessage.linkedEvent.title}</a>&quot;</div>
+                                <div class="postitSignature"><a href="${newsMessage.eventUrl}" onClick="javascript: pageTracker._trackPageview('/outgoing/linkedEvent/${newsMessage.linkedEvent.id}');">${newsMessage.linkedEvent.urlLabel}</a></div>
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="postit postitWhite">
+                            <div class="postitText">
+                                <div class="postitDate" style="float: left;"><fmt:formatDate value="${newsMessage.date}" type="date" dateStyle="short"/></div><div style="float: right; font-size: 10px;">&quot;<a href="${newsMessage.eventUrl}" onClick="javascript: pageTracker._trackPageview('/outgoing/linkedEvent/${newsMessage.linkedEvent.id}');">${newsMessage.linkedEvent.title}</a>&quot;</div>
+                                <div style="width: 100%; text-align: center;"><a href="${newsMessage.eventUrl}" onClick="javascript: pageTracker._trackPageview('/outgoing/linkedEvent/${newsMessage.linkedEvent.id}');"><img src="${cp}/bin/linkedEventBackground.bin?id=${newsMessage.linkedEvent.id}" height="80px" border="0" alt="${newsMessage.linkedEvent.title}"/></a></div>
+                                <div class="postitContent"></div>
+                            </div>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </c:when>
         </c:choose>
     </c:forEach>
     <br style="clear: both;"/>

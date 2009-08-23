@@ -18,6 +18,7 @@ import it.jugpadova.bean.EventSearch;
 import it.jugpadova.bean.NewsMessage;
 import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.dao.EventDao;
+import it.jugpadova.dao.LinkedEventDao;
 import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.exception.JUGEventsException;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
@@ -25,6 +26,7 @@ import it.jugpadova.exception.ParancoeAccessDeniedException;
 import it.jugpadova.exception.RegistrationNotOpenException;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Jugger;
+import it.jugpadova.po.LinkedEvent;
 import it.jugpadova.po.Participant;
 import it.jugpadova.util.Utilities;
 
@@ -40,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
@@ -82,7 +85,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: ec7c0560752e $
+ * @version $Revision: e8fb29d10937 $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -95,7 +98,6 @@ public class EventBo {
     private EventDao eventDao;
     @Autowired
     private ServicesBo servicesBo;
-    
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
@@ -104,6 +106,8 @@ public class EventBo {
     private MessageSource messageSource;
     @Autowired
     private Conf conf;
+    @Resource
+    private LinkedEventDao linkedEventDao;
 
     public List<Participant> searchConfirmedParticipantsByEventId(Long id) {
         return participantDao.findConfirmedParticipantsByEventId(id);
@@ -220,7 +224,7 @@ public class EventBo {
         org.apache.lucene.search.Query query = parser.parse(searchQuery);
         FullTextQuery hibQuery =
                 fullTextSession.createFullTextQuery(query, Event.class);
-      //  hibQuery.setSort(arg0)
+        //  hibQuery.setSort(arg0)
         if (!pastEvents) {
             hibQuery.enableFullTextFilter("notPassedEvents");
         }
@@ -245,7 +249,8 @@ public class EventBo {
             HttpServletRequest req = wctx.getHttpServletRequest();
             ScriptSession session = wctx.getScriptSession();
             Util util = new Util(session);
-            java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(
+            java.text.DateFormat dateFormat = java.text.DateFormat.
+                    getDateInstance(
                     java.text.DateFormat.SHORT, new Locale(locale));
             java.lang.String baseUrl =
                     "http://" + req.getServerName() + ":" + req.getServerPort() +
@@ -262,7 +267,8 @@ public class EventBo {
                 StringBuilder sb = new StringBuilder();
                 for (Event event : events) {
                     sb.append("<div>\n");
-                    sb.append("<div class=\"eventDate\">").append(dateFormat.format(
+                    sb.append("<div class=\"eventDate\">").append(dateFormat.
+                            format(
                             event.getStartDate())).
                             append("</div>");
                     if (event.getOwner() != null) {
@@ -348,15 +354,14 @@ public class EventBo {
         participantDao.store(participant);
     }
 
-   
-
     public Event retrieveEvent(Long id) {
         Event event = eventDao.read(id);
         if (event != null) {
             event.getParticipants().size();
             event.getEventResources().size();
             event.getSpeakers().size();
-            logger.debug("Found " + event.getSpeakers().size() + " speakers for event id: " + id);
+            logger.debug("Found " + event.getSpeakers().size() +
+                    " speakers for event id: " + id);
         }
         return event;
     }
@@ -421,20 +426,21 @@ public class EventBo {
      */
     public Participant confirmParticipant(String email, String confirmationCode)
             throws RegistrationNotOpenException {
-    	Participant p = getParticipant(email, confirmationCode);
-    	if((p == null)||(!p.canBeConfirmed()))
-    			throw new JUGEventsException();   
-    		if (p.getEvent().getRegistrationOpen()) {
-    			p.setConfirmed(Boolean.TRUE);
-    			p.setCancelled(Boolean.FALSE);
-    			p.setConfirmationDate(new Date());
-    		} else {
-    			throw new RegistrationNotOpenException(p.getEvent());
-    		}    	
-    		          
-    	return p;
+        Participant p = getParticipant(email, confirmationCode);
+        if ((p == null) || (!p.canBeConfirmed())) {
+            throw new JUGEventsException();
+        }
+        if (p.getEvent().getRegistrationOpen()) {
+            p.setConfirmed(Boolean.TRUE);
+            p.setCancelled(Boolean.FALSE);
+            p.setConfirmationDate(new Date());
+        } else {
+            throw new RegistrationNotOpenException(p.getEvent());
+        }
+
+        return p;
     }
-          
+
     /**
      * Cancel the registration of a participant to an event.     *
      * @param email The email of the participant
@@ -443,21 +449,20 @@ public class EventBo {
      * @throws it.jugpadova.exception.RegistrationNotOpenException When the participant can't be cancelled because the registration is yet closed
      * @throws JUGEventsException when the participant can't be cancelled according to the policy rules.
      */
-    public Participant cancelParticipant(String email, String confirmationCode) 
-    throws RegistrationNotOpenException {
-    	Participant p = getParticipant(email, confirmationCode);
-    	if((p == null)||(!p.canBeCancelled()))
-    		throw new JUGEventsException();       	
-    	if (p.getEvent().getRegistrationOpen()) {
-    		p.setCancellationDate(new Date());
-    		p.setCancelled(true);
-    	} else {
-    		throw new RegistrationNotOpenException(p.getEvent());
-    	}    		
-    	return p;
+    public Participant cancelParticipant(String email, String confirmationCode)
+            throws RegistrationNotOpenException {
+        Participant p = getParticipant(email, confirmationCode);
+        if ((p == null) || (!p.canBeCancelled())) {
+            throw new JUGEventsException();
+        }
+        if (p.getEvent().getRegistrationOpen()) {
+            p.setCancellationDate(new Date());
+            p.setCancelled(true);
+        } else {
+            throw new RegistrationNotOpenException(p.getEvent());
+        }
+        return p;
     }
-
-    
 
     @RemoteMethod
     public void updateBadgePanel(String continent, String country,
@@ -742,6 +747,11 @@ public class EventBo {
                         event.getStartDate(), event, baseUrl));
             }
         }
+        List<LinkedEvent> linkedEvents = linkedEventDao.findExposedEvents();
+        for (LinkedEvent linkedEvent : linkedEvents) {
+            messages.add(new NewsMessage(NewsMessage.TYPE_LINKED_EVENT,
+                    linkedEvent.getStartDate(), linkedEvent, baseUrl));
+        }
         return messages;
     }
 
@@ -754,7 +764,7 @@ public class EventBo {
         fullTextSession.setCacheMode(CacheMode.IGNORE);
         ScrollableResults results = fullTextSession.createCriteria(Event.class).
                 scroll(ScrollMode.FORWARD_ONLY);
-        
+
         int index = 0;
         while (results.next()) {
             index++;
@@ -789,21 +799,18 @@ public class EventBo {
     public void setServicesBo(ServicesBo servicesBo) {
         this.servicesBo = servicesBo;
     }
-    
+
     /*
      * ******************* Private Methods ****************************************************
      */
-    
-  
-    
     /**
      * Retrieves participant identified by email and confirmationCode.
      */
-    private Participant getParticipant(String email, String confirmationCode)
-    {
-    	 return participantDao.findByEmailAndConfirmationCode(email, confirmationCode);
+    private Participant getParticipant(String email, String confirmationCode) {
+        return participantDao.findByEmailAndConfirmationCode(email,
+                confirmationCode);
     }
-    
+
     private String generateConfirmationCode(Event event,
             Participant participant) {
         return new MessageDigestPasswordEncoder("MD5", true).encodePassword(

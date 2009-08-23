@@ -2,7 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
@@ -13,12 +13,30 @@
    height="1052.3622047"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.45.1"
+   inkscape:version="0.46"
    sodipodi:docbase="/home/lucio/MyWorks/jugevents/jugevents/src/main/webapp/images"
    sodipodi:docname="postit.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs4">
+    <linearGradient
+       id="linearGradient3199">
+      <stop
+         id="stop3201"
+         offset="0"
+         style="stop-color:#eeeeee;stop-opacity:1;" />
+      <stop
+         id="stop3203"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0.94117647;" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective37" />
     <linearGradient
        id="linearGradient3393">
       <stop
@@ -138,6 +156,26 @@
        y1="376.68613"
        x2="238.9413"
        y2="212.51677" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3134"
+       id="linearGradient2422"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.418576,0,0,0.4784104,80.749718,139.82855)"
+       x1="472.2692"
+       y1="376.68613"
+       x2="238.9413"
+       y2="212.51677" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3199"
+       id="linearGradient3205"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.418576,0,0,0.4784104,80.749718,139.82855)"
+       x1="472.2692"
+       y1="376.68613"
+       x2="238.9413"
+       y2="212.51677" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -154,7 +192,8 @@
      inkscape:window-width="1920"
      inkscape:window-height="1125"
      inkscape:window-x="0"
-     inkscape:window-y="25" />
+     inkscape:window-y="25"
+     showgrid="false" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -235,6 +274,39 @@
            d="M 314.74633,194.97215 C 313.58251,232.53879 306.90912,326.76545 325.8431,361.50592 C 325.8431,361.50592 215.77056,371.6337 144.918,358.74874 C 132.44409,280.24287 126.98402,237.85057 130.44395,193.86929 C 185.60392,202.83105 268.8337,200.1386 314.74633,194.97215 z "
            id="path3389"
            sodipodi:nodetypes="ccccc" />
+      </g>
+      <g
+         id="g3207"
+         inkscape:export-filename="/home/lucio/MyWorks/jugevents/jugevents/src/main/webapp/images/Postit_white.png"
+         inkscape:export-xdpi="73.18"
+         inkscape:export-ydpi="73.18">
+        <g
+           transform="matrix(1,0,0,0.7387522,286.56563,74.020959)"
+           style="opacity:0.38132294;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3282)"
+           id="g2412">
+          <path
+             style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.43914366;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1"
+             d="M 319.39156,190.46056 C 318.16568,230.0304 311.13644,329.28161 331.08005,365.87459 C 331.08005,365.87459 215.13801,376.54242 140.5073,362.97038 C 127.36822,280.27826 121.61701,235.62543 125.26143,189.29889 C 183.36275,198.73853 271.03068,195.90251 319.39156,190.46056 z"
+             id="path2414"
+             sodipodi:nodetypes="ccccc" />
+          <path
+             sodipodi:nodetypes="ccccc"
+             id="path2416"
+             d="M 314.74633,194.97215 C 313.58251,232.53879 306.90912,326.76545 325.8431,361.50592 C 325.8431,361.50592 215.77056,371.6337 144.918,358.74874 C 132.44409,280.24287 126.98402,237.85057 130.44395,193.86929 C 185.60392,202.83105 268.8337,200.1386 314.74633,194.97215 z"
+             style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:3.57995462;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+        </g>
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:#555555;stroke-width:1.18116832;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3318)"
+           d="M 319.39156,190.46056 C 318.16568,230.0304 311.13644,329.28161 331.08005,365.87459 C 331.08005,365.87459 215.13801,376.54242 140.5073,362.97038 C 127.36822,280.27826 121.61701,235.62543 125.26143,189.29889 C 183.36275,198.73853 271.03068,195.90251 319.39156,190.46056 z"
+           id="path2418"
+           sodipodi:nodetypes="ccccc"
+           transform="matrix(0.9850063,0,0,0.7276749,291.9787,71.946673)" />
+        <path
+           transform="matrix(1,0,0,0.7387522,288.56563,68.849694)"
+           sodipodi:nodetypes="ccccc"
+           id="path2420"
+           d="M 314.74633,194.97215 C 313.58251,232.53879 306.90912,326.76545 325.8431,361.50592 C 325.8431,361.50592 215.77056,371.6337 144.918,358.74874 C 132.44409,280.24287 126.98402,237.85057 130.44395,193.86929 C 185.60392,202.83105 268.8337,200.1386 314.74633,194.97215 z"
+           style="fill:url(#linearGradient3205);fill-opacity:1;stroke:none;stroke-width:3.57995462000000009;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;filter:url(#filter3318)" />
       </g>
     </g>
   </g>

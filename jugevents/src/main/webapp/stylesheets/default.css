@@ -433,6 +433,10 @@ div#news .postitGreen {
     background: white url(../images/Postit_green.png) no-repeat;
 }
 
+div#news .postitWhite {
+    background: white url(../images/Postit_white.png) no-repeat;
+}
+
 div#news .postitYellow {
     background: white url(../images/Postit_yellow.png) no-repeat;
 }
