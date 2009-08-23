@@ -16,6 +16,7 @@ package it.jugpadova.controllers;
 import it.jugpadova.blo.EventBo;
 import it.jugpadova.blo.JugBo;
 import it.jugpadova.blo.ParticipantBo;
+import it.jugpadova.dao.LinkedEventDao;
 import it.jugpadova.dao.SpeakerDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.JUG;
@@ -32,6 +33,7 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,6 +42,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -62,6 +65,8 @@ public class BinController {
     private ParticipantBo participantBo;
     @Autowired
     private SpeakerDao speakerDao;
+    @Resource
+    private LinkedEventDao linkedEventDao;
 
     /**
      * Produce the JUG Logo from the database, or the default no logo image.
@@ -73,7 +78,16 @@ public class BinController {
         byte[] jugLogo = jugBo.retrieveJugLogo(id);
         flushResponse(jugLogo, "JugLogo", "noJugLogo", res);       
     }
-    
+
+    /**
+     * Produce the background image of a linked event, or the default blank background image.
+     */
+    @RequestMapping
+    public void linkedEventBackground(@RequestParam("id") Long id,
+            HttpServletResponse res) throws IOException {
+        byte[] linkedEventBackGround = linkedEventDao.get(id).getBackground();
+        flushResponse(linkedEventBackGround, "linkedEventBackground", "noJugLogo", res);
+    }
     
     /**
      * Produce the speaker image from the database, or the default no logo image.
@@ -144,13 +158,7 @@ public class BinController {
             out.flush();
             out.close();
         }
-    }
-    
-    
-    
-    
-    
-    
+    }                        
     
 
     /**

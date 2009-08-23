@@ -106,6 +106,14 @@
         <put-attribute name="main" value="/WEB-INF/jsp/admin/spring.jsp"/>
     </definition>
 
+    <definition name="admin/linkedevent/list" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/admin/linkedevent/list.jsp"/>
+    </definition>
+
+    <definition name="admin/linkedevent/edit" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/admin/linkedevent/edit.jsp"/>
+    </definition>
+
     <definition name="message" extends="template.central">
         <put-attribute name="main" value="/WEB-INF/jsp/message.jsp"/>
     </definition>
