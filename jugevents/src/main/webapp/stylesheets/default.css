@@ -238,6 +238,7 @@ clear: left;
     border-top: solid 1px black;
     font-weight: bold;
     color: #ff6a00;
+    margin-top: 5px;
 }
 
 .menuTitle {
