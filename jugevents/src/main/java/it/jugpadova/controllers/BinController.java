@@ -99,7 +99,6 @@ public class BinController {
     	if(StringUtils.isEmpty(s)) return;
         Long id = new Long(s);      
         byte[] pictureSpeaker = speakerDao.get(id).getPicture();
-        if((pictureSpeaker==null)||(pictureSpeaker.length==0)) return;
         flushResponse(pictureSpeaker, "pictureSpeaker", "noSpeakerImage", res);        
     }
     
@@ -114,7 +113,6 @@ public class BinController {
         Long id = new Long(s);      
         List<Speaker> speakers = ((Event)req.getSession().getAttribute("event")).getSpeakers();
         byte[] pictureSpeaker = speakers.get(id.intValue()-1).getPicture();
-        if((pictureSpeaker==null)||(pictureSpeaker.length==0)) return;
         flushResponse(pictureSpeaker, "pictureSpeaker", "noSpeakerImage", res);        
     }
     
