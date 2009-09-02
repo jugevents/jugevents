@@ -34,40 +34,4 @@
     </security:authorize>
 </div>
 
-<div class="eventTitle">${event.title}</div>
-
-<c:if test="${event.registrationOpen}">
-    <div class="je_button"><a href="${cp}/event/registration.form?event.id=${event.id}"><spring:message code="register"/></a></div>
-    <c:if test="${(!empty event.registration) && event.registration.registrationRulesAreApplied}">
-        <c:if test="${!empty event.registration.maxParticipants}">
-            <div style="text-align: center;">
-                <spring:message code="event.registration.message.availableSeats" text="?event.registration.message.availableSeats?" arguments="${event.registration.maxParticipants - event.numberOfParticipants}"/>
-            </div>
-        </c:if>
-        <c:if test="${!empty event.registration.endRegistration}">
-            <div style="text-align: center;">
-                <fmt:formatDate value='${event.registration.endRegistration}' type='both' dateStyle='short' timeStyle="short" var="endRegistrationDate"/>
-                <spring:message code="event.registration.message.endRegistrationAt" text="?event.registration.message.endRegistrationAt?" arguments="${endRegistrationDate}"/>
-            </div>
-        </c:if>
-        <c:if test="${empty event.registration.endRegistration}">
-            <div style="text-align: center;">
-                <fmt:formatDate value='${event.startDate}' type='date' dateStyle='short' var="endRegistrationDate"/>
-                <spring:message code="event.registration.message.endRegistrationAt" text="?event.registration.message.endRegistrationAt?" arguments="${endRegistrationDate}"/>
-            </div>
-        </c:if>
-    </c:if>
-</c:if>
-
-<c:if test="${!empty event.owner}">
-    <div class="jugLogoBox">
-        <a href="${event.owner.jug.webSiteUrl}"><img src="${cp}/bin/jugLogo.bin?id=${event.owner.jug.id}" alt="JUG Logo" width="100"/></a>
-        <a href="${event.owner.jug.webSiteUrl}">${event.owner.jug.name}</a>
-    </div>
-</c:if>
-
-<%@ include file="show.jspf" %>
-
-<c:if test="${event.registrationOpen}">
-    <div class="je_button"><a href="${cp}/event/registration.form?event.id=${event.id}"><spring:message code="register"/></a></div>
-</c:if>
+<%@include file="show.jspf" %>

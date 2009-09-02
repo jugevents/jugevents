@@ -1,0 +1,17 @@
+<%@ page pageEncoding="UTF-8" %>
+<span class="strong"><spring:message code="event.start"  text="?event.start?"/>:</span> <fmt:formatDate value="${event.startDate}" type="date" dateStyle="short" /> ${event.startTime}<br/>
+<span class="strong"><spring:message code="event.end" text="?event.end?"/>:</span> <fmt:formatDate value="${event.endDate}" type="date" dateStyle="short" /> ${event.endTime}<br/>
+<span class="strong"><spring:message code="event.location" /></span>:<br/>
+${event.location}<br/>
+<div class="preview">${event.filteredDirections}</div>
+<c:if test="${!empty event.owner.jug.contactEmail}">
+    <span class="strong"><spring:message code="jugContact" />:</span>
+    <c:choose>
+        <c:when test="${!empty event.owner.jug.contactName}">
+            <a href="mailto:${event.owner.jug.contactEmail}">${event.owner.jug.contactName}</a>
+        </c:when>
+        <c:otherwise>
+            <a href="mailto:${event.owner.jug.contactEmail}">${event.owner.jug.contactEmail}</a>
+        </c:otherwise>
+    </c:choose><br/>
+</c:if>

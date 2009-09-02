@@ -1,0 +1,48 @@
+<%@ page pageEncoding="UTF-8" %>
+
+<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
+
+<c:if test="${!empty event.speakers}">
+    <div class="boxHeader">
+        <spring:message code="speakers" text="?speakers"/>
+    </div>
+    <div id="speakers" style="width: 100%; margin: 0; padding: 0;">
+        <c:forEach items="${event.speakers}" var="speaker" varStatus="iRow">
+            <div class="speaker">
+                <div>
+                    <div class="speaker_img">
+                        <img src="${cp}/bin/pictureSpeaker.bin?id=${speaker.id}" alt="Picture of ${speaker.firstName} ${speaker.lastName}" width="85" />
+                    </div>
+                    <div style="float: right; width: 110px; text-align: right;">
+                        <div style="font-weight: bold;">${speaker.firstName} ${speaker.lastName}</div>
+                        <c:if test="${!empty speaker.email}">
+                            <div><a href="mailto:${speaker.email}"><spring:message code="SendAMail" text="?SendAMail?"/></a></div>
+                        </c:if>
+                        <c:if test="${!empty speaker.url}">
+                            <div><a href="${speaker.url}"><spring:message code="WebSiteBlog" text="?WebSiteBlog?"/></a></div>
+                        </c:if>
+                        <c:if test="${!empty speaker.skypeId}">
+                            <div>
+                                <a href="skype:${speaker.skypeId}?call"><img src="http://mystatus.skype.com/smallclassic/${speaker.skypeId}" style="border: none;" width="110" alt="My state" /></a>
+                            </div>
+                        </c:if>
+                        <div id="speakerLinkAnchor_show_${iRow.index}" style="margin-top: 10px;"><a href="javascript:toggleSpeakerDetails('${iRow.index}');"><spring:message code="showDetails" text="?showDetails?" /></a></div>
+                        <div id="speakerLinkAnchor_hide_${iRow.index}" style="margin-top: 10px; display: none;"><a href="javascript:toggleSpeakerDetails('${iRow.index}');"><spring:message code="hideDetails" text="?showDetails?" /></a></div>
+                    </div>
+                    <div style="clear: both; height: 0px;">&nbsp;</div>
+                </div>
+                <div id="speaker_details_${iRow.index}" class="speaker_details" style="display: none; clear: both;">
+                    <div style="text-align: justify;">${speaker.filteredPreview}</div>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+
+    <script type="text/javascript">
+        function toggleSpeakerDetails(speakerId) {
+            $('speaker_details_'+speakerId).toggle();
+            $('speakerLinkAnchor_show_'+speakerId).toggle();
+            $('speakerLinkAnchor_hide_'+speakerId).toggle();
+        }
+    </script>
+</c:if>

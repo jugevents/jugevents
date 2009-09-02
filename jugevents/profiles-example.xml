@@ -3,6 +3,13 @@
     <profiles>
         <profile>
             <id>jugevents</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>netbeans.execution</name>
+                    <value>true</value>
+                </property>
+            </activation>
             <properties>
                 <mail.host>localhost</mail.host>
                 <mail.username>myusername</mail.username>

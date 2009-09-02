@@ -1,10 +1,10 @@
 <%@ include file="../common.jspf" %>
 <h1><spring:message code="RegisterTo" text="?Register to?"/> &quot;${event.title}&quot;</h1>
 
-<a href="${cp}/event/show.html?id=${event.id}"><spring:message code="BackToTheEvent"/></a>
+<a href="${cp}/event/${event.id}"><spring:message code="BackToTheEvent"/></a>
 
 <c:if test="${!empty event.owner}">
-    <div class="jugLogoBox">
+    <div class="jugLogoBox" style="float: right;">
         <a href="${event.owner.jug.webSiteUrl}"><img src="${cp}/bin/jugLogo.bin?id=${event.owner.jug.id}" alt="JUG Logo" width="100"/></a>
         <a href="${event.owner.jug.webSiteUrl}">${event.owner.jug.name}</a>
     </div>
@@ -30,4 +30,3 @@
         </dl>
     </div>
 </form:form>
-<%@ include file="show.jspf"%>

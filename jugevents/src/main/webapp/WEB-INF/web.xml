@@ -4,7 +4,7 @@
         <listener-class>org.parancoe.web.ContextListener</listener-class>
     </listener>
     <listener>
-        <listener-class>org.parancoe.web.PopulateInitialDataContextListener</listener-class>
+        <listener-class>it.jugpadova.PopulateInitialDataContextListener</listener-class>
     </listener>
 
     <!-- set requests encoding to UTF8 (needs to be the first filter) -->
