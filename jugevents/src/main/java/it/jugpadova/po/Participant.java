@@ -22,6 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import javax.persistence.Transient;
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.MaxLength;
@@ -31,7 +32,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: ec7c0560752e $
+ * @version $Revision: db985b62e665 $
  */
 @Entity
 @NamedQueries({
@@ -213,5 +214,19 @@ public class Participant extends EntityBase {
 	{
 		return confirmed;
 	}
+        @Transient
+        public boolean isConfirmed()
+        {
+            if(this.getConfirmed() != null)
+                return this.getConfirmed().booleanValue();
+            return false;
+        }
+        @Transient
+        public boolean isCancelled()
+        {
+            if(this.getCancelled() != null)
+                return this.getCancelled().booleanValue();
+            return false;
+        }
 
 }
