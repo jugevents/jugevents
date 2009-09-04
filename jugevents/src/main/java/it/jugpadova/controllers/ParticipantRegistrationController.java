@@ -59,6 +59,7 @@ public class ParticipantRegistrationController {
     protected ModelAndView onSubmit(HttpServletRequest req,
             @ModelAttribute(REGISTRATION_ATTRIBUTE) Registration registration,
             BindingResult result, SessionStatus status) throws Exception {
+        final String SENT_MAIL_URL = "redirect:/home/message.html?messageCode=participant.registration.sentMail";
         if (result.hasErrors()) {
             registration.setCaptchaResponse("");
             req.setAttribute("event", registration.getEvent());
@@ -73,21 +74,20 @@ public class ParticipantRegistrationController {
             eventBo.register(registration.getEvent(),
                     registration.getParticipant(), baseUrl);
             mv =
-                    new ModelAndView(
-                    "redirect:/home/message.html?messageCode=participant.registration.sentMail");
+                    new ModelAndView(SENT_MAIL_URL);
             Utilities.addMessageArguments(mv, registration.getEvent().getTitle(),
                     registration.getParticipant().getEmail());
         } else {
             Participant p = prevParticipant.get(0);
-            if (p.getConfirmed().booleanValue()) {
+            //partcipant already confirmed but not cancelled
+            if ((p.getConfirmed().booleanValue())&(!p.getCancelled())) {
                 status.setComplete();
                 mv = Utilities.getMessageView(
                         "participant.registration.yetRegistered");
             } else {
                 eventBo.refreshRegistration(registration.getEvent(), p, baseUrl);
                 mv =
-                        new ModelAndView(
-                        "redirect:/home/message.html?messageCode=participant.registration.sentMail");
+                        new ModelAndView(SENT_MAIL_URL);
                 Utilities.addMessageArguments(mv,
                         registration.getEvent().getTitle(),
                         registration.getParticipant().getEmail());
