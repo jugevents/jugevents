@@ -80,7 +80,7 @@ public class ParticipantRegistrationController {
         } else {
             Participant p = prevParticipant.get(0);
             //partcipant already confirmed but not cancelled
-            if (p.isConfirmed()&&(!p.isCancelled())) {
+            if (p.hasValidRegistration()) {
                 status.setComplete();
                 mv = Utilities.getMessageView(
                         "participant.registration.yetRegistered");

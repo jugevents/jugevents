@@ -252,7 +252,7 @@ public class Event extends EntityBase {
         int result = 0;
         if (getParticipants() != null) {
             for (Participant p : getParticipants()) {
-                if (p.isConfirmed()&&(!p.isCancelled())) {
+                if (p.hasValidRegistration()) {
                     result++;
                 }
             }

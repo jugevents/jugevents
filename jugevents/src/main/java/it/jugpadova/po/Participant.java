@@ -32,26 +32,31 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: db985b62e665 $
+ * @version $Revision: 88a2541ec57e $
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name="Participant.findParticipantByEmailAndEventId",
-        query="from Participant p where p.email = ? and p.event.id = ?"),
-    @NamedQuery(name="Participant.findConfirmedParticipantsByEventId",
-        query="from Participant p where p.event.id = ? and p.confirmed = true and p.cancelled != true order by p.creationDate, p.id"),
-    @NamedQuery(name="Participant.findNotConfirmedParticipantsByEventId",
-        query="from Participant p where p.event.id = ? and p.confirmed = false order by p.creationDate, p.id"),
-    @NamedQuery(name="Participant.findCancelledParticipantsByEventId",
-        query="from Participant p where p.event.id = ? and p.cancelled = true order by p.creationDate, p.id"),
-    @NamedQuery(name="Participant.findPresentParticipantsByEventId",
-        query="from Participant p where p.event.id = ? and p.attended = true"),
-    @NamedQuery(name="Participant.findWinningParticipantsByEventId",
-        query="from Participant p where p.event.id = ? and p.winner = true"),
-    @NamedQuery(name="Participant.findNonwinningParticipantsByEventId",
-        query="from Participant p where p.event.id = ? and (p.winner = null or p.winner = false)")
+    @NamedQuery(name = "Participant.findParticipantByEmailAndEventId",
+    query = "from Participant p where p.email = ? and p.event.id = ?"),
+    @NamedQuery(name = "Participant.findConfirmedParticipantsByEventId",
+    query =
+    "from Participant p where p.event.id = ? and p.confirmed = true and p.cancelled != true order by p.creationDate, p.id"),
+    @NamedQuery(name = "Participant.findNotConfirmedParticipantsByEventId",
+    query =
+    "from Participant p where p.event.id = ? and p.confirmed = false order by p.creationDate, p.id"),
+    @NamedQuery(name = "Participant.findCancelledParticipantsByEventId",
+    query =
+    "from Participant p where p.event.id = ? and p.cancelled = true order by p.creationDate, p.id"),
+    @NamedQuery(name = "Participant.findPresentParticipantsByEventId",
+    query = "from Participant p where p.event.id = ? and p.attended = true"),
+    @NamedQuery(name = "Participant.findWinningParticipantsByEventId",
+    query = "from Participant p where p.event.id = ? and p.winner = true"),
+    @NamedQuery(name = "Participant.findNonwinningParticipantsByEventId",
+    query =
+    "from Participant p where p.event.id = ? and (p.winner = null or p.winner = false)")
 })
 public class Participant extends EntityBase {
+
     @NotBlank
     private String firstName;
     @NotBlank
@@ -67,11 +72,10 @@ public class Participant extends EntityBase {
     private Date lastCertificateSentDate;
     private Date confirmationDate;
     private Boolean winner;
-    @MaxLength(value=255)
+    @MaxLength(value = 255)
     private String note;
     private Boolean cancelled = Boolean.FALSE;
     private Date cancellationDate;
-    
 
     /** Creates a new instance of Participant */
     public Participant() {
@@ -168,7 +172,7 @@ public class Participant extends EntityBase {
     public void setWinner(Boolean winner) {
         this.winner = winner;
     }
-    
+
     public String getNote() {
         return note;
     }
@@ -177,56 +181,46 @@ public class Participant extends EntityBase {
         this.note = note;
     }
 
-	public Boolean getCancelled() {
-		return cancelled;
-	}
+    public Boolean getCancelled() {
+        return cancelled;
+    }
 
-	public void setCancelled(Boolean cancelled) {
-		this.cancelled = cancelled;
-	}
+    public void setCancelled(Boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 
-	public Date getCancellationDate() {
-		return cancellationDate;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getCancellationDate() {
+        return cancellationDate;
+    }
 
-	public void setCancellationDate(Date cancellationDate) {
-		this.cancellationDate = cancellationDate;
-	}        
-	
-	/**
-	 * Evaluate the confirmation to the event.
-	 * @return
-	 */
-	public boolean canBeConfirmed()
-	{
-		return true;
-		/*
-		if((!cancelled&&!confirmed))
-			return true;
-		return false;
-		*/
-	}
-	/**
-	 * Evaluate the cancellation to the event.
-	 * @return
-	 */
-	public boolean canBeCancelled()
-	{
-		return confirmed;
-	}
-        @Transient
-        public boolean isConfirmed()
-        {
-            if(this.getConfirmed() != null)
-                return this.getConfirmed().booleanValue();
-            return false;
-        }
-        @Transient
-        public boolean isCancelled()
-        {
-            if(this.getCancelled() != null)
-                return this.getCancelled().booleanValue();
-            return false;
-        }
+    public void setCancellationDate(Date cancellationDate) {
+        this.cancellationDate = cancellationDate;
+    }
+
+    /**
+     * Evaluate the confirmation to the event.
+     * @return
+     */
+    public boolean canBeConfirmed() {
+        return true;
+        /*
+        if((!cancelled&&!confirmed))
+        return true;
+        return false;
+         */
+    }
+
+    /**
+     * Evaluate the cancellation to the event.
+     * @return
+     */
+    public boolean canBeCancelled() {
+        return confirmed;
+    }
+
+    public boolean hasValidRegistration() {
+        return this.getConfirmed()!=null && this.getConfirmed() && !(this.getCancelled()!=null && this.getCancelled());
+    }
 
 }
