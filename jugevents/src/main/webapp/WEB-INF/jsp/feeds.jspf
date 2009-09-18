@@ -1,0 +1,21 @@
+<%@ page pageEncoding="UTF-8" %>
+<div id="content_feeds">
+    <p class="boxTitle"><spring:message code="Feeds" text="?Feeds?"/></p>
+<a href="${cp}/event/rss.html?continent=${eventSearch.continent}&amp;country=${eventSearch.country}&amp;jugName=${eventSearch.jugName}&amp;pastEvents=${eventSearch.pastEvents}&amp;order=${eventSearch.orderByDate}">
+    <img style="vertical-align: middle; border: none; margin: 2px 5px 0px 5px;" src="${cp}/images/feed-icon-14x14.png" alt="Feed icon"/>
+</a>
+<span class="smallText">
+    <a href="${cp}/event/rss.html?continent=${eventSearch.continent}&amp;country=${eventSearch.country}&amp;jugName=${eventSearch.jugName}&amp;pastEvents=${eventSearch.pastEvents}&amp;order=${eventSearch.orderByDate}">
+        <spring:message code="RSS" text="?RSS?"/>
+    </a>
+</span>
+<br/>
+<a href="${cp}/event/ics.html">
+    <img style="vertical-align: middle; border: none; margin: 2px 0px 0px 0px;" src="${cp}/images/ics_icon.gif" alt="ICS icon"/>
+</a>
+<span class="smallText">
+    <a href="${cp}/event/ics.html">
+        <spring:message code="Calendar" text="?Calendar?"/>
+    </a>
+</span>
+</div>

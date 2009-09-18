@@ -1,5 +1,6 @@
 - &Event-springframework
   title: "Springframework Meeting 2007"
+  creationDate: 01/01/2007
   startDate: 07/14/2007
   startTime: "09:00 AM"
   endDate: 07/14/2007
@@ -11,6 +12,7 @@
   owner: *Jugger-fabrizio
 - &Event-jugpdnov
   title: "JUG Padova Meeting #38"
+  creationDate: 01/01/2007
   startDate: 11/24/2007
   startTime: "09:00 AM"
   endDate: 11/24/2007
@@ -22,6 +24,7 @@
   owner: *Jugger-lucio
 - &Event-jugpdgiu
   title: "JUG Padova Meeting #39"
+  creationDate: 01/01/2007
   startDate: 06/24/2008
   startTime: "09:00 AM"
   endDate: 06/24/2007
@@ -33,6 +36,7 @@
   owner: *Jugger-lucio
 - &Event-future
   title: "Future Meeting"
+  creationDate: 01/01/2007
   startDate: 11/24/2020
   startTime: "09:00 AM"
   endDate: 11/24/2020

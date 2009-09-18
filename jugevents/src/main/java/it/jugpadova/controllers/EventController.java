@@ -22,8 +22,6 @@ import it.jugpadova.po.Participant;
 
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,19 +29,21 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.fortuna.ical4j.data.CalendarOutputter;
+import net.fortuna.ical4j.model.Calendar;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sun.syndication.feed.rss.Channel;
-import com.sun.syndication.feed.rss.Description;
-import com.sun.syndication.feed.rss.Guid;
-import com.sun.syndication.feed.rss.Item;
 import com.sun.syndication.io.WireFeedOutput;
+import it.jugpadova.blol.FeedsBo;
 import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.dao.EventDao;
 import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.util.Utilities;
+import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +63,8 @@ public class EventController {
     private EventBo eventBo;
     @Autowired
     private ServicesBo servicesBo;
+    @Resource
+    private FeedsBo feedsBo;
 
     @RequestMapping
     public ModelAndView list(HttpServletRequest req,
@@ -93,7 +95,8 @@ public class EventController {
     }
 
     @RequestMapping
-    public ModelAndView show(@RequestParam(value="id", required=true) Long id) {
+    public ModelAndView show(
+            @RequestParam(value = "id", required = true) Long id) {
         ModelAndView mv =
                 new ModelAndView("event/show");
         Event event = eventBo.retrieveEvent(id);
@@ -188,49 +191,10 @@ public class EventController {
     public ModelAndView rss(HttpServletRequest req,
             HttpServletResponse res) throws Exception {
         try {
-            EventSearch eventSearch = new EventSearch();
-            eventSearch.setContinent(req.getParameter("continent"));
-            eventSearch.setCountry(req.getParameter("country"));
-            eventSearch.setJugName(req.getParameter("jugName"));
-            eventSearch.setPastEvents(Boolean.parseBoolean(req.getParameter(
-                    "pastEvents")));
-            eventSearch.setOrderByDate(req.getParameter("order"));
+            EventSearch eventSearch = buildEventSearch(req);
             List<Event> events = eventBo.search(eventSearch);
-            Channel channel = new Channel("rss_2.0");
-            channel.setTitle("JUG Event news");
-            channel.setDescription("JUG Events news always updated");
-            StringBuffer channelLink = req.getRequestURL();
-            if (req.getQueryString() != null) {
-                channelLink.append('?').append(req.getQueryString());
-            }
-            channel.setLink(channelLink.toString());
-            channel.setEncoding("UTF-8");
-            Date now = new Date();
-            channel.setLastBuildDate(now);
-            channel.setPubDate(now);
-            List<Item> items =
-                    new LinkedList<Item>();
-            for (Event event : events) {
-                Item item = new Item();
-                Guid guid = new Guid();
-                guid.setValue("http://" + req.getServerName() + ":" +
-                        req.getServerPort() + req.getContextPath() +
-                        "/event/show.html?id=" + event.getId());
-                guid.setPermaLink(true);
-                item.setGuid(guid);
-                item.setAuthor(event.getHostingOrganizationName());
-                item.setTitle(event.getTitle());
-                item.setExpirationDate(event.getEndDate() != null
-                        ? event.getEndDate() : event.getStartDate());
-                item.setPubDate(event.getStartDate());
-                Description description =
-                        new Description();
-                description.setValue(event.getFilteredDescription());
-                description.setType("text/html");
-                item.setDescription(description);
-                items.add(item);
-            }
-            channel.setItems(items);
+            Channel channel = feedsBo.buildChannel(events,
+                    Utilities.getBaseUrl(req), buildChannelLink(req));
             // flush it in the res
             WireFeedOutput wfo = new WireFeedOutput();
             res.setHeader("Cache-Control", "no-store");
@@ -249,6 +213,14 @@ public class EventController {
         return null;
     }
 
+    private String buildChannelLink(HttpServletRequest req) {
+        StringBuffer channelLink = req.getRequestURL();
+        if (req.getQueryString() != null) {
+            channelLink.append('?').append(req.getQueryString());
+        }
+        return channelLink.toString();
+    }
+
     @RequestMapping
     public ModelAndView badge(HttpServletRequest req,
             HttpServletResponse res) throws Exception {
@@ -264,39 +236,17 @@ public class EventController {
                     java.text.DateFormat.getDateInstance(
                     java.text.DateFormat.DEFAULT,
                     new Locale(locale));
-            java.lang.String baseUrl =
-                    "http://" + req.getServerName() + ":" + req.getServerPort() +
-                    req.getContextPath();
-            it.jugpadova.bean.EventSearch eventSearch =
-                    new it.jugpadova.bean.EventSearch();
-            eventSearch.setContinent(req.getParameter("continent"));
-            eventSearch.setCountry(req.getParameter("country"));
-            eventSearch.setJugName(req.getParameter("jugName"));
-            eventSearch.setPastEvents(java.lang.Boolean.parseBoolean(req.getParameter(
-                    "pastEvents")));
-            eventSearch.setOrderByDate(req.getParameter("order"));
-            String maxResults = req.getParameter("maxResults");
-            if (StringUtils.isNotBlank(maxResults)) {
-                try {
-                    eventSearch.setMaxResults(new Integer(maxResults));
-                } catch (NumberFormatException numberFormatException) {
-                    /* ignore it */
-                }
-            }
-            java.util.List<it.jugpadova.po.Event> events =
-                    eventBo.search(eventSearch);
+            String baseUrl = Utilities.getBaseUrl(req);
+            EventSearch eventSearch = buildEventSearch(req);
+            List<Event> events = eventBo.search(eventSearch);
             boolean showJUGName =
-                    java.lang.Boolean.parseBoolean(req.getParameter(
-                    "jeb_showJUGName"));
+                    Boolean.parseBoolean(req.getParameter("jeb_showJUGName"));
             boolean showCountry =
-                    java.lang.Boolean.parseBoolean(req.getParameter(
-                    "jeb_showCountry"));
+                    Boolean.parseBoolean(req.getParameter("jeb_showCountry"));
             boolean showDescription =
-                    java.lang.Boolean.parseBoolean(req.getParameter(
-                    "jeb_showDescription"));
+                    Boolean.parseBoolean(req.getParameter("jeb_showDescription"));
             boolean showParticipants =
-                    java.lang.Boolean.parseBoolean(req.getParameter(
-                    "jeb_showParticipants"));
+                    Boolean.parseBoolean(req.getParameter("jeb_showParticipants"));
             String badgeStyle = req.getParameter("jeb_style");
             String result =
                     eventBo.getBadgeCode(eventBo.getBadgeHtmlCode(events,
@@ -341,5 +291,56 @@ public class EventController {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    @RequestMapping
+    public ModelAndView ics(HttpServletRequest req,
+            HttpServletResponse res) throws Exception {
+        try {
+            EventSearch eventSearch = buildEventSearch(req);
+            List<Event> events = eventBo.search(eventSearch);
+
+            Calendar calendar = feedsBo.buildCalendar(events, Utilities.
+                    getBaseUrl(req));
+
+            // flush it in the res
+            res.setContentType("text/calendar");
+            res.setHeader("Content-Disposition",
+                    " attachment; filename=\"JUGEventsCalendar.ics\"");
+            res.setHeader("Expires", "0");
+            res.setHeader("Cache-Control",
+                    "must-revalidate, post-check=0, pre-check=0, no-store");
+            res.setHeader("Pragma", "public, no-cache");
+
+            CalendarOutputter outputter = new CalendarOutputter(true);
+            ServletOutputStream resOutputStream = res.getOutputStream();
+            outputter.output(calendar, resOutputStream);
+            resOutputStream.flush();
+            resOutputStream.close();
+        } catch (Exception exception) {
+            logger.error("Error producing ICS", exception);
+            throw exception;
+        }
+        return null;
+    }
+
+    private EventSearch buildEventSearch(HttpServletRequest req) {
+        EventSearch eventSearch = new EventSearch();
+        eventSearch.setContinent(req.getParameter("continent"));
+        eventSearch.setCountry(req.getParameter("country"));
+        eventSearch.setJugName(req.getParameter("jugName"));
+        eventSearch.setPastEvents(java.lang.Boolean.parseBoolean(req.
+                getParameter(
+                "pastEvents")));
+        eventSearch.setOrderByDate(req.getParameter("order"));
+        String maxResults = req.getParameter("maxResults");
+        if (StringUtils.isNotBlank(maxResults)) {
+            try {
+                eventSearch.setMaxResults(new Integer(maxResults));
+            } catch (NumberFormatException numberFormatException) {
+                /* ignore it */
+            }
+        }
+        return eventSearch;
     }
 }

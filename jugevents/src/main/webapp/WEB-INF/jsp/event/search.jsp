@@ -9,7 +9,15 @@
     </a>
     <span class="smallText">
         <a href="${cp}/event/rss.html?continent=${eventSearch.continent}&amp;country=${eventSearch.country}&amp;jugName=${eventSearch.jugName}&amp;pastEvents=${eventSearch.pastEvents}&amp;order=${eventSearch.orderByDate}">
-            <spring:message code="SearchFeed"/>
+            <spring:message code="SearchFeed" text="?SearchFeed?"/>
+        </a>
+    </span>
+    <a href="${cp}/event/ics.html?continent=${eventSearch.continent}&amp;country=${eventSearch.country}&amp;jugName=${eventSearch.jugName}&amp;pastEvents=${eventSearch.pastEvents}&amp;order=${eventSearch.orderByDate}">
+        <img style="vertical-align: middle; border: none;" src="${cp}/images/ics_icon.gif" alt="ICS icon"/>
+    </a>
+    <span class="smallText">
+        <a href="${cp}/event/ics.html?continent=${eventSearch.continent}&amp;country=${eventSearch.country}&amp;jugName=${eventSearch.jugName}&amp;pastEvents=${eventSearch.pastEvents}&amp;order=${eventSearch.orderByDate}">
+            <spring:message code="SearchCalendar" text="?SearchCalendar?"/>
         </a>
     </span>
 </h1>
