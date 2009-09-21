@@ -126,9 +126,13 @@ public class EventController {
             List<Participant> participantsNotConfirmed =
                     eventBo.searchNotConfirmedParticipantsByEventId(
                     event.getId());
+            List<Participant> participantsCancelled =
+                eventBo.searchCancelledParticipantsByEventId(event.getId());
+            
             mv.addObject("event", event);
             mv.addObject("participants", participants);
             mv.addObject("participantsNotConfirmed", participantsNotConfirmed);
+            mv.addObject("participantsCancelled", participantsCancelled);
             Registration registration = new Registration();
             registration.setEvent(event);
             registration.setParticipant(new Participant());

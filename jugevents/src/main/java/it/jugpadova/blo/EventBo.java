@@ -85,7 +85,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: e8fb29d10937 $
+ * @version $Revision: 234f73ce3127 $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -119,6 +119,10 @@ public class EventBo {
 
     public List<Participant> searchNotConfirmedParticipantsByEventId(Long id) {
         return participantDao.findNotConfirmedParticipantsByEventId(id);
+    }
+    
+    public List<Participant> searchCancelledParticipantsByEventId(Long id) {
+        return participantDao.findCancelledParticipantsByEventId(id);
     }
 
     public Participant searchParticipantById(Long participantId) {
