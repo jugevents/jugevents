@@ -41,10 +41,9 @@ public class SecuredAjaxBo implements AjaxMethods {
     }
 
     @RemoteMethod
-    public void confirmParticipantOnAttendance(long participantId, boolean value) {
+    public void confirmParticipantOnAttendance(long participantId, boolean attended, boolean wasCancelled) {
         participantBo.confirmParticipantOnAttendance(participantId,
-                value);
-
+                attended, wasCancelled);
     }
 
     @RemoteMethod

@@ -55,7 +55,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 234f73ce3127 $
+ * @version $Revision: 9b61bfe9a3d8 $
  */
 @Component
 public class ParticipantBo {
@@ -96,16 +96,21 @@ public class ParticipantBo {
      * @param value true if he's present
      */
     public void confirmParticipantOnAttendance(long participantId,
-            boolean value) {
+            boolean attended, boolean wasCancelled) {
         Participant participant =
                 participantDao.read(Long.valueOf(participantId));
-        participant.setAttended(new Boolean(value));
-        participant.setConfirmed(new Boolean(value));
-        participant.setCancelled(false);
-        if (value) {
+        if (attended) {
+            participant.setAttended(Boolean.TRUE);
+            participant.setConfirmed(Boolean.TRUE);
             participant.setConfirmationDate(new Date());
+            participant.setCancelled(Boolean.FALSE);
         } else {
+            participant.setAttended(Boolean.FALSE);
+            participant.setConfirmed(Boolean.FALSE);
             participant.setConfirmationDate(null);
+            if (wasCancelled) {
+                participant.setCancelled(Boolean.TRUE);
+            }
         }
     }
 

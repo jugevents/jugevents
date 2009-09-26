@@ -22,7 +22,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import javax.persistence.Transient;
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.MaxLength;
@@ -32,18 +31,20 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 234f73ce3127 $
+ * @version $Revision: 9b61bfe9a3d8 $
  */
 @Entity
 @NamedQueries({
     @NamedQuery(name = "Participant.findParticipantByEmailAndEventId",
     query = "from Participant p where p.email = ? and p.event.id = ?"),
+    @NamedQuery(name = "Participant.findParticipantsByEventId",
+    query = "from Participant p where p.event.id = ?"),
     @NamedQuery(name = "Participant.findConfirmedParticipantsByEventId",
     query =
-    "from Participant p where p.event.id = ? and p.confirmed = true and p.cancelled = false order by p.creationDate, p.id"),
+    "from Participant p where p.event.id = ? and p.confirmed = true and (p.cancelled is null or p.cancelled = false) order by p.creationDate, p.id"),
     @NamedQuery(name = "Participant.findNotConfirmedParticipantsByEventId",
     query =
-    "from Participant p where p.event.id = ? and p.confirmed = false and p.cancelled = false order by p.creationDate, p.id"),
+    "from Participant p where p.event.id = ? and (p.confirmed is null or p.confirmed = false) and (p.cancelled is null or p.cancelled = false) order by p.creationDate, p.id"),
     @NamedQuery(name = "Participant.findCancelledParticipantsByEventId",
     query =
     "from Participant p where p.event.id = ? and p.cancelled = true order by p.creationDate, p.id"),
@@ -78,7 +79,7 @@ public class Participant extends EntityBase {
     private Boolean winner;
     @MaxLength(value = 255)
     private String note;
-    private Boolean cancelled = Boolean.FALSE;
+    private Boolean cancelled;
     private Date cancellationDate;
 
     /** Creates a new instance of Participant */
@@ -144,8 +145,6 @@ public class Participant extends EntityBase {
     }
 
     public Boolean getAttended() {
-    	if(attended==null)
-    		return false;
         return attended;
     }
 

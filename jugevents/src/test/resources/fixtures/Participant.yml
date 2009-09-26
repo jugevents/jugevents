@@ -8,3 +8,56 @@
   attended: false
   confirmationDate: 02/17/2007
   winner: false
+- &Participant-FutureRossi
+  firstName: "Mario"
+  lastName: "Rossi"
+  email: "mario.rossi@example.net"
+  confirmed: true
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
+  cancelled: false
+- &Participant-FutureRossi2
+  firstName: "Mario"
+  lastName: "Rossi2"
+  email: "mario.rossi2@example.net"
+  confirmed: true
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
+  cancelled: true
+- &Participant-FutureRossi3
+  firstName: "Mario"
+  lastName: "Rossi3"
+  email: "mario.rossi3@example.net"
+  confirmed: false
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
+- &Participant-FutureRossi3bis
+  firstName: "Mario"
+  lastName: "Rossi3bis"
+  email: "mario.rossi3@example.net"
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
+- &Participant-FutureRossi4
+  firstName: "Mario"
+  lastName: "Rossi4"
+  email: "mario.rossi4@example.net"
+  confirmed: false
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
+  cancelled: true
+  

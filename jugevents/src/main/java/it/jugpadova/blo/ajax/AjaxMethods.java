@@ -32,7 +32,7 @@ public interface AjaxMethods {
 
     // TODO: Unsecured waiting to solve the problems with the proxy
     // @Secured({"ROLE_JUGGER"})
-    void confirmParticipantOnAttendance(long participantId, boolean value);
+    void confirmParticipantOnAttendance(long participantId, boolean attended, boolean wasCancelled);
 
     // TODO: Unsecured waiting to solve the problems with the proxy
     // @Secured({"ROLE_JUGGER"})
