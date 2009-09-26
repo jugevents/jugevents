@@ -83,24 +83,6 @@ public class ParticipantDaoTest extends JugEventsBaseTest {
         assertEquals(all.size(), confirmed.size()+notConfirmed.size()+cancelled.size());
     }
 
-    /**
-     * Test of findPresentParticipantsByEventId method, of class ParticipantDao.
-     */
-    public void testFindPresentParticipantsByEventId() {
-    }
-
-    /**
-     * Test of findWinningParticipantsByEventId method, of class ParticipantDao.
-     */
-    public void testFindWinningParticipantsByEventId() {
-    }
-
-    /**
-     * Test of findNonwinningParticipantsByEventId method, of class ParticipantDao.
-     */
-    public void testFindNonwinningParticipantsByEventId() {
-    }
-
     private List<Event> retrieveFutureEvent() {
         List<Event> futureEvent = eventDao.findByTitle("Future Meeting");
         assertSize(1, futureEvent);
