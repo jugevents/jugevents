@@ -1,0 +1,4 @@
+syntag: regexp
+^jugevents/nbactions.xml
+^jugevents/profiles.xml
+^jugevents/target/
