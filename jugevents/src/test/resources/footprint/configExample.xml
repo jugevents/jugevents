@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <footprint version="$Rev: 23 $" title="demo" idiom="english"
-	date="$Date: 2007-05-27 15:34:34 +0200 (dom, 27 mai 2007) $">
+	date="$Date: 2009/10/06 13:58:16 $">
 	<template pdf.template.filename="files/template.demo.pdf"
 		pdf.generated.prefix="" pdf.generated.path="delete_this"
 		pdf.generated.extension=".pdf" />
