@@ -2,3 +2,5 @@ syntag: regexp
 ^jugevents/nbactions.xml
 ^jugevents/profiles.xml
 ^jugevents/target/
+^jugevents/src/main/webapp/META-INF/context.xml
+^jugevents/src/main/webapp/WEB-INF/database.xml
