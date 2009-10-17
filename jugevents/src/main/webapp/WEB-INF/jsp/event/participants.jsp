@@ -8,6 +8,7 @@
 
 <h2><spring:message code='ParticipantList'/></h2>
 <div class="secondaryMenu">
+    <a href="printBadges.html?id=${event.id}"><spring:message code="PrintBadges" text="?PrintBadges?"/></a>
     <a href="javascript:void(0)" onclick="AjaxMethodsJS.sendCertificateToAllParticipants(${event.id}, '${conf.jugeventsBaseUrl}'); return false;"><spring:message code="SendAllCertificates"/></a>
     <a href="javascript:void(0)" onclick="$('addNewParticipantDiv').show(); $('participant.firstName').focus(); return false;"><spring:message code="AddParticipant"/></a>
 </div>

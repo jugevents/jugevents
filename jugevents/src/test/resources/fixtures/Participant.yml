@@ -60,4 +60,54 @@
   confirmationDate: 02/17/2007
   winner: false
   cancelled: true
+- &Participant-FutureLucio2
+  firstName: "Lucio2"
+  lastName: "Benfante"
+  email: "lucio.benfante@jugpadova.it"
+  confirmed: true
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
+- &Participant-FutureLucio3
+  firstName: "Lucio3"
+  lastName: "Benfante"
+  email: "lucio.benfante@jugpadova.it"
+  confirmed: true
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
+- &Participant-FutureLucio4
+  firstName: "Lucio4"
+  lastName: "Benfante"
+  email: "lucio.benfante@jugpadova.it"
+  confirmed: true
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
+- &Participant-FutureLucio5
+  firstName: "Lucio5"
+  lastName: "Benfante"
+  email: "lucio.benfante@jugpadova.it"
+  confirmed: true
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
+- &Participant-FutureLucio6
+  firstName: "Lucio6"
+  lastName: "Benfante"
+  email: "lucio.benfante@jugpadova.it"
+  confirmed: true
+  event: *Event-future
+  creationDate: 02/17/2007
+  attended: false
+  confirmationDate: 02/17/2007
+  winner: false
   
