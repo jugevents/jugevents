@@ -42,7 +42,7 @@ public class ParticipantDaoTest extends JugEventsBaseTest {
         List<Participant> participants =
                 participantDao.findConfirmedParticipantsByEventId(futureEvent.
                 get(0).getId());
-        assertSize(2, participants);
+        assertSize(7, participants);
     }
 
     /**

@@ -55,13 +55,15 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 9b61bfe9a3d8 $
+ * @version $Revision: b947e4e0b212 $
  */
 @Component
 public class ParticipantBo {
 
     private static final Logger logger =
             Logger.getLogger(ParticipantBo.class);
+    private static final String BADGE_PAGE_TEMPLATE_PATH =
+            "it/jugpadova/BadgePageTemplate.pdf";
     @Autowired
     private ParticipantDao participantDao;
     @Autowired
@@ -132,7 +134,8 @@ public class ParticipantBo {
                     jugBo.retrieveJugCertificateTemplate(
                     event.getOwner().getJug().getId());
             byte[] certificate =
-                    buildCertificate(jugCertificateTemplate, participant.getFirstName() + " " +
+                    buildCertificate(jugCertificateTemplate, participant.
+                    getFirstName() + " " +
                     participant.getLastName(), event.getTitle(),
                     event.getStartDate(), event.getOwner().getJug().
                     getName());
@@ -165,7 +168,8 @@ public class ParticipantBo {
                         jugBo.retrieveJugCertificateTemplate(
                         event.getOwner().getJug().getId());
                 byte[] certificate =
-                        buildCertificate(jugCertificateTemplate, participant.getFirstName() + " " +
+                        buildCertificate(jugCertificateTemplate, participant.
+                        getFirstName() + " " +
                         participant.getLastName(), event.getTitle(),
                         event.getStartDate(), event.getOwner().getJug().
                         getName());

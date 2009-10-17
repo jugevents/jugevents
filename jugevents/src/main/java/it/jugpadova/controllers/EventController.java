@@ -38,11 +38,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sun.syndication.feed.rss.Channel;
 import com.sun.syndication.io.WireFeedOutput;
+import it.jugpadova.blo.ParticipantBadgeBo;
 import it.jugpadova.blol.FeedsBo;
 import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.dao.EventDao;
 import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.util.Utilities;
+import java.io.IOException;
+import java.io.OutputStream;
 import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,6 +68,8 @@ public class EventController {
     private ServicesBo servicesBo;
     @Resource
     private FeedsBo feedsBo;
+    @Resource
+    private ParticipantBadgeBo participantBadgeBo;
 
     @RequestMapping
     public ModelAndView list(HttpServletRequest req,
@@ -127,8 +132,8 @@ public class EventController {
                     eventBo.searchNotConfirmedParticipantsByEventId(
                     event.getId());
             List<Participant> participantsCancelled =
-                eventBo.searchCancelledParticipantsByEventId(event.getId());
-            
+                    eventBo.searchCancelledParticipantsByEventId(event.getId());
+
             mv.addObject("event", event);
             mv.addObject("participants", participants);
             mv.addObject("participantsNotConfirmed", participantsNotConfirmed);
@@ -141,6 +146,51 @@ public class EventController {
             throw pade;
         }
         return mv;
+    }
+
+    @RequestMapping
+    public void printBadges(
+            @RequestParam(value = "id", required = false) Long id,
+            HttpServletResponse res) {
+        Event event = null;
+        if (id != null) {
+            event = eventBo.retrieveEvent(id);
+            if (event == null) {
+                throw new IllegalArgumentException("No event with id " + id);
+            }
+            eventBo.checkUserAuthorization(event);
+        } else {
+            // it was requested a simple empty preview
+            event = new Event();
+            event.setId(-1L);
+            event.setTitle("Sample Event");
+        }
+        OutputStream out = null;
+        try {
+            byte[] pdfBytes = participantBadgeBo.buildPDFBadges(event);
+            out = res.getOutputStream();
+            res.setContentType("application/pdf");
+            res.setContentLength(pdfBytes.length);
+            res.setHeader("Content-Disposition",
+                    " attachment; filename=\"" + event.getTitle() +
+                    "_badges.pdf\"");
+            res.setHeader("Expires", "0");
+            res.setHeader("Cache-Control",
+                    "must-revalidate, post-check=0, pre-check=0");
+            res.setHeader("Pragma", "public");
+            out.write(pdfBytes);
+            out.flush();
+        } catch (Exception ex) {
+            logger.error("Can't build PDF badges for " +
+                    event.getTitle(), ex);
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException ioe) {
+                }
+            }
+        }
     }
 
     /**
@@ -250,7 +300,8 @@ public class EventController {
             boolean showDescription =
                     Boolean.parseBoolean(req.getParameter("jeb_showDescription"));
             boolean showParticipants =
-                    Boolean.parseBoolean(req.getParameter("jeb_showParticipants"));
+                    Boolean.parseBoolean(
+                    req.getParameter("jeb_showParticipants"));
             String badgeStyle = req.getParameter("jeb_style");
             String result =
                     eventBo.getBadgeCode(eventBo.getBadgeHtmlCode(events,

@@ -9,10 +9,12 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,11 +50,14 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
     "from Event e where e.startDate >= current_date()"),
     @NamedQuery(name = "Event.findEventByPartialLocation", query =
     "from Event e where lower(e.location) like lower(?) order by e.location"),
-    @NamedQuery(name = "Event.findEventByPartialLocationAndOwner", query =
+    @NamedQuery(name = "Event.findEventByPartialLocationAndOwner",
+    query =
     "from Event e where lower(e.location) like lower(?) and e.owner.user.username = ? order by e.location"),
-    @NamedQuery(name = "Event.findUpcomingEvents", query =
+    @NamedQuery(name = "Event.findUpcomingEvents",
+    query =
     "from Event e where e.startDate >= current_date() and e.startDate <= ? order by e.startDate"),
-    @NamedQuery(name = "Event.findNewEvents", query =
+    @NamedQuery(name = "Event.findNewEvents",
+    query =
     "from Event e where e.startDate >= current_date() and e.creationDate >= ? order by e.startDate")
 })
 @FullTextFilterDefs({
@@ -79,10 +84,9 @@ public class Event extends EntityBase {
     private Registration registration;
     private List<EventResource> eventResources;
     private List<Speaker> speakers = new ArrayList<Speaker>();
+    private byte[] badgeTemplate;
 
-    
-
-	/**
+    /**
      * Get the entity id.
      * 
      * @return the entity id.
@@ -234,19 +238,32 @@ public class Event extends EntityBase {
     public void setEventResources(List<EventResource> eventResources) {
         this.eventResources = eventResources;
     }
-    @OneToMany(mappedBy = "event")  @org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-    public List<Speaker> getSpeakers() {
-    	if(this.speakers == null)
-    	{
-    		this.speakers = new ArrayList<Speaker>();
-    	}
-		return speakers;
-	}
 
-	public void setSpeakers(List<Speaker> speakers) {
-		this.speakers = speakers;
-	}
-    
+    @OneToMany(mappedBy = "event")
+    @org.hibernate.annotations.Cascade({
+        org.hibernate.annotations.CascadeType.ALL,
+        org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+    public List<Speaker> getSpeakers() {
+        if (this.speakers == null) {
+            this.speakers = new ArrayList<Speaker>();
+        }
+        return speakers;
+    }
+
+    public void setSpeakers(List<Speaker> speakers) {
+        this.speakers = speakers;
+    }
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    public byte[] getBadgeTemplate() {
+        return badgeTemplate;
+    }
+
+    public void setBadgeTemplate(byte[] badgeTemplate) {
+        this.badgeTemplate = badgeTemplate;
+    }
+
     @Transient
     public int getNumberOfParticipants() {
         int result = 0;
@@ -342,7 +359,7 @@ public class Event extends EntityBase {
         boolean result;
         // old way
         DateMidnight today = new DateMidnight();
-        result =today.compareTo(new DateMidnight(this.startDate)) <= 0;
+        result = today.compareTo(new DateMidnight(this.startDate)) <= 0;
         return result;
     }
 
@@ -362,11 +379,10 @@ public class Event extends EntityBase {
                 reg.getStartRegistration().compareTo(now) > 0) ||
                 (reg.getEndRegistration() != null &&
                 reg.getEndRegistration().compareTo(now) < 0) ||
-                (reg.getEndRegistration() == null && !todayIsBeforeTheEndOfTheStartDay())) {
+                (reg.getEndRegistration() == null &&
+                !todayIsBeforeTheEndOfTheStartDay())) {
             result = false;
         }
         return result;
     }
-    
-    
 }

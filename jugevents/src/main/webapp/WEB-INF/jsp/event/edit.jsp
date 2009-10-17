@@ -10,7 +10,7 @@
         <h1><spring:message code="EditEvent"/></h1>                            
     </c:otherwise>
 </c:choose>
-<form:form commandName="event" method="post" action="${cp}/event/edit.form">
+<form:form commandName="event" method="post" action="${cp}/event/edit.form" enctype="multipart/form-data">
     <div>
         <form:errors path="*" cssClass="errorBox"/>
         <form:hidden path="id"/>
@@ -138,6 +138,16 @@
                     <form:option value="11:30 PM" label="11:30 PM"/>
                 </form:select>
             </dd>
+            <dt><form:label path="badgeTemplate">
+                <img id="tip_badgeTemplate" src="${cp}/images/question16x16.png" alt="Help Tip"/>&nbsp;<spring:message code="badgeTemplate" text="?badgeTemplate?" />
+            </form:label></dt>
+            <dd>
+                <input type="file" name="badgeTemplate" id="badgeTemplate" /><br/>
+                <a href="${cp}/docs/BadgePageTemplate.pdf" class="smallText"><spring:message code="Example" text="?Example?"/>
+                </a> - <a href="${cp}/docs/BadgePageTemplate.sla" class="smallText"><spring:message code="SourceFile" text="?SourceFile?"/></a>
+                (<a href="http://www.scribus.net" class="smallText"><spring:message code="BuiltWithScribus" text="?BuiltWithScribus?"/></a>)
+                <a href="${cp}/event/printBadges.html?id=${event.id}" class="smallText"><spring:message code="Preview"/></a>
+            </dd>
             <dt>
                 <form:label path="description"><spring:message code="event.description"/></form:label><br/>
                 (<a href="http://hobix.com/textile/" rel="external">Textile</a>)
@@ -208,10 +218,13 @@
             
     new Autocompleter.DWR('location', 'locationList', updateLocationList, { partialChars: 0, fullSearch: true, updateElement: populateDirections });
 
-    function updateLocationList(autocompleter, token) {
-        eventBo.findPartialLocation(token, '<security:authentication property="principal.username"/>', function(data) {
-        autocompleter.setChoices(data)
-    });    
+    new Tip($('tip_badgeTemplate'), '<spring:message code="tip.badgeTemplate" text="?tip.badgeTemplate?"/>', {title: '<spring:message code="tip.badgeTemplate.title" text="?tip.badgeTemplate.title?"/>', effect: 'appear'});
+
+function updateLocationList(autocompleter, token) {
+    eventBo.findPartialLocation(token, '<security:authentication property="principal.username"/>',
+        function(data) {
+            autocompleter.setChoices(data)
+        });
 }
 
 function populateDirections(selectedElement) {

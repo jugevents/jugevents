@@ -31,7 +31,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 9b61bfe9a3d8 $
+ * @version $Revision: b1902c355937 $
  */
 @Entity
 @NamedQueries({
@@ -42,6 +42,9 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
     @NamedQuery(name = "Participant.findConfirmedParticipantsByEventId",
     query =
     "from Participant p where p.event.id = ? and p.confirmed = true and (p.cancelled is null or p.cancelled = false) order by p.creationDate, p.id"),
+    @NamedQuery(name = "Participant.findConfirmedParticipantsByEventIdOrderByLastNameAndFirstName",
+    query =
+    "from Participant p where p.event.id = ? and p.confirmed = true and (p.cancelled is null or p.cancelled = false) order by p.lastName, p.firstName, p.creationDate, p.id"),
     @NamedQuery(name = "Participant.findNotConfirmedParticipantsByEventId",
     query =
     "from Participant p where p.event.id = ? and (p.confirmed is null or p.confirmed = false) and (p.cancelled is null or p.cancelled = false) order by p.creationDate, p.id"),
