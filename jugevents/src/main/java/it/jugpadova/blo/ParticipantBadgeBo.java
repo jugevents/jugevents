@@ -22,6 +22,8 @@ import com.lowagie.text.pdf.PdfCopyFields;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 import com.lowagie.text.pdf.RandomAccessFileOrArray;
+import it.jugpadova.dao.EventDao;
+import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
 import java.io.ByteArrayInputStream;
@@ -46,7 +48,7 @@ public class ParticipantBadgeBo {
     private static final String BADGE_PAGE_TEMPLATE_PATH =
             "it/jugpadova/BadgePageTemplate.pdf";
     @Resource
-    private EventBo eventBo;
+    private ParticipantDao participantDao;
 
     /**
      * Build a PDF with the badges of confirmed participants.
@@ -54,7 +56,9 @@ public class ParticipantBadgeBo {
     public byte[] buildPDFBadges(Event event) throws IOException,
             DocumentException {
         List<Participant> participants =
-                eventBo.searchConfirmedParticipantsByEventId(event.getId());
+                participantDao.
+                findConfirmedParticipantsByEventIdOrderByLastNameAndFirstName(
+                event.getId());
         int participantsPerPage = getParticipantsPerPage(event);
         int pages = (participants.size() / participantsPerPage) + 2; // prints a more page with empty badges
         ByteArrayOutputStream pdfMergedBaos = new ByteArrayOutputStream();
@@ -105,7 +109,8 @@ public class ParticipantBadgeBo {
 
     protected InputStream getBadgePageTemplateInputStream(Event event) {
         InputStream is = null;
-        if (event != null && event.getBadgeTemplate() != null && event.getBadgeTemplate().length > 0) {
+        if (event != null && event.getBadgeTemplate() != null && event.
+                getBadgeTemplate().length > 0) {
             is = new ByteArrayInputStream(event.getBadgeTemplate());
         } else {
             is = getDefaultBadgePageTemplateInputStream();
