@@ -24,6 +24,7 @@ import com.lowagie.text.pdf.PdfStamper;
 import com.lowagie.text.pdf.RandomAccessFileOrArray;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +56,7 @@ public class ParticipantBadgeBo {
         List<Participant> participants =
                 eventBo.searchConfirmedParticipantsByEventId(event.getId());
         int participantsPerPage = getParticipantsPerPage(event);
-        int pages = (participants.size() / participantsPerPage) + 1;
+        int pages = (participants.size() / participantsPerPage) + 2; // prints a more page with empty badges
         ByteArrayOutputStream pdfMergedBaos = new ByteArrayOutputStream();
         PdfCopyFields pdfMerged = new PdfCopyFields(pdfMergedBaos);
         int newIndex = 1;
@@ -84,12 +85,18 @@ public class ParticipantBadgeBo {
         PdfReader mergedReader = new PdfReader(pdfMergedBaos.toByteArray());
         PdfStamper mergedStamper = new PdfStamper(mergedReader, resultBaos);
         AcroFields mergedForm = mergedStamper.getAcroFields();
-        int i = 1;
+        int count = 1;
+        for (int i = 0; i < pages; i++) {
+            for (int j = 1; j <= participantsPerPage; j++) {
+                mergedForm.setField("title" + count, event.getTitle());
+                count++;
+            }
+        }
+        count = 1;
         for (Participant participant : participants) {
-            mergedForm.setField("title" + i, event.getTitle());
-            mergedForm.setField("firstName" + i, participant.getFirstName());
-            mergedForm.setField("lastName" + i, participant.getLastName());
-            i++;
+            mergedForm.setField("firstName" + count, participant.getFirstName());
+            mergedForm.setField("lastName" + count, participant.getLastName());
+            count++;
         }
         mergedStamper.setFormFlattening(true);
         mergedStamper.close();
@@ -98,9 +105,8 @@ public class ParticipantBadgeBo {
 
     protected InputStream getBadgePageTemplateInputStream(Event event) {
         InputStream is = null;
-        if (event != null) {
-            // TODO check and retrieve the customized template
-            is = getDefaultBadgePageTemplateInputStream();
+        if (event != null && event.getBadgeTemplate() != null && event.getBadgeTemplate().length > 0) {
+            is = new ByteArrayInputStream(event.getBadgeTemplate());
         } else {
             is = getDefaultBadgePageTemplateInputStream();
         }

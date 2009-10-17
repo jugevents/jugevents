@@ -39,7 +39,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sun.syndication.feed.rss.Channel;
 import com.sun.syndication.io.WireFeedOutput;
 import it.jugpadova.blo.ParticipantBadgeBo;
-import it.jugpadova.blo.ParticipantBo;
 import it.jugpadova.blol.FeedsBo;
 import it.jugpadova.blol.ServicesBo;
 import it.jugpadova.dao.EventDao;
@@ -150,12 +149,22 @@ public class EventController {
     }
 
     @RequestMapping
-    public void printBadges(@RequestParam("id") Long id, HttpServletResponse res) {
-        Event event = eventBo.retrieveEvent(id);
-        if (event == null) {
-            throw new IllegalArgumentException("No event with id " + id);
+    public void printBadges(
+            @RequestParam(value = "id", required = false) Long id,
+            HttpServletResponse res) {
+        Event event = null;
+        if (id != null) {
+            event = eventBo.retrieveEvent(id);
+            if (event == null) {
+                throw new IllegalArgumentException("No event with id " + id);
+            }
+            eventBo.checkUserAuthorization(event);
+        } else {
+            // it was requested a simple empty preview
+            event = new Event();
+            event.setId(-1L);
+            event.setTitle("Sample Event");
         }
-        eventBo.checkUserAuthorization(event);
         OutputStream out = null;
         try {
             byte[] pdfBytes = participantBadgeBo.buildPDFBadges(event);
@@ -163,7 +172,8 @@ public class EventController {
             res.setContentType("application/pdf");
             res.setContentLength(pdfBytes.length);
             res.setHeader("Content-Disposition",
-                    " attachment; filename=\"" + event.getTitle() + "_badges.pdf\"");
+                    " attachment; filename=\"" + event.getTitle() +
+                    "_badges.pdf\"");
             res.setHeader("Expires", "0");
             res.setHeader("Cache-Control",
                     "must-revalidate, post-check=0, pre-check=0");

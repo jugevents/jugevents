@@ -2,7 +2,7 @@
 <jwr:script src="${cp}/dwr/interface/AjaxMethodsJS.js" />
 <h1><spring:message code='Participants'/></h1>
 <div class="secondaryMenu">
-    <a href="${cp}/event/show.html?id=${event.id}"><spring:message code="BackToTheEvent"/></a>
+    <a href="${cp}/event/${event.id}"><spring:message code="BackToTheEvent"/></a>
 </div>
 <%@ include file="show_brief.jspf" %>
 
