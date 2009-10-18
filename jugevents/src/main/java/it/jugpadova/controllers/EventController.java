@@ -47,6 +47,7 @@ import it.jugpadova.util.Utilities;
 import java.io.IOException;
 import java.io.OutputStream;
 import javax.annotation.Resource;
+import net.fortuna.ical4j.model.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -369,6 +370,9 @@ public class EventController {
 
             CalendarOutputter outputter = new CalendarOutputter(true);
             ServletOutputStream resOutputStream = res.getOutputStream();
+            if (calendar.getComponents().isEmpty()) {
+                outputter.setValidating(false);
+            }
             outputter.output(calendar, resOutputStream);
             resOutputStream.flush();
             resOutputStream.close();
