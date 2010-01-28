@@ -30,6 +30,7 @@
   confirmationDate: 02/17/2007
   winner: false
   cancelled: true
+  reminderEnabled: false
 - &Participant-FutureRossi3
   firstName: "Mario"
   lastName: "Rossi3"
@@ -40,6 +41,7 @@
   attended: false
   confirmationDate: 02/17/2007
   winner: false
+  reminderEnabled: false
 - &Participant-FutureRossi3bis
   firstName: "Mario"
   lastName: "Rossi3bis"
@@ -49,6 +51,7 @@
   attended: false
   confirmationDate: 02/17/2007
   winner: false
+  reminderEnabled: false
 - &Participant-FutureRossi4
   firstName: "Mario"
   lastName: "Rossi4"
@@ -60,6 +63,7 @@
   confirmationDate: 02/17/2007
   winner: false
   cancelled: true
+  reminderEnabled: false
 - &Participant-FutureLucio2
   firstName: "Lucio2"
   lastName: "Benfante"
@@ -70,6 +74,7 @@
   attended: false
   confirmationDate: 02/17/2007
   winner: false
+  reminderEnabled: false
 - &Participant-FutureLucio3
   firstName: "Lucio3"
   lastName: "Benfante"
@@ -80,6 +85,7 @@
   attended: false
   confirmationDate: 02/17/2007
   winner: false
+  reminderEnabled: false
 - &Participant-FutureLucio4
   firstName: "Lucio4"
   lastName: "Benfante"
@@ -90,6 +96,7 @@
   attended: false
   confirmationDate: 02/17/2007
   winner: false
+  reminderEnabled: false
 - &Participant-FutureLucio5
   firstName: "Lucio5"
   lastName: "Benfante"
@@ -100,6 +107,7 @@
   attended: false
   confirmationDate: 02/17/2007
   winner: false
+  reminderEnabled: false
 - &Participant-FutureLucio6
   firstName: "Lucio6"
   lastName: "Benfante"
@@ -110,4 +118,5 @@
   attended: false
   confirmationDate: 02/17/2007
   winner: false
+  reminderEnabled: false
   

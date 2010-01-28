@@ -31,7 +31,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: b1902c355937 $
+ * @version $Revision: c7dd56e0da05 $
  */
 @Entity
 @NamedQueries({
@@ -57,8 +57,11 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
     query = "from Participant p where p.event.id = ? and p.winner = true"),
     @NamedQuery(name = "Participant.findNonwinningParticipantsByEventId",
     query =
-    "from Participant p where p.event.id = ? and (p.winner = null or p.winner = false)")
-})
+    "from Participant p where p.event.id = ? and (p.winner = null or p.winner = false)"),
+    @NamedQuery(name = "Participant.findParticipantsToBeReminded",
+    	    query = "from Participant p where p.confirmed = true and (p.cancelled is null or p.cancelled = false) "+
+    	     "and p.reminderEnabled = true and p.reminderSentDate is null and  p.event.numOfDaysReminder >= 0 "+
+    	     "and (p.event.startDate - current_date()) <= p.event.numOfDaysReminder order by p.event.id")})
 public class Participant extends EntityBase {
 
     /**
@@ -84,10 +87,29 @@ public class Participant extends EntityBase {
     private String note;
     private Boolean cancelled;
     private Date cancellationDate;
-
-    /** Creates a new instance of Participant */
+    private Boolean reminderEnabled = Boolean.TRUE;
+    private Date reminderSentDate;
+    
+    
+	/** Creates a new instance of Participant */
     public Participant() {
     }
+    public Boolean getReminderEnabled() {
+		return reminderEnabled;
+	}
+
+	public void setReminderEnabled(Boolean reminderEnabled) {
+		this.reminderEnabled = reminderEnabled;
+	}
+	@Temporal(value = TemporalType.TIMESTAMP)
+	public Date getReminderSentDate() {
+		return reminderSentDate;
+	}
+
+	public void setReminderSentDate(Date reminderSentDate) {
+		this.reminderSentDate = reminderSentDate;
+	}
+
 
     public String getFirstName() {
         return firstName;

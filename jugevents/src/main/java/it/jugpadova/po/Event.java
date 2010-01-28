@@ -3,6 +3,7 @@ package it.jugpadova.po;
 import it.jugpadova.blo.FilterBo;
 
 import it.jugpadova.util.NotPassedEventsFilterFactory;
+import it.jugpadova.util.NumOfDaysReminder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,6 +86,7 @@ public class Event extends EntityBase {
     private List<EventResource> eventResources;
     private List<Speaker> speakers = new ArrayList<Speaker>();
     private byte[] badgeTemplate;
+    private int numOfDaysReminder = NumOfDaysReminder.NOT_ACTIVE.value;
 
     /**
      * Get the entity id.
@@ -385,4 +387,12 @@ public class Event extends EntityBase {
         }
         return result;
     }
+
+	public int getNumOfDaysReminder() {
+		return numOfDaysReminder;
+	}
+
+	public void setNumOfDaysReminder(int numOfDaysReminder) {
+		this.numOfDaysReminder = numOfDaysReminder;
+	}
 }

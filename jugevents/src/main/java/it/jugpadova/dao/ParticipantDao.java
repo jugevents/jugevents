@@ -24,18 +24,20 @@ import org.parancoe.persistence.dao.generic.GenericDao;
 @Dao(entity = Participant.class)
 public interface ParticipantDao extends GenericDao<Participant, Long> {
 
-    public List<Participant> findByEmailAndConfirmationCodeAndConfirmed(String email, String confirmationCode, Boolean confirmed);
-    public Participant findByEmailAndConfirmationCode(String email, String confirmationCode);
+     List<Participant> findByEmailAndConfirmationCodeAndConfirmed(String email, String confirmationCode, Boolean confirmed);
+     Participant findByEmailAndConfirmationCode(String email, String confirmationCode);
 
-    public List<Participant> findConfirmedParticipantsByEventId(Long id);
-    public List<Participant> findConfirmedParticipantsByEventIdOrderByLastNameAndFirstName(Long id);
-    public List<Participant> findNotConfirmedParticipantsByEventId(Long id);
-    public List<Participant> findCancelledParticipantsByEventId(Long id);
-    public List<Participant> findParticipantByEmailAndEventId(String email, Long eventId);
-    public List<Participant> findParticipantsByEventId(Long eventId);
-    public List<Participant> findPresentParticipantsByEventId(Long eventId);
+     List<Participant> findConfirmedParticipantsByEventId(Long id);
+     List<Participant> findConfirmedParticipantsByEventIdOrderByLastNameAndFirstName(Long id);
+     List<Participant> findNotConfirmedParticipantsByEventId(Long id);
+     List<Participant> findCancelledParticipantsByEventId(Long id);
+     List<Participant> findParticipantByEmailAndEventId(String email, Long eventId);
+     List<Participant> findParticipantsByEventId(Long eventId);
+     List<Participant> findPresentParticipantsByEventId(Long eventId);
 
-    public List<Participant> findWinningParticipantsByEventId(Long eventId);
+     List<Participant> findWinningParticipantsByEventId(Long eventId);
 
-    public List<Participant> findNonwinningParticipantsByEventId(Long eventId);
+     List<Participant> findNonwinningParticipantsByEventId(Long eventId);
+    
+    List<Participant> findParticipantsToBeReminded();
 }
