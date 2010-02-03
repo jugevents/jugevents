@@ -8,6 +8,7 @@
   attended: false
   confirmationDate: 02/17/2007
   winner: false
+  reminderEnabled: true
 - &Participant-FutureRossi
   firstName: "Mario"
   lastName: "Rossi"
@@ -19,6 +20,7 @@
   confirmationDate: 02/17/2007
   winner: false
   cancelled: false
+  reminderEnabled: true
 - &Participant-FutureRossi2
   firstName: "Mario"
   lastName: "Rossi2"
