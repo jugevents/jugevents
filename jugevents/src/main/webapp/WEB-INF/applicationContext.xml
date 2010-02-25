@@ -244,5 +244,29 @@
         </property>
     </bean>
     <!-- end footprint section -->
+      <!-- quartz scheduler (begin) -->
+	<bean name="reminderJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="it.jugpadova.scheduler.ParticipantsReminderQuartzJob" />
+		<property name="jobDataAsMap">
+			<map>
+			 <entry key="schedulerBo" value-ref="schedulerBo"/>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="reminderJob" />
+		
+		<property name="cronExpression" value="* * 23 * * ?" />
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="cronTrigger" />
+			</list>
+		</property>
+	</bean>
+	<!-- quartz scheduler (end) -->
         
 </beans>

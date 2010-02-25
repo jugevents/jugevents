@@ -170,6 +170,29 @@
                     <dd><form:input path="registration.maxParticipants" maxlength="7" size="7"/></dd>
                     <dt><form:label path="registration.manualActivation"><spring:message code="event.registration.manualActivation" text="?event.registration.manualActivation?"/>:</form:label></dt>
                     <dd><form:radiobutton path="registration.manualActivation" value="" onclick="enableRegistrationRulesFields(true)"/><spring:message code="No" text="?No?"/>&nbsp;<form:radiobutton path="registration.manualActivation" value="true" onclick="enableRegistrationRulesFields(false)"/><spring:message code="Enabled" text="?Enabled?"/>&nbsp;<form:radiobutton path="registration.manualActivation" value="false" onclick="enableRegistrationRulesFields(false)"/><spring:message code="Disabled" text="?Disabled?"/></dd>
+                    <dt><form:label path="numOfDaysReminder"><spring:message code="reminder.numOfDaysReminder" text="?reminder.numOfDaysReminder?"/></form:label></dt>
+		            <dd>
+		            <%--label attribute of form:option doesn't provide i18n --%>
+		             <img id="tip_numOfDaysReminder" src="${cp}/images/question16x16.png" alt="Help Tip"/>
+		                <form:select path="numOfDaysReminder">
+		                    <form:option value="-1">
+		                    	<spring:message code="reminder.ReminderNotEnabled" text="?reminder.ReminderNotEnabled?"/>	
+		                    </form:option>	
+		                     <form:option value="1">
+		                    	<spring:message code="reminder.OneDayBefore" text="?reminder.OneDayBefore?"/>
+		                    </form:option>	
+		                     <form:option value="2">
+		                    	<spring:message code="reminder.TwoDaysBefore" text="?reminder.TwoDaysBefore?"/>	
+		                    </form:option>	
+		                     <form:option value="3">
+		                    	<spring:message code="reminder.ThreeDaysBefore" text="?reminder.ThreeDaysBefore?"/>	
+		                    </form:option>	
+		                     <form:option value="5">
+		                    	<spring:message code="reminder.FiveDaysBefore" text="?reminder.FiveDaysBefore?"/>	
+		                    </form:option>	         		                             
+		                </form:select> 					
+					</dd>
+               
                 </dl>
             </fieldset>
         </div>
@@ -286,6 +309,8 @@ $('registration.manualActivation1').checked = true;
 } else {
 enableRegistrationRulesFields(false);
 }
+
+new Tip($('tip_numOfDaysReminder'), '<spring:message code="tip.numOfDaysReminder" text="?tip.numOfDaysReminder?"/>', {title: '<spring:message code="tip.numOfDaysReminder.title" text="?tip.numOfDaysReminder.title?"/>', effect: 'appear'});
 
 
 </script>
