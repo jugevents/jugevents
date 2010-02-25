@@ -32,6 +32,8 @@
                 <lucene.indexes.root.path>/var/opt/lucene/indexes</lucene.indexes.root.path>
                 <slideshare.apiKey>slideshareApiKey</slideshare.apiKey>
                 <slideshare.sharedSecret>slideshareSharedSecret</slideshare.sharedSecret>
+                 <jugevents.baseUrl>http://localhost:8080/jugevents</jugevents.baseUrl>
+                <scheduler.cronExpression>10 * * * * ?</scheduler.cronExpression>
             </properties>
         </profile>        
     </profiles>

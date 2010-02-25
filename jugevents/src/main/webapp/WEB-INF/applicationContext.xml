@@ -256,8 +256,8 @@
 
 	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="reminderJob" />
-		<!-- run every morning at 6 AM -->
-		<property name="cronExpression" value="10 * * * * ?" />
+		
+		<property name="cronExpression" value="* * 23 * * ?" />
 	</bean>
 
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
