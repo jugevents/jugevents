@@ -12,6 +12,7 @@
         <property name="password" value=""/>
         <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
     </bean>
+    
 
     --><!-- MySql configuration -->
 
