@@ -41,7 +41,7 @@ public class SchedulerBo {
 	    @Autowired
 	    private Conf conf;
 	    
-	  //TODO find the way to externalize this in some properties file
+	     //TODO find the way to externalize this in some properties file
 	    public static final String SUBJECT= "Event Reminder";
 	    
 	    public static final String MAIL_TEMPLATE= "it/jugpadova/participant-reminder.vm";
@@ -73,6 +73,7 @@ public class SchedulerBo {
 	    @Transactional(propagation = Propagation.REQUIRED)	
 	    public void remindToParticipants()
 	    {
+	    	Date currentDate = new Date();
 	    	List<Participant> participants = participantDao.findParticipantsToBeReminded();
 	    	logger.debug("Found "+participants.size()+" to be reminded");
 	    	for (Participant participant : participants) {

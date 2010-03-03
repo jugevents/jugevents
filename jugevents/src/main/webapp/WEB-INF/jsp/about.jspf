@@ -70,6 +70,16 @@
                 <p>JUGEvents es un <a href="http://code.google.com/p/jugevents">proyecto</a> libre desarrollado por <a href="http://www.jugpadova.it">JUG Padova</a>.
                	Cualquier persona puede participar.</p>
             </c:when>
+               <c:when test="${requestScope.requestContext.locale eq 'ro'}">
+                <p>Cu JUGEvents Puteţi căuta pentru evenimentele organizate de cani, si inregistreaza-te pentru ei. Un reprezentant JUG pot şi de a începe un cont pentru a gestiona evenimentele din JUG sale.
+                    <a href="${cp}/jugger/registration.form">obţine în mod liber</a>
+                şi de a începe un cont pentru a gestiona evenimentele din JUG</p>
+                <p>JUGEvents este încă în dezvoltare. Dacă găsiţi nici o problemă cu ea, sau dacă doriţi să sugereze nici o nouă caracteristică, vă rugăm să scrieţi la
+                <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
+                <p>JUGEvents este un <a href="http://www.jugpadova.it">JUG Padova</a>  <a href="http://code.google.com/p/jugevents">proiect</a>
+               	Oricine poate partecipate.</p>
+            </c:when>
+            
             <c:otherwise>
                 <p>With JUGEvents You can search for events organized by JUGs,
                     and register to them. A JUG representative can

@@ -7,7 +7,7 @@
         
     <bean id="servicesBo" class="it.jugpadova.mock.MockServicesBo"/>
     
-    <!-- start mail section (test porpouse)-->
+    <!-- start mail section (test purpose)-->
     <bean id="mailSender" class="it.jugpadova.mock.ParancoeMockMailSender"/>
     
     <bean id="footprintSettings" class="net.java.dev.footprint.model.generated.FootprintProperties">

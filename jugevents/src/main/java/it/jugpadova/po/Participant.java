@@ -31,7 +31,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 18e107c27d68 $
+ * @version $Revision: 91f010246c42 $
  */
 @Entity
 @NamedQueries({
@@ -59,11 +59,10 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
     query =
     "from Participant p where p.event.id = ? and (p.winner = null or p.winner = false)"),
     @NamedQuery(name = "Participant.findParticipantsToBeReminded",
-    	    query = "from Participant p where p.confirmed = true and (p.cancelled is null or p.cancelled = false) "+
-    	     "and p.reminderEnabled = true and p.reminderSentDate is null and  p.event.numOfDaysReminder >= 0 "+
-    	     "and (day(p.event.startDate) - day(current_date())) <= p.event.numOfDaysReminder "+    	     
-    	     "and month(p.event.startDate) = month(current_date()) and year(p.event.startDate) = year(current_date()) "+
-    	     "and p.event.startDate >= current_date() order by p.event.id")})
+    	    query = "from Participant p  where  p.confirmed = true and (p.cancelled is null or p.cancelled = false) "+
+    	     "and p.reminderEnabled = true and p.reminderSentDate is null and p.event.reminderDate is not null " +
+    	     "and   p.event.reminderDate <= current_date() and current_date() <= p.event.startDate " +        	     
+    	     "order by p.event.id")})
 public class Participant extends EntityBase {
 
     /**

@@ -24,7 +24,7 @@
             <dt><form:label path="participant.note"><spring:message code="Note"/>:</form:label></dt>
             <dd><form:textarea path="participant.note" rows="6" cols="25"/></dd>
            <%-- //TODO fix this problem, try to find the way to evaluate constants in the jstl. I would prefer to use NumOfDaysReminder.NOT_ACTIVE instead   --%>           
-            <c:if test="${event.numOfDaysReminder >= 0}">
+            <c:if test="${event.reminderDate != null}">
 	            <dt><form:label path="participant.reminderEnabled"><spring:message code="participant.enableReminder" text="?participant.enableReminder?"/>:</form:label></dt>
 	            <dd><form:checkbox id="participant.reminderEnabled" path="participant.reminderEnabled"></form:checkbox>
 	            <img id="tip_enableReminder" src="${cp}/images/question16x16.png" alt="Help Tip"/></dd>

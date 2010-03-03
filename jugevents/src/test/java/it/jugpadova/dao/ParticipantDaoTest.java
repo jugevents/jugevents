@@ -23,6 +23,7 @@ import it.jugpadova.util.NumOfDaysReminder;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.annotation.Resource;
 
@@ -87,31 +88,7 @@ public class ParticipantDaoTest extends JugEventsBaseTest {
         assertEquals(all.size(), confirmed.size()+notConfirmed.size()+cancelled.size());
     }
     
-    public void testFindParticipantsToBeReminded()
-    {
-    	//change date of future event, it's the only event with the scheduler active
-    	Event futureEvent = retrieveFutureEvent().get(0);
-    	Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.DATE, 1);
-        futureEvent.setStartDate(cal.getTime());
-        futureEvent.setNumOfDaysReminder(NumOfDaysReminder.TWO_DAYS.value);
-        eventDao.store(futureEvent);
-        
-    	List<Participant> participants =
-            participantDao.findParticipantsToBeReminded();
-        assertEquals(2, participants.size());
-        Participant p = participants.get(0);       
-        Event event = p.getEvent();        
-        event.setNumOfDaysReminder(NumOfDaysReminder.NOT_ACTIVE.value);
-        eventDao.store(event);
-        participants =
-            participantDao.findParticipantsToBeReminded();
-        assertEquals(0, participants.size());
-        
-
-        
-    }
+    
 
 
     private List<Event> retrieveFutureEvent() {

@@ -15,6 +15,7 @@ package it.jugpadova.dao;
 
 import it.jugpadova.po.Participant;
 
+import java.util.Date;
 import java.util.List;
 
 import org.parancoe.persistence.dao.generic.Dao;
@@ -39,5 +40,5 @@ public interface ParticipantDao extends GenericDao<Participant, Long> {
 
      List<Participant> findNonwinningParticipantsByEventId(Long eventId);
     
-    List<Participant> findParticipantsToBeReminded();
+	List<Participant> findParticipantsToBeReminded();
 }

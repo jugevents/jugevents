@@ -257,7 +257,7 @@
 	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="reminderJob" />
 		
-		<property name="cronExpression" value="* * 23 * * ?" />
+		<property name="cronExpression" value="10 * * * * ?" />
 	</bean>
 
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

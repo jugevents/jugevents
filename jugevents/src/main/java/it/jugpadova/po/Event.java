@@ -7,6 +7,7 @@ import it.jugpadova.util.NumOfDaysReminder;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -86,7 +87,11 @@ public class Event extends EntityBase {
     private List<EventResource> eventResources;
     private List<Speaker> speakers = new ArrayList<Speaker>();
     private byte[] badgeTemplate;
-    private int numOfDaysReminder = NumOfDaysReminder.NOT_ACTIVE.value;
+    private Date reminderDate;
+   
+    private boolean activeReminder;
+    
+    public final static int NUM_OF_DAYS_REMINDER_BEFORE_EVENT = 2;
 
     /**
      * Get the entity id.
@@ -388,11 +393,36 @@ public class Event extends EntityBase {
         return result;
     }
 
-	public int getNumOfDaysReminder() {
-		return numOfDaysReminder;
+	
+	
+
+	public void setReminderDate(Date reminderDate) {
+		this.reminderDate = reminderDate;
 	}
 
-	public void setNumOfDaysReminder(int numOfDaysReminder) {
-		this.numOfDaysReminder = numOfDaysReminder;
+	public Date getReminderDate() {
+		return reminderDate;
 	}
+
+	@Transient
+	public boolean getActiveReminder() {
+		if(this.reminderDate == null)
+			return false;
+		return true;
+	}
+    /**
+     * Set the reminder date two days before the start date.
+     * @param activeReminder
+     */
+	@Transient
+	public void setActiveReminder(boolean activeReminder) {
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTime(this.getStartDate());
+		gc.add(GregorianCalendar.DAY_OF_YEAR, -NUM_OF_DAYS_REMINDER_BEFORE_EVENT);
+		this.setReminderDate(gc.getTime());
+		
+	}
+	
+	
+	
 }
