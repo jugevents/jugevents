@@ -89,7 +89,7 @@ public class Event extends EntityBase {
     private byte[] badgeTemplate;
     private Date reminderDate;
    
-    private boolean activeReminder;
+    
     
     public final static int NUM_OF_DAYS_REMINDER_BEFORE_EVENT = 2;
 
@@ -155,6 +155,10 @@ public class Event extends EntityBase {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+        if(getActiveReminder())
+        {
+        	setActiveReminder(true);
+        }
     }
 
     public String getStartTime() {
@@ -416,6 +420,11 @@ public class Event extends EntityBase {
      */
 	@Transient
 	public void setActiveReminder(boolean activeReminder) {
+		if(!activeReminder)
+		{
+			this.setReminderDate(null);
+			return;
+		}
 		GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(this.getStartDate());
 		gc.add(GregorianCalendar.DAY_OF_YEAR, -NUM_OF_DAYS_REMINDER_BEFORE_EVENT);

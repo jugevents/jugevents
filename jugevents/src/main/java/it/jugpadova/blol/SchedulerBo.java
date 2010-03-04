@@ -73,7 +73,7 @@ public class SchedulerBo {
 	    @Transactional(propagation = Propagation.REQUIRED)	
 	    public void remindToParticipants()
 	    {
-	    	Date currentDate = new Date();
+	    	logger.debug("Running scheduler for reminder");
 	    	List<Participant> participants = participantDao.findParticipantsToBeReminded();
 	    	logger.debug("Found "+participants.size()+" to be reminded");
 	    	for (Participant participant : participants) {
