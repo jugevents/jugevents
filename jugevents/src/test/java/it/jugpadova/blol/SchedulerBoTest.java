@@ -5,20 +5,18 @@ import it.jugpadova.dao.EventDao;
 import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.po.Event;
 import it.jugpadova.po.Participant;
-
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 
 public class SchedulerBoTest extends JugEventsBaseTest {
 
-    @Autowired
+    @Resource
     private SchedulerBo schedulerBo;
-    @Autowired
+    @Resource
     private EventDao eventDao;
-    @Autowired
+    @Resource
     private ParticipantDao participantDao;
 
     public void testRemindToParticipants() {

@@ -85,6 +85,10 @@ public class ParticipantRegistrationController {
                 mv = Utilities.getMessageView(
                         "participant.registration.yetRegistered");
             } else {
+                p.setFirstName(registration.getParticipant().getFirstName());
+                p.setLastName(registration.getParticipant().getLastName());
+                p.setNote(registration.getParticipant().getNote());
+                p.setReminderEnabled(registration.getParticipant().getReminderEnabled());
                 eventBo.refreshRegistration(registration.getEvent(), p, baseUrl);
                 mv =
                         new ModelAndView(SENT_MAIL_URL);
