@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:parancoe="http://www.parancoe.org/schema/parancoe"
        xmlns:parancoe-web="http://www.parancoe.org/schema/parancoe-web"
        xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
        http://www.parancoe.org/schema/parancoe http://www.parancoe.org/schema/parancoe.xsd
        http://www.parancoe.org/schema/parancoe-web http://www.parancoe.org/schema/parancoe-web.xsd
        http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+
+    <tx:annotation-driven />
     
     <context:component-scan base-package="it.jugpadova.blol"/>
     <parancoe:define-daos basePackage="it.jugpadova"/>

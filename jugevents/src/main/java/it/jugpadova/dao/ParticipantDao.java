@@ -21,24 +21,34 @@ import java.util.List;
 import org.parancoe.persistence.dao.generic.Dao;
 import org.parancoe.persistence.dao.generic.GenericDao;
 
-
 @Dao(entity = Participant.class)
 public interface ParticipantDao extends GenericDao<Participant, Long> {
 
-     List<Participant> findByEmailAndConfirmationCodeAndConfirmed(String email, String confirmationCode, Boolean confirmed);
-     Participant findByEmailAndConfirmationCode(String email, String confirmationCode);
+    List<Participant> findByEmailAndConfirmationCodeAndConfirmed(String email,
+            String confirmationCode, Boolean confirmed);
 
-     List<Participant> findConfirmedParticipantsByEventId(Long id);
-     List<Participant> findConfirmedParticipantsByEventIdOrderByLastNameAndFirstName(Long id);
-     List<Participant> findNotConfirmedParticipantsByEventId(Long id);
-     List<Participant> findCancelledParticipantsByEventId(Long id);
-     List<Participant> findParticipantByEmailAndEventId(String email, Long eventId);
-     List<Participant> findParticipantsByEventId(Long eventId);
-     List<Participant> findPresentParticipantsByEventId(Long eventId);
+    Participant findByEmailAndConfirmationCode(String email,
+            String confirmationCode);
 
-     List<Participant> findWinningParticipantsByEventId(Long eventId);
+    List<Participant> findConfirmedParticipantsByEventId(Long id);
 
-     List<Participant> findNonwinningParticipantsByEventId(Long eventId);
-    
-	List<Participant> findParticipantsToBeReminded();
+    List<Participant> findConfirmedParticipantsByEventIdOrderByLastNameAndFirstName(
+            Long id);
+
+    List<Participant> findNotConfirmedParticipantsByEventId(Long id);
+
+    List<Participant> findCancelledParticipantsByEventId(Long id);
+
+    List<Participant> findParticipantByEmailAndEventId(String email,
+            Long eventId);
+
+    List<Participant> findParticipantsByEventId(Long eventId);
+
+    List<Participant> findPresentParticipantsByEventId(Long eventId);
+
+    List<Participant> findWinningParticipantsByEventId(Long eventId);
+
+    List<Participant> findNonwinningParticipantsByEventId(Long eventId);
+
+    List<Participant> findParticipantsToBeReminded();
 }

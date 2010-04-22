@@ -31,7 +31,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 91f010246c42 $
+ * @version $Revision: 98827ce0471a $
  */
 @Entity
 @NamedQueries({
@@ -42,7 +42,8 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
     @NamedQuery(name = "Participant.findConfirmedParticipantsByEventId",
     query =
     "from Participant p where p.event.id = ? and p.confirmed = true and (p.cancelled is null or p.cancelled = false) order by p.creationDate, p.id"),
-    @NamedQuery(name = "Participant.findConfirmedParticipantsByEventIdOrderByLastNameAndFirstName",
+    @NamedQuery(name =
+    "Participant.findConfirmedParticipantsByEventIdOrderByLastNameAndFirstName",
     query =
     "from Participant p where p.event.id = ? and p.confirmed = true and (p.cancelled is null or p.cancelled = false) order by p.lastName, p.firstName, p.creationDate, p.id"),
     @NamedQuery(name = "Participant.findNotConfirmedParticipantsByEventId",
@@ -59,17 +60,17 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
     query =
     "from Participant p where p.event.id = ? and (p.winner = null or p.winner = false)"),
     @NamedQuery(name = "Participant.findParticipantsToBeReminded",
-    	    query = "from Participant p  where  p.confirmed = true and (p.cancelled is null or p.cancelled = false) "+
-    	     "and p.reminderEnabled = true and p.reminderSentDate is null and p.event.reminderDate is not null " +
-    	     "and   p.event.reminderDate <= current_date() and current_date() <= p.event.startDate " +        	     
-    	     "order by p.event.id")})
+    query = "from Participant p  where  p.confirmed = true and (p.cancelled is null or p.cancelled = false) "
+    + "and p.reminderEnabled = true and p.reminderSentDate is null and p.event.reminderDate is not null "
+    + "and   p.event.reminderDate <= current_date() and current_date() <= p.event.startDate "
+    + "order by p.event.id")})
 public class Participant extends EntityBase {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	@NotBlank
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    @NotBlank
     private String firstName;
     @NotBlank
     private String lastName;
@@ -90,27 +91,27 @@ public class Participant extends EntityBase {
     private Date cancellationDate;
     private Boolean reminderEnabled = Boolean.TRUE;
     private Date reminderSentDate;
-    
-    
-	/** Creates a new instance of Participant */
+
+    /** Creates a new instance of Participant */
     public Participant() {
     }
+
     public Boolean getReminderEnabled() {
-		return reminderEnabled;
-	}
+        return reminderEnabled;
+    }
 
-	public void setReminderEnabled(Boolean reminderEnabled) {
-		this.reminderEnabled = reminderEnabled;
-	}
-	@Temporal(value = TemporalType.TIMESTAMP)
-	public Date getReminderSentDate() {
-		return reminderSentDate;
-	}
+    public void setReminderEnabled(Boolean reminderEnabled) {
+        this.reminderEnabled = reminderEnabled;
+    }
 
-	public void setReminderSentDate(Date reminderSentDate) {
-		this.reminderSentDate = reminderSentDate;
-	}
+    @Temporal(value = TemporalType.TIMESTAMP)
+    public Date getReminderSentDate() {
+        return reminderSentDate;
+    }
 
+    public void setReminderSentDate(Date reminderSentDate) {
+        this.reminderSentDate = reminderSentDate;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -251,7 +252,7 @@ public class Participant extends EntityBase {
     }
 
     public boolean hasValidRegistration() {
-        return this.getConfirmed()!=null && this.getConfirmed() && !(this.getCancelled()!=null && this.getCancelled());
+        return this.getConfirmed() != null && this.getConfirmed() && !(this.
+                getCancelled() != null && this.getCancelled());
     }
-
 }
