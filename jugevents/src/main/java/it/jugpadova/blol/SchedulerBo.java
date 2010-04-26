@@ -85,11 +85,15 @@ public class SchedulerBo {
         participant.setReminderSentDate(new Date());
         participantDao.store(participant);
         String subject = SUBJECT + " - " + participant.getEvent().getTitle();
-        sendEmailAsReminder(participant, conf.getJugeventsBaseUrl(), subject,
-                MAIL_TEMPLATE, conf.getInternalMail());
-        logger.info("Sent reminder to " + participant.getFirstName() + " " + participant.
-                getLastName() + " for the event: " + participant.getEvent().
-                getTitle());
-
+        try {
+            sendEmailAsReminder(participant, conf.getJugeventsBaseUrl(), subject,
+                    MAIL_TEMPLATE, conf.getInternalMail());
+            logger.info("Sent reminder to " + participant.getFirstName() + " " + participant.
+                    getLastName() + " for the event: " + participant.getEvent().
+                    getTitle());
+        } catch (Exception e) {
+            logger.warn("Failed reminder to " + participant.getEmail() + " (" + participant.
+                    getId() + ") for the event " + participant.getId());
+        }
     }
 }
