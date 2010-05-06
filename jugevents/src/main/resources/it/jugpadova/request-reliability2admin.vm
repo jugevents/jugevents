@@ -1,6 +1,6 @@
 <html>
 <body style="background-color: white; padding: 2em;">
-<a href="${baseUrl}"><img src="${baseUrl}/images/jugeventsLogoReflectedWhite.jpg" alt="JUG Events Logo" style="border: 0; width: 206px; height: 50px;"/></a>
+<a href="${baseUrl}/"><img src="${baseUrl}/images/jugeventsLogoReflectedWhite.jpg" alt="JUG Events Logo" style="border: 0; width: 206px; height: 50px;"/></a>
 <p>The jugger identified by ${username} has required to increase his reliability.</p>
 <p>Motivation: <br/>
 &quot;${motivation}&quot;</p>

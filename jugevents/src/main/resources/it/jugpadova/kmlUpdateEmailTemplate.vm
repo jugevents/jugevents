@@ -1,7 +1,7 @@
 <html>
 <body style="background-color: white; padding: 2em;">
-<a href="${jugeventsBaseUrl}"><img src="${jugEventsEmailLogoUrl}" alt="JUG Events Logo" style="border: 0; width: 206px; height: 50px;"/></a>
-<p>This is an automatic message from the <a href="${jugeventsBaseUrl}">JUG Events</a> application, mainly to the mantainers of the
+<a href="${jugeventsBaseUrl}/"><img src="${jugEventsEmailLogoUrl}" alt="JUG Events Logo" style="border: 0; width: 206px; height: 50px;"/></a>
+<p>This is an automatic message from the <a href="${jugeventsBaseUrl}/">JUG Events</a> application, mainly to the mantainers of the
  <a href="http://wiki.java.net/bin/view/JUGs/JUG-MAP"> Java User Groups International Map</a>.</p>
 <p><b>${jugger.firstName} ${jugger.lastName}</b> (<a href="mailto:${jugger.Email}">${jugger.Email}</a>) updated the data of its JUG
 in JUG Events.</p>

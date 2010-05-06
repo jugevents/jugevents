@@ -1,6 +1,6 @@
 <html>
 <body style="background-color: white; padding: 2em;">
-<a href="${baseUrl}"><img src="${baseUrl}/images/jugeventsLogoReflectedWhite.jpg" alt="JUG Events Logo" style="border: 0; width: 206px; height: 50px;"/></a>
+<a href="${baseUrl}/"><img src="${baseUrl}/images/jugeventsLogoReflectedWhite.jpg" alt="JUG Events Logo" style="border: 0; width: 206px; height: 50px;"/></a>
 <p>Dear <b>${jugger.firstName} ${jugger.lastName}</b>,<br/>
 on  ${dateRequest} you asked to be reliable with the following motivation:</p>
 <div style="width: 400px; margin: 1em 2em 1em 2em; padding: 2em; border: 1px dotted; background-color: lightgray;"> 
@@ -11,7 +11,7 @@ on  ${dateRequest} you asked to be reliable with the following motivation:</p>
   ${adminResponse}
 </div>
 <p>If You didn't request this <em>reliability request</em> action, please ignore this message and
-continue to access to <a href="${baseUrl}">JUG Events</a> as usually. If you want to
+continue to access to <a href="${baseUrl}/">JUG Events</a> as usually. If you want to
 signal an abuse, please write to <a href="mailto:info@jugevents.org">info@jugevents.org</a>.</p>
 <p>Best Regards,<br/>
 <a href="mailto:info@jugevents.org">The JUG Events Team</a></p>
