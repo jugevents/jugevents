@@ -22,6 +22,8 @@ import it.jugpadova.po.Participant;
 
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,8 +48,10 @@ import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.util.Utilities;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 import javax.annotation.Resource;
-import net.fortuna.ical4j.model.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -92,8 +96,8 @@ public class EventController {
             }
             eventBo.checkUserAuthorization(event);
             eventDao.delete(event);
-            logger.info("User " + servicesBo.authenticatedUsername() +
-                    " deleted event with id=" + id);
+            logger.info("User " + servicesBo.authenticatedUsername()
+                    + " deleted event with id=" + id);
         } catch (ParancoeAccessDeniedException pade) {
             throw pade;
         }
@@ -173,8 +177,8 @@ public class EventController {
             res.setContentType("application/pdf");
             res.setContentLength(pdfBytes.length);
             res.setHeader("Content-Disposition",
-                    " attachment; filename=\"" + event.getTitle() +
-                    "_badges.pdf\"");
+                    " attachment; filename=\"" + event.getTitle()
+                    + "_badges.pdf\"");
             res.setHeader("Expires", "0");
             res.setHeader("Cache-Control",
                     "must-revalidate, post-check=0, pre-check=0");
@@ -182,8 +186,7 @@ public class EventController {
             out.write(pdfBytes);
             out.flush();
         } catch (Exception ex) {
-            logger.error("Can't build PDF badges for " +
-                    event.getTitle(), ex);
+            logger.error("Can't build PDF badges for " + event.getTitle(), ex);
         } finally {
             if (out != null) {
                 try {
@@ -209,12 +212,12 @@ public class EventController {
         final Event event = participant.getEvent();
         eventBo.checkUserAuthorization(event);
         participantDao.delete(participant);
-        logger.info("Deleted participant " + participant.getFirstName() + " " +
-                participant.getLastName() + " (" + participant.getEmail() + ", " + (participant.getConfirmed()
-                ? "confirmed" : "not confirmed") + ") from the event " +
-                event.getId());
-        return "redirect:/event/participants.html?id=" +
-                event.getId();
+        logger.info("Deleted participant " + participant.getFirstName() + " " + participant.
+                getLastName() + " (" + participant.getEmail() + ", " + (participant.
+                getConfirmed()
+                ? "confirmed" : "not confirmed") + ") from the event " + event.
+                getId());
+        return "redirect:/event/participants.html?id=" + event.getId();
     }
 
     @RequestMapping
@@ -383,7 +386,10 @@ public class EventController {
         return null;
     }
 
-    private EventSearch buildEventSearch(HttpServletRequest req) {
+    private EventSearch buildEventSearch(HttpServletRequest req) throws ParseException {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        df.setLenient(false);
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
         EventSearch eventSearch = new EventSearch();
         eventSearch.setContinent(req.getParameter("continent"));
         eventSearch.setCountry(req.getParameter("country"));
@@ -399,6 +405,17 @@ public class EventController {
             } catch (NumberFormatException numberFormatException) {
                 /* ignore it */
             }
+        }
+        eventSearch.setFriendlyName(req.getParameter("friendlyName"));
+        String startDate = req.getParameter("startDate");
+        if (StringUtils.isNotBlank(startDate)) {
+            Date date = df.parse(startDate);
+            eventSearch.setStartDate(date);
+        }
+        String endDate = req.getParameter("endDate");
+        if (StringUtils.isNotBlank(endDate)) {
+            Date date = df.parse(endDate);
+            eventSearch.setEndDate(date);
         }
         return eventSearch;
     }

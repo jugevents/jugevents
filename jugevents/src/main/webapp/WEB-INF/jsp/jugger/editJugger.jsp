@@ -115,6 +115,10 @@
                                 onblur="javascript:disableJugFields();" />
                 <div id="jugList" class="auto_complete"></div>
             </dd>
+            <dt><form:label path="jugger.jug.internalFriendlyName">
+            <spring:message code="juggerRegistrationJUGFriendlyName" text="?juggerRegistrationJUGFriendlyName?" /></form:label></dt>
+            <dd><form:input path="jugger.jug.internalFriendlyName" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/>
+            </dd>
             <dt><form:label path="jugger.jug.country.englishName">
                     <spring:message code="juggerRegistrationCountry" />
             </form:label></dt>

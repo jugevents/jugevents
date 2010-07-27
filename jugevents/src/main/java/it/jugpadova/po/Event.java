@@ -3,7 +3,6 @@ package it.jugpadova.po;
 import it.jugpadova.blo.FilterBo;
 
 import it.jugpadova.util.NotPassedEventsFilterFactory;
-import it.jugpadova.util.NumOfDaysReminder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,7 +47,8 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  */
 @Entity
 @Indexed
-@NamedQueries(value = {@NamedQuery(name = "Event.findCurrentEvents", query =
+@NamedQueries(value = {
+    @NamedQuery(name = "Event.findCurrentEvents", query =
     "from Event e where e.startDate >= current_date()"),
     @NamedQuery(name = "Event.findEventByPartialLocation", query =
     "from Event e where lower(e.location) like lower(?) order by e.location"),
@@ -88,9 +88,6 @@ public class Event extends EntityBase {
     private List<Speaker> speakers = new ArrayList<Speaker>();
     private byte[] badgeTemplate;
     private Date reminderDate;
-   
-    
-    
     public final static int NUM_OF_DAYS_REMINDER_BEFORE_EVENT = 2;
 
     /**
@@ -155,9 +152,8 @@ public class Event extends EntityBase {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
-        if(getActiveReminder())
-        {
-        	setActiveReminder(true);
+        if (getActiveReminder()) {
+            setActiveReminder(true);
         }
     }
 
@@ -322,8 +318,8 @@ public class Event extends EntityBase {
                     result = reg.getManualActivation();
                 } else {
                     // TODO complete with other rules
-                    if (partecipantsAreUnderTheLimit(reg) &&
-                            todayIsInTheRegistrationInterval(reg)) {
+                    if (partecipantsAreUnderTheLimit(reg) && todayIsInTheRegistrationInterval(
+                            reg)) {
                         result = true;
                     }
                 }
@@ -361,9 +357,8 @@ public class Event extends EntityBase {
     }
 
     private boolean partecipantsAreUnderTheLimit(final Registration reg) {
-        return reg.getMaxParticipants() == null ||
-                this.getNumberOfParticipants() <
-                reg.getMaxParticipants().longValue();
+        return reg.getMaxParticipants() == null || this.getNumberOfParticipants() < reg.
+                getMaxParticipants().longValue();
     }
 
     private boolean todayIsBeforeTheEndOfTheStartDay() {
@@ -375,63 +370,55 @@ public class Event extends EntityBase {
     }
 
     private boolean thereAreNoRegistrationRules(final Registration reg) {
-        return reg == null ||
-                (reg != null && reg.getEnabled() &&
-                reg.getManualActivation() == null &&
-                reg.getStartRegistration() == null &&
-                reg.getEndRegistration() == null &&
-                reg.getMaxParticipants() == null);
+        return reg == null || (reg != null && reg.getEnabled() && reg.
+                getManualActivation() == null && reg.getStartRegistration()
+                == null && reg.getEndRegistration() == null && reg.
+                getMaxParticipants() == null);
     }
 
     private boolean todayIsInTheRegistrationInterval(Registration reg) {
         boolean result = true;
         Date now = new Date();
-        if ((reg.getStartRegistration() != null &&
-                reg.getStartRegistration().compareTo(now) > 0) ||
-                (reg.getEndRegistration() != null &&
-                reg.getEndRegistration().compareTo(now) < 0) ||
-                (reg.getEndRegistration() == null &&
-                !todayIsBeforeTheEndOfTheStartDay())) {
+        if ((reg.getStartRegistration() != null && reg.getStartRegistration().
+                compareTo(now) > 0) || (reg.getEndRegistration() != null && reg.
+                getEndRegistration().compareTo(now) < 0) || (reg.
+                getEndRegistration() == null
+                && !todayIsBeforeTheEndOfTheStartDay())) {
             result = false;
         }
         return result;
     }
 
-	
-	
+    public void setReminderDate(Date reminderDate) {
+        this.reminderDate = reminderDate;
+    }
 
-	public void setReminderDate(Date reminderDate) {
-		this.reminderDate = reminderDate;
-	}
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    public Date getReminderDate() {
+        return reminderDate;
+    }
 
-	public Date getReminderDate() {
-		return reminderDate;
-	}
+    @Transient
+    public boolean getActiveReminder() {
+        if (this.reminderDate == null) {
+            return false;
+        }
+        return true;
+    }
 
-	@Transient
-	public boolean getActiveReminder() {
-		if(this.reminderDate == null)
-			return false;
-		return true;
-	}
     /**
      * Set the reminder date two days before the start date.
      * @param activeReminder
      */
-	@Transient
-	public void setActiveReminder(boolean activeReminder) {
-		if(!activeReminder)
-		{
-			this.setReminderDate(null);
-			return;
-		}
-		GregorianCalendar gc = new GregorianCalendar();
-		gc.setTime(this.getStartDate());
-		gc.add(GregorianCalendar.DAY_OF_YEAR, -NUM_OF_DAYS_REMINDER_BEFORE_EVENT);
-		this.setReminderDate(gc.getTime());
-		
-	}
-	
-	
-	
+    public void setActiveReminder(boolean activeReminder) {
+        if (!activeReminder) {
+            this.setReminderDate(null);
+            return;
+        }
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(this.getStartDate());
+        gc.add(GregorianCalendar.DAY_OF_YEAR, -NUM_OF_DAYS_REMINDER_BEFORE_EVENT);
+        this.setReminderDate(gc.getTime());
+
+    }
 }

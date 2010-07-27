@@ -14,6 +14,8 @@
 package it.jugpadova.po;
 
 import it.jugpadova.util.JUGValidator;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +25,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
+import org.apache.commons.lang.StringUtils;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.parancoe.plugins.world.Country;
@@ -71,6 +74,7 @@ public class JUG extends EntityBase {
     private String contactEmail;
     private String timeZoneId;
     private byte[] certificateTemplate;
+    private String internalFriendlyName;
 
     public String getName() {
         return name;
@@ -174,6 +178,14 @@ public class JUG extends EntityBase {
         this.timeZoneId = timeZoneId;
     }
 
+    public String getInternalFriendlyName() {
+        return internalFriendlyName;
+    }
+
+    public void setInternalFriendlyName(String internalFriendlyName) {
+        this.internalFriendlyName = internalFriendlyName;
+    }
+
     @Transient
     public String getWebSiteUrl() {
         String result = this.getWebSite();
@@ -181,5 +193,16 @@ public class JUG extends EntityBase {
             result = "http://" + result;
         }
         return result;
+    }
+
+    @Transient
+    public String getFriendlyNameEncoded() throws UnsupportedEncodingException {
+        String result = null;
+        if (StringUtils.isNotBlank(getInternalFriendlyName())) {
+            result = getInternalFriendlyName();
+        } else {
+            result = getName();
+        }
+        return URLEncoder.encode(result, "UTF-8");
     }
 }

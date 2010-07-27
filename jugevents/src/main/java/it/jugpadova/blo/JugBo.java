@@ -259,6 +259,7 @@ public class JugBo {
             jug.setModifiedKmlData(newJUG.isModifiedKmlData());
         }
         jug.setName(newJUG.getName());
+        jug.setInternalFriendlyName(newJUG.getInternalFriendlyName());
         jug.setCountry(countryDao.findByEnglishName(newJUG.getCountry().
                 getEnglishName()));
         if (newJUG.getLogo() != null && newJUG.getLogo().length > 0) {

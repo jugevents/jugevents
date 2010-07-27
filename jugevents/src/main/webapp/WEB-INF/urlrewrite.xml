@@ -29,6 +29,21 @@
         <to>/event/show.html?id=$1</to>
     </rule>
 
+    <rule>
+        <from>^/ical/([^/]+)/([^/]+)/(.*)$</from>
+        <to>/event/ics.html?startDate=$2&amp;endDate=$3&amp;friendlyName=$1&amp;pastEvents=true&amp;order=asc</to>
+    </rule>
+
+    <rule>
+        <from>^/ical/([^/]+)/(.*)$</from>
+        <to>/event/ics.html?startDate=$2&amp;friendlyName=$1&amp;pastEvents=true&amp;order=asc</to>
+    </rule>
+
+    <rule>
+        <from>^/ical/(.*)$</from>
+        <to>/event/ics.html?friendlyName=$1&amp;pastEvents=true&amp;order=asc</to>
+    </rule>
+
     <class-rule class="it.jugpadova.urlrewrite.CheckPreconditions"/>
 
     <outbound-rule>

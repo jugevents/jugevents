@@ -18,6 +18,8 @@ import it.jugpadova.bean.RequireReliability;
 import it.jugpadova.bean.TimeZoneBean;
 import it.jugpadova.blo.JuggerBo;
 import it.jugpadova.blol.ServicesBo;
+import it.jugpadova.dao.JUGDao;
+import it.jugpadova.dao.JuggerDao;
 import it.jugpadova.exception.ParancoeAccessDeniedException;
 import it.jugpadova.po.JUG;
 import it.jugpadova.po.Jugger;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import java.util.List;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -76,6 +79,10 @@ public class JuggerEditController {
     private JuggerBo juggerBo;
     @Autowired
     private ServicesBo servicesBo;
+    @Resource
+    private JuggerDao juggerDao;
+    @Resource
+    private JUGDao jugDao;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) throws Exception {
@@ -86,31 +93,37 @@ public class JuggerEditController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @Validation(view=FORM_VIEW)
+    @Validation(view = FORM_VIEW, continueOnErrors = true)
     protected ModelAndView save(HttpServletRequest req,
             @ModelAttribute(JUGGER_ATTRIBUTE) EditJugger ej,
             BindingResult result, SessionStatus status) throws IOException {
-
-        if (StringUtils.isNotBlank(ej.getPassword())) {
-            ej.getJugger().getUser().setPassword(SecurityUtilities.encodePassword(
-                    ej.getPassword(), ej.getJugger().getUser().getUsername()));
+        final Jugger jugger = ej.getJugger();
+        validateJugger(jugger, result);
+        if (result.hasErrors()) {
+            return new ModelAndView(FORM_VIEW);
         }
-        juggerBo.update(ej.getJugger(), ej.getRequireReliability().
-                isRequireReliability(), ej.getRequireReliability().getComment(),
-                Utilities.getBaseUrl(req));
+        if (StringUtils.isNotBlank(ej.getPassword())) {
+            jugger.getUser().setPassword(SecurityUtilities.encodePassword(
+                    ej.getPassword(), jugger.getUser().getUsername()));
+        }
+        juggerBo.update(jugger,
+                ej.getRequireReliability().isRequireReliability(), ej.
+                getRequireReliability().
+                getComment(), Utilities.getBaseUrl(req));
         ModelAndView mv = new ModelAndView("redirect:/jugger/edit.form");
         mv.addObject("jugger.user.username",
-                ej.getJugger().getUser().getUsername());
+                jugger.getUser().getUsername());
         Utilities.addMessageCode(mv, "juggerUpdateSuccessful");
         status.setComplete();
         return mv;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    protected String form(@RequestParam("jugger.user.username") String username, Model model) {
+    protected String form(@RequestParam("jugger.user.username") String username,
+            Model model) {
         if (!servicesBo.checkAuthorization(username)) {
-            throw new ParancoeAccessDeniedException("Forbidden access to user identified by " +
-                    username);
+            throw new ParancoeAccessDeniedException("Forbidden access to user identified by "
+                    + username);
         }
         EditJugger ej = new EditJugger();
         Jugger jugger = juggerBo.searchByUsername(username);
@@ -149,4 +162,32 @@ public class JuggerEditController {
         }
         return timezones;
     }
+
+    private void validateJugger(Jugger jugger, BindingResult result) {
+        if (jugger != null) {
+            if (StringUtils.isNotBlank(jugger.getEmail())) {
+                // check if it exists yet a jugger with the same email
+                Jugger prevJugger = juggerDao.findByEmail(jugger.getEmail());
+                if (prevJugger != null && !jugger.equals(prevJugger)) {
+                    result.rejectValue("jugger.email", "emailalreadypresent",
+                            "An user tried to register with an email that exists yet");
+                }
+            }
+            JUG jug = jugger.getJug();
+            if (jug != null) {
+                final String internalFriendlyName =
+                        jug.getInternalFriendlyName();
+                if (StringUtils.isNotBlank(internalFriendlyName)) {
+                    JUG friendlyJug = jugDao.findByInternalFriendlyName(
+                            internalFriendlyName);
+                    if (friendlyJug != null && !friendlyJug.equals(jug)) {
+                        result.rejectValue("jugger.jug.internalFriendlyName",
+                                "friendlyNameAlreadyPresent",
+                                "An user tried to create a JUG with a friendly name that exists yet");
+                    }
+                }
+            }
+        }
+    }
 } // end of class
+

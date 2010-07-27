@@ -390,6 +390,8 @@ public class JuggerBo {
             }
             // effect.highlight("jugger.jug.country.englishName");            
 
+            util.setValue("jugger.jug.internalFriendlyName", jug.getInternalFriendlyName());
+
             util.setValue("jugger.jug.webSite", jug.getWebSite());
             // effect.highlight("jugger.jug.webSite");
 
@@ -456,6 +458,7 @@ public class JuggerBo {
             jsFunction = "parancoe.util.fullDisableFormElement";
         }
         util.addFunctionCall(jsFunction, "jugger.jug.country.englishName");
+        util.addFunctionCall(jsFunction, "jugger.jug.internalFriendlyName");
         util.addFunctionCall(jsFunction, "jugger.jug.webSite");
         util.addFunctionCall(jsFunction, "jugger.jug.logo");
         util.addFunctionCall(jsFunction, "jugger.jug.longitude");

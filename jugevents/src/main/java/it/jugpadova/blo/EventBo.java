@@ -85,7 +85,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 234f73ce3127 $
+ * @version $Revision: d371f8529ad3 $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -120,7 +120,7 @@ public class EventBo {
     public List<Participant> searchNotConfirmedParticipantsByEventId(Long id) {
         return participantDao.findNotConfirmedParticipantsByEventId(id);
     }
-    
+
     public List<Participant> searchCancelledParticipantsByEventId(Long id) {
         return participantDao.findCancelledParticipantsByEventId(id);
     }
@@ -152,17 +152,25 @@ public class EventBo {
         try {
             DetachedCriteria eventCriteria =
                     DetachedCriteria.forClass(Event.class);
-            if (StringUtils.isNotBlank(eventSearch.getJugName()) ||
-                    StringUtils.isNotBlank(eventSearch.getCountry()) ||
-                    StringUtils.isNotBlank(eventSearch.getContinent())) {
+            if (StringUtils.isNotBlank(eventSearch.getJugName())
+                    || StringUtils.isNotBlank(eventSearch.getFriendlyName())
+                    || StringUtils.isNotBlank(eventSearch.getCountry())
+                    || StringUtils.isNotBlank(eventSearch.getContinent())) {
                 DetachedCriteria ownerCriteria =
                         eventCriteria.createCriteria("owner.jug");
                 if (StringUtils.isNotBlank(eventSearch.getJugName())) {
                     ownerCriteria.add(Restrictions.ilike("name",
                             eventSearch.getJugName(), MatchMode.ANYWHERE));
                 }
-                if (StringUtils.isNotBlank(eventSearch.getCountry()) ||
-                        StringUtils.isNotBlank(eventSearch.getContinent())) {
+                if (StringUtils.isNotBlank(eventSearch.getFriendlyName())) {
+                    ownerCriteria.add(Restrictions.or(
+                            Restrictions.eq("name",
+                            eventSearch.getFriendlyName()),
+                            Restrictions.eq("internalFriendlyName", eventSearch.
+                            getFriendlyName())));
+                }
+                if (StringUtils.isNotBlank(eventSearch.getCountry()) || StringUtils.
+                        isNotBlank(eventSearch.getContinent())) {
                     DetachedCriteria countryCriteria =
                             ownerCriteria.createCriteria("country");
                     if (StringUtils.isNotBlank(eventSearch.getCountry())) {
@@ -182,6 +190,14 @@ public class EventBo {
             }
             if (!eventSearch.isPastEvents()) {
                 eventCriteria.add(Restrictions.ge("startDate", new Date()));
+            }
+            if (eventSearch.getStartDate() != null) {
+                eventCriteria.add(Restrictions.ge("startDate", eventSearch.
+                        getStartDate()));
+            }
+            if (eventSearch.getEndDate() != null) {
+                eventCriteria.add(Restrictions.le("endDate", eventSearch.
+                        getEndDate()));
             }
             if ("desc".equals(eventSearch.getOrderByDate())) {
                 eventCriteria.addOrder(Order.desc("startDate"));
@@ -257,8 +273,8 @@ public class EventBo {
                     getDateInstance(
                     java.text.DateFormat.SHORT, new Locale(locale));
             java.lang.String baseUrl =
-                    "http://" + req.getServerName() + ":" + req.getServerPort() +
-                    req.getContextPath();
+                    "http://" + req.getServerName() + ":" + req.getServerPort() + req.
+                    getContextPath();
             List<Event> events = null;
             try {
                 events = this.search(searchQuery, pastEvents, maxResults);
@@ -315,11 +331,11 @@ public class EventBo {
         //easy thanks to Lucio :)
         eventDao.store(event);
         if (isNew) {
-            logger.info(loggedUser + " created a new event with id=" +
-                    event.getId());
+            logger.info(loggedUser + " created a new event with id=" + event.
+                    getId());
         } else {
-            logger.info(loggedUser + " updated the event with id=" +
-                    event.getId());
+            logger.info(loggedUser + " updated the event with id="
+                    + event.getId());
         }
     }
 
@@ -331,8 +347,8 @@ public class EventBo {
         sendConfirmationEmail(event, participant, baseUrl);
         event.addParticipant(participant);
         eventDao.store(event);
-        logger.info(participant.getEmail() + " (" + participant.getId() +
-                ") registered to the event with id=" + event.getId());
+        logger.info(participant.getEmail() + " (" + participant.getId()
+                + ") registered to the event with id=" + event.getId());
     }
 
     public void addParticipant(Event event, Participant participant) {
@@ -343,8 +359,8 @@ public class EventBo {
         participantDao.store(participant);
         event.addParticipant(participant);
         eventDao.store(event);
-        logger.info(participant.getEmail() + " (" + participant.getId() +
-                ") added to the event with id=" + event.getId());
+        logger.info(participant.getEmail() + " (" + participant.getId()
+                + ") added to the event with id=" + event.getId());
     }
 
     public void refreshRegistration(Event event, Participant participant,
@@ -364,8 +380,8 @@ public class EventBo {
             event.getParticipants().size();
             event.getEventResources().size();
             event.getSpeakers().size();
-            logger.debug("Found " + event.getSpeakers().size() +
-                    " speakers for event id: " + id);
+            logger.debug("Found " + event.getSpeakers().size()
+                    + " speakers for event id: " + id);
         }
         return event;
     }
@@ -373,8 +389,8 @@ public class EventBo {
     @RemoteMethod
     public List findPartialLocation(String partialLocation, String username) {
         List<String> result = new ArrayList<String>();
-        if (!StringUtils.isBlank(partialLocation) &&
-                !StringUtils.isBlank(username)) {
+        if (!StringUtils.isBlank(partialLocation) && !StringUtils.isBlank(
+                username)) {
             try {
                 Map<String, Event> yetAdded = new HashMap<String, Event>();
                 List<Event> events = eventDao.findEventByPartialLocationAndOwner(
@@ -383,12 +399,12 @@ public class EventBo {
                 while (itEvents.hasNext()) {
                     Event event = itEvents.next();
                     final String listItem =
-                            event.getLocation() + "<div class=\"informal\">" +
-                            event.getDirections() + "</div>" +
-                            "<div class=\"informal hidden\">" + event.getId() +
-                            "</div>";
-                    final String listItemSignature = event.getLocation() +
-                            event.getDirections();
+                            event.getLocation() + "<div class=\"informal\">" + event.
+                            getDirections() + "</div>"
+                            + "<div class=\"informal hidden\">" + event.getId()
+                            + "</div>";
+                    final String listItemSignature = event.getLocation() + event.
+                            getDirections();
                     if (!yetAdded.containsKey(listItemSignature)) {
                         result.add(listItem);
                         yetAdded.put(listItemSignature, event);
@@ -481,8 +497,8 @@ public class EventBo {
         java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(
                 java.text.DateFormat.DEFAULT, new Locale(locale));
         java.lang.String baseUrl =
-                "http://" + req.getServerName() + ":" + req.getServerPort() +
-                req.getContextPath();
+                "http://" + req.getServerName() + ":" + req.getServerPort() + req.
+                getContextPath();
         it.jugpadova.bean.EventSearch eventSearch =
                 new it.jugpadova.bean.EventSearch();
         eventSearch.setContinent(continent);
@@ -534,17 +550,15 @@ public class EventBo {
         result.append("<script type=\"text/javascript\" src=\"").append(baseUrl).
                 append("/event/badge.html");
         try {
-            if (StringUtils.isNotBlank(continent) ||
-                    StringUtils.isNotBlank(country) ||
-                    StringUtils.isNotBlank(jugName) ||
-                    StringUtils.isNotBlank(pastEvents) ||
-                    StringUtils.isNotBlank(orderByDate) ||
-                    StringUtils.isNotBlank(jebShowJUGName) ||
-                    StringUtils.isNotBlank(jebShowCountry) ||
-                    StringUtils.isNotBlank(jebShowDescription) ||
-                    StringUtils.isNotBlank(jebShowParticipants) ||
-                    StringUtils.isNotBlank(badgeStyle) ||
-                    StringUtils.isNotBlank(lang)) {
+            if (StringUtils.isNotBlank(continent) || StringUtils.isNotBlank(
+                    country) || StringUtils.isNotBlank(jugName) || StringUtils.
+                    isNotBlank(pastEvents)
+                    || StringUtils.isNotBlank(orderByDate) || StringUtils.
+                    isNotBlank(jebShowJUGName) || StringUtils.isNotBlank(
+                    jebShowCountry)
+                    || StringUtils.isNotBlank(jebShowDescription) || StringUtils.
+                    isNotBlank(jebShowParticipants) || StringUtils.isNotBlank(
+                    badgeStyle) || StringUtils.isNotBlank(lang)) {
                 result.append('?');
                 boolean first = true;
                 if (StringUtils.isNotBlank(continent)) {
@@ -708,7 +722,8 @@ public class EventBo {
                 result.append(
                         "<div class=\"jeb_participants\"><span id=\"jeb_participants_label\" class=\"jeb_text\">").
                         append(messageSource.getMessage("Participants", null,
-                        "Participants", StringUtils.isNotBlank(lang) ? new Locale(lang)
+                        "Participants", StringUtils.isNotBlank(lang) ? new Locale(
+                        lang)
                         : Locale.ENGLISH)).
                         append(": </span><span class=\"jeb_text\">").append(
                         event.getNumberOfParticipants()).
@@ -818,8 +833,8 @@ public class EventBo {
     private String generateConfirmationCode(Event event,
             Participant participant) {
         return new MessageDigestPasswordEncoder("MD5", true).encodePassword(
-                event.getTitle() + participant.getFirstName() +
-                participant.getLastName() + participant.getEmail(),
+                event.getTitle() + participant.getFirstName() + participant.
+                getLastName() + participant.getEmail(),
                 new Date());
     }
 

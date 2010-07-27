@@ -45,7 +45,9 @@
         <dl>
             
             <dt><form:label path="jugger.jug.name"><spring:message code="juggerRegistrationJUGName"/> (*)</form:label></dt>                            
-            <dd><form:input path="jugger.jug.name" onblur="javascript:disableJugFields();"/><div id="jugList" class="auto_complete"></div></dd>      
+            <dd><form:input path="jugger.jug.name" onblur="javascript:disableJugFields();"/><div id="jugList" class="auto_complete"></div></dd>
+            <dt><form:label path="jugger.jug.internalFriendlyName"><spring:message code="juggerRegistrationJUGFriendlyName" text="?juggerRegistrationJUGFriendlyName?" /></form:label></dt>
+            <dd><form:input path="jugger.jug.internalFriendlyName" /></dd>
             <dt><form:label path="jugger.jug.country.englishName"><spring:message code="juggerRegistrationCountry"/></form:label></dt>                            
             <dd><form:input path="jugger.jug.country.englishName"  /><div id="countryList" class="auto_complete"></div></dd>
             <dt><form:label path="jugger.jug.webSite"><spring:message code="juggerRegistrationWebSite"/></form:label></dt>                            
@@ -115,6 +117,7 @@
 
     function enableJugFields() {
         parancoe.util.fullEnableFormElement('jugger.jug.country.englishName');
+        parancoe.util.fullEnableFormElement('jugger.jug.internalFriendlyName');
         parancoe.util.fullEnableFormElement('jugger.jug.webSite');
         parancoe.util.fullEnableFormElement('jugger.jug.logo');
         parancoe.util.fullEnableFormElement('jugger.jug.longitude');

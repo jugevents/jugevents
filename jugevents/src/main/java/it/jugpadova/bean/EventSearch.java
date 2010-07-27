@@ -1,5 +1,7 @@
 package it.jugpadova.bean;
 
+import java.util.Date;
+
 /**
  * Bean for the event search form.
  *
@@ -13,6 +15,9 @@ public class EventSearch {
     private boolean pastEvents;
     private String orderByDate="asc";
     private Integer maxResults;
+    private String friendlyName;
+    private Date startDate;
+    private Date endDate;
 
     public EventSearch() {
     }
@@ -63,6 +68,30 @@ public class EventSearch {
 
     public void setMaxResults(Integer maxResults) {
         this.maxResults = maxResults;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getFriendlyName() {
+        return friendlyName;
+    }
+
+    public void setFriendlyName(String friendlyName) {
+        this.friendlyName = friendlyName;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
 }

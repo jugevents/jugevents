@@ -33,6 +33,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.octo.captcha.service.CaptchaService;
 import it.jugpadova.blo.JuggerBo;
+import it.jugpadova.dao.JUGDao;
+import it.jugpadova.dao.JuggerDao;
+import it.jugpadova.po.JUG;
+import it.jugpadova.po.Jugger;
+import javax.annotation.Resource;
+import org.apache.commons.lang.StringUtils;
+import org.parancoe.plugins.security.UserDao;
 import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,6 +72,12 @@ public class JuggerRegistrationController {
     private JuggerBo juggerBo;
     @Autowired
     private CaptchaService captchaService;
+    @Resource
+    private JuggerDao juggerDao;
+    @Resource
+    private UserDao userDao;
+    @Resource
+    private JUGDao jugDao;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) throws Exception {
@@ -75,36 +88,68 @@ public class JuggerRegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @Validation(view = FORM_VIEW)
+    @Validation(view = FORM_VIEW, continueOnErrors = true)
     protected ModelAndView save(HttpServletRequest req,
             @ModelAttribute(JUGGER_ATTRIBUTE) NewJugger jc,
             BindingResult result, SessionStatus status) throws IOException {
-        try {
-            juggerBo.newJugger(jc.getJugger(),
-                    Utilities.getBaseUrl(req),
-                    jc.getRequireReliability().isRequireReliability(),
-                    jc.getRequireReliability().getComment());
-        } catch (EmailAlreadyPresentException e) {
-            result.rejectValue("jugger.email", "emailalreadypresent",
-                    e.getMessage());
-            logger.error(e);
+        final Jugger jugger = jc.getJugger();
+        validateJugger(jugger, result);
+        if (result.hasErrors()) {
             return new ModelAndView(FORM_VIEW);
-        } catch (UserAlreadyPresentsException e) {
-            result.rejectValue("jugger.user.username", "useralreadypresents",
-                    e.getMessage());
-            logger.error(e);
-            return new ModelAndView(FORM_VIEW);
-        } finally {
-            if (jc.getJugger().getJug().getCountry() == null) {
-                jc.getJugger().getJug().setCountry(new Country());
-            }
+        }
+        juggerBo.newJugger(jugger, Utilities.getBaseUrl(req),
+                jc.getRequireReliability().isRequireReliability(),
+                jc.getRequireReliability().getComment());
+        if (jugger.getJug().getCountry() == null) {
+            jugger.getJug().setCountry(new Country());
         }
         ModelAndView mv =
                 new ModelAndView(
                 "redirect:/home/message.html?messageCode=jugger.registration.sentMail");
-        Utilities.addMessageArguments(mv, jc.getJugger().getEmail());
+        Utilities.addMessageArguments(mv, jugger.getEmail());
         status.setComplete();
         return mv;
+    }
+
+    private void validateJugger(final Jugger jugger, BindingResult result) {
+        if (jugger != null) {
+            if (jugger.getUser() != null && StringUtils.isNotBlank(jugger.
+                    getUser().getUsername())) {
+                // check if username is already presents
+                String username = jugger.getUser().getUsername();
+                if (userDao.findByUsername(username) != null) {
+                    result.rejectValue("jugger.user.username",
+                            "useralreadypresents",
+                            "User with username: " + username
+                            + " already presents in the database!");
+                }
+            }
+            if (StringUtils.isNotBlank(jugger.getEmail())) {
+                // check if it exists yet a jugger with the same email
+                Jugger prevJugger = juggerDao.findByEmail(jugger.getEmail());
+                if (prevJugger != null) {
+                    result.rejectValue("jugger.email", "emailalreadypresent",
+                            "An user tried to register with an email that exists yet");
+                }
+            }
+            JUG newJUG = jugger.getJug();
+            if (newJUG != null) {
+                JUG jug = jugDao.findByName(newJUG.getName());
+                if (jug == null) { // it's a new JUG
+                    final String internalFriendlyName =
+                            newJUG.getInternalFriendlyName();
+                    if (StringUtils.isNotBlank(internalFriendlyName)) {
+                        JUG friendlyJug = jugDao.findByInternalFriendlyName(
+                                internalFriendlyName);
+                        if (friendlyJug != null) {
+                            result.rejectValue("jugger.jug.internalFriendlyName",
+                                    "friendlyNameAlreadyPresent",
+                                    "An user tried to create a JUG with a friendly name that exists yet");
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET)
