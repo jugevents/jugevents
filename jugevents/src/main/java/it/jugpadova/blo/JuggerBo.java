@@ -27,18 +27,23 @@ import it.jugpadova.po.Jugger;
 import it.jugpadova.util.SecurityUtilities;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.mail.internet.MimeMessage;
 
-import org.springframework.security.providers.encoding .MessageDigestPasswordEncoder;
+import org.springframework.security.providers.encoding.MessageDigestPasswordEncoder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
@@ -137,8 +142,8 @@ public class JuggerBo {
         sendEmail(jugger, baseUrl, "Please Confirm your Jugger registration",
                 jugger.getConfirmationCode(),
                 "it/jugpadova/jugger-registration-confirmation.vm");
-        logger.info("Jugger (" + jugger.getUser().getUsername() +
-                ") has been created with success");
+        logger.info("Jugger (" + jugger.getUser().getUsername()
+                + ") has been created with success");
     }
 
     /**
@@ -171,15 +176,16 @@ public class JuggerBo {
                     getUsername() + " already enabled");
         }
         jugger.getUser().setEnabled(true);
-        String encryptedPWD = SecurityUtilities.encodePassword(password, jugger.getUser().
+        String encryptedPWD = SecurityUtilities.encodePassword(password, jugger.
+                getUser().
                 getUsername());
         jugger.getUser().setPassword(encryptedPWD);
         //jugger.getUser().setPassword(password);
         // one way code...so regenerate it
         jugger.setConfirmationCode(generateConfirmationCode(jugger));
         juggerDao.store(jugger);
-        logger.info("Username " + jugger.getUser().getUsername() +
-                " enabled to jugevents");
+        logger.info("Username " + jugger.getUser().getUsername()
+                + " enabled to jugevents");
         return jugger;
     }
 
@@ -189,14 +195,15 @@ public class JuggerBo {
             throw new UserNotEnabledException("User " + jugger.getUser().
                     getUsername() + " is not enabled");
         }
-        String encryptedPWD = SecurityUtilities.encodePassword(password, jugger.getUser().
+        String encryptedPWD = SecurityUtilities.encodePassword(password, jugger.
+                getUser().
                 getUsername());
         jugger.getUser().setPassword(encryptedPWD);
         // one way code...so regenerate it
         jugger.setChangePasswordCode(generateConfirmationCode(jugger));
         juggerDao.store(jugger);
-        logger.info("User " + jugger.getUser().getUsername() +
-                " changed its password");
+        logger.info("User " + jugger.getUser().getUsername()
+                + " changed its password");
         return jugger;
     }
 
@@ -225,7 +232,8 @@ public class JuggerBo {
         List<String> result = new ArrayList<String>();
         if (!StringUtils.isBlank(partialCountry)) {
             try {
-                List<Country> countries = countryDao.findByPartialLocalNameAndContinent(
+                List<Country> countries = countryDao.
+                        findByPartialLocalNameAndContinent(
                         "%" + partialCountry + "%",
                         "%" + partialContinent + "%");
                 Iterator<Country> itCountries = countries.iterator();
@@ -290,7 +298,8 @@ public class JuggerBo {
         List<String> result = new ArrayList<String>();
         if (!StringUtils.isBlank(partialJugName)) {
             try {
-                List<JUG> jugs = jugDao.findByPartialJugNameAndCountryAndContinent(
+                List<JUG> jugs = jugDao.
+                        findByPartialJugNameAndCountryAndContinent(
                         "%" + partialJugName + "%",
                         "%" + partialCountry + "%",
                         "%" + partialContinent + "%");
@@ -309,8 +318,8 @@ public class JuggerBo {
         List<String> result = new ArrayList<String>();
         if (!StringUtils.isBlank(partialJugName)) {
             try {
-                List<JUG> jugs = jugDao.findByPartialName("%" + partialJugName +
-                        "%");
+                List<JUG> jugs = jugDao.findByPartialName("%" + partialJugName
+                        + "%");
                 for (JUG jug : jugs) {
                     result.add(jug.getName());
                 }
@@ -390,15 +399,16 @@ public class JuggerBo {
             }
             // effect.highlight("jugger.jug.country.englishName");            
 
-            util.setValue("jugger.jug.internalFriendlyName", jug.getInternalFriendlyName());
+            util.setValue("jugger.jug.internalFriendlyName", jug.
+                    getInternalFriendlyName());
 
             util.setValue("jugger.jug.webSite", jug.getWebSite());
             // effect.highlight("jugger.jug.webSite");
 
             util.setValue("jugLogo",
-                    "<img style=\"float: right;\" src=\"" + cp +
-                    "/bin/jugLogo.bin?id=" + jug.getId() +
-                    "\" alt=\"JUG Logo\" width=\"100\"/>");
+                    "<img style=\"float: right;\" src=\"" + cp
+                    + "/bin/jugLogo.bin?id=" + jug.getId()
+                    + "\" alt=\"JUG Logo\" width=\"100\"/>");
 
             if (jug.getLongitude() != null) {
                 util.setValue("jugger.jug.longitude", jug.getLongitude().
@@ -423,7 +433,7 @@ public class JuggerBo {
 
             util.setValue("jugger.jug.infos", jug.getInfos());
 
-        // fixJugFields(false);
+            // fixJugFields(false);
         }
 
     }
@@ -467,6 +477,54 @@ public class JuggerBo {
     }
 
     /**
+     * Update the frienly URLs div.
+     *
+     * @param jugName
+     */
+    @RemoteMethod
+    public void updateFriendlyUrls(String jugName, String friendlyName) throws
+            UnsupportedEncodingException {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        df.setCalendar(cal);
+        WebContext wctx = WebContextFactory.get();
+        ScriptSession session = wctx.getScriptSession();
+        Util util = new Util(session);
+        String friendly = jugName;
+        if (StringUtils.isNotBlank(friendlyName)) {
+            friendly = friendlyName;
+        }
+        friendly = URLEncoder.encode(friendly, "UTF-8");
+        StringBuilder sb = new StringBuilder();
+        sb.append("<a href=\"").append(conf.getJugeventsBaseUrl()).append(
+                "/ical/").append(friendly).append("\">").append(conf.
+                getJugeventsBaseUrl()).append("/ical/").append(friendly).append(
+                "</a><br/>");
+        cal.setTime(new Date());
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.MONTH, 0);
+        Date startDate = cal.getTime();
+        sb.append("<a href=\"").append(conf.getJugeventsBaseUrl()).append(
+                "/ical/").append(friendly).append(
+                "/").append(df.format(startDate)).append("\">").append(conf.
+                getJugeventsBaseUrl()).append("/ical/").append(friendly).append(
+                "/").append(df.format(startDate)).append(
+                "</a><br/>");
+        cal.set(Calendar.DAY_OF_MONTH, 31);
+        cal.set(Calendar.MONTH, 11);
+        Date endDate = cal.getTime();
+        sb.append("<a href=\"").append(conf.getJugeventsBaseUrl()).append(
+                "/ical/").append(friendly).append(
+                "/").append(df.format(startDate)).append(
+                "/").append(df.format(endDate)).append("\">").append(conf.
+                getJugeventsBaseUrl()).append("/ical/").append(friendly).append(
+                "/").append(df.format(startDate)).append(
+                "/").append(df.format(endDate)).append(
+                "</a>");
+        util.setValue("friendlyUrls", sb.toString());
+    }
+
+    /**
      * Updates Jugger and its childs.
      *
      * @param jugger
@@ -492,10 +550,10 @@ public class JuggerBo {
         User userToValidate = null;
 
         // check if username is already presents
-        if (userDao.findByUsername(username)!=null) {
+        if (userDao.findByUsername(username) != null) {
 
-            throw new UserAlreadyPresentsException("User with username: " +
-                    username + " already presents in the database!");
+            throw new UserAlreadyPresentsException("User with username: "
+                    + username + " already presents in the database!");
         }
 
         // set authority to jugger
@@ -525,8 +583,8 @@ public class JuggerBo {
         Jugger jugger = juggerDao.searchByUsername(username);
 
         if (jugger == null) {
-            throw new IllegalArgumentException("No jugger with username " +
-                    username);
+            throw new IllegalArgumentException("No jugger with username "
+                    + username);
         }
         User user = jugger.getUser();
         userDao.delete(user);
@@ -534,12 +592,12 @@ public class JuggerBo {
         // verify if jugger has been deleted
         jugger = juggerDao.searchByUsername(username);
         if (jugger == null) {
-            logger.info("Jugger with username: " + username +
-                    " has been deleted");
+            logger.info("Jugger with username: " + username
+                    + " has been deleted");
             return;
         }
-        throw new RuntimeException("There were some problems deleting jugger: " +
-                username);
+        throw new RuntimeException("There were some problems deleting jugger: "
+                + username);
     }
 
     /**
@@ -600,3 +658,4 @@ public class JuggerBo {
         return juggerDao.findAllOrderByUsername();
     }
 } // end of class
+

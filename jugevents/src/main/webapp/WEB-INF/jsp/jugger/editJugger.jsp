@@ -4,7 +4,7 @@
 <jwr:script src="${cp}/dwr/interface/AjaxMethodsJS.js" />
 <jwr:script src="/javascripts/modal.js" />
 <style type="text/css">
-    
+
     #mww
     {
         position: fixed;    
@@ -15,9 +15,9 @@
         height: 10em;
         border: 2px solid blue;
         padding: 2em 2em 2em 2em;	
-        
+
     }
-    
+
     #mbg
     {
         position: fixed;
@@ -25,7 +25,7 @@
         top: 0;
         width: 100%;
         height: 100%;
-        
+
         z-index: 9;
         background-color:#222222;
         display: none;
@@ -61,7 +61,7 @@
 </style>
 <![endif]>
 <![endif]-->
-                                                
+
 <h1><spring:message code="Edit-Jugger"/></h1>
 
 <%@ include file="../message.jspf" %>
@@ -83,82 +83,86 @@
             <dd><form:password path="password" /></dd>
             <dt><form:label path="confirmPassword"><spring:message code="confirmPassword"/></form:label></dt>
             <dd><form:password path="confirmPassword" /></dd>
-            
+
         </dl>
     </fieldset>
-    
-    
+
+
     <security:authorize ifAnyGranted="ROLE_JUGGER">    
         <c:if test="${!jugger.reliable}">                            
             <fieldset>
                 <legend><spring:message  code="Reliability" /></legend>       
                 <a href="javascript:require();"><spring:message code="requireReliability"/></a>                
                 &nbsp;<img id="tip_reliability" src="${cp}/images/question16x16.png" />          
-                
+
                 <div id="confirmMSGOK" style="display: none; color: #41AF0A"></div>
-                
+
             </fieldset>      
             <script type="text/javascript">
                 new Tip($('tip_reliability'), '<spring:message code="tip.reliability"/>', {title: '<spring:message code="tip.reliability.title"/>', effect: 'appear'});
             </script>                      
         </c:if>
     </security:authorize>
-    
-    
-    
+
+
+
     <fieldset><legend>JUG</legend>
         <span id="jugLogo"><img style="float: right;" src="${cp}/bin/jugLogo.bin?id=${jugger.jugger.jug.id}" alt="JUG Logo" width="100"/></span>
         <dl>
             <dt><form:label path="jugger.jug.name">
-            <spring:message code="juggerRegistrationJUGName" /> (*)</form:label></dt>
+                    <spring:message code="juggerRegistrationJUGName" /> (*)</form:label></dt>
             <dd><form:input path="jugger.jug.name" 
-                                onblur="javascript:disableJugFields();" />
+                        onblur="javascript:disableJugFields();" />
                 <div id="jugList" class="auto_complete"></div>
             </dd>
             <dt><form:label path="jugger.jug.internalFriendlyName">
-            <spring:message code="juggerRegistrationJUGFriendlyName" text="?juggerRegistrationJUGFriendlyName?" /></form:label></dt>
+                    <spring:message code="juggerRegistrationJUGFriendlyName" text="?juggerRegistrationJUGFriendlyName?" /></form:label></dt>
             <dd><form:input path="jugger.jug.internalFriendlyName" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/>
             </dd>
+            <div id="friendlyUrlsDiv" class="smallText form-aligned">
+                <b><spring:message code="FriendlyUrls" text="?FriendlyUrls?"/>:</b><br/>
+                <div id="friendlyUrls"> <!-- AJAX filled --> </div>
+            </div>
             <dt><form:label path="jugger.jug.country.englishName">
                     <spring:message code="juggerRegistrationCountry" />
-            </form:label></dt>
+                </form:label></dt>
             <dd><form:input path="jugger.jug.country.englishName" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}" />
                 <div id="countryList" class="auto_complete"></div>
             </dd>
             <dt><form:label path="jugger.jug.webSite">
                     <spring:message code="juggerRegistrationWebSite" />
-            </form:label></dt>
+                </form:label></dt>
             <dd><form:input path="jugger.jug.webSite" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
             <dt><form:label path="jugger.jug.logo">
-                <img id="tip_jugLogo" src="${cp}/images/question16x16.png" alt="Help Tip"/>&nbsp;<spring:message code="juggerRegistrationLogo" />
-            </form:label></dt>
+                    <img id="tip_jugLogo" src="${cp}/images/question16x16.png" alt="Help Tip"/>&nbsp;<spring:message code="juggerRegistrationLogo" />
+                </form:label></dt>
             <dd><input type="file" name="jugger.jug.logo" id="jugger.jug.logo"  <c:if test="${!jugger.reliable}">readonly="readonly" disabled="disabled"</c:if>/></dd>
             <dt><form:label path="jugger.jug.longitude">
-                <img id="tip_jugCoordinates" src="${cp}/images/question16x16.png" alt="Help Tip"/>&nbsp;<spring:message code="juggerRegistrationLongitude" />
-            </form:label></dt>
+                    <img id="tip_jugCoordinates" src="${cp}/images/question16x16.png" alt="Help Tip"/>&nbsp;<spring:message code="juggerRegistrationLongitude" />
+                </form:label></dt>
             <dd>
                 <form:input path="jugger.jug.longitude" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/><br/>
                 <a href="http://www.travelgis.com/geocode/" rel="external" class="smallText"><spring:message code="FindYourLocation" text="Find Your Location"/></a>
             </dd>
             <dt><form:label path="jugger.jug.latitude">
                     <spring:message code="juggerRegistrationLatitude" />
-            </form:label></dt>
+                </form:label></dt>
             <dd><form:input path="jugger.jug.latitude" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
             <dt><form:label path="jugger.jug.timeZoneId">
                     <spring:message code="juggerRegistrationTimezone" />
-            </form:label></dt>
+                </form:label></dt>
             <dd><form:select items="${timezones}" itemLabel="description" itemValue="id"  path="jugger.jug.timeZoneId" disabled="${!jugger.reliable}"/></dd>
             <dt><form:label path="jugger.jug.contactName">
                     <spring:message code="juggerRegistrationContactName" />
-            </form:label></dt>
+                </form:label></dt>
             <dd><form:input path="jugger.jug.contactName" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
             <dt><form:label path="jugger.jug.contactEmail">
                     <spring:message code="juggerRegistrationContactEmail" />
-            </form:label></dt>
+                </form:label></dt>
             <dd><form:input path="jugger.jug.contactEmail" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
             <dt><form:label path="jugger.jug.certificateTemplate">
-                <img id="tip_jugCertificateTemplate" src="${cp}/images/question16x16.png" alt="Help Tip"/>&nbsp;<spring:message code="juggerRegistrationCertificateTemplate" />
-            </form:label></dt>
+                    <img id="tip_jugCertificateTemplate" src="${cp}/images/question16x16.png" alt="Help Tip"/>&nbsp;<spring:message code="juggerRegistrationCertificateTemplate" />
+                </form:label></dt>
             <dd>
                 <input type="file" name="jugger.jug.certificateTemplate" id="jugger.jug.certificateTemplate"  <c:if test="${!jugger.reliable}">readonly="readonly" disabled="disabled"</c:if>/><br/>
                 <a href="${cp}/docs/certificate.odt" class="smallText"><spring:message code="Example"/></a>
@@ -166,7 +170,7 @@
             </dd>
             <dt><form:label path="jugger.jug.infos">
                     <spring:message code="juggerRegistrationJUGInfos" />
-            </form:label></dt>
+                </form:label></dt>
             <dd><form:textarea path="jugger.jug.infos" cols="30" rows="5" readonly="${!jugger.reliable}" disabled="${!jugger.reliable}"/></dd>
         </dl>
     </fieldset>
@@ -175,7 +179,7 @@
         <dd><input type="submit" value="<spring:message code='Update'/>" /><br/><br/></dd>                            
         <dt><spring:message code="juggerRegistrationRequired" /> (*)</dt><dd>&nbsp;</dd>                            
     </dl>
-    
+
 </form:form>
 
 <div id="mww">    
@@ -200,7 +204,14 @@
             
     new Autocompleter.DWR('jugger.jug.country.englishName', 'countryList', updateCountryList, { valueSelector: singleValueSelector, partialChars: 0, fullSearch: true });
     new Autocompleter.DWR('jugger.jug.name', 'jugList', updateJUGNameList, { valueSelector: singleValueSelector, partialChars: 0, fullSearch: true, afterUpdateElement: populateJugFields });
-            
+
+    juggerBo.updateFriendlyUrls($F('jugger.jug.name'), $F('jugger.jug.internalFriendlyName'));
+
+    new Form.Element.Observer('jugger.jug.internalFriendlyName', 1,
+    function(el, value) {
+        juggerBo.updateFriendlyUrls($F('jugger.jug.name'), $F('jugger.jug.internalFriendlyName'));
+    });
+
     function updateCountryList(autocompleter, token) {
         juggerBo.findPartialCountry(token, function(data) {
             autocompleter.setChoices(data)
