@@ -63,7 +63,7 @@
             <dt><form:label path="picture"><spring:message code="speaker.picture" text="?speaker.picture?"/></form:label></dt>
             <dd><input type="file" name="picture"></dd>
             <dt><form:label path="resume"><spring:message code="speaker.resume" text="?speaker.resume?"/></form:label><br/>
-            (<a href="http://hobix.com/textile/" rel="external">Textile</a>)
+            (<a href="http://redcloth.org/hobix.com/textile/" rel="external">Textile</a>)
             </dt>
             <dd><form:textarea path="resume" cols="50" rows="10"/></dd>  
              <dt>&nbsp;</dt>

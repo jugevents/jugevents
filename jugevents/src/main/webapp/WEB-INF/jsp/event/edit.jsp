@@ -23,7 +23,7 @@
             </dd>
             <dt>
                 <form:label path="directions"><spring:message code="event.directions"/></form:label><br/>
-                (<a href="http://hobix.com/textile/" rel="external">Textile</a>)
+                (<a href="http://redcloth.org/hobix.com/textile/" rel="external">Textile</a>)
             </dt>
             <dd><form:textarea path="directions" cols="38" rows="5"/></dd>
             <dt>&nbsp;</dt>
@@ -150,7 +150,7 @@
             </dd>
             <dt>
                 <form:label path="description"><spring:message code="event.description"/></form:label><br/>
-                (<a href="http://hobix.com/textile/" rel="external">Textile</a>)
+                (<a href="http://redcloth.org/hobix.com/textile/" rel="external">Textile</a>)
             </dt>
             <dd><form:textarea path="description" cols="38" rows="8" /></dd>
             <dt>&nbsp;</dt>
