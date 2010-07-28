@@ -192,7 +192,7 @@ public class FeedsBo {
                 JsonSerializationContext jsc) {
             final JsonObject result = new JsonObject();
             result.addProperty("title", event.getTitle());
-            result.addProperty("description", event.getDescription());
+            result.addProperty("description", event.getFilteredDescription());
             String timezone =
                     (event.getOwner() != null
                     && event.getOwner().getJug() != null)

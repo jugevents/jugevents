@@ -92,8 +92,9 @@ public class FeedsBoTest extends JugEventsBaseTest {
         String json = feedsBo.buildJson(events, TEST_BASE_URL, false);
         assertNotNull(json);
         assertTrue("The json resul is blank", StringUtils.isNotBlank(json));
+        System.out.println(json);
         assertEquals(
-                "[{\"title\":\"Meeting 1\",\"description\":\"JBoss\",\"start\":\"2010-01-09 17:30:00\",\"end\":\"2010-01-09 19:30:00\",\"allDay\":false},{\"title\":\"Meeting 2\",\"description\":\"JQuery\",\"start\":\"2010-01-10 17:30:00\",\"end\":\"2010-01-10 19:30:00\",\"allDay\":false}]",
+                "[{\"title\":\"Meeting 1\",\"description\":\"\\u003cp\\u003eJBoss\\u003c/p\\u003e\",\"start\":\"2010-01-09 17:30:00\",\"end\":\"2010-01-09 19:30:00\",\"allDay\":false},{\"title\":\"Meeting 2\",\"description\":\"\\u003cp\\u003eJQuery\\u003c/p\\u003e\",\"start\":\"2010-01-10 17:30:00\",\"end\":\"2010-01-10 19:30:00\",\"allDay\":false}]",
                 json);
     }
 
