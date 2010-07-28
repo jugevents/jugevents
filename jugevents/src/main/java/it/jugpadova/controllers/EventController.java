@@ -446,6 +446,16 @@ public class EventController {
             Date date = df.parse(endDate);
             eventSearch.setEndDate(date);
         }
+        String startTimestamp = req.getParameter("start");
+        if (StringUtils.isNotBlank(startTimestamp)) {
+            Date date = new Date(Long.parseLong(startTimestamp)*1000);
+            eventSearch.setStartDate(date);
+        }
+        String endTimestamp = req.getParameter("end");
+        if (StringUtils.isNotBlank(endTimestamp)) {
+            Date date = new Date(Long.parseLong(endTimestamp)*1000);
+            eventSearch.setEndDate(date);
+        }
         return eventSearch;
     }
 }
