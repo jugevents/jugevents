@@ -48,7 +48,6 @@ import it.jugpadova.dao.ParticipantDao;
 import it.jugpadova.util.Utilities;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 import javax.annotation.Resource;
@@ -259,6 +258,7 @@ public class EventController {
             res.setHeader("Pragma", "no-cache");
             res.setDateHeader("Expires", 0);
             res.setContentType("text/xml");
+            res.setCharacterEncoding("UTF-8");
             ServletOutputStream resOutputStream = res.getOutputStream();
             wfo.output(channel,
                     new OutputStreamWriter(resOutputStream, "UTF-8"));
@@ -370,6 +370,7 @@ public class EventController {
             res.setHeader("Cache-Control",
                     "must-revalidate, post-check=0, pre-check=0, no-store");
             res.setHeader("Pragma", "public, no-cache");
+            res.setCharacterEncoding("UTF-8");
 
             CalendarOutputter outputter = new CalendarOutputter(true);
             ServletOutputStream resOutputStream = res.getOutputStream();
@@ -402,6 +403,7 @@ public class EventController {
             res.setDateHeader("Expires", 0);
             res.setContentType("application/json");
             res.setContentLength(json.getBytes().length);
+            res.setCharacterEncoding("UTF-8");
             ServletOutputStream resOutputStream = res.getOutputStream();
             Writer writer =
                     new OutputStreamWriter(resOutputStream, "UTF-8");
