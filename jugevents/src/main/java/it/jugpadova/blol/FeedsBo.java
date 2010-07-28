@@ -16,10 +16,19 @@
  */
 package it.jugpadova.blol;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import it.jugpadova.po.Event;
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.CalScale;
@@ -39,7 +48,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Locale;
+import java.util.TimeZone;
 import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Url;
@@ -87,8 +96,8 @@ public class FeedsBo {
                         event.getEndDate(), event.getEndTime())));
             }
             vEvent.getProperties().add(new Location(event.getLocation()));
-            vEvent.getProperties().add(new Url(new URI(baseUrl +
-                    "/event/show.html?id=" + event.getId())));
+            vEvent.getProperties().add(new Url(new URI(baseUrl
+                    + "/event/show.html?id=" + event.getId())));
             vEvent.getProperties().add(new net.fortuna.ical4j.model.property.Description(htmlTextConverter.
                     convert(event.getFilteredDescription())));
             calendar.getComponents().add(vEvent);
@@ -153,5 +162,85 @@ public class FeedsBo {
         }
         channel.setItems(items);
         return channel;
+    }
+
+    /**
+     * Build an JSON serialization from the list of events.
+     *
+     * @param events The list of events
+     * @param baseUrl The application base URL
+     * @return The JSON serialization
+     */
+    public String buildJson(List<Event> events, String baseUrl,
+            boolean prettyPrinting) {
+        String result = null;
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Event.class, new EventJsonSerializer());
+        if (prettyPrinting) {
+            gsonBuilder.setPrettyPrinting();
+        }
+        Gson gson = gsonBuilder.create();
+        result = gson.toJson(events);
+        return result;
+    }
+
+    private class EventJsonSerializer implements JsonSerializer<Event> {
+
+        @Override
+        public JsonElement serialize(Event event, Type type,
+                JsonSerializationContext jsc) {
+            final JsonObject result = new JsonObject();
+            result.addProperty("title", event.getTitle());
+            result.addProperty("description", event.getDescription());
+            String timezone =
+                    (event.getOwner() != null
+                    && event.getOwner().getJug() != null)
+                    ? event.getOwner().getJug().getTimeZoneId() : null;
+            try {
+                result.addProperty("start",
+                        formatDateAndTime(event.getStartDate(),
+                        event.getStartTime(),
+                        timezone));
+            } catch (ParseException ex) {
+                throw new RuntimeException("Can't convert start date and time",
+                        ex);
+            }
+            try {
+                result.addProperty("end",
+                        formatDateAndTime(event.getEndDate(),
+                        event.getEndTime(),
+                        timezone));
+            } catch (ParseException ex) {
+                throw new RuntimeException("Can't convert end date and time", ex);
+            }
+            result.addProperty("allDay", Boolean.FALSE);
+            return result;
+        }
+
+        /**
+         * Format separated date and time to a single string object.
+         *
+         * @param date The date
+         * @param time The time (in the "KK:mm aa" format)
+         * @return The full date&time string
+         * @throws ParseException If the time is in the wrong format.
+         */
+        public String formatDateAndTime(Date date,
+                String time, String timezone) throws ParseException {
+            DateFormat dfDateAndTime = new SimpleDateFormat(
+                    "dd/MM/yyyy KK:mm aa");
+            DateFormat dfDateAndTimeResult = new SimpleDateFormat(
+                    "yyyy-MM-dd kk:mm:ss");
+            if (timezone != null) {
+                dfDateAndTime.setTimeZone(TimeZone.getTimeZone(timezone));
+                dfDateAndTimeResult.setTimeZone(TimeZone.getTimeZone(timezone));
+            }
+            if (time == null) {
+                time = "08:00 AM";
+            }
+            Date dateWithTime =
+                    dfDateAndTime.parse(dfDate.format(date) + " " + time);
+            return dfDateAndTimeResult.format(dateWithTime);
+        }
     }
 }

@@ -14,18 +14,22 @@
  *  limitations under the License.
  *  under the License.
  */
-
 package it.jugpadova.blol;
 
 import it.jugpadova.JugEventsBaseTest;
 import it.jugpadova.dao.EventDao;
+import it.jugpadova.po.Event;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TimeZone;
 import javax.annotation.Resource;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.ValidationException;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Test of methos of the FeedBo.
@@ -33,6 +37,8 @@ import net.fortuna.ical4j.model.ValidationException;
  * @author Lucio Benfante
  */
 public class FeedsBoTest extends JugEventsBaseTest {
+
+    private static final String TEST_BASE_URL = "http://test.base.url";
     @Resource
     private FeedsBo feedsBo;
     @Resource
@@ -43,7 +49,7 @@ public class FeedsBoTest extends JugEventsBaseTest {
      */
     public void testBuildCalendar() throws URISyntaxException, ParseException {
         Calendar calendar =
-                feedsBo.buildCalendar(eventDao.findAll(), "http://test.base.url");
+                feedsBo.buildCalendar(eventDao.findAll(), TEST_BASE_URL);
         try {
             calendar.validate(true);
         } catch (ValidationException ex) {
@@ -61,5 +67,48 @@ public class FeedsBoTest extends JugEventsBaseTest {
         net.fortuna.ical4j.model.Date cd2 =
                 feedsBo.convertDateAndTime(d, "05:00 PM");
         assertEquals("20090918T170000", cd2.toString());
+    }
+
+    /**
+     * Test of buildJson method, of class FeedsBo.
+     */
+    public void testBuildJson() {
+        List<Event> events = eventDao.findAll();
+        String json = feedsBo.buildJson(events, TEST_BASE_URL, true);
+        assertNotNull(json);
+        assertTrue("The json resul is blank", StringUtils.isNotBlank(json));
+    }
+
+    /**
+     * Test of buildJson method, of class FeedsBo.
+     */
+    public void testBuildJsonSimple() {
+        List<Event> events = new LinkedList<Event>();
+        events.add(createTestEvent("Meeting 1", "JBoss", 2010, 0, 9, "05:30 PM",
+                "07:30 PM"));
+        events.add(createTestEvent("Meeting 2", "JQuery", 2010, 0, 10,
+                "05:30 PM",
+                "07:30 PM"));
+        String json = feedsBo.buildJson(events, TEST_BASE_URL, false);
+        assertNotNull(json);
+        assertTrue("The json resul is blank", StringUtils.isNotBlank(json));
+        assertEquals(
+                "[{\"title\":\"Meeting 1\",\"description\":\"JBoss\",\"start\":\"2010-01-09 17:30:00\",\"end\":\"2010-01-09 19:30:00\",\"allDay\":false},{\"title\":\"Meeting 2\",\"description\":\"JQuery\",\"start\":\"2010-01-10 17:30:00\",\"end\":\"2010-01-10 19:30:00\",\"allDay\":false}]",
+                json);
+    }
+
+    private Event createTestEvent(String title, String description, int year,
+            int month, int day, String startTime, String endTime) {
+        java.util.Calendar cal =
+                java.util.Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        Event event = new Event();
+        event.setTitle(title);
+        event.setDescription(description);
+        cal.set(year, month, day);
+        event.setStartDate(cal.getTime());
+        event.setStartTime(startTime);
+        event.setEndDate(cal.getTime());
+        event.setEndTime(endTime);
+        return event;
     }
 }
