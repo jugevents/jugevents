@@ -23,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import it.jugpadova.po.Event;
+import it.jugpadova.po.JUG;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -214,6 +215,12 @@ public class FeedsBo {
                 throw new RuntimeException("Can't convert end date and time", ex);
             }
             result.addProperty("allDay", Boolean.FALSE);
+            if (event.getOwner() != null && event.getOwner().getJug() != null) {
+                JUG jug = event.getOwner().getJug();
+                result.addProperty("jugName", jug.getName());
+                result.addProperty("jugFriendlyName", jug.getInternalFriendlyName());
+                result.addProperty("jugWebSite", jug.getWebSiteUrl());
+            }
             return result;
         }
 
