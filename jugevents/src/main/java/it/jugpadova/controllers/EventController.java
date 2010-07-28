@@ -386,6 +386,35 @@ public class EventController {
         return null;
     }
 
+    @RequestMapping
+    public ModelAndView json(HttpServletRequest req,
+            HttpServletResponse res) throws Exception {
+        try {
+            EventSearch eventSearch = buildEventSearch(req);
+            List<Event> events = eventBo.search(eventSearch);
+            String json =
+                    feedsBo.buildJson(events,
+                    Utilities.getBaseUrl(req), true);
+            // flush it in the res
+            res.setHeader("Cache-Control",
+                    "must-revalidate, post-check=0, pre-check=0, no-store");
+            res.setHeader("Pragma", "public, no-cache");
+            res.setDateHeader("Expires", 0);
+            res.setContentType("application/json");
+            res.setContentLength(json.getBytes().length);
+            ServletOutputStream resOutputStream = res.getOutputStream();
+            Writer writer =
+                    new OutputStreamWriter(resOutputStream, "UTF-8");
+            writer.write(json);
+            writer.flush();
+            writer.close();
+        } catch (Exception exception) {
+            logger.error("Error producing JSON", exception);
+            throw exception;
+        }
+        return null;
+    }
+
     private EventSearch buildEventSearch(HttpServletRequest req) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         df.setLenient(false);

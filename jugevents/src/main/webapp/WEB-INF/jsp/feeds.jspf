@@ -18,4 +18,13 @@
         <spring:message code="Calendar" text="?Calendar?"/>
     </a>
 </span>
+<br/>
+<a href="${cp}/event/json.html">
+    <img style="vertical-align: middle; border: none; margin: 2px 3px 0px 5px;" src="${cp}/images/json_icon.png" alt="JSON icon"/>
+</a>
+<span class="smallText">
+    <a href="${cp}/event/json.html">
+        <spring:message code="JSON" text="?JSON?"/>
+    </a>
+</span>
 </div>
