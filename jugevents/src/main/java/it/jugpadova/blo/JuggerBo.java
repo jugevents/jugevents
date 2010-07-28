@@ -520,7 +520,11 @@ public class JuggerBo {
                 getJugeventsBaseUrl()).append("/ical/").append(friendly).append(
                 "/").append(df.format(startDate)).append(
                 "/").append(df.format(endDate)).append(
-                "</a>");
+                "</a><br/>");
+        sb.append("<a href=\"").append(conf.getJugeventsBaseUrl()).append(
+                "/json/").append(friendly).append("\">").append(conf.
+                getJugeventsBaseUrl()).append("/json/").append(friendly).append(
+                "</a><br/>");
         util.setValue("friendlyUrls", sb.toString());
     }
 
