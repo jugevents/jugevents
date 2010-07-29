@@ -93,6 +93,9 @@ public class FeedsBo {
                     createRegistry();
             net.fortuna.ical4j.model.TimeZone timezone = registry.getTimeZone(
                     timezoneId);
+            if (timezone == null) {
+                timezone = registry.getTimeZone("GMT");
+            }
             VTimeZone tz = timezone.getVTimeZone();
             VEvent vEvent = new VEvent();
             vEvent.getProperties().add(new Uid(event.getId().toString()));
