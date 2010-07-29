@@ -15,8 +15,6 @@ package it.jugpadova.controllers;
 
 import it.jugpadova.bean.NewJugger;
 import it.jugpadova.bean.RequireReliability;
-import it.jugpadova.exception.EmailAlreadyPresentException;
-import it.jugpadova.exception.UserAlreadyPresentsException;
 import it.jugpadova.util.Utilities;
 
 import java.io.IOException;
