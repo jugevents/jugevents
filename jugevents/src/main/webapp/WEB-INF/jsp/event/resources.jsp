@@ -4,7 +4,7 @@
 <jwr:script src="/javascripts/jugevents/eventResources.js" />
 <h1><spring:message code='event.resources'/></h1>
 <div class="secondaryMenu">
-    <a href="${cp}/event/show.html?id=${event.id}"><spring:message code="BackToTheEvent"/></a>
+    <a href="${cp}/event/${event.id}"><spring:message code="BackToTheEvent"/></a>
     <a id="newResourceLink" href="#"><spring:message code="AddResource" text="?AddResource?"/></a>
 </div>
 <%@ include file="show_brief.jspf" %>

@@ -1,9 +1,15 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <div style="margin: 0; padding: 0;">
     <div style="float:left; width: 550px;">
         <%@ include file="main_description.jspf" %>
         <%@ include file="resources.jspf" %>
     </div>
     <div style="float:right; width: 200px; padding-left: 10px; font-size: 11px">
+        <c:if test="${event.registration.enabled && event.registration.showParticipants}">
+            <div style="text-align: right; margin: 0px 0px 10px 0px;;">
+                <a href="${cp}/event/showParticipants.html?id=${event.id}"><spring:message code="WhoIsComing" text="?WhoIsComing?"/></a>
+            </div>
+        </c:if>
         <%@ include file="registration_button.jspf" %>
         <%@ include file="jug_box.jspf" %>
         <%@ include file="event_data.jspf" %>

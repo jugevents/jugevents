@@ -33,6 +33,10 @@
         <put-attribute name="main" value="/WEB-INF/jsp/event/show.jsp"/>
     </definition>
 
+    <definition name="event/showParticipants" extends="template.central">
+        <put-attribute name="main" value="/WEB-INF/jsp/event/showParticipants.jsp"/>
+    </definition>
+
     <definition name="event/edit" extends="template.central">
         <put-attribute name="main" value="/WEB-INF/jsp/event/edit.jsp"/>
     </definition>
