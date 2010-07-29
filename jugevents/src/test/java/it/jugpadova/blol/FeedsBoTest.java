@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.TimeZone;
 import javax.annotation.Resource;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.TimeZoneRegistry;
+import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.ValidationException;
 import org.apache.commons.lang.StringUtils;
 
@@ -60,12 +62,16 @@ public class FeedsBoTest extends JugEventsBaseTest {
     public void testConvertDateAndTime() throws ParseException {
         SimpleDateFormat df =
                 new SimpleDateFormat("dd/MM/yyyy");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+        TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().
+                createRegistry();
+        net.fortuna.ical4j.model.TimeZone tz = registry.getTimeZone("GMT");
         Date d = df.parse("18/09/2009");
         net.fortuna.ical4j.model.Date cd1 =
-                feedsBo.convertDateAndTime(d, "12:00 AM");
+                feedsBo.convertDateAndTime(d, "12:00 AM", tz);
         assertEquals("20090918T120000", cd1.toString());
         net.fortuna.ical4j.model.Date cd2 =
-                feedsBo.convertDateAndTime(d, "05:00 PM");
+                feedsBo.convertDateAndTime(d, "05:00 PM", tz);
         assertEquals("20090918T170000", cd2.toString());
     }
 

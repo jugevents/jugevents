@@ -5,7 +5,7 @@ package it.jugpadova.bean;
  * 
  * @author lucio
  */
-public class TimeZoneBean {
+public class TimeZoneBean implements Comparable<TimeZoneBean> {
     private String id;
     private String description;
 
@@ -20,6 +20,11 @@ public class TimeZoneBean {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public int compareTo(TimeZoneBean o) {
+        return this.id.compareTo(o.getId());
     }
         
 }

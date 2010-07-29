@@ -29,9 +29,14 @@ import it.jugpadova.util.Utilities;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.TimeZone;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -155,11 +160,27 @@ public class JuggerEditController {
         RequestContext rc = (RequestContext) req.getAttribute("requestContext");
         List<TimeZoneBean> timezones = new ArrayList();
         Date now = new Date();
-        for (int i = -12; i <= 12; i++) {
-            DateTimeZone fdtz = FixedDateTimeZone.forOffsetHours(i);
-            timezones.add(new TimeZoneBean(fdtz.getID(), fdtz.getShortName(
-                    now.getTime(), rc.getLocale())));
+//        for (int i = -12; i <= 12; i++) {
+//            DateTimeZone fdtz = FixedDateTimeZone.forOffsetHours(i);
+//            timezones.add(new TimeZoneBean(fdtz.getID(), fdtz.getShortName(
+//                    now.getTime(), rc.getLocale())));
+//        }
+//        Set tzIds = DateTimeZone.getAvailableIDs();
+//        for (Object otzId : tzIds) {
+//            String tzId = (String) otzId;
+//            DateTimeZone fdtz = DateTimeZone.forID(tzId);
+////            timezones.add(new TimeZoneBean(fdtz.getID(), fdtz.getID() + " - " + fdtz.getName(now.getTime(), rc.getLocale())));
+//            timezones.add(new TimeZoneBean(fdtz.getID(), fdtz.toString() + " - " + fdtz.toTimeZone().getDisplayName(true, TimeZone.LONG, rc.getLocale())));
+//        }
+
+        String[] tzIds = TimeZone.getAvailableIDs();
+        for (Object otzId : tzIds) {
+            String tzId = (String) otzId;
+            TimeZone fdtz = TimeZone.getTimeZone(tzId);
+            timezones.add(new TimeZoneBean(fdtz.getID(), fdtz.getID()));
         }
+
+        Collections.sort(timezones);
         return timezones;
     }
 
@@ -189,5 +210,6 @@ public class JuggerEditController {
             }
         }
     }
+
 } // end of class
 

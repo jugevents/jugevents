@@ -28,8 +28,6 @@ import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.CalScale;
@@ -50,6 +48,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.TimeZone;
+import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.TimeZoneRegistry;
+import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
+import net.fortuna.ical4j.model.component.VTimeZone;
 import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Url;
@@ -63,10 +65,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class FeedsBo {
-
-    private DateFormat dfDate = new SimpleDateFormat("dd/MM/yyyy");
-    private DateFormat dfDateAndTime = new SimpleDateFormat(
-            "dd/MM/yyyy KK:mm aa");
 
     /**
      * Build an iCal calendar from the list of events.
@@ -85,16 +83,28 @@ public class FeedsBo {
         calendar.getProperties().add(CalScale.GREGORIAN);
 
         for (Event event : events) {
+            // Create a TimeZone
+            String timezoneId =
+                    (event.getOwner() != null
+                    && event.getOwner().getJug() != null
+                    && event.getOwner().getJug().getTimeZoneId() != null)
+                    ? event.getOwner().getJug().getTimeZoneId() : "GMT";
+            TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().
+                    createRegistry();
+            net.fortuna.ical4j.model.TimeZone timezone = registry.getTimeZone(
+                    timezoneId);
+            VTimeZone tz = timezone.getVTimeZone();
             VEvent vEvent = new VEvent();
             vEvent.getProperties().add(new Uid(event.getId().toString()));
+            vEvent.getProperties().add(tz.getTimeZoneId());
             vEvent.getProperties().add(new Summary(event.getTitle()));
             vEvent.getProperties().add(new Created(new net.fortuna.ical4j.model.DateTime(event.
                     getCreationDate())));
             vEvent.getProperties().add(new DtStart(convertDateAndTime(
-                    event.getStartDate(), event.getStartTime())));
+                    event.getStartDate(), event.getStartTime(), timezone)));
             if (event.getEndDate() != null) {
                 vEvent.getProperties().add(new DtEnd(convertDateAndTime(
-                        event.getEndDate(), event.getEndTime())));
+                        event.getEndDate(), event.getEndTime(), timezone)));
             }
             vEvent.getProperties().add(new Location(event.getLocation()));
             vEvent.getProperties().add(new Url(new URI(baseUrl
@@ -115,13 +125,16 @@ public class FeedsBo {
      * @throws ParseException If the time is in the wrong format.
      */
     public net.fortuna.ical4j.model.Date convertDateAndTime(Date date,
-            String time) throws ParseException {
+            String time, net.fortuna.ical4j.model.TimeZone timezone) throws ParseException {
+        DateFormat dfDate = new SimpleDateFormat("dd/MM/yyyy");
+//        DateFormat dfDateAndTime = new SimpleDateFormat("dd/MM/yyyy KK:mm aa");
+        dfDate.setTimeZone(timezone);
+//        dfDateAndTime.setTimeZone(TimeZone.getTimeZone(timezone));
         if (time == null) {
             time = "08:00 AM";
         }
-        Date dateWithTime =
-                dfDateAndTime.parse(dfDate.format(date) + " " + time);
-        return new net.fortuna.ical4j.model.DateTime(dateWithTime);
+        String dateWithTime = dfDate.format(date) + " " + time;
+        return new DateTime(dateWithTime, "dd/MM/yyyy KK:mm aa", timezone);
     }
 
     /**
@@ -218,7 +231,8 @@ public class FeedsBo {
             if (event.getOwner() != null && event.getOwner().getJug() != null) {
                 JUG jug = event.getOwner().getJug();
                 result.addProperty("jugName", jug.getName());
-                result.addProperty("jugFriendlyName", jug.getInternalFriendlyName());
+                result.addProperty("jugFriendlyName", jug.
+                        getInternalFriendlyName());
                 result.addProperty("jugWebSite", jug.getWebSiteUrl());
             }
             return result;
@@ -234,14 +248,17 @@ public class FeedsBo {
          */
         public String formatDateAndTime(Date date,
                 String time, String timezone) throws ParseException {
+            DateFormat dfDate = new SimpleDateFormat("dd/MM/yyyy");
             DateFormat dfDateAndTime = new SimpleDateFormat(
                     "dd/MM/yyyy KK:mm aa");
             DateFormat dfDateAndTimeResult = new SimpleDateFormat(
                     "yyyy-MM-dd kk:mm:ss");
-            if (timezone != null) {
-                dfDateAndTime.setTimeZone(TimeZone.getTimeZone(timezone));
-                dfDateAndTimeResult.setTimeZone(TimeZone.getTimeZone(timezone));
+            if (timezone == null) {
+                timezone = "GMT";
             }
+            dfDate.setTimeZone(TimeZone.getTimeZone(timezone));
+            dfDateAndTime.setTimeZone(TimeZone.getTimeZone(timezone));
+            dfDateAndTimeResult.setTimeZone(TimeZone.getTimeZone(timezone));
             if (time == null) {
                 time = "08:00 AM";
             }
