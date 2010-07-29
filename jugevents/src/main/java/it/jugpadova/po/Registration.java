@@ -27,6 +27,7 @@ public class Registration implements Serializable {
     @Min(value = 0, inclusive = false)
     private Long maxParticipants;
     private Boolean manualActivation;
+    private Boolean showParticipants = Boolean.FALSE;
 
     public Boolean getEnabled() {
         return enabled;
@@ -68,6 +69,14 @@ public class Registration implements Serializable {
 
     public void setMaxParticipants(Long maxParticipants) {
         this.maxParticipants = maxParticipants;
+    }
+
+    public Boolean getShowParticipants() {
+        return showParticipants;
+    }
+
+    public void setShowParticipants(Boolean showParticipants) {
+        this.showParticipants = showParticipants;
     }
     
     @Transient
