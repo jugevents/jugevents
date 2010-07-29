@@ -130,7 +130,7 @@ public class FeedsBo {
     public net.fortuna.ical4j.model.Date convertDateAndTime(Date date,
             String time, net.fortuna.ical4j.model.TimeZone timezone) throws ParseException {
         DateFormat dfDate = new SimpleDateFormat("dd/MM/yyyy");
-        dfDate.setTimeZone(timezone);
+        //dfDate.setTimeZone(timezone);
         if (time == null) {
             time = "08:00 AM";
         }
