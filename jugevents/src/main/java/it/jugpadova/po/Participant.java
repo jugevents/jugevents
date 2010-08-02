@@ -13,6 +13,8 @@
 // limitations under the License.
 package it.jugpadova.po;
 
+import it.jugpadova.util.GravatarUtils;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -21,6 +23,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
@@ -31,7 +34,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 98827ce0471a $
+ * @version $Revision: 85b2ab1af09a $
  */
 @Entity
 @NamedQueries({
@@ -254,5 +257,10 @@ public class Participant extends EntityBase {
     public boolean hasValidRegistration() {
         return this.getConfirmed() != null && this.getConfirmed() && !(this.
                 getCancelled() != null && this.getCancelled());
+    }
+
+    @Transient
+    public String getGravatarUrl() throws UnsupportedEncodingException {
+        return GravatarUtils.getUrl(email, 69, null, null);
     }
 }

@@ -7,6 +7,22 @@
         </div>
         <%@ include file="show_brief.jspf" %>
         <div id="participants">
+            <c:choose>
+                <c:when test="${!empty participants}">
+                    <c:forEach var="participant" items="${participants}">
+                        <div class="participant">
+                            <div class="participant_picture">
+                                <img title="${participant.firstName}" alt="${participant.firstName}" width="69" height="69" border="0" src="${participant.gravatarUrl}"/>
+                            </div>
+                            <div class="participant_data">
+                                ${participant.firstName}<br/>
+                                ${participant.lastName}
+                            </div>
+                        </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise><spring:message code="NoParticipants" text="?NoParticipants?"/></c:otherwise>
+            </c:choose>
         </div>
     </div>
     <div style="float:right; width: 200px; padding-left: 10px; font-size: 11px">

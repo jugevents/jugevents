@@ -553,3 +553,26 @@ div.jugLogoBox img {
 .strong {
     font-weight: bold;
 }
+
+/* Show Participant div */
+
+.participant {
+    width: 177px;
+    height: 89px;
+    float: left;
+    margin: 0px 4px 4px 0px;
+    border: solid 1px silver;
+}
+
+.participant_picture {
+    width: 69px;
+    height: 69px;
+    margin: 10px;
+    float: left;
+}
+
+.participant_data {
+    width: 88px;
+    float: left;
+    margin-top: 20px;
+}
