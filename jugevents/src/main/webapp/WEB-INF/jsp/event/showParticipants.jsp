@@ -16,7 +16,7 @@
                             </div>
                             <div class="participant_data">
                                 ${participant.firstName}<br/>
-                                ${participant.lastName}
+                                ${participant.exposedLastName}
                             </div>
                         </div>
                     </c:forEach>
