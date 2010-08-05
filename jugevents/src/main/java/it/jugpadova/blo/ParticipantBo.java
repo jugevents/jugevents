@@ -55,7 +55,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the participant management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: b947e4e0b212 $
+ * @version $Revision: 447b44fd4f78 $
  */
 @Component
 public class ParticipantBo {
@@ -119,8 +119,15 @@ public class ParticipantBo {
     public void setWinner(long participantId, boolean value) {
         Participant participant =
                 participantDao.read(Long.valueOf(participantId));
-        participant.setWinner(new Boolean(value));
+        participant.setWinner(value);
     }
+
+    public void setShowFullLastName(long participantId, boolean value) {
+        Participant participant =
+                participantDao.read(Long.valueOf(participantId));
+        participant.setShowFullLastName(value);
+    }
+
 
     public void sendCertificateToParticipant(long participantId, String baseUrl) {
         try {
@@ -364,4 +371,5 @@ public class ParticipantBo {
     public Participant retrieveParticipant(Long id) {
         return participantDao.read(id);
     }
+
 }

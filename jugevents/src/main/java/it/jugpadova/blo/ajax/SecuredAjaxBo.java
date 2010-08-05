@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component("ajaxMethods")
-@RemoteProxy(name="AjaxMethodsJS")
+@RemoteProxy(name = "AjaxMethodsJS")
 public class SecuredAjaxBo implements AjaxMethods {
-    
+
     @Autowired
     private ServicesBo servicesBo;
     @Autowired
@@ -27,7 +27,6 @@ public class SecuredAjaxBo implements AjaxMethods {
     @Autowired
     private EventResourceBo eventResourceBo;
 
-    
     @RemoteMethod
     public String requireReliabilityOnExistingJugger(String emailJugger,
             String motivation, String baseURL) {
@@ -41,7 +40,8 @@ public class SecuredAjaxBo implements AjaxMethods {
     }
 
     @RemoteMethod
-    public void confirmParticipantOnAttendance(long participantId, boolean attended, boolean wasCancelled) {
+    public void confirmParticipantOnAttendance(long participantId,
+            boolean attended, boolean wasCancelled) {
         participantBo.confirmParticipantOnAttendance(participantId,
                 attended, wasCancelled);
     }
@@ -68,13 +68,16 @@ public class SecuredAjaxBo implements AjaxMethods {
     @RemoteMethod
     public void setAttended(long participantId, boolean value) {
         participantBo.setAttended(participantId, value);
-
     }
 
     @RemoteMethod
     public void setWinner(long participantId, boolean value) {
         participantBo.setWinner(participantId, value);
+    }
 
+    @RemoteMethod
+    public void setShowFullLastName(long participantId, boolean value) {
+        participantBo.setShowFullLastName(participantId, value);
     }
 
     @RemoteMethod
