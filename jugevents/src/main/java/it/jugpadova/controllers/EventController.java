@@ -53,6 +53,7 @@ import java.util.TimeZone;
 import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -150,6 +151,22 @@ public class EventController {
             throw pade;
         }
         return mv;
+    }
+
+    @RequestMapping
+    public String showParticipants(@RequestParam("id") Long id,
+            HttpServletRequest req,
+            HttpServletResponse res, Model model) {
+        Event event = eventBo.retrieveEvent(id);
+        if (event == null) {
+            throw new IllegalArgumentException("No event with id " + id);
+        }
+        eventBo.checkShowParticipants(event);
+        List<Participant> participants =
+                eventBo.searchConfirmedParticipantsByEventId(event.getId());
+        model.addAttribute("event", event);
+        model.addAttribute("participants", participants);
+        return "event/showParticipants";
     }
 
     @RequestMapping
@@ -417,7 +434,8 @@ public class EventController {
         return null;
     }
 
-    private EventSearch buildEventSearch(HttpServletRequest req) throws ParseException {
+    private EventSearch buildEventSearch(HttpServletRequest req) throws
+            ParseException {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         df.setLenient(false);
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -450,12 +468,12 @@ public class EventController {
         }
         String startTimestamp = req.getParameter("start");
         if (StringUtils.isNotBlank(startTimestamp)) {
-            Date date = new Date(Long.parseLong(startTimestamp)*1000);
+            Date date = new Date(Long.parseLong(startTimestamp) * 1000);
             eventSearch.setStartDate(date);
         }
         String endTimestamp = req.getParameter("end");
         if (StringUtils.isNotBlank(endTimestamp)) {
-            Date date = new Date(Long.parseLong(endTimestamp)*1000);
+            Date date = new Date(Long.parseLong(endTimestamp) * 1000);
             eventSearch.setEndDate(date);
         }
         return eventSearch;

@@ -85,7 +85,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  * Business logic for the event management.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: d371f8529ad3 $
+ * @version $Revision: a59c158cee07 $
  */
 @Component
 @RemoteProxy(name = "eventBo")
@@ -746,6 +746,15 @@ public class EventBo {
         if (!servicesBo.canCurrentUserManageEvent(event)) {
             throw new ParancoeAccessDeniedException(
                     "You are not authorized on this event.");
+        }
+    }
+
+    public void checkShowParticipants(Event event)
+            throws ParancoeAccessDeniedException {
+        if (event.getRegistration().getShowParticipants() == null
+                || !event.getRegistration().getShowParticipants()) {
+            throw new ParancoeAccessDeniedException(
+                    "You are not authorized to see the participants of this event.");
         }
     }
 

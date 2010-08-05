@@ -13,6 +13,8 @@
 // limitations under the License.
 package it.jugpadova.po;
 
+import it.jugpadova.util.GravatarUtils;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -21,6 +23,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import org.apache.commons.lang.StringUtils;
 
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
@@ -31,7 +35,7 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank
  * The participant of an event.
  *
  * @author Lucio Benfante (<a href="lucio.benfante@jugpadova.it">lucio.benfante@jugpadova.it</a>)
- * @version $Revision: 98827ce0471a $
+ * @version $Revision: de4cd8e998e2 $
  */
 @Entity
 @NamedQueries({
@@ -91,6 +95,7 @@ public class Participant extends EntityBase {
     private Date cancellationDate;
     private Boolean reminderEnabled = Boolean.TRUE;
     private Date reminderSentDate;
+    private Boolean showFullLastName = Boolean.TRUE;
 
     /** Creates a new instance of Participant */
     public Participant() {
@@ -230,6 +235,14 @@ public class Participant extends EntityBase {
         this.cancellationDate = cancellationDate;
     }
 
+    public Boolean getShowFullLastName() {
+        return showFullLastName;
+    }
+
+    public void setShowFullLastName(Boolean showFullLastName) {
+        this.showFullLastName = showFullLastName;
+    }
+
     /**
      * Evaluate the confirmation to the event.
      * @return
@@ -254,5 +267,23 @@ public class Participant extends EntityBase {
     public boolean hasValidRegistration() {
         return this.getConfirmed() != null && this.getConfirmed() && !(this.
                 getCancelled() != null && this.getCancelled());
+    }
+
+    @Transient
+    public String getGravatarUrl() throws UnsupportedEncodingException {
+        return GravatarUtils.getUrl(email, 69, null, null);
+    }
+
+    @Transient
+    public String getExposedLastName() {
+        String result = "";
+        if (getShowFullLastName() != null && getShowFullLastName()) {
+            result = getLastName();
+        } else {
+            if (StringUtils.isNotBlank(getLastName())) {
+                result = getLastName().trim().charAt(0)+".";
+            }
+        }
+        return result;
     }
 }

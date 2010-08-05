@@ -24,6 +24,8 @@
                     <dd><form:input path="participant.firstName"/></dd>
                     <dt><form:label path="participant.lastName"><spring:message code="last_name"/>:</form:label></dt>
                     <dd><form:input path="participant.lastName"/></dd>
+                    <dt><form:label path="participant.showFullLastName"><spring:message code="show_full_last_name" text="?show_full_last_name?"/>:</form:label></dt>
+                    <dd><form:checkbox path="participant.showFullLastName"/></dd>
                     <dt><form:label path="participant.email"><spring:message code="Email"/>:</form:label></dt>
                     <dd><form:input path="participant.email"/></dd>
                     <dt><form:label path="participant.note"><spring:message code="Note"/>:</form:label></dt>
@@ -46,6 +48,9 @@
             <display:column media="html" sortProperty="lastName" titleKey="last_name" sortable="true" headerClass="sortable">
             <span id="lastName_v_${participantList.id}" onclick="$('lastName_e_${participantList.id}').toggle(); $('lastName_v_${participantList.id}').toggle();$('lastName_f_${participantList.id}').focus()">${participantList.lastName}&nbsp;<img src="${cp}/images/editableMarker.gif" alt="<spring:message code='InlineEdit'/>"/></span>
             <span id="lastName_e_${participantList.id}" style="display: none;"><input type="text" onchange="AjaxMethodsJS.updateParticipantFieldValue(${participantList.id}, 'lastName', this.value)" id="lastName_f_${participantList.id}" size="15" onblur="$('lastName_e_${participantList.id}').toggle(); $('lastName_v_${participantList.id}').toggle()" value="${participantList.lastName}"/></span>
+            </display:column>
+            <display:column media="html" titleKey="show_full_last_name" sortable="true" headerClass="sortable" style="text-align: center;">
+                <input id="conf_sfln_chk_${participantList.id}" name="conf_sfln_chk_${participantList.id}" onclick="AjaxMethodsJS.setShowFullLastName(${participantList.id}, this.checked)" type="checkbox" <c:if test="${participantList.showFullLastName}">checked="checked"</c:if> />
             </display:column>
             <display:column media="csv xml excel pdf" property="lastName" titleKey="last_name" sortable="true" headerClass="sortable"/>
             <display:column media="html" sortProperty="email" titleKey="Email" sortable="true" headerClass="sortable">

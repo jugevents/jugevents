@@ -172,8 +172,7 @@
                     <dd><form:radiobutton path="registration.manualActivation" value="" onclick="enableRegistrationRulesFields(true)"/><spring:message code="No" text="?No?"/>&nbsp;<form:radiobutton path="registration.manualActivation" value="true" onclick="enableRegistrationRulesFields(false)"/><spring:message code="Enabled" text="?Enabled?"/>&nbsp;<form:radiobutton path="registration.manualActivation" value="false" onclick="enableRegistrationRulesFields(false)"/><spring:message code="Disabled" text="?Disabled?"/></dd>
                     <dt><form:label path="activeReminder"><spring:message code="reminder.numOfDaysReminder" text="?reminder.numOfDaysReminder?"/></form:label></dt>
 		            <dd>
-		            <%--label attribute of form:option doesn't provide i18n --%>
-		             <img id="tip_numOfDaysReminder" src="${cp}/images/question16x16.png" alt="Help Tip"/>
+		            <%--label attribute of form:option doesn't provide i18n --%>		             
 		<form:select path="activeReminder">
 			<form:option value="false">
 				<spring:message code="reminder.ReminderNotEnabled"
@@ -184,8 +183,9 @@
 					text="?reminder.Enabled?" />
 			</form:option>
 			
-		</form:select></dd>
-               
+		</form:select> <img id="tip_numOfDaysReminder" src="${cp}/images/question16x16.png" alt="Help Tip"/></dd>
+                    <dt><form:label path="registration.showParticipants"><spring:message code="event.registration.showParticipants" text="?event.registration.showParticipants?"/></form:label></dt>
+                    <dd><form:checkbox path="registration.showParticipants" /> <img id="tip_showParticipants" src="${cp}/images/question16x16.png" alt="Help Tip"/></dd>
                 </dl>
             </fieldset>
         </div>
@@ -304,6 +304,7 @@ enableRegistrationRulesFields(false);
 }
 
 new Tip($('tip_numOfDaysReminder'), '<spring:message code="tip.numOfDaysReminder" text="?tip.numOfDaysReminder?"/>', {title: '<spring:message code="tip.numOfDaysReminder.title" text="?tip.numOfDaysReminder.title?"/>', effect: 'appear'});
+new Tip($('tip_showParticipants'), '<spring:message code="tip.showParticipants" text="?tip.showParticipants?"/>', {title: '<spring:message code="tip.showParticipants.title" text="?tip.showParticipants.title?"/>', effect: 'appear'});
 
 
 </script>
