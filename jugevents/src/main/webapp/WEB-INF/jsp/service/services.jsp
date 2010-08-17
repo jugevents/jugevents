@@ -19,6 +19,12 @@
             vous fournir, <a href="mailto:info@jugevents.org">suggérez le nous</a>,
         et nous essaierons de le réaliser.</p>
     </c:when>
+    <c:when test="${requestScope.lang eq 'de'}">
+        <p>JUG Events wurde nicht nur entwickelt, um Ihre JUG-Veranstaltungen zu verwalten. Das Projekt kann Ihrer JUG and der internationalen
+            JUG-Gemeinde viele weitere Dienste zur Verfügung stellen.</p>
+        <p>Falls Sie Ideen für andere Dienste and Funktionen haben, zögern Sie bitte nicht <a href="mailto:info@jugevents.org">uns eine Mail zu schicken</a>.
+            Wir werden uns bemühen die besten Ideen zu realisieren.</p>
+    </c:when>
     <c:when test="${requestScope.requestContext.locale eq 'pt_BR'}">
         <p>JUG Events não serve apenas para o gerenciamento de eventos.
             O projeto também provê serviços úteis ao seu JUG e à comunidade
