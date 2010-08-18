@@ -4,6 +4,8 @@
 
 <h2><spring:message code="juggerRegistrationTitle"/></h2>
 
+<div class="warning"><spring:message code="newAccountRegistrationWarning" text="?newAccountRegistrationWarning?"/></div>
+
 <form:form commandName="jugger" method="post" action="${cp}/jugger/registration.form" onsubmit="enableJugFields(); return true;" enctype="multipart/form-data">
     <form:errors path="*" cssClass="errorBox"/>
     

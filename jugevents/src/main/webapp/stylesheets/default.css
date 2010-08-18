@@ -554,6 +554,18 @@ div.jugLogoBox img {
     font-weight: bold;
 }
 
+div.warning {
+    border: silver dotted 1px;
+    color: grey;
+    background-color: #F0F090;
+    background-image: url('../images/question32x32.png');
+    background-position: 1px 1px;
+    background-repeat: no-repeat;
+    padding: 5px 5px 5px 37px;
+    margin: 5px 0;
+    min-height: 32px;
+}
+
 /* Show Participant div */
 
 .participant {
