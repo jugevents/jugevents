@@ -6,5 +6,6 @@ syntag: regexp
 ^jugevents/src/main/webapp/WEB-INF/database.xml
 ^jugevents/.classpath
 ^jugevents/.project
+^jugevents/.settings
 .orig$
 
