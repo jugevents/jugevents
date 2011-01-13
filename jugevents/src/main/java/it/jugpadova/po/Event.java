@@ -27,6 +27,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import org.hibernate.search.annotations.DateBridge;
 
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
@@ -34,6 +35,7 @@ import org.hibernate.search.annotations.FullTextFilterDef;
 import org.hibernate.search.annotations.FullTextFilterDefs;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Resolution;
 import org.hibernate.search.annotations.Store;
 import org.joda.time.*;
 import org.parancoe.persistence.po.hibernate.EntityBase;
@@ -146,6 +148,7 @@ public class Event extends EntityBase {
 
     @Temporal(value = TemporalType.DATE)
     @Field(index = Index.UN_TOKENIZED, store = Store.YES)
+    @DateBridge(resolution=Resolution.DAY)
     public Date getStartDate() {
         return startDate;
     }
