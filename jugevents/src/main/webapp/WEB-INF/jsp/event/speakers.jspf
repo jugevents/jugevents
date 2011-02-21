@@ -16,7 +16,7 @@
                     <div style="float: right; width: 110px; text-align: right;">
                         <div style="font-weight: bold;">${speaker.firstName} ${speaker.lastName}</div>
                         <c:if test="${!empty speaker.email}">
-                            <div><a href="mailto:${speaker.email}"><spring:message code="SendAMail" text="?SendAMail?"/></a></div>
+                            <div><a href="mailto:${speaker.email}?subject=${event.title}"><spring:message code="SendAMail" text="?SendAMail?"/></a></div>
                         </c:if>
                         <c:if test="${!empty speaker.url}">
                             <div><a href="${speaker.url}"><spring:message code="WebSiteBlog" text="?WebSiteBlog?"/></a></div>

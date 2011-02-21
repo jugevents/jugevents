@@ -8,10 +8,10 @@ ${event.location}<br/>
     <span class="strong"><spring:message code="jugContact" />:</span>
     <c:choose>
         <c:when test="${!empty event.owner.jug.contactName}">
-            <a href="mailto:${event.owner.jug.contactEmail}">${event.owner.jug.contactName}</a>
+            <a href="mailto:${event.owner.jug.contactEmail}?subject=${event.title}">${event.owner.jug.contactName}</a>
         </c:when>
         <c:otherwise>
-            <a href="mailto:${event.owner.jug.contactEmail}">${event.owner.jug.contactEmail}</a>
+            <a href="mailto:${event.owner.jug.contactEmail}?subject=${event.title}">${event.owner.jug.contactEmail}</a>
         </c:otherwise>
     </c:choose><br/>
 </c:if>
