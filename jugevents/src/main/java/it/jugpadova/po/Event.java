@@ -4,6 +4,8 @@ import it.jugpadova.blo.FilterBo;
 
 import it.jugpadova.util.NotPassedEventsFilterFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -423,5 +425,17 @@ public class Event extends EntityBase {
         gc.add(GregorianCalendar.DAY_OF_YEAR, -NUM_OF_DAYS_REMINDER_BEFORE_EVENT);
         this.setReminderDate(gc.getTime());
 
+    }
+    
+    /**
+     * Returns a convenient subject for the mail relating to the event itself.
+     * Possible usages  are for jug contact's email and speakers.
+     * The value is encoded.
+     * @return
+     */
+    @Transient
+    public String getSubjectForEmailContact() throws UnsupportedEncodingException
+    {
+    	return URLEncoder.encode(this.getTitle(), "UTF-8");
     }
 }
