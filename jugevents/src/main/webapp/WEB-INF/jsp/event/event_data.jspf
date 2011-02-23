@@ -6,12 +6,12 @@ ${event.location}<br/>
 <div class="preview">${event.filteredDirections}</div>
 <c:if test="${!empty event.owner.jug.contactEmail}">
     <span class="strong"><spring:message code="jugContact" />:</span>
-    <c:choose>
+     <c:choose>
         <c:when test="${!empty event.owner.jug.contactName}">
-            <a href="mailto:${event.owner.jug.contactEmail}">${event.owner.jug.contactName}</a>
+            <a href="mailto:${event.owner.jug.contactEmail}?subject=${event.subjectForEmailContact}">${event.owner.jug.contactName}</a>
         </c:when>
         <c:otherwise>
-            <a href="mailto:${event.owner.jug.contactEmail}">${event.owner.jug.contactEmail}</a>
+            <a href="mailto:${event.owner.jug.contactEmail}?subject=${event.subjectForEmailContact}">${event.owner.jug.contactEmail}</a>
         </c:otherwise>
     </c:choose><br/>
 </c:if>
