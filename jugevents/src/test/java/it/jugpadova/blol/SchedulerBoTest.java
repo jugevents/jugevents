@@ -29,6 +29,7 @@ public class SchedulerBoTest extends JugEventsBaseTest {
         cal.setTime(currentDate);
         cal.add(GregorianCalendar.MINUTE, 1);
         futureEvent.setStartDate(cal.getTime());
+        futureEvent.updateReminderDate();
 
         assertTrue(futureEvent.getReminderDate().compareTo(futureEvent.
                 getStartDate()) < 0);

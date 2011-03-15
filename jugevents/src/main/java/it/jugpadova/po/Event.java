@@ -92,6 +92,7 @@ public class Event extends EntityBase {
     private List<Speaker> speakers = new ArrayList<Speaker>();
     private byte[] badgeTemplate;
     private Date reminderDate;
+    private boolean activeReminderInput = false;
     public final static int NUM_OF_DAYS_REMINDER_BEFORE_EVENT = 2;
 
     /**
@@ -156,10 +157,7 @@ public class Event extends EntityBase {
     }
 
     public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-        if (getActiveReminder()) {
-            setActiveReminder(true);
-        }
+        this.startDate = startDate;        
     }
 
     public String getStartTime() {
@@ -403,19 +401,19 @@ public class Event extends EntityBase {
         return reminderDate;
     }
 
-    @Transient
+    /*@Transient
     public boolean getActiveReminder() {
         if (this.reminderDate == null) {
             return false;
         }
         return true;
-    }
+    }*/
 
     /**
      * Set the reminder date two days before the start date.
      * @param activeReminder
      */
-    public void setActiveReminder(boolean activeReminder) {
+    /*public void setActiveReminder(boolean activeReminder) {
         if (!activeReminder) {
             this.setReminderDate(null);
             return;
@@ -425,7 +423,7 @@ public class Event extends EntityBase {
         gc.add(GregorianCalendar.DAY_OF_YEAR, -NUM_OF_DAYS_REMINDER_BEFORE_EVENT);
         this.setReminderDate(gc.getTime());
 
-    }
+    }*/
     
     /**
      * Returns a convenient subject for the mail relating to the event itself.
@@ -438,4 +436,38 @@ public class Event extends EntityBase {
     {
     	return URLEncoder.encode(this.getTitle(), "UTF-8");
     }
+    @Transient
+	public Boolean getActiveReminder() {
+    	if(this.getReminderDate()==null)
+    		return false;
+		return true;
+	}
+    //@Transient
+	public void setActiveReminder(Boolean activeReminder) {
+		this.activeReminderInput = activeReminder;
+	}
+	
+	/**
+	 * This method is called from the EventEditController to calculate 
+	 * the date of reminder date.
+	 * Currently reminderDate corresponds to 2 days earlier the event 
+	 * start date.
+	 */
+	public void updateReminderDate()
+	{
+		if(this.activeReminderInput)
+		{
+			GregorianCalendar gc = new GregorianCalendar();
+	        gc.setTime(this.getStartDate());
+	        gc.add(GregorianCalendar.DAY_OF_YEAR, -NUM_OF_DAYS_REMINDER_BEFORE_EVENT);
+	        this.setReminderDate(gc.getTime());
+		}
+		else
+		{
+			this.setReminderDate(null);
+		}
+			
+	}
+	
+	
 }

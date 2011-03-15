@@ -80,7 +80,7 @@ public class EventEditController {
     @Validation(view = FORM_VIEW)
     public String save(@ModelAttribute("event") Event event,
             BindingResult result, SessionStatus status) {
-    	
+    	event.updateReminderDate();
     	eventBo.checkUserAuthorization(event);
         eventBo.save(event);
         status.setComplete();
