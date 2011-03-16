@@ -180,6 +180,11 @@ public class EventEditController {
     private  ModelAndView mvEvent(Event event)
     {
     	ModelAndView mv = new ModelAndView(FORM_VIEW);
+    	//fix-issue 83
+    	if(event.getReminderDate()!=null)
+    	{
+    		event.setActiveReminder(true);
+    	}
     	mv.addObject("event", event);
     	return mv; 
     }
