@@ -9,7 +9,7 @@
             <div style="text-align: right; margin: 0px 0px 10px 0px;;">
                 <a href="${cp}/event/showParticipants.html?id=${event.id}">
                 	 <c:choose>
-				        <c:when test="${event.eventinThePast}">
+				        <c:when test="${event.eventInThePast}">
 				            <spring:message code="WhoAttended" text="?WhoAttended?"/>
 				        </c:when>
 				        <c:otherwise>

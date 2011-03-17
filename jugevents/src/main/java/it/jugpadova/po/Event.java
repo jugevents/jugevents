@@ -444,7 +444,7 @@ public class Event extends EntityBase {
 	}
 	
 	@Transient
-	public boolean isEventinThePast() {
+	public boolean isEventInThePast() {
         return !Utilities.todayIsBeforeDate(this.endDate);
     }
 }
