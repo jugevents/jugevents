@@ -7,7 +7,16 @@
     <div style="float:right; width: 200px; padding-left: 10px; font-size: 11px">
         <c:if test="${event.registration.enabled && event.registration.showParticipants}">
             <div style="text-align: right; margin: 0px 0px 10px 0px;;">
-                <a href="${cp}/event/showParticipants.html?id=${event.id}"><spring:message code="WhoIsComing" text="?WhoIsComing?"/></a>
+                <a href="${cp}/event/showParticipants.html?id=${event.id}">
+                	 <c:choose>
+				        <c:when test="${event.eventinThePast}">
+				            <spring:message code="WhoAttended" text="?WhoAttended?"/>
+				        </c:when>
+				        <c:otherwise>
+				            <spring:message code="WhoIsComing" text="?WhoIsComing?"/>
+				        </c:otherwise>
+   					 </c:choose> 
+                </a>
             </div>
         </c:if>
         <%@ include file="registration_button.jspf" %>

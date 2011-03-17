@@ -1,8 +1,8 @@
 package it.jugpadova.po;
 
 import it.jugpadova.blo.FilterBo;
-
 import it.jugpadova.util.NotPassedEventsFilterFactory;
+import it.jugpadova.util.Utilities;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -29,8 +29,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import org.hibernate.search.annotations.DateBridge;
 
+import org.hibernate.search.annotations.DateBridge;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FullTextFilterDef;
@@ -39,7 +39,6 @@ import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Resolution;
 import org.hibernate.search.annotations.Store;
-import org.joda.time.*;
 import org.parancoe.persistence.po.hibernate.EntityBase;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.CascadeValidation;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
@@ -365,11 +364,7 @@ public class Event extends EntityBase {
     }
 
     private boolean todayIsBeforeTheEndOfTheStartDay() {
-        boolean result;
-        // old way
-        DateMidnight today = new DateMidnight();
-        result = today.compareTo(new DateMidnight(this.startDate)) <= 0;
-        return result;
+    	return Utilities.todayIsBeforeDate(this.startDate);        
     }
 
     private boolean thereAreNoRegistrationRules(final Registration reg) {
@@ -447,4 +442,9 @@ public class Event extends EntityBase {
 	public void setActiveReminder(boolean activeReminder) {
 		this.activeReminder = activeReminder;
 	}
+	
+	@Transient
+	public boolean isEventinThePast() {
+        return !Utilities.todayIsBeforeDate(this.endDate);
+    }
 }

@@ -12,12 +12,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ListIterator;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.joda.time.DateMidnight;
 import org.parancoe.plugins.security.User;
 import org.parancoe.plugins.world.Country;
 import org.springframework.web.servlet.ModelAndView;
@@ -184,4 +186,13 @@ public class Utilities {
     	}
     	return null;
     }
+	
+	 public static boolean todayIsBeforeDate(final Date date) {
+	        boolean result;
+	        // old way
+	        DateMidnight today = new DateMidnight();
+	        result = today.compareTo(new DateMidnight(date)) <= 0;
+	        return result;
+	    }
+
 }
