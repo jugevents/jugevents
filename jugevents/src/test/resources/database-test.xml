@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
         http://www.parancoe.org/schema/parancoe http://www.parancoe.org/schema/parancoe.xsd">
     
-    <!-- HSQLDB in-memory configuration --><!--
+    <!-- HSQLDB in-memory configuration -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="url" value="jdbc:hsqldb:mem:jugevents"/>
         <property name="username" value="sa"/>
@@ -14,7 +14,7 @@
     </bean>
     
 
-    --><!-- MySql configuration -->
+    <!-- MySql configuration -->
     <!--
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="url" value="jdbc:mysql://localhost:3306/jugevents"/>
@@ -25,14 +25,14 @@
     -->
 
     <!-- Postgres configuration -->
-    
+    <!--
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="url" value="jdbc:postgresql://localhost:5432/jugevents"/>
         <property name="username" value="postgres"/>
         <property name="password" value="pippo"/>
         <property name="driverClassName" value="org.postgresql.Driver"/>
     </bean>
-    
+    -->
     
     <bean id="sessionFactory" parent="abstractSessionFactory">
         <property name="hibernateProperties">
@@ -42,7 +42,6 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                  -->
-                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
