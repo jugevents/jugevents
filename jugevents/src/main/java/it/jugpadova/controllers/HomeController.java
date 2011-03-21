@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.parancoe.web.util.FlashHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,6 +35,8 @@ public class HomeController {
     public ModelAndView welcome(HttpServletRequest req, HttpServletResponse res) {
         Map params = new HashMap();
         params.put("something", new Object());
+        FlashHelper.setRedirectError(req, "flash.TestError");
+        FlashHelper.setRedirectNotice(req, "flash.TestNotice");
         return new ModelAndView("welcome", params);
     }
 

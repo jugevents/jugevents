@@ -588,3 +588,29 @@ div.warning {
     float: left;
     margin-top: 20px;
 }
+
+/* Error/notice start */
+
+div.notice_flash {
+    background-color: #dffadd;
+    padding: 5px;
+    margin: 5px;
+    border: dotted gray thin;
+}
+
+div.notice_flash p {
+    margin: 0!important;
+}
+
+div.error_flash {
+    background-color: #faddde;
+    padding: 5px;
+    margin: 5px;
+    border: dotted gray thin;
+}
+
+div.error_flash p {
+    margin: 0!important;
+}
+
+/* Error/notice end */

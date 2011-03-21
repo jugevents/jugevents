@@ -12,6 +12,8 @@
             <tiles:insertAttribute name="menu"/>
             <div id="content" class="fullSize">
                 <div id="content_main_fullSize">
+                    <p:flash type="notice"/>
+                    <p:flash type="error"/>
                     <tiles:insertAttribute name="main"/>
                 </div>
             </div>

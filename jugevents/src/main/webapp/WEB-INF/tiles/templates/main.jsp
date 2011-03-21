@@ -12,6 +12,8 @@
             <tiles:insertAttribute name="menu"/>
             <div id="content">
                 <div id="content_main_twoColumns">
+                    <p:flash type="notice"/>
+                    <p:flash type="error"/>
                     <tiles:insertAttribute name="main"/>
                 </div>
                 <div id="content_right_column">
