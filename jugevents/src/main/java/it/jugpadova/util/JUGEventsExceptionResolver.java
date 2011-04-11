@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.parancoe.web.ExceptionResolver;
+import org.parancoe.web.util.FlashHelper;
 import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
@@ -69,6 +70,12 @@ public class JUGEventsExceptionResolver extends ExceptionResolver {
             if (e instanceof ConversationException) {
             	return new ModelAndView("conversationException", null);
             }
+            if(e instanceof HttpSessionRequiredException)
+            {
+            	FlashHelper.setRedirectError(req, "objectNotFoundInSession");
+            	return new  ModelAndView("event/list", null);
+            }
+            	
             if (!interceptedWithMinimalLogging(e)) {
                 logger.error("Unexpected exception", e);
             }
