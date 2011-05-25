@@ -27,6 +27,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import org.parancoe.web.util.FlashHelper;
 import org.parancoe.web.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -79,11 +80,12 @@ public class EventEditController {
     @RequestMapping(value="/event/edit.form", method = RequestMethod.POST)
     @Validation(view = FORM_VIEW)
     public String save(@ModelAttribute("event") Event event,
-            BindingResult result, SessionStatus status) {
+            BindingResult result, SessionStatus status, HttpSession session) {
     	event.updateReminderDate();
     	eventBo.checkUserAuthorization(event);
         eventBo.save(event);
         status.setComplete();
+        cleanEventSession(session);
         return "redirect:show.html?id=" + event.getId();
     }
     
@@ -91,9 +93,13 @@ public class EventEditController {
     
     @RequestMapping(value="/event/edit.form", method = RequestMethod.GET)
     public ModelAndView form(@RequestParam(value = "id", required =
-            false) Long id, @RequestParam(value = "copyId", required = false) Long copyId, Model model, HttpServletRequest req) {
+            false) Long id, @RequestParam(value = "copyId", required = false) Long copyId, Model model, HttpServletRequest req, HttpSession session) {
         Event event = null;
-       
+        if(session.getAttribute("event") != null)
+        {
+        	FlashHelper.setRedirectNotice(req, "eventAlreadyInSession");
+        	return new  ModelAndView("redirect:/");
+        }
         if (id != null) {
             event = eventBo.retrieveEvent(id);
             if (event.getRegistration() == null) {
@@ -197,9 +203,16 @@ public class EventEditController {
     private void clearSpeakerSession(HttpSession session)
     {
     	session.setAttribute(SESSION_SPEAKER, null);
-    	session.setAttribute(ORIGINAL_SESSION_SPEAKER, null);
+    	session.setAttribute(ORIGINAL_SESSION_SPEAKER, null);    	
     }
     
+    @RequestMapping(value = "/event/cleanSession.form", method = RequestMethod.GET)    
+    public String cleanEventSession(HttpSession session)
+    {
+    	clearSpeakerSession(session);
+    	session.setAttribute("event", null);
+    	return "redirect:/";
+    }
    
     
     
