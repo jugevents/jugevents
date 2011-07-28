@@ -32,5 +32,9 @@
         
 %>
 
-
-
+<c:choose>
+    <c:when test="${!empty pageTitle}">
+        <c:set var="pageTitle" value="JUG Events - ${pageTitle}"/>
+    </c:when>
+    <c:otherwise><c:set var="pageTitle" value="JUG Events - ${pageTitle}"/></c:otherwise>
+</c:choose>

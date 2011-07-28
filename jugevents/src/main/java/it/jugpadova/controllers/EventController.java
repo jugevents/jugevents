@@ -116,6 +116,7 @@ public class EventController {
         mv.addObject("event", event);
         mv.addObject("canCurrentUserManageEvent",
                 servicesBo.canCurrentUserManageEvent(event));
+        mv.addObject("pageTitle", event.getTitle());
         return mv;
     }
 
