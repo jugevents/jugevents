@@ -14,13 +14,13 @@
             <url>http://maven2.parancoe.org/repo</url>
             <layout>default</layout>
         </repository>
-        <repository>
+<!--        <repository>
             <id>java-net-repository</id>
             <name>java.net Repository for Maven</name>
             <url>http://download.java.net/maven/2</url>
             <layout>default</layout>
-        </repository>
-        <repository>
+        </repository>-->
+<!--        <repository>
             <id>modularity-releases</id>
             <name>Modularity Releases Repository</name>
             <url>http://m2.modularity.net.au/releases</url>
@@ -30,7 +30,7 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </repository>
+        </repository>-->
     </repositories>
     <build>
         <finalName>jugevents</finalName>
@@ -392,9 +392,9 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>net.fortuna.ical4j</groupId>
+            <groupId>org.mnode.ical4j</groupId>
             <artifactId>ical4j</artifactId>
-            <version>1.0-rc2</version>
+            <version>1.0.7</version>
         </dependency>
         <!-- quartz dependency -->
          <dependency>
